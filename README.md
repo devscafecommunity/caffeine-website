@@ -11,7 +11,7 @@ Documentation, plans, screenshots and books for the **Caffeine Engine** and
 | `content/en/docs/` | English documentation (canonical) |
 | `content/pt/docs/` | Portuguese mirror of the English tree |
 | `tex/` | LaTeX books and PDF sources |
-| `captures/` | Screenshot manifest and fixture project |
+| `captures/` | Screenshot manifest, fixture project, the capture flows (`flows/`) and the widget captions (`ui-captions.json`) |
 | `scripts/` | i18n audit, translation and diagram helpers |
 
 ## Where to write
@@ -20,6 +20,7 @@ Documentation, plans, screenshots and books for the **Caffeine Engine** and
 |-------|--------|
 | Build, install, first project | `content/en/docs/getting-started/` |
 | Editor UI, panels, viewport | `content/en/docs/editor/` |
+| Doppio guides (architecture, generators, headless testing, roadmaps) | `content/en/docs/doppio/` |
 | Engine modules (ECS, rendering, audio…) | matching module folder |
 | Roadmaps and historical plans | `content/en/docs/plans/` |
 | Book-length material | `tex/` |

@@ -1,6 +1,6 @@
 # Referência da UI do Doppio
 
-Gerado por `cargo test -p doppio-ui capture_ui_gallery -- --ignored`. As descrições vivem em `doppio/docs/ui-captions.json`.
+Gerado por `cargo test -p doppio-ui capture_ui_gallery -- --ignored`. As descrições vivem em `caffeine-website/captures/ui-captions.json`.
 
 ## `editor.menu.scene`
 
@@ -24,7 +24,13 @@ Menu Ver: focar, repor câmara e renderizar.
 
 ![editor.pane.hierarchy](../images/ui-reference/editor-pane-hierarchy.png)
 
-Hierarquia da cena: lista as entidades e permite selecionar.
+Árvore da cena: linhas compactas, ícones semânticos, expandir/fechar e seleção.
+
+## `viewport.canvas.gizmo`
+
+![viewport.canvas.gizmo](../images/ui-reference/viewport-canvas-gizmo.png)
+
+Gizmo de transformação sobre o viewport (mover, rodar ou escalar).
 
 ## `editor.pane.viewport`
 
@@ -36,7 +42,19 @@ Render do motor para a cena atual, com controlos de câmara.
 
 ![editor.pane.inspector](../images/ui-reference/editor-pane-inspector.png)
 
-Transformação e ações da entidade selecionada.
+Inspector de propriedades: cabeçalho da entidade, Transform e cartões de componentes recolhíveis.
+
+## `inspector.material.picker`
+
+![inspector.material.picker](../images/ui-reference/inspector-material-picker.png)
+
+Abre o seletor pesquisável de materiais .mat para a entidade selecionada.
+
+## `hierarchy.toolbar.add`
+
+![hierarchy.toolbar.add](../images/ui-reference/hierarchy-toolbar-add.png)
+
+Cria uma entidade nova a partir da barra da hierarquia.
 
 ## `hierarchy.tree.scene`
 

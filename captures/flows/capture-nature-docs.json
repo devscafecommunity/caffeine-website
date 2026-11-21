@@ -1,0 +1,111 @@
+{
+  "name": "Capture the Nature Generator screenshots used by docs/nature-generator-guide.md",
+  "description": "Run through scripts/capture-nature-docs.sh (it strips the NNN- prefix so the images have stable names). Needs libcaffeine-capi.",
+  "fixture": "nature",
+  "size": [
+    1600,
+    900
+  ],
+  "steps": [
+    {
+      "action": "wait",
+      "ms": 800,
+      "real_time": true,
+      "label": "let the preview render"
+    },
+    {
+      "action": "screenshot",
+      "name": "nature-pane"
+    },
+    {
+      "action": "click",
+      "target": "id:editor.pane.maximize.Pane(2)"
+    },
+    {
+      "action": "wait",
+      "ms": 2500,
+      "real_time": true,
+      "label": "the engine renders the placed models"
+    },
+    {
+      "action": "click",
+      "target": "id:editor.menu.view"
+    },
+    {
+      "action": "click",
+      "target": "id:editor.view.toggle_markers"
+    },
+    {
+      "action": "screenshot",
+      "name": "nature-scene",
+      "target": "id:editor.pane.viewport",
+      "padding": 0
+    },
+    {
+      "action": "reset",
+      "fixture": "nature",
+      "preset": "Boulder"
+    },
+    {
+      "action": "wait",
+      "ms": 800,
+      "real_time": true
+    },
+    {
+      "action": "screenshot",
+      "name": "nature-rock",
+      "target": "id:editor.pane.nature_generator",
+      "padding": 0
+    },
+    {
+      "action": "reset",
+      "fixture": "nature",
+      "preset": "Pink Flower"
+    },
+    {
+      "action": "wait",
+      "ms": 800,
+      "real_time": true
+    },
+    {
+      "action": "screenshot",
+      "name": "nature-plant",
+      "target": "id:editor.pane.nature_generator",
+      "padding": 0
+    },
+    {
+      "action": "reset",
+      "fixture": "nature",
+      "preset": "Oak",
+      "size": [
+        1600,
+        900
+      ]
+    },
+    {
+      "action": "wait",
+      "ms": 600,
+      "real_time": true,
+      "label": "let the preview render"
+    },
+    {
+      "action": "click",
+      "target": "point:614,437",
+      "label": "select the leaf material node"
+    },
+    {
+      "action": "click",
+      "target": "id:naturegen.edit_material",
+      "label": "add an Edit Library Material node after it"
+    },
+    {
+      "action": "wait",
+      "ms": 500,
+      "real_time": true
+    },
+    {
+      "action": "screenshot",
+      "name": "nature-edit-node"
+    }
+  ]
+}

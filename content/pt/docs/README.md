@@ -14,6 +14,7 @@
 | **Build guide** | [`getting-started/build-guide.md`](getting-started/build-guide.md) | Wrapper `caffeine-build` para todas as plataformas |
 | **Galeria da UI** | [`editor/ui-gallery.md`](editor/ui-gallery.md) | Screenshots do editor, viewport e docking |
 | **Referência da UI (gerada)** | [`editor/ui-reference.md`](editor/ui-reference.md) | Cada id de widget com imagem legendada e destacada |
+| **Guias do Doppio** | [`doppio/README.md`](doppio/README.md) | Arquitetura do editor, driver headless, geradores (natureza, terreno, água, textura, materiais), roadmaps |
 | **Plugin Manager** | [`editor/plugin-manager.md`](editor/plugin-manager.md) | Compilar, instalar e ativar plugins explicitamente |
 
 ### Arquitectura
@@ -121,6 +122,7 @@
 | **Photon GI** | [`editor/photon.md`](editor/photon.md) | GI híbrido nativo por radiance cascades e AO baked |
 | **Migração de plugins** | [`editor/plugin-migration.md`](editor/plugin-migration.md) | Mover um plugin para `doppio-plugins` e o loader opt-in |
 | **Git Plugin** | [`editor/git-plugin.md`](editor/git-plugin.md) | Painel opcional de gestão Git do projeto |
+| **Guias do Doppio** | [`doppio/README.md`](doppio/README.md) | Arquitetura do editor, driver headless, geradores (natureza, terreno, água, textura, materiais), roadmaps |
 
 ### Terrain
 
