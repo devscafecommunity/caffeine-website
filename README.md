@@ -148,6 +148,26 @@ python3 -m http.server -d site 8080    # http://localhost:8080
 - Styles and behaviour live in `scripts/site/site.css` and `scripts/site/site.js`.
 - The site is generated on every run; edit the source, never `site/`.
 
+## Website
+
+`scripts/build-site.py` turns `content/{en,pt}/docs/` into a static website in `site/`
+(ignored by git). It needs `markdown-it-py` and `pygments`:
+
+```bash
+pip install markdown-it-py pygments
+python3 scripts/build-site.py
+python3 -m http.server -d site 8080    # http://localhost:8080
+```
+
+- Pages are generated from Markdown only; no CDN, no network access at view time.
+- The first `# Heading` becomes the page title; `> **Key:** value` lines at the top of a page
+  become metadata chips; `> [!NOTE]`, `[!TIP]`, `[!WARNING]` … become callouts.
+- Links between pages are rewritten to `.html`. Links that climb out of `docs/` (for example
+  `../../src/...`) point at the engine repository on GitHub. Targets that do not exist are shown
+  with a dotted underline, and the build lists them by file.
+- Styles and behaviour live in `scripts/site/site.css` and `scripts/site/site.js`.
+- The site is generated on every run; edit the source, never `site/`.
+
 ## Books
 
 LaTeX sources are under `tex/`:
