@@ -1,58 +1,46 @@
 # Photon — native hybrid radiance-cascade GI
 
+<div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Editor</span>
+  <span>Last updated: <time datetime="2026-11-21">2026-11-21</time></span>
+</div>
+
+<p class="doc-lede">Real-time global illumination without hardware ray tracing, managed from the Photon tab.</p>
+
 Photon is a **native Doppio and runtime system**: it is compiled into the editor and
 runtime binaries, not loaded as a plugin. It provides real-time global illumination
 without hardware ray tracing.
 
 ![Photon indirect lighting in the runtime](../images/captures/photon-gi.png)
 
-## v0.1 scope
+## Status
 
-| Photon spec | v0.1 status |
-|-------------|-------------|
-| Screen-anchored near field | **Implemented**: K exponentially growing intervals traced against the depth buffer |
-| Interval merge | **Implemented**: front-to-back radiance accumulation |
-| Far field | **Approximated**: sky + ambient fallback when a ray leaves the screen |
-| World-anchored probe field | Not yet |
-| Multi-bounce feedback | Not yet |
+| Photon part | Status |
+|-------------|--------|
+| Screen-anchored near field | **Implemented**: world-aligned cascades traced against the depth buffer, merged front to back, resolved to SH-L1 |
+| Far field | **Implemented**: four voxel clipmap levels with probes, the whole scene's triangles voxelised (terrain, skinned and cut-out meshes included) |
+| Dirty regions | **Implemented**: a moving object revoxelises only the boxes where it was and is |
+| Direct light into GI | **Implemented**: sun, point and spot lights injected into the voxels, shadowed through the material volume |
+| Multi-bounce feedback | **Implemented**: the previous irradiance is fed back with a cap and a reprojected history |
+| Bounce gain | **Implemented**: scales the light the voxels hold |
+| Motion vectors | Not yet: the history reprojects with the previous matrix |
 | Glossy reflection pass | Not yet |
 | Temporal denoiser | Provided by the engine's TAA: Photon runs before it |
 
-The full specification is the design target. This native slice is intentionally
-labelled v0.1 wherever it differs from the reference design.
-
-## Presets
-
-| Preset | Quality | Cascades | Radius |
-|--------|---------|----------|--------|
-| **Performance** | Low | 3 | 10 m |
-| **Balanced** | Medium | 4 | 14 m |
-| **High** | High | 5 | 22 m |
-| **Cinematic** | High | 6 | 32 m |
-
-## Parameters
-
-| Parameter | Meaning |
-|-----------|---------|
-| **Intensity** | Indirect-light multiplier |
-| **Cascades** | Number of distance intervals |
-| **Radius** | Near-field reach in world units |
-| **Thickness** | Depth tolerance for accepting a screen hit |
-| **Sky intensity** | Far-field fallback when a ray leaves the screen |
-| **Ambient** | Constant bounce term |
-| **Tint RGB** | Albedo approximation applied to gathered radiance |
-| **Debug** | Lit scene, GI only, or fallback only |
+The complete guide, with the Photon tab, presets, statistics and the C ABI, is
+[Photon: global illumination in Doppio](../doppio/photon-guide.md).
 
 ## Use it
 
 1. Open a scene with a Camera 3D and geometry.
-2. Open **View → Photon Global Illumination**, or run **Photon GI** in the command
-   palette.
-3. Press **Create Photon GI** if the scene has no component yet.
-4. Pick a preset and tune radius/thickness for the scene scale.
-5. Switch **Debug → GI only** to inspect the cascade result.
+2. Open **View → Photon (Global Illumination)**.
+3. Press **Add Photon GI** if the scene has no component yet.
+4. Pick a preset, then tune **Radius**, **Sky**, **Bounce gain** and the voxel geometry switches.
+5. Switch **Debug → GI only** to inspect the result, and read the **Voxel volume** card for what the far field is doing.
 
-The component is `ECS::PhotonGIComponent`; the Inspector has a full drawer as well.
+The component is `ECS::PhotonGIComponent`; the Inspector shows the same fields.
+
 
 ## Baked ambient occlusion (no RTX)
 
@@ -84,7 +72,6 @@ changing static geometry.
 > Photon pass. Meshes with overlapping UVs average their faces; use unique UVs for
 > per-face AO.
 
-
 ## Troubleshooting the bake
 
 | Message | Cause / fix |
@@ -110,17 +97,19 @@ in-flight frame.
 Photon runs **before TAA**, so the temporal resolve cleans the stochastic ray
 pattern. Start at Balanced for editing and High/Cinematic for captures.
 
+
 ## Limitations
 
-- No world-anchored radiance probe field: off-screen light falls back to a constant
-  sky + ambient term.
-- Single bounce: the previous frame's indirect irradiance is not fed back yet.
-- Screen-space occlusion can leak on thin geometry; raise **Thickness** or use a
-  smaller **Radius**.
-- Glossy reflections are not part of v0.1.
+- Photon has no motion vectors yet: the history reprojects with the previous matrix, so fast
+  movers can ghost.
+- The terrain counts with one earth colour in the voxel volume, and a cut-out mesh counts as a
+  solid block when its switch is on.
+- Screen-space occlusion can leak on thin geometry; use a smaller **Radius**.
+- Glossy reflections are not part of Photon yet.
 
 ## Related
 
+- [Photon: global illumination in Doppio](../doppio/photon-guide.md)
 - [Scene viewport](scene-viewport.md)
 - [Workspace and theme](workspace-and-theme.md)
 - [Plugin catalog](../plugins/README.md)

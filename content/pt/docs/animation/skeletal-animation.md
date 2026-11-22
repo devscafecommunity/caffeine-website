@@ -3,7 +3,7 @@
 > **Fase:** 5 — Transição Dimensional  
 > **Namespace:** `Caffeine::Animation`  
 > **Arquivo:** `src/animation/SkeletalAnimation.hpp`  
-> **Status:** 📅 Planejado
+> ** Estado:** O caminho de poses com skin é `SkinnedPose` com `AnimationSystem` (SkinLibrary). `BlendNode` e `sampleBlendTree` são os auxiliares de blend; o `SkeletalAnimationSystem` sem uso foi removido.
 
 ---
 

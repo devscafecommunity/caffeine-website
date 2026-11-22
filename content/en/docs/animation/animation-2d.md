@@ -1,18 +1,17 @@
 # 🎬 Animation System
 
-> **Phase:**4 — The Brain
-> **Namespace:** `Caffeine::Animation` 
-> **File:** `src/animation/AnimationSystem.hpp` 
-> **Status: ** Implemented
-> **RF:** RF4.9
+> **Phase:** 4 — The Brain
+> **Namespace:** `Caffeine::Animation`
+> **Files:** `src/caffeine/animation/` (`AnimationComponents.hpp`, `AnimationSystem.hpp`, `Smoothing.hpp`, `Skeleton2D.hpp`, `Rig2DAsset.hpp`, `Rig2DSystem.hpp`)
+> **Status:** Implemented for PhaseShift, smoothing and 2D rigs. Drawing 2D rigs through the batch renderer is in progress.
 
 ---
 
 ## Overview
 
-2D animation system with sprite clips and state machine. Each entity has a component `Animator` who manages the animation state machine.
+Every animated entity can carry a **PhaseShift** component. It is the state machine formerly called `Animator`, renamed to match the engine's vocabulary. It reads and writes named parameters, and three kinds of pose consume them: sprite frames, 2D rigs (bones and skinned meshes in the Live2D style) and 3D skinned poses.
 
-**Phase 5** adds skeletal animation (bones, skinning, blend trees) — see [`animation/skeletal-animation.md`](../animation/skeletal-animation.md).
+The rule: animation sources never touch bones or vertices. They write **parameters**, and the rig turns parameters into a pose.
 
 ---
 
@@ -21,153 +20,127 @@
 ```cpp
 namespace Caffeine::Animation {
 
-struct FrameRect {
-    f32 x = 0.0f;
-    f32 y = 0.0f;
-    f32 w = 0.0f;
-    f32 h = 0.0f;
+// The state machine (formerly `Animator`). One per entity.
+struct PhaseShift : PhaseShiftStateMachine {
+    std::vector<PhaseShiftLayer>      layers;
+    std::vector<PhaseShiftParameter>  parameters;
+    std::vector<AnimationClip>        embeddedClips;
+    f32  playbackScale = 1.0f;
+    bool paused        = false;
+
+    void addParameter(const char* name, ParameterType type);
+    void setFloat(const char* name, f32 value);
+    void setSmoothing(const char* name, f32 smoothTime);  // critically damped spring, 0 = off
+    f32  getSmoothedFloat(const char* name) const;
 };
 
-struct AnimationClip {
-    FixedString<32>        name;
-    u32                    fps   = 12;
-    std::vector<FrameRect> frames;
-    bool                   loop  = true;
-    f32 duration() const;
+// Float parameters can be smoothed. Conditions read `smoothed` when smoothTime > 0.
+struct PhaseShiftParameter {
+    FixedString<32> name;
+    ParameterType   type;
+    f32 floatValue;
+    f32 smoothTime     = 0.0f;
+    f32 smoothed       = 0.0f;
+    f32 smoothVelocity = 0.0f;
 };
 
-struct AnimationTransition {
-    FixedString<32>       toState;
-    std::function<bool()> condition;
-    f32                   blendTime   = 0.1f;
-    bool                  hasExitTime = false;
+// Live2D-style 2D rig: parameters drive bone channels, bones skin a mesh.
+struct Rig2D {
+    Skeleton2D                  skeleton;
+    std::vector<Vertex2D>       vertices;
+    std::vector<u32>            indices;
+    std::vector<Parameter2D>    parameters;
+    std::vector<ParamBinding2D> bindings;
 };
 
-struct AnimationState {
-    FixedString<32>                  name;
-    const AnimationClip*             clip  = nullptr;
-    f32                              speed = 1.0f;
-    std::vector<AnimationTransition> transitions;
-};
-
-struct Animator {
-    HashMap<FixedString<32>, AnimationState>     states;
-    FixedString<32>                              currentState;
-    FixedString<32>                              previousState;
-    f32                                          timeInState   = 0.0f;
-    f32                                          blendWeight   = 1.0f;
-    f32                                          playbackScale = 1.0f;
-    bool                                         paused        = false;
-    std::vector<std::pair<u32, FixedString<32>>> frameEvents;
-    std::function<void(const FixedString<32>&)>  onFrameEvent;
-};
-
-class AnimationSystem : public ECS::ISystem {
-public:
-    void onUpdate(ECS::World& world, f32 dt) override;
-
-    void play(ECS::World& world, ECS::Entity e, const char* stateName);
-    void pause(ECS::World& world, ECS::Entity e);
-    void resume(ECS::World& world, ECS::Entity e);
-    void setSpeed(ECS::World& world, ECS::Entity e, f32 speed);
-    bool isPlaying(ECS::World& world, ECS::Entity e, const char* stateName) const;
-};
+std::vector<Vec2> skinMesh2D(const Rig2D& rig, const ParamValues2D& params);
 
 }  // namespace Caffeine::Animation
 ```
 
----
+## State Machine (PhaseShift)
 
-## State Machine Visual
+A state is a clip plus transitions. A transition fires when its conditions hold on the parameters, and it blends into the target over `blendTime`. Exit time transitions wait for the current clip to reach a normalized time.
 
-- `jump == true`
-- `idle ──────────────────► jump_rise`
-  - `◄──────────────────────────┤ apex (vel.y < 0.1)`
-  - `land ▼`
-  - `◄──────────────── jump_fall`
-  - `moveX != 0`
-  - `► walk`
-  - `attack btn`
-  - `► attack_1 ──► attack_2 (combo)`
-
+```text
+  idle ──(speed > 0.5, smoothed 0.15 s)──► run
+   ▲                                        │
+   └──────────(speed <= 0.5)────────────────┘
+  Exit   returns to the default state
+```
 
 ---
 
-## Exemplos de Uso
+## Smoothing and Transitions
 
-```cpp
-AnimationClip idleClip;
-idleClip.name = "idle";
-idleClip.fps  = 8;
-idleClip.frames = { {0,0,64,64}, {64,0,64,64} };
-idleClip.loop = true;
+`setSmoothing(name, seconds)` puts a float parameter on a critically damped spring. Conditions read the smoothed value, so a parameter that jumps from 0 to 1 still takes the chosen time to cross a threshold. The spring never overshoots. Smoothing is saved with the scene as an optional trailing section, so older scenes still load.
 
-AnimationClip walkClip;
-walkClip.name = "walk";
-walkClip.fps  = 12;
-walkClip.frames = { {128,0,64,64}, {192,0,64,64}, {256,0,64,64}, {320,0,64,64} };
-walkClip.loop = true;
+Blends between states use `blendCurve` (a `KeyCurve`): linear, ease in, ease out, ease in-out or a cubic Bezier.
 
-AnimationState idleState;
-idleState.name = "idle";
-idleState.clip = &idleClip;
-idleState.transitions.push_back({
-    FixedString<32>("walk"),
-    [&]() { return input.axisValue(Axis::MoveX) != 0.0f; }
-});
+---
 
-AnimationState walkState;
-walkState.name = "walk";
-walkState.clip = &walkClip;
-walkState.transitions.push_back({
-    FixedString<32>("idle"),
-    [&]() { return input.axisValue(Axis::MoveX) == 0.0f; }
-});
+## Parameters and 2D Rigs
 
-Animator anim;
-anim.states.set(FixedString<32>("idle"), idleState);
-anim.states.set(FixedString<32>("walk"), walkState);
-anim.currentState = "idle";
+A `Rig2D` has bones, a mesh of vertices with up to four bone weights each, a triangle list, named parameters and bindings. A binding adds a curve of offsets to one bone channel (rotation, translation or scale) as its parameter moves. Each tick the rig takes its parameters from the rig defaults, then from the parameter clip at the entity's time, then from the PhaseShift float parameters of the same name. The result is skinned into vertex positions in rig order.
 
-world.add<Animator>(player, std::move(anim));
+Rigs and parameter clips are text files. Names have no spaces.
 
-AnimationSystem animSys;
-animSys.play(world, player, "attack_1");
+Sprites are drawn the same way. A `Sprite` component's `Name` is the image path, relative to the project root; an empty name draws a white quad. A `SpriteSheet` picks the frame by the `Sprite`'s `frameIndex`. A sprite is one world unit on its longer side, scaled by the entity's placement (its `Transform`, or its 2D components when it has no 3D ones).
 
-world.get<Animator>(player)->frameEvents.push_back({3u, FixedString<32>("attack_hit")});
-world.get<Animator>(player)->onFrameEvent = [](const FixedString<32>& evt) {
-    if (evt == FixedString<32>("attack_hit")) damageEnemiesInRange();
-};
+```text
+CAFRIG2D1                         rig header
+bone  <name> <parent> <px> <py> <rotation> <sx> <sy>
+vert  <px> <py> <u> <v> <n> [<bone> <weight>] x n
+tri   <a> <b> <c>
+param <name> <min> <default> <max>
+bind  <parameter index> <bone> <channel> <n> [<x> <y>] x n
 
-animSys.onUpdate(world, dt);
+CAFPCLIP1                         parameter clip header
+name <text>
+loop <0|1>
+duration <seconds>
+track <parameter name> <n> [<time> <value>] x n
+```
+
+## Lua
+
+The functions below are in the `caffeine.animation` table. Each returns `true` on success.
+
+```lua
+local e = caffeine.entity.create()
+caffeine.component.add(e, "PhaseShift")
+caffeine.animation.attachRig2D(e, "assets/hero.rig2d")
+caffeine.animation.playRig2DClip(e, "assets/hero_blink.pclip")
+caffeine.animation.setSmoothing(e, "Bend", 0.15)   -- seconds to reach the target
+caffeine.animation.setFloat(e, "Bend", 1.0)        -- the rig's Bend parameter follows
 ```
 
 ---
 
 ## Design Decisions
 
-| Decision | Justificativa |
+| Decision | Rationale |
 |---------|-------------|
-| State machine | Animated logic separated from gameplay logic |
-| `condition` como lambda | Flexible without overhead parsing |
-| `blendTime` by transition | Smooth Crossfade by default |
-| Frame events | Synchronize gameplay with specific animation frames |
-| `priority = 200` | Wheel after PhysicsSystem (100) and MovementSystem (150) |
+| Parameters are the only interface | Sprites, rigs and skeletons can share one state machine |
+| Critically damped smoothing | No overshoot, stable at any frame time |
+| PhaseShift floats override by name | The rig defaults and clips give the base pose; a state can take over any parameter |
+| Text asset formats | Diffable and reviewable in git, like `CAFANIM1` |
 
 ---
 
 ## Acceptance Criteria
 
-- [ ] `advanceFrame()` < 0.1ms para 100 entidades animadas
-- [ ] 60fps com 100 entidades animadas simultaneamente
-- [ ] Soft blendtime transitions (no visual pop)
-- [ ] Frame events disparados no frame correto
+- [x] Rig skinning is exact at the rest pose
+- [x] Smoothed float gates a transition until the spring catches up
+- [x] Rig and clip files round-trip, and out-of-range indices are rejected
+- [ ] Rigs drawn in the viewport through the batch renderer (GPU path built, not yet run on a device)
+- [x] Rig and PhaseShift panels bound to the engine through the C ABI (C ABI v22)
 
 ---
 
 ## Dependencies
 
-- **Upstream:** [ECS Core](ecs.md), [Asset Manager](../assets/asset-manager.md) (AnimationClip carregado)
+- **Upstream:** [ECS Core](ecs.md), [Asset Manager](../assets/asset-manager.md) (clips and rigs are loaded from assets)
 - **Downstream:** [Phase 5 — Skeletal Animation](../animation/skeletal-animation.md)
 
 ---
@@ -176,11 +149,11 @@ animSys.onUpdate(world, dt);
 
 | Topic | Description |
 |--------|-----------|
-| [Sistemas de Jogo]() | Animation System como sistema ECS |
-| [Rendering & Pipeline]() | Sprites animados renderizados pelo Batch Renderer |
+| [Game Systems]() | Animation System as an ECS system |
+| [Rendering & Pipeline]() | Animated sprites and rigs drawn by the batch renderer |
 
 ## References
 
-- [`docs/architecture_specs.md`](../architecture specs.md) — §12 Animation System
-- [`animation/skeletal-animation.md`](../animation/skeletal-animation.md) — extension to 3D
+- [`animation/skeletal-animation.md`](../animation/skeletal-animation.md) — 3D skinned poses
+- [`architecture_specs.md`](../architecture_specs.md) — §12 Animation System
 - [Transversal Topic Index]()

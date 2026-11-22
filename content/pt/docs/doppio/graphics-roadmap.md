@@ -21,9 +21,9 @@ materiais.
 > real (veja [`micromeshes.md`](micromeshes.md)): draws indiretos e storage buffers no RHI, estatísticas de render e uma leitura no HUD, a hierarquia
 > de clusters offline com normais, UVs, tangentes e cores de vértice, o corte na GPU com transformações por instância, o draw iluminado no G-buffer e
 > o corte mais grosseiro próprio das cascatas do sol para uma arena de índices partilhada, e um teste de occlusion de fase única contra a profundidade do frame anterior. **Em aberto
-> no M-2:** occlusion em duas fases e cortes para sombras de pontos de luz e de focos. **O Photon ainda não começou** (P-A: primeiro o voxelizador conservador, porque a injeção de luz direta não pode ser verificada
+> no M-2:** occlusion em duas fases e cortes para sombras de pontos de luz e de focos. **O P-A do Photon está quase feito** (P-A: primeiro o voxelizador conservador, porque a injeção de luz direta não podia ser verificada
 > antes dele; depois os vetores de movimento, depois a luz direta real). O trabalho de GPU independente feito entretanto **não** faz parte destas fases:
-> sombreamento e vento da vegetação, sombras com alpha test, modificadores de material em execução e água deslocada na GPU (veja os guias de Natureza e de Água).
+> sombreamento e vento da vegetação, sombras com alpha test, modificadores de material em execução, água deslocada na GPU e o tempo (nuvens, névoa de altura e chuva; veja os guias de Natureza, de Água e de Environment).
 > A base de mundo determinístico partilhada com o roadmap do mundo (`core/Hash.hpp`, o núcleo de scatter) está concluída.
 >
 > **O M-0 está completo.** **A seguir, por ordem:** P-A, cujo primeiro item é o voxelizador conservador. As próximas fases dos Micromeshes (M-3 streaming, a
@@ -53,12 +53,12 @@ triângulos de origem em vista com um custo limitado por frame**, que é o que o
 
 ### Onde estamos (2026-11-20)
 
-17 itens concluídos, 28 em aberto. **Os Micromeshes estão em grande parte concluídos; o Photon ainda não começou**, pelo que o próximo
-trabalho real nesta página é o P-A do Photon (veja a secção 8 para a ordem).
+21 itens concluídos, 25 em aberto. **Os Micromeshes estão em grande parte concluídos; o P-A do Photon está quase feito** (cenas de regressão, voxelizador com regiões sujas, luz direta real, ganho do ressalto e painel do Photon feitos), pelo que o próximo
+trabalho real nesta página são os vetores de movimento do P-A (veja a secção 8 para a ordem).
 
 | Fase | Feito | Em aberto | Estado |
 |---|---|---|---|
-| P-A Photon: torná-lo correto | 0 | 4 | não iniciado: o voxelizador, vetores de movimento, luz direta real, cenas de regressão |
+| P-A Photon: torná-lo correto | 4 | 1 | quase feito: cenas de regressão, voxelizador e luz direta real feitos; vetores de movimento em aberto |
 | P-B Photon: qualidade | 0 | 5 | não iniciado |
 | P-C Photon: escala e custo | 0 | 4 | não iniciado |
 | M-0 RHI e ferramentas | 4 | 0 | concluído: draws indiretos, storage buffers, estatísticas, a leitura no HUD, o conjunto de benchmarks (faltam as entradas no Profiler) |
@@ -78,8 +78,8 @@ trabalho real nesta página é o P-A do Photon (veja a secção 8 para a ordem).
 | Campo distante da GI | **Feito (preenchimento de recurso)**: quatro níveis de clipmap 0.25/0.5/1/2 m, probes com SH, consultas de Chebyshev | `PhotonCascades.hpp`, `PhotonFarField.hpp` |
 | Multi-bounce | **Feito**: a irradiância anterior realimentada com um limite e histórico reprojetado | notas P5 do header |
 | AO pré-calculado | **Feito**: bake de AO por BVH/GPU | `PhotonAOBake.cpp`, `PhotonGpuBake.cpp` |
-| Luz direta na GI | **Lacuna**: a injeção usa um termo hemisférico de céu, não as luzes e sombras reais | "KNOWN GAPS" do header |
-| Voxelização | **Lacuna**: recurso por acumulação de profundidade no ecrã, pelo que faltam as faces fora do ecrã e as traseiras | "KNOWN GAPS" do header |
+| Luz direta na GI | **Feito**: o sol, as luzes de ponto e os focos injetados nos voxels, com sombra por marcha no volume de materiais | `photon_inject.comp` |
+| Voxelização | **Feito**: voxelizador conservador de triângulos com atualização por região suja, terreno, malhas com esqueleto e recortadas; teto de 1M de triângulos; o preenchimento pelo ecrã fica como recurso | `photon_voxelize_tri.comp`, `GpuSceneRenderer::updatePhotonGeometry` |
 | Vetores de movimento | **Lacuna**: o histórico reprojeta apenas com a matriz anterior | P5 do header |
 | LOD de geometria | **Feito para meshes opacas que optam por ele** (corte de clusters Micromesh); **parcial** para as restantes: 3 LODs de vértices agrupados por mesh, LODs de chunks de terreno, cull de frustum no CPU | `micromesh/`, `MicromeshGpu.cpp`, `MeshLOD.cpp`, `TerrainLodSystem.cpp` |
 | Occlusion | **Parcial**: oclusores AABB grosseiros no CPU (máx. 16), pirâmide Min-Z para a GI e, para o Micromesh, uma pirâmide de profundidade máxima de fase única da profundidade do frame anterior | `CoarseOcclusion.hpp`, `MinZPyramid.cpp`, `MicromeshGpu.cpp` |
@@ -87,7 +87,9 @@ trabalho real nesta página é o P-A do Photon (veja a secção 8 para a ordem).
 | Sombras | **Feito**: 4 cascatas direcionais a 2048, mapas de pontos de luz e de focos | `GpuDirectionalShadowMap.hpp` |
 | Pós-processamento | **Feito**: TAA, ACES, bloom, DOF, SSAO, motion blur, exposição automática | `PostProcessStack.cpp` |
 | Compute e indirect no RHI | **Feito (M-0)**: draws e dispatch indiretos, storage buffers, buffers de compute de leitura e escrita, capacidades, `readBuffer` | `rhi/CommandBuffer.hpp`, `tests/test_rhi_indirect.cpp` |
-| Página do site para o Photon | **Desatualizada**: diz v0.1, sem campo de probes, um só bounce; o código já vai além disso | `caffeine-website/.../editor/photon.md` |
+| Página do site para o Photon | **Feito**: o guia do Photon e a página do editor | [`photon-guide.md`](photon-guide.md) |
+| Céu, nuvens, névoa, chuva e relâmpagos | **Feito**: componentes refletidos `Volumetric Clouds` e `Weather`, névoa exponencial de altura, chuva no espaço do mundo com profundidade e salpicos no passo de composição, rajadas de vento partilhadas pela chuva, folhagem e nuvens, relâmpagos com raio, um clarão que ilumina a cena e o Photon, e eventos de trovão, sombras de nuvens em movimento no chão e no bounce do Photon, silver lining e sun shafts, humidade da cena inteira, sol e luz do céu do Photon que seguem o céu encoberto, o separador Environment | `WeatherSystem.hpp`, `sky.frag`, `post_composite.frag`, `photon_inject.comp`, [`environment-guide.md`](environment-guide.md) |
+| Profiler e desempenho medido | **Feito**: uma árvore de scopes com tempo real de GPU por passo (`CF_GPU_SCOPE`), o separador Profiler, C ABI v18; primeira ronda: pesquisas da cache de texturas fora do ciclo de desenho (passo opaco 13.5 para 2.3 ms), probes do Photon limitadas à vista e distribuídas no tempo (25 para 9 ms), marcha para o sol das nuvens mais barata, pesquisas da cache de materiais fora do ciclo de desenho, casters de sombra descartados por cascata, gráficos de frame rate, CPU por core, GPU e memória (C ABI v19) | `Profiler.hpp`, `GpuProfile.hpp`, [`profiler-guide.md`](profiler-guide.md) |
 
 ## 3. Análise da proposta
 
@@ -133,16 +135,34 @@ Photon primeiro: é o mais perto de estar concluído, beneficia todas as cenas j
 > ecrã, onde o preenchimento de voxels por profundidade do ecrã não tem geometria. A luz direta não pode ser testada, e por isso não compensa o seu custo,
 > até o voxelizador conservador (terceiro item) fornecer geometria que o ecrã não vê. Ordenar em conformidade. O componente
 > de GI Photon está agora refletido (Inspector, cenas, scripts: `Photon GI`, com `Debug view`), o que a próxima tentativa exige; note-se
-> que o `Debug view` não alterou a imagem no caminho `ComputeC0` nesse teste, o que convém verificar.
+> que o `Debug view` não alterou a imagem no caminho `ComputeC0` nesse teste: corrigido (2026-11-21), GI only e Fallback only funcionam agora aí.
 
-- [ ] Injetar **luz direta real** (sol, pontos de luz, focos, com o termo de sombra) no radiance de voxels/probes
-      em vez do termo hemisférico de céu. Teste: uma parede vermelha iluminada pelo sol tinge um chão branco próximo.
+- [x] Injetar **luz direta real** (sol, pontos de luz, focos) na radiância dos voxels (`photon_inject.comp`: `directLight`, com sombra
+      marchada pelo volume de materiais, na convenção `radiância x N.L` do shader forward), com o ambiente de céu escalado pela
+      visibilidade do céu de cada face. Teste: uma parede vermelha, uma branca e uma verde atrás da câmara (fora do ecrã) tingem o cubo
+      branco que as encara de vermelho, neutro e verde (cerca de 40 em 255, nada sem a parede). Três erros encontrados pelo caminho, todos
+      no campo distante: as sondas decodificavam as direções duas vezes (a consulta lia direções diferentes das que as sondas traçaram), as
+      cascatas faziam o mesmo, e o **volume de materiais era cycled** (descartado) por cada passo de compute (`CommandBuffer::beginComputePass(..., cycle)`).
+      Este último deixava o preenchimento pelo ecrã apagar os voxels de triângulos a cada frame: uma sala fechada lia 90 em 255 de luz de céu, agora cerca de 15 em média (1 a 3 nos frames mais calmos).
 - [ ] Passo de **vetores de movimento** (matrizes por objeto, frame anterior), usado pelo histórico do Photon, pelo TAA e pelo motion
       blur. Remover a lacuna de "sem vetores de movimento"; invalidar o histórico na desoclusão por teste de profundidade/normal.
-- [ ] **Voxelizador conservador de triângulos** com atualizações por região suja (geometria estática uma vez, dinâmica a cada
-      frame), a substituir o recurso do G-buffer. Manter o recurso por trás de um nível de qualidade.
-- [ ] Cenas de regressão headless: Cornell box, luz através de uma porta, fuga por parede fina. Seeds fixas, limiares
-      de imagem em `doppio/tests/ui-flows`.
+- [x] **Voxelizador conservador de triângulos** (`photon_voxelize_tri.comp`, `PhotonCascades::updateGeometryVoxels`): uma invocação por
+      triângulo, teste de eixos separadores triângulo/caixa nos voxels da sua caixa, nos quatro níveis do clipmap; os triângulos opacos da
+      cena são reunidos com o seu albedo (`GpuSceneRenderer::updatePhotonGeometry`, um hash por objeto a cada frame, uma comparação com o conjunto anterior) e um
+      nível é limpo e refeito quando a sua origem do clipmap se move ou a geometria muda. **Regiões sujas:** um
+      objeto em movimento limpa e revoxeliza só as caixas onde esteve e onde está (no máximo 8, senão os níveis refazem-se por inteiro); o terreno, as malhas com esqueleto (na sua pose) e, a pedido, as recortadas entram no volume; acima de 1 milhão de triângulos o voxelizador pára e o preenchimento pelo ecrã trabalha sozinho, e o painel di-lo. Uma
+      superfície com textura conta com a cor média da sua imagem (`GpuTextureCache::averageColor`). Testes de GPU: `test_photon_voxelizer.cpp`.
+      O preenchimento pelo ecrã fica, como recurso e para o terreno.
+- [x] Cenas de regressão headless: Cornell box, luz através de uma porta, fuga por parede fina (módulo `photon_gi` em `windows/main/tests.rs`, limiares
+      de imagem sobre a diferença entre GI desligado e ligado). Medido em 2026-11-21: a cor passa de uma superfície à outra (um chão branco ganha cerca de +8 de vermelho junto
+      à parede vermelha, +6 de verde junto à verde). Uma sala sem abertura tinha fugas: com a câmara dentro dela o interior ficava iluminado como o céu
+      aberto (ganhos de 60 a 90 em 255, fosse qual fosse a intensidade do céu); agora está selada (cerca de 15 em média nos frames; cada frame oscilava entre 3 e 25 até as probes terem desvios de amostragem próprios, veja a média temporal no guia do Photon), com o ressalto do sol por uma fresta em 7 a 16 no chão
+      do fundo contra cerca de 170 na mancha iluminada, e uma divisória deixa esse ressalto fora do lado de lá (4,3 -> 1,5). O campo distante é consultado a 0,4 m
+      da superfície (os voxels da própria superfície têm até 0,5 m de espessura) e a partir da origem do raio, não do seu ponto de saída do ecrã.
+      Todos são testes normais.
+- [x] **Ganho do ressalto e painel do Photon** (C ABI v17: `caffeine_session_photon_stats`, `caffeine_session_photon_rebuild`). O `Bounce gain` escala o que os voxels guardam: no chão do fundo da sala com fresta
+      (só GI, em 255) lê 13 com ganho 0, 18 com 1 e 24 com 4; as cascatas do ecrã escalam com `Intensity`. O separador **Photon** edita o componente, os interruptores da
+      geometria dos voxels e as predefinições, com estatísticas dos voxels ao vivo; veja [`photon-guide.md`](photon-guide.md).
 
 ### Fase P-B — Qualidade e estabilidade
 

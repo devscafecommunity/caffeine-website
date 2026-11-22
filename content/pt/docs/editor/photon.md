@@ -1,58 +1,46 @@
 # Photon — GI híbrido nativo por radiance cascades
 
+<div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Estável</span>
+  <span class="doc-badge">Editor</span>
+  <span>Última atualização: <time datetime="2026-11-21">2026-11-21</time></span>
+</div>
+
+<p class="doc-lede">Iluminação global em tempo real sem hardware de ray tracing, gerida a partir do separador Photon.</p>
+
 O Photon é um **sistema nativo do Doppio e do runtime**: é compilado nos binários do
 editor e do runtime, não é carregado como plugin. Fornece iluminação global em tempo
 real sem hardware de ray tracing.
 
 ![Iluminação indireta do Photon no runtime](../images/captures/photon-gi.png)
 
-## Âmbito v0.1
+## Estado
 
-| Spec Photon | Estado v0.1 |
-|-------------|-------------|
-| Near field ancorado ao ecrã | **Implementado**: K intervalos exponenciais traçados contra o depth buffer |
-| Merge de intervalos | **Implementado**: acumulação de radiance front-to-back |
-| Far field | **Aproximado**: fallback de céu + ambiente quando o raio sai do ecrã |
-| Campo de probes world-anchored | Ainda não |
-| Feedback multi-bounce | Ainda não |
+| Parte do Photon | Estado |
+|-----------------|--------|
+| Campo próximo ancorado ao ecrã | **Implementado**: cascatas alinhadas ao mundo traçadas contra o buffer de profundidade, fundidas da frente para trás, resolvidas em SH-L1 |
+| Campo distante | **Implementado**: quatro níveis de clipmap de voxels com probes, os triângulos de toda a cena voxelizados (terreno, malhas com esqueleto e recortadas incluídos) |
+| Regiões sujas | **Implementado**: um objeto em movimento revoxeliza só as caixas onde esteve e onde está |
+| Luz direta na GI | **Implementado**: sol, luzes de ponto e focos injetados nos voxels, com sombra pelo volume de materiais |
+| Realimentação multi-bounce | **Implementado**: a irradiância anterior volta a entrar com um limite e um histórico reprojetado |
+| Ganho do ressalto | **Implementado**: escala a luz que os voxels guardam |
+| Vetores de movimento | Ainda não: o histórico reprojeta com a matriz anterior |
 | Passe de reflexos glossy | Ainda não |
-| Denoiser temporal | Fornecido pelo TAA da engine: o Photon corre antes dele |
+| Denoiser temporal | Fornecido pelo TAA do motor: o Photon corre antes dele |
 
-A especificação completa é o alvo. Esta fatia nativa está marcada como v0.1 onde
-difere do design de referência.
-
-## Presets
-
-| Preset | Qualidade | Cascatas | Raio |
-|--------|-----------|----------|------|
-| **Performance** | Low | 3 | 10 m |
-| **Balanced** | Medium | 4 | 14 m |
-| **High** | High | 5 | 22 m |
-| **Cinematic** | High | 6 | 32 m |
-
-## Parâmetros
-
-| Parâmetro | Significado |
-|-----------|-------------|
-| **Intensity** | Multiplicador de luz indireta |
-| **Cascades** | Número de intervalos de distância |
-| **Radius** | Alcance do near field em unidades de mundo |
-| **Thickness** | Tolerância de profundidade para aceitar um hit |
-| **Sky intensity** | Fallback quando um raio sai do ecrã |
-| **Ambient** | Termo de bounce constante |
-| **Tint RGB** | Aproximação de albedo aplicada à radiance recolhida |
-| **Debug** | Cena iluminada, só GI, ou só fallback |
+O guia completo, com o separador Photon, as predefinições, as estatísticas e a C ABI, é
+[Photon: iluminação global no Doppio](../doppio/photon-guide.md).
 
 ## Utilização
 
-1. Abra uma cena com Camera 3D e geometria.
-2. Abra **View → Photon Global Illumination**, ou execute **Photon GI** na command
-   palette.
-3. Prima **Create Photon GI** se a cena ainda não tiver o componente.
-4. Escolha um preset e ajuste radius/thickness à escala da cena.
-5. Use **Debug → GI only** para inspecionar o resultado das cascatas.
+1. Abra uma cena com uma Camera 3D e geometria.
+2. Abra **View → Photon (Global Illumination)**.
+3. Prima **Add Photon GI** se a cena ainda não tiver o componente.
+4. Escolha uma predefinição e ajuste **Radius**, **Sky**, **Bounce gain** e os interruptores da geometria dos voxels.
+5. Mude **Debug → GI only** para inspecionar o resultado, e leia o cartão **Voxel volume** para ver o que o campo distante está a fazer.
 
-O componente é `ECS::PhotonGIComponent`; o Inspector também tem um drawer completo.
+O componente é `ECS::PhotonGIComponent`; o Inspetor mostra os mesmos campos.
+
 
 ## Oclusão de ambiente pré-processada (sem RTX)
 
@@ -63,9 +51,10 @@ do mesh selecionado:
 2. Escolha resolução (256/512/1024), raios, distância máxima e bias.
 3. Prima **Bake selected mesh**.
 
-O baker usa **compute na GPU** quando o render device expõe compute e recorre ao BVH
-CPU caso contrário. A CPU só rasteriza UVs e constrói a lista de triângulos; os testes
-de raio pesados correm na GPU. Cenas com mais de 8192 triângulos usam o caminho CPU.
+O baker usa **compute na GPU** quando o render device expõe compute e
+recorre ao BVH CPU caso contrário. A CPU só rasteriza UVs e constrói a lista de
+triângulos; os testes de raio pesados correm na GPU. Cenas com mais de 8192
+triângulos usam o caminho CPU.
 
 O baker:
 
@@ -82,7 +71,6 @@ depois de alterar geometria estática.
 > O AO pré-processado é para meshes estáticas. Objetos em movimento devem continuar
 > a usar o passe screen-space do Photon. Meshes com UVs sobrepostas fazem média das
 > faces; use UVs únicas para AO por face.
-
 
 ## Resolução de problemas do bake
 
@@ -109,17 +97,19 @@ curso.
 O Photon corre **antes do TAA**, por isso o resolve temporal limpa o padrão
 estocástico. Comece em Balanced para edição e use High/Cinematic para capturas.
 
+
 ## Limitações
 
-- Sem campo de probes world-anchored: a luz fora do ecrã usa um fallback constante
-  de céu + ambiente.
-- Bounce único: a irradiância indireta do frame anterior ainda não é realimentada.
-- Oclusão em screen-space pode vazar em geometria fina; aumente **Thickness** ou
-  reduza **Radius**.
-- Reflexos glossy não fazem parte da v0.1.
+- O Photon ainda não tem vetores de movimento: o histórico reprojeta com a matriz anterior, por
+  isso objetos rápidos podem deixar rasto.
+- O terreno conta com uma só cor de terra no volume de voxels, e uma malha recortada conta como
+  um bloco sólido quando o seu interruptor está ligado.
+- A oclusão em screen-space pode vazar em geometria fina; use um **Radius** menor.
+- Os reflexos glossy ainda não fazem parte do Photon.
 
 ## Relacionado
 
+- [Photon: iluminação global no Doppio](../doppio/photon-guide.md)
 - [Scene viewport](scene-viewport.md)
 - [Workspace e tema](workspace-and-theme.md)
 - [Catálogo de plugins](../plugins/README.md)

@@ -63,20 +63,66 @@ doppio/
   shared library.
 - a four-region `PaneGrid` layout: Hierarchy on the left; Viewport (+ Material,
   Texture and other generators, Texture Set, Script, Dryad Nodes) in the centre;
-  Inspector (+ Material, Nature, Water, Terrain) on the right; and a Project-style
-  bottom dock with **Assets** (folder tree + file grid) next to the Console;
+  Material, Nature, Water and Terrain are editors, so they are tabs of the centre workspace); Inspector
+  (+ Profiler, Photon, Environment, Audio) alone on the right, only what stays open while working; and a Project-style
+  bottom dock with **Assets** (folder tree + file grid) next to the Console, tall enough to keep the Hierarchy short (a tab strip wider than its pane scrolls sideways and the pane drops its split button, so tabs are never hidden);
 - **docking**: dragging a tab away from its header shows guides on every pane
   (`uikit/components/dock_overlay.rs`): the centre adds the tab to that pane's
   group, the edge guides split the pane and dock on that side. Panes also have
   a maximise/restore button; open menus only close on a click outside, Escape
   or choosing an item (hover updates from widgets behind never dismiss them);
+- the **Performance** tab (`uikit/panels/performance.rs`, `windows/main/performance.rs`, View → Performance): where the render options live.
+  The scene's `Forward Render Features` component (instancing, occlusion culling, reflection probes and screen-space reflections, volumetric
+  light, diffuse sky light and their numbers; **Add render features** puts it on a new entity) and the editor viewport's own render scale,
+  anti-aliasing, light shadows and ground grid. Scene edits are undo steps; viewport options are the editor's and are not. The editor starts the
+  viewport at render scale 1.0 (the engine's own default stays 1.5 for other hosts). Agents use `performance`, `performance_set`,
+  `performance_add` and `show_performance`. Photon keeps its own tab. With Photon off, or its component disabled, no Photon pass runs (a test
+  checks the engine's profiler), though a profiler row keeps the totals since the last **Reset**;
+- **building the editor**: the editor lays out and draws the whole window on every tick, so an unoptimised build costs a full core and leaves
+  the GPU waiting (a scene the engine draws in 2 ms ran at 7 fps). The workspace's `Cargo.toml` therefore builds dependencies at `opt-level = 3`
+  and the editor crates at 1 even in the dev profile, with line-table debug info; the first build takes minutes, later ones are incremental, and
+  the whole-window layout dropped from about 20 ms to about 3 ms;
+- **Play and the scene views**: ▶ / ⏸ and ⏹ sit in the middle of the top bar (`uikit/components/transport.rs`, `windows/main/sceneview.rs`).
+  Play snapshots the scene and starts the engine's game simulation (C ABI v23, `GameSimulation`): the systems `caffeine-runtime` runs
+  between frames (animation, effects, fluids, navigation, 2D and 3D physics, Lua and Dryad scripts, procedural worlds, UI) over the editor's
+  own world, shown in the **Gameplay** tab through the scene's active camera with the keyboard and pointer reaching the scripts. Pause freezes
+  it, Stop ends it and puts the scene back as it was: what the game did, and anything edited meanwhile, is undone, and Play leaves no undo history.
+  The **Camera** tab shows the scene through the selected Camera 3D (or the active one) without playing. Both pictures are engine scene views with
+  their own render target and draw on demand like the editor viewport. The simulation does not belong to one view: the game ticks
+  whichever tab is on screen, and the clock of the picture (clouds, weather, wind, water, sound) steps once per game tick by whichever view
+  draws first (the editor Viewport, Gameplay or Camera), so every visible view shows the same moment and none counts it twice; with
+  none on screen the physics and scripts go on and only the picture-bound parts wait. The engine's profiler lists the work: `Game::tick`
+  with `Game::animation`, `effects`, `physics2d`, `physics3d`, `scripts` and `world_and_ui`, and `SceneView::game` / `SceneView::camera`. Agents use `toggle_play`, `stop_play`, `game_key`, `show_gameplay`,
+  `show_camera_preview` and the `play` query;
+- **detaching**: the ⧉ button in a pane's title bar turns the active tab into a window of its own (the editor
+  runs as an `iced::daemon`; `windows/main/detach.rs`). A detached tab is the same view over the same engine and
+  documents, so nothing is copied: it leaves the dock layout and is drawn in another operating-system window with a
+  **Dock back** button. Closing that window docks the tab back, closing the main window quits, a "show this tab"
+  command raises the window instead of docking a second copy, and the last tab of the editor cannot leave. Agents use
+  `detach_tab`, `attach_tab` and the `windows` query; the single-window agent bridge build refuses to detach;
 - the **Assets wizard** (`+ New` / `Import` in the Assets toolbar,
   `uikit/asset_wizard.rs` + `uikit/panels/asset_wizard.rs`): Create (folder,
   Lua, Dryad script; material and texture set open their editors), Import
-  (copies files or folders into the current folder, never overwriting; dropped
-  files join the queue) and Pack (`caf-pack --input <asset root> --output
+  (copies files or folders into the current folder, never overwriting; the queue tags
+  every file with its kind and flags the ones that will be skipped; a file dropped on the window outside the
+  wizard is imported straight into the folder being browsed) and Pack (`caf-pack --input <asset root> --output
   <project>.cap`, found via `CAF_PACK`, `CAFFEINE_ENGINE_ROOT`, a sibling
   `caf-pack/build/src` or `PATH`);
+- the **file browser** (`uikit/file_browser.rs` + `uikit/panels/file_browser.rs`, **Browse…** in the Import tab):
+  Doppio's own picker for files and folders on this computer, identical on Linux, macOS and Windows and drivable by
+  tests and agents because it is plain `std::fs` (no operating-system dialog). It has places (home, Desktop, Documents,
+  Downloads, every drive on Windows, `/` and the mount points elsewhere), a path trail, a box that takes typed or pasted
+  paths (`~`, relative, quoted, `file://`), a name filter, hidden-file and importable-types switches and a multi-selection
+  that survives walking between folders; a double-clicked file is taken at once and the next Browse opens where the last
+  one ended;
+- **asset kinds, cards and the shared picker**: `uikit/asset_kind.rs` is the one table of file
+  extensions (textures including bmp/psd/pnm, meshes, audio including flac, fonts, prefabs, scenes,
+  terrain/water/nature graphs, texture sets and data files such as .json, .csv, .mtl and .bin);
+  the Assets grid draws a card per asset with a bar in its kind's colour, a thumbnail or icon well and an
+  extension chip. Every asset field composes `asset_field` (thumbnail, editable path, **…** and **×**)
+  and opens the single `asset.pick.*` overlay: matching assets with kind filters, search, the current value
+  first and a *None* row. Inspector string fields are recognised by name (`Mesh Path`, `Clip Path`,
+  `Script`…); the Terrain and Water Generator slots use it too; agents drive it with `asset_pick_*` and `asset_kinds`;
 - stable widget ids for the toolbar, inspector inputs and entity rows;
 - a headless `iced_test` harness covering editing, panes, console filters,
   hierarchy search, viewport gestures and flight;
@@ -267,6 +313,9 @@ precedent.
   so projects created by the C++ tools and by Doppio are interchangeable.
   `uikit::project` owns create/load/scan/recent helpers and injects the recent
   file in tests so no real user state is touched.
+- The **Sample** template is the fixed project the team benchmarks and tries Doppio in: the standard folders and
+  nothing else, named `Sample` unless a name is typed. Its canonical copy is `samples/Sample` in the engine repository, and a
+  test fails when the template and that copy drift apart (`cargo test -p doppio-ui zz_write_sample -- --ignored` rewrites it).
 - The **Assets** pane is now a real browser: clickable breadcrumbs, Up/Root,
   refresh, folder-first navigation and a Grid/List switch. Folder navigation is
   derived from `AssetInfo.relative_path`; no new C ABI call is required.
@@ -744,7 +793,7 @@ registers scene-level queries and actions:
 | query | `layout` | pane list and kinds |
 | action | `toggle_grid` | shows or hides the reference grid |
 | action | `open_project_manager` | opens the Project Manager dialog |
-| action | `create_project` | `{ "name", "location"?, "template"?: "Empty"\|"2D"\|"3D" }` |
+| action | `create_project` | `{ "name", "location"?, "template"?: "Empty"\|"2D"\|"3D"\|"Sample" }` |
 | action | `open_project` | `{ "path": "project root or project.caffeine" }` |
 | action | `open_script` / `open_dryad` | `{ "path": "script.lua" \| "script.dyd" }` |
 | action | `dryad_add_node` / `dryad_connect` / `dryad_set_number` / `dryad_set_bool` / `dryad_set_text` | graph editing |

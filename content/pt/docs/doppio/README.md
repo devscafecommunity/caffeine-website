@@ -36,5 +36,8 @@ fazem rochas, árvores, água, terreno, texturas e materiais. O repositório do 
 | Página | O que cobre |
 |---|---|
 | [`micromeshes.md`](micromeshes.md) | Micromeshes: uma hierarquia de clusters e um corte na GPU para malhas densas |
+| [`photon-guide.md`](photon-guide.md) | Photon: iluminação global, o separador Photon, o volume de voxels e as suas estatísticas |
+| [`profiler-guide.md`](profiler-guide.md) | Profiler: scopes cronometrados do renderer, GPU timing, o separador Profiler e como ler um perfil |
+| [`environment-guide.md`](environment-guide.md) | Environment: nuvens, névoa de altura e chuva, o separador Environment, e como concordam com o sol e o Photon |
 | [`graphics-roadmap.md`](graphics-roadmap.md) | O plano do renderer: Micromeshes, Photon e o que vem a seguir |
 | [`photoreal-world-roadmap.md`](photoreal-world-roadmap.md) | O plano de conteúdo: terreno, natureza, água, scatter e streaming |

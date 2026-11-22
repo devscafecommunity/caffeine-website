@@ -36,5 +36,8 @@ make rocks, trees, water, terrain, textures and materials. The engine repository
 | Page | What it covers |
 |---|---|
 | [`micromeshes.md`](micromeshes.md) | Micromeshes: a cluster hierarchy and a GPU cut for dense meshes |
+| [`photon-guide.md`](photon-guide.md) | Photon: global illumination, the Photon tab, the voxel volume and its statistics |
+| [`profiler-guide.md`](profiler-guide.md) | Profiler: timed scopes for the renderer, GPU timing, the Profiler tab and how to read a profile |
+| [`environment-guide.md`](environment-guide.md) | Environment: clouds, height fog and rain, the Environment tab, and how they agree with the sun and Photon |
 | [`graphics-roadmap.md`](graphics-roadmap.md) | The renderer plan: Micromeshes, Photon and what is next |
 | [`photoreal-world-roadmap.md`](photoreal-world-roadmap.md) | The content plan: terrain, nature, water, scatter and streaming |

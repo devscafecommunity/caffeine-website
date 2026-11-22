@@ -167,6 +167,40 @@ audio.update(dt);
 
 ---
 
+## Som 3D e o som do tempo
+
+O `AudioService` (a camada para scripts sobre o sistema acima) tem um modo 3D e toca sons que só existem em memória.
+As regras são funções puras em `src/caffeine/audio/Spatial.hpp`, por isso são testes unitários que não precisam de dispositivo.
+
+```cpp
+audio.setListener3D({camera.position, camera.forward, {0, 1, 0}});
+u32 h = audio.playAt3D("wind.wav", {120, 4, -30}, /*ref*/ 2.0f, /*max*/ 200.0f);
+audio.setSourcePosition3D(h, newPosition);                  // recalcula ganho e pan
+audio.registerSamples("made:tone", samples, 22050, 1);      // sem ficheiro; play("made:tone") funciona
+```
+
+* O **ganho** é 1 até à distância de referência, depois cai (`Rolloff::Inverse`: metade por cada duplicação da distância, ou
+  `Linear`) e chega a 0 na distância máxima com um fade curto, por isso nada corta de repente.
+* O **pan** é o lado em que a fonte está (direita = frente x cima, mão direita), e abre-se ao longo da distância de referência
+  para que um som em cima do ouvinte não salte de lado para lado. O atraso (`distância / 343`) é comunicado; o serviço
+  não o aplica.
+* Os valores calculam-se quando o som começa e quando se chama `setSourcePosition3D`; o serviço não segue sozinho um ouvinte que se move.
+
+O tempo do editor usa-o. Com **Audio Enabled** no componente `Weather` da cena (o cartão *Sound* do separador Environment; desligado por
+omissão), a sessão abre o dispositivo de áudio e toca três coisas feitas de ruído, sem ficheiros:
+
+| Som | Segue | Feito por |
+|---|---|---|
+| Leito de chuva | A intensidade da chuva, suavizada em cerca de 0.6 s; parado quando é 0 | `synthesizeRainLoop` em `AmbienceSynth.hpp`, um ciclo sem costura |
+| Leito de vento | A velocidade do vento vezes a rajada | `synthesizeWindLoop`, um ciclo sem costura |
+| Trovão | Cada evento de trovão: panorâmico para a direção do raio contra onde a câmara olha, mais baixo com a distância | `synthesizeThunder` em `ThunderSynth.hpp`: um estalo que só os raios próximos têm, e rolamentos que perdem os agudos e duram mais com a distância |
+
+O `WeatherAudio` comanda um `AudioSink`, por isso as suas regras testam-se com um dispositivo falso. Sem dispositivo os níveis e a contagem de trovões
+continuam a seguir o tempo (`caffeine_session_audio_state` comunica-os) e nada toca. O host de runtime (`caffeine-runtime`) não usa o
+renderer de cena na GPU, por isso ainda não tem som do tempo.
+
+---
+
 ## Decisões de Design
 
 | Decisão | Justificativa |

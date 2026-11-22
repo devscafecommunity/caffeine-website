@@ -167,6 +167,40 @@ audio.update(dt);
 
 ---
 
+## 3D sound and the weather's sound
+
+`AudioService` (the script-facing layer over the system above) has a 3D mode and can play sounds that exist only in memory.
+The rules are pure functions in `src/caffeine/audio/Spatial.hpp`, so they are unit tests that need no device.
+
+```cpp
+audio.setListener3D({camera.position, camera.forward, {0, 1, 0}});
+u32 h = audio.playAt3D("wind.wav", {120, 4, -30}, /*ref*/ 2.0f, /*max*/ 200.0f);
+audio.setSourcePosition3D(h, newPosition);                  // recomputes gain and pan
+audio.registerSamples("made:tone", samples, 22050, 1);      // no file needed; play("made:tone") works
+```
+
+* **Gain** is 1 up to the reference distance, then falls (`Rolloff::Inverse`: half for every doubling of the distance, or
+  `Linear`) and reaches 0 at the maximum distance with a short fade, so nothing cuts off.
+* **Pan** is the side the source is on (right = forward x up, right-handed), and it opens up over the reference distance so a
+  sound on top of the listener does not jump from side to side. The delay (`distance / 343`) is reported; the service does not apply it.
+* The values are computed when the sound starts and when `setSourcePosition3D` is called; the service does not follow a moving
+  listener by itself.
+
+The editor's weather uses it. With **Audio Enabled** on the scene's `Weather` component (the Environment tab's *Sound* card; off by
+default), the session opens the audio device and plays three things made from noise, with no files:
+
+| Sound | Follows | Made by |
+|---|---|---|
+| Rain bed | The rain's intensity, smoothed over about 0.6 s; stopped when it is 0 | `synthesizeRainLoop` in `AmbienceSynth.hpp`, a seamless loop |
+| Wind bed | The wind's speed times its gust | `synthesizeWindLoop`, a seamless loop |
+| Thunder | Each thunder event: panned to the strike's bearing against where the camera faces, quieter with the distance | `synthesizeThunder` in `ThunderSynth.hpp`: a crack that only close strikes have, and rolls that lose their highs and last longer with the distance |
+
+`WeatherAudio` drives an `AudioSink`, so its rules are tested with a fake device. Without a device the levels and the thunder count still
+follow the weather (`caffeine_session_audio_state` reports them) and nothing plays. The runtime host (`caffeine-runtime`) does not use the
+GPU scene renderer, so it has no weather sound yet.
+
+---
+
 ## Design Decisions
 
 | Decision | Justificativa |

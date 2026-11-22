@@ -3,7 +3,7 @@
 > **Phase:**5 — Dimensional Transition
 > **Namespace:** `Caffeine::Animation` 
 > **File:** `src/animation/SkeletalAnimation.hpp` 
-> ** Status:** 
+> ** Status:** The skinned pose path is `SkinnedPose` with `AnimationSystem` (SkinLibrary). `BlendNode` and `sampleBlendTree` are the blend helpers; the unused `SkeletalAnimationSystem` was removed.
 
 ---
 

@@ -21,10 +21,10 @@ materials.
 > renderer (see [`micromeshes.md`](micromeshes.md)): RHI indirect draws and storage buffers, render stats and a HUD readout, the offline
 > cluster hierarchy with normals, UVs, tangents and vertex colours, the GPU cut with per-instance transforms, the lit G-buffer draw and
 > the sun cascades' own coarser cut into a shared index arena, and a single-phase occlusion test against last frame's depth. **Open in
-> M-2:** two-phase occlusion and point and spot shadow cuts. **Photon has not started** (P-A: the conservative voxeliser first, because the direct-light injection cannot be verified
+> M-2:** two-phase occlusion and point and spot shadow cuts. **Photon P-A is nearly done** (P-A: the conservative voxeliser first, because the direct-light injection could not be verified
 > before it; then motion vectors, then real direct light). Independent GPU work done meanwhile is **not** part of these phases:
-> vegetation shading and wind, alpha-tested shadows, run-time material modifiers and GPU-displaced water (see the Nature and Water
-> guides). The deterministic-world foundation shared with the world roadmap (`core/Hash.hpp`, the scatter core) is done.
+> vegetation shading and wind, alpha-tested shadows, run-time material modifiers, GPU-displaced water and the weather (clouds, height fog
+> and rain; see the Nature, Water and Environment guides). The deterministic-world foundation shared with the world roadmap (`core/Hash.hpp`, the scatter core) is done.
 >
 > **M-0 is complete.** **Next, in order:** P-A, whose first item is the conservative voxeliser. Micromesh's next phases (M-3 streaming, the
 > `.micromesh` section in `.caf`, a terrain cluster path to beat the benchmark's baseline) follow once the content pipeline needs them.
@@ -53,12 +53,12 @@ source triangles in view with a frame-bound cost**, which is what clusters deliv
 
 ### Where it stands (2026-11-20)
 
-17 items done, 28 open. **Micromeshes are largely done; Photon has not started**, so the next real
-work on this page is Photon P-A (see section 8 for the order).
+21 items done, 25 open. **Micromeshes are largely done; Photon P-A is nearly done** (regression scenes, voxeliser with dirty regions, real direct light, bounce gain and the Photon panel done), so the next real
+work on this page is Photon P-A's motion vectors (see section 8 for the order).
 
 | Phase | Done | Open | State |
 |---|---|---|---|
-| P-A Photon: make it correct | 0 | 4 | not started: the voxeliser, motion vectors, real direct light, regression scenes |
+| P-A Photon: make it correct | 4 | 1 | nearly done: regression scenes, voxeliser and real direct light done; motion vectors open |
 | P-B Photon: quality | 0 | 5 | not started |
 | P-C Photon: scale and cost | 0 | 4 | not started |
 | M-0 RHI and tooling | 4 | 0 | done: indirect draws, storage buffers, stats, the HUD readout, the benchmark set (Profiler entries still to add) |
@@ -78,8 +78,8 @@ work on this page is Photon P-A (see section 8 for the order).
 | GI far field | **Done (fallback fill)**: four clipmap levels 0.25/0.5/1/2 m, probes with SH, Chebyshev queries | `PhotonCascades.hpp`, `PhotonFarField.hpp` |
 | Multi-bounce | **Done**: previous irradiance fed back with a cap and reprojected history | header notes P5 |
 | Baked AO | **Done**: BVH/GPU AO bake | `PhotonAOBake.cpp`, `PhotonGpuBake.cpp` |
-| Direct light into GI | **Gap**: injection uses a hemispherical sky term, not the real lights and shadows | header "KNOWN GAPS" |
-| Voxelisation | **Gap**: screen depth-accumulation fallback, so off-screen and back faces are missing | header "KNOWN GAPS" |
+| Direct light into GI | **Done**: the sun, point and spot lights injected into the voxels, shadowed by a march through the material volume | `photon_inject.comp` |
+| Voxelisation | **Done**: conservative triangle voxeliser with dirty-region updates, terrain, skinned and cut-out meshes; 1M-triangle cap; the screened fill stays as the fallback | `photon_voxelize_tri.comp`, `GpuSceneRenderer::updatePhotonGeometry` |
 | Motion vectors | **Gap**: history reprojects with the previous matrix only | header P5 |
 | Geometry LOD | **Done for opaque meshes that opt in** (Micromesh cluster cut); **partial** for the rest: 3 clustered-vertex LODs per mesh, terrain chunk LODs, CPU frustum cull | `micromesh/`, `MicromeshGpu.cpp`, `MeshLOD.cpp`, `TerrainLodSystem.cpp` |
 | Occlusion | **Partial**: coarse CPU AABB occluders (max 16), Min-Z pyramid for GI, and for Micromesh a single-phase farthest-depth pyramid of last frame's depth | `CoarseOcclusion.hpp`, `MinZPyramid.cpp`, `MicromeshGpu.cpp` |
@@ -87,7 +87,9 @@ work on this page is Photon P-A (see section 8 for the order).
 | Shadows | **Done**: 4 directional cascades at 2048, point and spot maps | `GpuDirectionalShadowMap.hpp` |
 | Post | **Done**: TAA, ACES, bloom, DOF, SSAO, motion blur, auto exposure | `PostProcessStack.cpp` |
 | Compute and indirect in the RHI | **Done (M-0)**: indirect draws and dispatch, storage buffers, read-write compute buffers, capabilities, `readBuffer` | `rhi/CommandBuffer.hpp`, `tests/test_rhi_indirect.cpp` |
-| Website page for Photon | **Stale**: says v0.1, no probe field, single bounce; the code is past that | `caffeine-website/.../editor/photon.md` |
+| Website page for Photon | **Done**: the Photon guide and the editor page | [`photon-guide.md`](photon-guide.md) |
+| Sky, clouds, fog, rain and lightning | **Done**: reflected `Volumetric Clouds` and `Weather` components, exponential height fog, world-space rain with depth and splashes in the composite pass, wind gusts shared by rain, foliage and clouds, lightning with a bolt, a flash that lights the scene and Photon, and thunder events, moving cloud shadows on the ground and in Photon's bounce, silver lining and sun shafts, scene-wide wetness, sun and Photon sky light that follow the overcast sky, the Environment tab | `WeatherSystem.hpp`, `sky.frag`, `post_composite.frag`, `photon_inject.comp`, [`environment-guide.md`](environment-guide.md) |
+| Profiler and measured performance | **Done**: a scope tree with real GPU time per pass (`CF_GPU_SCOPE`), the Profiler tab, C ABI v18; first round: texture-cache lookups out of the draw loop (opaque pass 13.5 to 2.3 ms), Photon probes culled to the view and time-sliced (25 to 9 ms), cheaper cloud sun march, material-cache lookups out of the draw loop, shadow casters culled per cascade, charts for frame rate, CPU per core, GPU and memory (C ABI v19) | `Profiler.hpp`, `GpuProfile.hpp`, [`profiler-guide.md`](profiler-guide.md) |
 
 ## 3. Review of the proposal
 
@@ -133,16 +135,34 @@ Photon first: it is closest to done, benefits every scene now, and Micromeshes w
 > screen, where the screen-depth voxel fill has no geometry. The direct light cannot be tested, and so is not worth its cost,
 > until the conservative voxeliser (third item) provides geometry the screen does not see. Order accordingly. The Photon GI
 > component is now reflected (Inspector, scenes, scripts: `Photon GI`, with `Debug view`), which the next attempt needs; note
-> that `Debug view` did not change the image on the `ComputeC0` path in that test, worth checking.
+> that `Debug view` did not change the image on the `ComputeC0` path in that test: fixed (2026-11-21), GI only and Fallback only now work there.
 
-- [ ] Inject **real direct light** (sun, point, spot, with the shadow term) into the voxel/probe radiance
-      instead of the hemispherical sky term. Test: a red wall lit by the sun tints a nearby white floor.
+- [x] Inject **real direct light** (sun, point, spot) into the voxel radiance (`photon_inject.comp`: `directLight`, shadowed by a
+      march through the material volume, the forward shader's `radiance x N.L` convention), with the sky ambient scaled by the sky
+      visibility of each face. Test: a red, a white and a green wall behind the camera (not on screen) tint the white cube that faces
+      them red, neutral and green (about 40 of 255, nothing without the wall). Three bugs found on the way, all in the far field: the
+      probes decoded their directions twice (so the far query read other directions than the probes had traced), the cascades did
+      the same, and the **material volume was cycled** (discarded) by each compute pass (`CommandBuffer::beginComputePass(..., cycle)`).
+      The last one let the screened fill erase the triangle voxels every frame: a closed room read 90 of 255 of sky light, now about 15 on average (1 to 3 in the quietest frames).
 - [ ] **Motion vectors** pass (per object matrices, previous frame), used by Photon history, TAA and motion
       blur. Remove the "no motion vectors" gap; invalidate history on disocclusion by depth/normal test.
-- [ ] Conservative **triangle voxeliser** with dirty-region updates (static geometry once, dynamic per
-      frame), replacing the G-buffer fallback. Keep the fallback behind a quality tier.
-- [ ] Headless regression scenes: Cornell box, light-through-door, thin wall leak. Fixed seeds, image
-      thresholds in `doppio/tests/ui-flows`.
+- [x] Conservative **triangle voxeliser** (`photon_voxelize_tri.comp`, `PhotonCascades::updateGeometryVoxels`): one invocation per
+      triangle, separating-axis triangle/box test over the voxels of its box, all four clipmap levels; the scene's opaque triangles are
+      gathered with their albedo (`GpuSceneRenderer::updatePhotonGeometry`, one hash per object every frame, a diff against the last set) and a
+      level is cleared and rebuilt when its clipmap origin moves or the geometry changes. **Dirty regions:** a moving
+      object clears and revoxelises only the boxes where it was and is (at most 8, else the levels rebuild whole); terrain, skinned meshes (in their pose) and, on request, cut-out meshes are in the volume; past 1 million triangles the voxeliser stops and the screened fill works alone, and the panel says so. A textured
+      surface counts with the mean colour of its picture (`GpuTextureCache::averageColor`). GPU tests: `test_photon_voxelizer.cpp`.
+      The screened fill stays, as the fallback and for the terrain.
+- [x] Headless regression scenes: Cornell box, light-through-door, thin wall leak (module `photon_gi` in `windows/main/tests.rs`, image
+      thresholds on the difference between GI off and on). Measured 2026-11-21: colour bleed passes (a white floor gains about +8 red beside the
+      red wall, +6 green beside the green one). A room with no opening leaked: with the camera inside it the interior was lit like the open
+      sky (gains of 60 to 90 out of 255, whatever the sky intensity); sealed now (about 15 on average over the frames; single frames swung between 3 and 25 until probes got their own sample offsets, see the temporal average in the Photon guide), with the sun's bounce through a slit at 7 to 16 on
+      the far floor against about 170 on the lit patch, and a partition shuts that bounce out of the far side (4.3 -> 1.5). The far field is
+      asked from 0.4 m off the surface (the surface's own voxels are up to 0.5 m thick) and from the ray's origin, not its screen-exit point.
+      All regular tests.
+- [x] **Bounce gain and the Photon panel** (C ABI v17: `caffeine_session_photon_stats`, `caffeine_session_photon_rebuild`). `Bounce gain` scales what the voxels hold: on the far floor of the slit room
+      (GI only, of 255) it reads 13 at gain 0, 18 at 1 and 24 at 4; the screen cascades are scaled by `Intensity`. The **Photon** tab edits the component, the voxel
+      geometry switches and presets, with live voxel statistics; see [`photon-guide.md`](photon-guide.md).
 
 ### Phase P-B — Quality and stability
 

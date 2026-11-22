@@ -63,20 +63,66 @@ doppio/
   biblioteca partilhada.
 - um layout `PaneGrid` de quatro regiões: Hierarchy à esquerda; Viewport (+ Material,
   Texture e outros geradores, Texture Set, Script, Dryad Nodes) ao centro;
-  Inspector (+ Material, Nature, Water, Terrain) à direita; e uma doca inferior ao estilo Project
-  com **Assets** (árvore de pastas + grelha de ficheiros) junto à Console;
+  Material, Nature, Water e Terrain são editores, por isso são separadores do espaço de trabalho central); Inspector
+  (+ Profiler, Photon, Environment, Audio) sozinho à direita, só o que fica aberto enquanto se trabalha; e uma doca inferior ao estilo Project
+  com **Assets** (árvore de pastas + grelha de ficheiros) junto à Console, alta o bastante para manter a Hierarchy curta (uma faixa de separadores mais larga do que o painel desliza para os lados e o painel larga o botão de dividir, por isso os separadores nunca se escondem);
 - **docking**: arrastar um separador para fora do seu cabeçalho mostra guias em todos os painéis
   (`uikit/components/dock_overlay.rs`): o centro adiciona o separador ao grupo desse painel,
   as guias dos bordos dividem o painel e fixam-no nesse lado. Os painéis têm também
   um botão de maximizar/restaurar; os menus abertos só fecham com um clique fora, Escape
   ou ao escolher um item (as atualizações de hover de widgets por trás nunca os fecham);
+- o separador **Performance** (`uikit/panels/performance.rs`, `windows/main/performance.rs`, View → Performance): onde vivem as opções de renderização.
+  O componente `Forward Render Features` da cena (instancing, occlusion culling, sondas de reflexão e reflexões em espaço de ecrã, luz volumétrica,
+  luz difusa do céu e os seus números; **Add render features** põe-no numa nova entidade) e a escala de renderização, o anti-aliasing, as sombras das luzes e a
+  grelha do viewport do editor. As edições da cena são passos de undo; as opções do viewport são do editor e não são. O editor arranca o viewport com
+  escala 1,0 (o valor do motor continua 1,5 para outros anfitriões). Os agentes usam `performance`, `performance_set`, `performance_add` e
+  `show_performance`. O Photon mantém o seu separador. Com o Photon desligado, ou o componente desativado, nenhum passo do Photon corre (um teste verifica
+  o profiler do motor), embora uma linha do profiler guarde os totais desde o último **Reset**;
+- **compilar o editor**: o editor calcula o layout e desenha a janela toda a cada tick, por isso uma build sem otimização custa um núcleo inteiro e deixa a GPU
+  à espera (uma cena que o motor desenha em 2 ms corria a 7 fps). O `Cargo.toml` do workspace compila por isso as dependências com `opt-level = 3` e as
+  crates do editor com 1 mesmo no perfil dev, com informação de debug só de tabelas de linhas; a primeira compilação demora minutos, as seguintes são
+  incrementais, e o layout da janela inteira passou de cerca de 20 ms para cerca de 3 ms;
+- **Play e as vistas da cena**: ▶ / ⏸ e ⏹ ficam ao centro da barra superior (`uikit/components/transport.rs`, `windows/main/sceneview.rs`).
+  O Play tira um snapshot da cena e arranca a simulação de jogo do motor (C ABI v23, `GameSimulation`): os sistemas que o `caffeine-runtime` corre
+  entre frames (animação, efeitos, fluidos, navegação, física 2D e 3D, scripts Lua e Dryad, mundos procedurais, UI) sobre o mundo do próprio
+  editor, mostrada no separador **Gameplay** através da câmara ativa da cena com o teclado e o ponteiro a chegar aos scripts. O Pause congela-a,
+  o Stop termina-a e repõe a cena como estava: o que o jogo fez, e o que se editou entretanto, é desfeito, e o Play não deixa histórico de undo.
+  O separador **Camera** mostra a cena através da Camera 3D selecionada (ou da ativa) sem jogar. Ambas as imagens são vistas de cena do motor com
+  o seu próprio alvo de renderização e desenham a pedido como o viewport do editor. A simulação não pertence a uma vista: o jogo avança
+  qualquer que seja o separador visível, e o relógio da imagem (nuvens, tempo, vento, água, som) avança uma vez por tick do jogo pela vista
+  que desenhar primeiro (o Viewport do editor, o Gameplay ou o Camera), por isso todas as vistas visíveis mostram o mesmo instante e nenhuma o
+  conta duas vezes; sem nenhuma visível a física e os scripts continuam e só o que depende da imagem espera. O profiler do motor lista o trabalho:
+  `Game::tick` com `Game::animation`, `effects`, `physics2d`, `physics3d`, `scripts` e `world_and_ui`, e `SceneView::game` / `SceneView::camera`. Os agentes usam `toggle_play`, `stop_play`, `game_key`,
+  `show_gameplay`, `show_camera_preview` e a consulta `play`;
+- **destacar**: o botão ⧉ na barra de título de um painel transforma o separador ativo numa janela própria (o editor
+  corre como um `iced::daemon`; `windows/main/detach.rs`). Um separador destacado é a mesma vista sobre o mesmo motor e
+  os mesmos documentos, por isso nada é copiado: sai do layout do dock e é desenhado noutra janela do sistema operativo com um
+  botão **Dock back**. Fechar essa janela devolve o separador ao dock, fechar a janela principal sai, um comando "mostrar este
+  separador" levanta a janela em vez de acoplar uma segunda cópia, e o último separador do editor não pode sair. Os agentes usam
+  `detach_tab`, `attach_tab` e a consulta `windows`; a build da ponte de agente, de janela única, recusa destacar;
 - o **Assets wizard** (`+ New` / `Import` na barra de ferramentas de Assets,
   `uikit/asset_wizard.rs` + `uikit/panels/asset_wizard.rs`): Create (pasta,
   Lua, script Dryad; o material e o texture set abrem os seus editores), Import
-  (copia ficheiros ou pastas para a pasta atual, sem nunca sobrescrever; os ficheiros largados
-  entram na fila) e Pack (`caf-pack --input <asset root> --output
+  (copia ficheiros ou pastas para a pasta atual, sem nunca sobrescrever; a fila marca
+  cada ficheiro com o seu tipo e assinala os que serão ignorados; um ficheiro largado na janela fora do
+  wizard é importado diretamente para a pasta que está a ser vista) e Pack (`caf-pack --input <asset root> --output
   <project>.cap`, encontrado através de `CAF_PACK`, `CAFFEINE_ENGINE_ROOT`, um
   `caf-pack/build/src` vizinho ou `PATH`);
+- o **navegador de ficheiros** (`uikit/file_browser.rs` + `uikit/panels/file_browser.rs`, **Browse…** no separador Import):
+  o seletor próprio do Doppio para ficheiros e pastas deste computador, igual em Linux, macOS e Windows e controlável por
+  testes e agentes porque é `std::fs` simples (sem diálogo do sistema operativo). Tem locais (home, Desktop, Documents,
+  Downloads, todas as unidades no Windows, `/` e os pontos de montagem nos outros), um trilho do caminho, uma caixa que aceita
+  caminhos escritos ou colados (`~`, relativo, entre aspas, `file://`), um filtro por nome, interruptores de ficheiros ocultos
+  e de tipos importáveis e uma multisseleção que sobrevive à passagem entre pastas; um ficheiro com duplo clique é tomado de
+  imediato e o Browse seguinte abre onde o anterior terminou;
+- **tipos de asset, cartões e o seletor partilhado**: `uikit/asset_kind.rs` é a única tabela de extensões
+  (texturas incluindo bmp/psd/pnm, malhas, áudio incluindo flac, tipos de letra, prefabs, cenas,
+  grafos de terreno/água/natureza, texture sets e ficheiros de dados como .json, .csv, .mtl e .bin);
+  a grelha de Assets desenha um cartão por asset com uma barra na cor do seu tipo, uma miniatura ou um ícone
+  e uma etiqueta da extensão. Cada campo de asset compõe `asset_field` (miniatura, caminho editável, **…** e **×**)
+  e abre a única sobreposição `asset.pick.*`: os assets compatíveis com filtros por tipo, pesquisa, o valor atual
+  primeiro e uma linha *None*. Os campos de texto do Inspector são reconhecidos pelo nome (`Mesh Path`, `Clip Path`,
+  `Script`…); os slots dos geradores de Terreno e Água usam-no também; os agentes usam `asset_pick_*` e `asset_kinds`;
 - ids de widget estáveis para a barra de ferramentas, os campos do inspector e as linhas de entidades;
 - um harness headless `iced_test` que cobre edição, painéis, filtros da consola,
   pesquisa na hierarchy, gestos do viewport e voo;
@@ -267,6 +313,9 @@ do lado do motor.
   por isso os projetos criados pelas ferramentas C++ e pelo Doppio são intercambiáveis.
   `uikit::project` é responsável pelos helpers de criar/carregar/analisar/recentes e injeta o ficheiro
   de recentes nos testes, para que nenhum estado real do utilizador seja tocado.
+- O template **Sample** é o projeto fixo em que a equipa faz benchmarks e experimenta o Doppio: as pastas padrão e
+  mais nada, chamado `Sample` a menos que se escreva um nome. A sua cópia canónica é `samples/Sample` no repositório do motor, e um
+  teste falha quando o template e essa cópia se afastam (`cargo test -p doppio-ui zz_write_sample -- --ignored` reescreve-a).
 - O painel **Assets** é agora um navegador real: breadcrumbs clicáveis, Up/Root,
   atualizar, navegação com pastas primeiro e um comutador Grid/List. A navegação por pastas é
   derivada de `AssetInfo.relative_path`; não é necessária nenhuma nova chamada à C ABI.
@@ -744,7 +793,7 @@ regista queries e ações ao nível da cena:
 | query | `layout` | lista e tipos de painéis |
 | action | `toggle_grid` | mostra ou esconde a grelha de referência |
 | action | `open_project_manager` | abre o diálogo do Project Manager |
-| action | `create_project` | `{ "name", "location"?, "template"?: "Empty"\|"2D"\|"3D" }` |
+| action | `create_project` | `{ "name", "location"?, "template"?: "Empty"\|"2D"\|"3D"\|"Sample" }` |
 | action | `open_project` | `{ "path": "project root or project.caffeine" }` |
 | action | `open_script` / `open_dryad` | `{ "path": "script.lua" \| "script.dyd" }` |
 | action | `dryad_add_node` / `dryad_connect` / `dryad_set_number` / `dryad_set_bool` / `dryad_set_text` | edição do grafo |
