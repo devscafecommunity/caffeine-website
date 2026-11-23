@@ -1,0 +1,15 @@
+{
+  "name": "Capture the Photon tab screenshots used by docs/doppio/photon-guide.md",
+  "description": "Run through scripts/capture-photon-docs.sh (it strips the NNN- prefix). Needs the engine (fixture scene3d).",
+  "fixture": "scene3d",
+  "size": [1600, 1250],
+  "steps": [
+    {"action": "click", "target": "id:editor.menu.view", "label": "open the View menu"},
+    {"action": "click", "target": "id:editor.menu.view.photon", "label": "open the Photon tab"},
+    {"action": "screenshot", "name": "photon-empty", "target": "id:editor.pane.photon", "padding": 0},
+    {"action": "click", "target": "id:photon.setup.add", "label": "add Photon GI"},
+    {"action": "wait", "ms": 400, "real_time": true, "label": "let a few frames render"},
+    {"action": "screenshot", "name": "photon-pane", "target": "id:editor.pane.photon", "padding": 0},
+    {"action": "screenshot", "name": "photon-editor"}
+  ]
+}

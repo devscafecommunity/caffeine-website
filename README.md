@@ -61,6 +61,7 @@ How pages are placed:
 |-------|--------|
 | Build, install, first project | `content/en/docs/getting-started/` |
 | Editor UI, panels, viewport | `content/en/docs/editor/` |
+| Doppio guides (architecture, generators, headless testing, roadmaps) | `content/en/docs/doppio/` |
 | Engine modules (ECS, rendering, audio…) | matching module folder |
 | Doppio generators | `doppio/docs/` in the engine, linked from the site |
 | Roadmaps and historical plans | `content/en/docs/plans/` |

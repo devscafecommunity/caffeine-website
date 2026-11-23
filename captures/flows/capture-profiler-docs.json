@@ -1,0 +1,23 @@
+{
+  "name": "Capture the Profiler tab screenshots used by docs/doppio/profiler-guide.md",
+  "description": "Run through scripts/capture-profiler-docs.sh (it strips the NNN- prefix). Needs the engine (fixture scene3d).",
+  "fixture": "scene3d",
+  "size": [1600, 1600],
+  "steps": [
+    {"action": "click", "target": "id:editor.menu.view", "label": "open the View menu"},
+    {"action": "click", "target": "id:editor.menu.view.profiler", "label": "open the Profiler tab"},
+    {"action": "scroll", "target": "id:editor.pane.viewport", "dy": 1, "label": "move the camera so the viewport keeps rendering"},
+    {"action": "wait", "frames": 120, "label": "let frames render and the charts fill"},
+    {"action": "scroll", "target": "id:editor.pane.viewport", "dy": -1, "label": "and back"},
+    {"action": "wait", "frames": 120, "label": "more frames"},
+    {"action": "screenshot", "name": "profiler-pane", "target": "id:editor.pane.profiler", "padding": 0},
+    {"action": "click", "target": "id:profiler.setup.gpu_timing", "offset": [-115, 0], "label": "GPU timing on"},
+    {"action": "click", "target": "id:profiler.setup.reset", "label": "reset"},
+    {"action": "scroll", "target": "id:editor.pane.viewport", "dy": 1, "label": "move the camera so the viewport renders frames"},
+    {"action": "wait", "ms": 800, "real_time": true, "label": "collect GPU samples"},
+    {"action": "scroll", "target": "id:editor.pane.viewport", "dy": -1, "label": "and back"},
+    {"action": "wait", "ms": 1500, "real_time": true, "label": "collect GPU samples"},
+    {"action": "wait", "frames": 60, "label": "and some frames more"},
+    {"action": "screenshot", "name": "profiler-gpu", "target": "id:editor.pane.profiler", "padding": 0}
+  ]
+}

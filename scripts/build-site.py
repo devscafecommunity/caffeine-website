@@ -51,7 +51,7 @@ ASSET_EXT = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".pdf", ".mp4", "
 
 # Sections in display order. "_root" holds the Markdown files directly under docs/.
 SECTION_ORDER = [
-    "getting-started", "editor", "plugins", "scripting", "ecs", "rendering", "assets",
+    "getting-started", "editor", "doppio", "plugins", "scripting", "ecs", "rendering", "assets",
     "physics", "audio", "input", "animation", "terrain", "ui", "core", "math", "memory",
     "concurrency", "debug", "performance", "architecture", "api", "releases", "plans",
     "analysis", "_root",
@@ -61,6 +61,7 @@ SECTION_INFO = {
     "en": {
         "getting-started": ("Getting started", "Build the engine, run Doppio and create your first project."),
         "editor": ("Doppio editor", "Panels, viewport, inspector, materials and generators."),
+        "doppio": ("Doppio guides", "Editor architecture, headless driver, generators and roadmaps."),
         "plugins": ("Plugins", "Install, write and ship plugins for Doppio."),
         "scripting": ("Scripting", "Runtime APIs and native modules available to scripts."),
         "ecs": ("ECS", "Entities, components, archetypes, scenes and serialization."),
@@ -88,6 +89,7 @@ SECTION_INFO = {
     "pt": {
         "getting-started": ("Começar", "Compilar o motor, executar o Doppio e criar o primeiro projeto."),
         "editor": ("Editor Doppio", "Painéis, viewport, inspetor, materiais e geradores."),
+        "doppio": ("Guias do Doppio", "Arquitetura do editor, driver headless, geradores e roadmaps."),
         "plugins": ("Plugins", "Instalar, escrever e publicar plugins para o Doppio."),
         "scripting": ("Scripting", "APIs de runtime e módulos nativos disponíveis para scripts."),
         "ecs": ("ECS", "Entidades, componentes, arquétipos, cenas e serialização."),
@@ -319,6 +321,14 @@ def _resolve(href: str, env: dict) -> tuple[str, bool]:
     return posixpath.relpath(site_target, start=env["page_dir"]) + suffix, True
 
 
+_HTML_HREF = re.compile(r'(\bhref=")([^"]+\.md(?:#[^"]*)?)(")')
+
+
+def _rewrite_html_links(content: str, env: dict) -> str:
+    """Raw HTML links to other pages (`<a href="other.md">`) get the same rewrite as Markdown links."""
+    return _HTML_HREF.sub(lambda m: m.group(1) + _resolve(m.group(2), env)[0] + m.group(3), content)
+
+
 def _site_rule(state) -> None:
     """Core rule: heading ids, anchors, TOC, lede, link and image rewriting."""
     env = state.env
@@ -352,9 +362,14 @@ def _site_rule(state) -> None:
     if lede_at is not None and lede_at < len(tokens) and tokens[lede_at].type == "paragraph_open":
         tokens[lede_at].attrSet("class", "lede")
     for tok in tokens:
+        if tok.type == "html_block":
+            tok.content = _rewrite_html_links(tok.content, env)
+            continue
         if tok.type != "inline" or not tok.children:
             continue
         for child in tok.children:
+            if child.type == "html_inline":
+                child.content = _rewrite_html_links(child.content, env)
             if child.type == "link_open" and child.attrGet("href") is not None:
                 new, ok = _resolve(child.attrGet("href"), env)
                 child.attrSet("href", new)
