@@ -21,6 +21,15 @@ registra-o ao lado do event bus.
 **Âmbito intencional:** cobre a maioria dos casos 2D. Para joints, CCD ou convex hulls, integra
 uma biblioteca dedicada (Box2D/Jolt) como gatilho de escala.
 
+**Comportamento (verificado por `tests/test_physics2d.cpp`):**
+
+- **Passo fixo.** `onUpdate(dt)` corre passos inteiros de `kFixedStep` (1/60 s) e leva o resto para a chamada seguinte (no máximo 8 passos por frame), então quedas, forças e aterragens são iguais a qualquer frame rate. Uma força vale pelo frame em que foi pedida (força x tempo do frame); impulsos são instantâneos; um empurrão acorda um corpo adormecido.
+- **Cenário.** Um collider com `isStatic` nunca se move, mesmo com um `RigidBody2D`; um chão que é só collider segura os corpos. Um corpo que andaria mais de metade do seu tamanho numa fatia avança em até 8 fatias, com uma passagem de colisão em cada, e paredes finas não são saltadas.
+- **Contactos.** Círculo contra caixa tem a normal de A para B nas duas ordens (um centro dentro da caixa sai pelo lado mais próximo). A restituição é a menor das duas e é ignorada para uma velocidade de um passo de gravidade (sem tremor em repouso). Os pares são resolvidos numa ordem fixa, então uma cena repete-se igual.
+- **Hierarquia.** Um corpo sob um pai é simulado no espaço do mundo (o deslocamento, a rotação e a escala do pai contam): as posições são lidas pela matriz do pai, os movimentos e as correções viram mudanças locais, e `teleport`, `raycast` e as consultas de sobreposição usam posições do mundo. O tamanho de um collider não é escalado pelos pais.
+- **Plataformas one-way** travam um corpo que está acima e desce, e deixam-no passar por baixo ou de lado. **Layers** acima de 31 nunca colidem.
+- **Eventos.** `OnCollision2D` uma vez por par por frame; `OnTrigger2D` quando um corpo entra (`entered = true`) e quando sai (`entered = false`), com `triggerEntity` o trigger.
+
 ---
 
 ## API

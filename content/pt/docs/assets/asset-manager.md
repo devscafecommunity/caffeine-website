@@ -223,6 +223,18 @@ O `LinearAllocator` aloca um buffer de `fileSize + 64` bytes. O `BlobLoader` faz
 
 ---
 
+## Referências de Projeto
+
+O gestor é também **o único lugar que decide a que se refere um caminho**. Um campo de componente, um campo do Inspector ou um node de gerador nunca guarda um caminho por conta própria: pergunta ao gestor e guarda o que recebe, então o que aponta é um ficheiro *dentro do projeto* (ou um built-in do motor).
+
+- `resolveReference(path)` entende um caminho relativo ao projeto, à pasta de assets ou aos assets do motor, ou absoluto. `Ok` só para um ficheiro no projeto ou no motor; `Missing`, `OutsideProject` e `NotAFile` nos outros casos. Um caminho relativo que sobe com `..` nunca é válido. `\\`, `.` e `//` não importam.
+- `importReference(path)` faz o mesmo e copia um ficheiro real de fora para a pasta de assets, na pasta do seu tipo (`Textures`, `Models`, `Audio`, `Materials`, `Scripts`; uma pasta existente é reutilizada qualquer que seja a caixa). Um ficheiro que já lá está com o mesmo conteúdo é reutilizado, um diferente com o mesmo nome fica `_1`, `_2`…
+- O resultado traz `projectPath` (relativo à raiz do projeto: o que cenas e ficheiros `.mat` guardam) e `assetPath` (relativo à pasta de assets quando o ficheiro está nela: o que o seletor lista e os componentes guardam).
+- C ABI 24: `caffeine_session_asset_reference(session, path, import, out)`. O Doppio chama-a para cada campo de asset do Inspector e cada slot de gerador que guarda um asset; ver [Rust UI](../doppio/rust-ui.md).
+- Os handles seguram uma referência desde que o slot é encontrado, então uma carga que termina antes de o handle do chamador existir nunca é expulsa; um ficheiro é um slot qualquer que seja a grafia; um caminho que sobe da pasta base, ou um ficheiro carregado como outro tipo, dá um handle vazio; threads que carregam o mesmo asset partilham uma carga; os callbacks de invalidação correm fora do lock do gestor.
+
+---
+
 ## Hot-Reload (RF3.9)
 
 Em builds **debug** (`#ifdef CF_DEBUG`):

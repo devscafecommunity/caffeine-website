@@ -21,6 +21,15 @@ event bus.
 **Intentional scope:** this covers most 2D cases. For joints, CCD or convex hulls, integrate a
 dedicated library (Box2D/Jolt) as a scaling trigger.
 
+**Behaviour (verified by `tests/test_physics2d.cpp`):**
+
+- **Fixed step.** `onUpdate(dt)` runs whole steps of `kFixedStep` (1/60 s) and carries the remainder over (at most 8 steps per frame), so falls, forces and landings are the same at any frame rate. A force holds for the frame it is asked in (force x frame time); impulses are instant; a push wakes a sleeping body.
+- **Scenery.** A collider with `isStatic` never moves, even if it carries a `RigidBody2D`; a floor that is only a collider holds bodies up. A body that would move more than half its size in a slice is advanced in up to 8 slices with a collision pass each, so thin walls are not jumped over.
+- **Contacts.** Circle against box has its normal from A to B in either order (a centre inside the box leaves by the nearest side). Restitution is the smaller of the two and is ignored for a speed of one step of gravity (no jitter at rest). Pairs are resolved in a fixed order, so a scene replays identically.
+- **Hierarchy.** A body under a parent is simulated in world space (the parent's offset, turn and scale count): positions are read through the parent's matrix, movements and corrections become local changes, `teleport`, `raycast` and the overlap queries take world positions. A collider's size is not scaled by its parents.
+- **One-way platforms** stop a body that is above them and moving down, and let it through from below or the side. **Layers** above 31 never collide.
+- **Events.** `OnCollision2D` once per pair per frame; `OnTrigger2D` when a body enters (`entered = true`) and when it leaves (`entered = false`), with `triggerEntity` the trigger.
+
 ---
 
 ## API

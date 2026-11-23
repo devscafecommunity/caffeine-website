@@ -1,4 +1,4 @@
-# 🎬 Animation System
+# 🎬 Sistema de Animação
 
 <div class="doc-meta">
   <span class="doc-badge doc-badge--stable">Stable</span>
@@ -34,11 +34,18 @@ percurso esquelético está documentado em
 ```cpp
 namespace Caffeine::Animation {
 
-struct FrameRect {
-    f32 x = 0.0f;
-    f32 y = 0.0f;
-    f32 w = 0.0f;
-    f32 h = 0.0f;
+// The state machine (formerly `Animator`). One per entity.
+struct PhaseShift : PhaseShiftStateMachine {
+    std::vector<PhaseShiftLayer>      layers;
+    std::vector<PhaseShiftParameter>  parameters;
+    std::vector<AnimationClip>        embeddedClips;
+    f32  playbackScale = 1.0f;
+    bool paused        = false;
+
+    void addParameter(const char* name, ParameterType type);
+    void setFloat(const char* name, f32 value);
+    void setSmoothing(const char* name, f32 smoothTime);  // critically damped spring, 0 = off
+    f32  getSmoothedFloat(const char* name) const;
 };
 
 struct AnimationClip {
@@ -204,7 +211,7 @@ para reações a dano e morte.
 
 ---
 
-## Exemplos de Uso
+## Suavização e Transições
 
 ```cpp
 AnimationClip idleClip;
@@ -281,7 +288,7 @@ para essas entradas.
 
 ---
 
-## Critério de Aceitação
+## Critérios de Aceitação
 
 `tests/test_animation.cpp` cobre:
 

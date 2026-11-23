@@ -127,4 +127,4 @@ Os headers estão em
 [`include/caffeine/ui/`](https://github.com/devscafecommunity/caffeine/tree/main/include/caffeine/ui).
 Este kit é o vocabulário legado do SDK de plugins ImGui. O editor Doppio ativo é
 Rust/Iced e consome a C ABI; ver as
-[notas da UI Rust](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/rust-ui.md).
+[notas da UI Rust](https://github.com/devscafecommunity/caffeine-website/blob/main/content/en/docs/doppio/rust-ui.md).

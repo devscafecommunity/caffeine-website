@@ -32,11 +32,18 @@ skeletal path is documented in [`animation/skeletal-animation.md`](../animation/
 ```cpp
 namespace Caffeine::Animation {
 
-struct FrameRect {
-    f32 x = 0.0f;
-    f32 y = 0.0f;
-    f32 w = 0.0f;
-    f32 h = 0.0f;
+// The state machine (formerly `Animator`). One per entity.
+struct PhaseShift : PhaseShiftStateMachine {
+    std::vector<PhaseShiftLayer>      layers;
+    std::vector<PhaseShiftParameter>  parameters;
+    std::vector<AnimationClip>        embeddedClips;
+    f32  playbackScale = 1.0f;
+    bool paused        = false;
+
+    void addParameter(const char* name, ParameterType type);
+    void setFloat(const char* name, f32 value);
+    void setSmoothing(const char* name, f32 smoothTime);  // critically damped spring, 0 = off
+    f32  getSmoothedFloat(const char* name) const;
 };
 
 struct AnimationClip {
@@ -202,7 +209,7 @@ useful for hit reactions and death.
 
 ---
 
-## Exemplos de Uso
+## Smoothing and Transitions
 
 ```cpp
 AnimationClip idleClip;
