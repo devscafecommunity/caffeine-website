@@ -199,6 +199,18 @@ O `LinearAllocator` aloca um buffer de `fileSize + 64` bytes. O `BlobLoader` faz
 
 ---
 
+## Project References
+
+The manager is also the **one place that decides what a path refers to**. A component field, an Inspector field or a generator node never keeps a path on its own: it asks the manager, and keeps what comes back, so what it points at is a file *inside the project* (or an engine built-in).
+
+- `resolveReference(path)` understands a path relative to the project, to the assets folder or to the engine's assets, or absolute. `Ok` only for a file in the project or the engine; `Missing`, `OutsideProject` and `NotAFile` otherwise. A relative path that climbs out with `..` is never valid. `\\`, `.` and `//` do not matter.
+- `importReference(path)` does the same and copies a real file from outside into the assets folder, in the folder of its kind (`Textures`, `Models`, `Audio`, `Materials`, `Scripts`; an existing folder is reused whatever its case). A file that is already there with the same content is reused, a different one with the same name gets `_1`, `_2`…
+- The result carries `projectPath` (relative to the project root: what scenes and `.mat` files store) and `assetPath` (relative to the assets folder when the file is in it: what the picker lists and components store).
+- C ABI 24: `caffeine_session_asset_reference(session, path, import, out)`. Doppio calls it for every Inspector asset field and every generator slot that holds an asset; see [Rust UI](../doppio/rust-ui.md).
+- Handles hold a reference from the moment a slot is found, so a load that ends before the caller's handle exists is never evicted; one file is one slot whatever its spelling; a path that climbs out of the base folder, or a file loaded as another type, gives an empty handle; threads loading the same asset share one load; invalidation callbacks run outside the manager's lock.
+
+---
+
 ## Hot-Reload (RF3.9)
 
 Em builds **debug** ( `#ifdef CF_DEBUG` ):

@@ -74,7 +74,7 @@ O heightmap interno guarda valores **normalizados** `[0, 1]`. Na mesh, `y = samp
 
 ### Colisão
 
-`TerrainCollisionMeshBuilder` reutiliza `buildRegion` com `collisionSampleStep` (ex.: 4 → ~16× menos triângulos). Acesso via `TerrainCache::collisionMeshFor(entity)`.
+`TerrainCollisionMeshBuilder` reutiliza `buildRegion` com `collisionSampleStep` (ex.: 4 → ~16× menos triângulos). Acesso via `TerrainCache::collisionMeshFor(entity)`. Essa malha grossa serve para consultas. A **física** usa o seu próprio heightfield estático na resolução total das amostras, criado pelo `PhysicsSystem3D` para todo terreno com `buildCollisionMesh` ligado: os corpos assentam na superfície real, esculpir reconstrói-o e a transformação da entidade move-o ([Physics 3D](../physics/physics-3d.md)).
 
 ---
 

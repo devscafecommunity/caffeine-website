@@ -41,3 +41,5 @@ fazem rochas, árvores, água, terreno, texturas e materiais. O repositório do 
 | [`environment-guide.md`](environment-guide.md) | Environment: nuvens, névoa de altura e chuva, o separador Environment, e como concordam com o sol e o Photon |
 | [`graphics-roadmap.md`](graphics-roadmap.md) | O plano do renderer: Micromeshes, Photon e o que vem a seguir |
 | [`photoreal-world-roadmap.md`](photoreal-world-roadmap.md) | O plano de conteúdo: terreno, natureza, água, scatter e streaming |
+| [`terrain-editing-roadmap.md`](terrain-editing-roadmap.md) | O plano de edição de terreno: pincéis customizados, paleta de materiais, vegetação adaptativa e o formato nativo do terreno |
+| [`terrain-editing-phase-0.md`](terrain-editing-phase-0.md) | A base da edição de terreno como foi construída: modelo de tiles, motor de traço, contêiner nativo, GI regional, cursor do pincel, C ABI 25 a 27 |

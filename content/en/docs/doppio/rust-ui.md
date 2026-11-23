@@ -122,7 +122,11 @@ doppio/
   extension chip. Every asset field composes `asset_field` (thumbnail, editable path, **…** and **×**)
   and opens the single `asset.pick.*` overlay: matching assets with kind filters, search, the current value
   first and a *None* row. Inspector string fields are recognised by name (`Mesh Path`, `Clip Path`,
-  `Script`…); the Terrain and Water Generator slots use it too; agents drive it with `asset_pick_*` and `asset_kinds`;
+  `Script`…); the Terrain and Water Generator slots use it too; agents drive it with `asset_pick_*` and `asset_kinds`.
+  Whatever is typed or picked goes through the engine's asset manager first (`windows/main/assetref.rs`, C ABI 24): a file
+  from outside the project is imported into its folder and the field keeps the project path, a file of the wrong kind is
+  refused before anything is copied, and a path still being typed is kept as typed. The Material Generator's Image and
+  Normal Map nodes, the Terrain and Water slots, the Nature material and image nodes and the baking of a graph follow the same rule;
 - stable widget ids for the toolbar, inspector inputs and entity rows;
 - a headless `iced_test` harness covering editing, panes, console filters,
   hierarchy search, viewport gestures and flight;

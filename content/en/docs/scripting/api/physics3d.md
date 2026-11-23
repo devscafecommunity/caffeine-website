@@ -42,6 +42,26 @@ Sets the gravity vector in metres per second squared (default 0, -9.81, 0).
 caffeine.physics3d.setGravity(0, -3.7, 0) -- Mars
 ```
 
+### `caffeine.physics3d.setSurfaceCombine`
+
+`setSurfaceCombine(mode) -> boolean`
+
+Chooses how the two surfaces of a contact are merged. The default blend makes a bouncy ball bounce on any floor; use "product" for scenes tuned against the old rule.
+
+**Parameters**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `mode` | string | "blend" (default): friction is the geometric mean of the two surfaces and restitution the larger. "product": both are multiplied, Bullet's own rule. |
+
+**Returns:** `boolean` — false for an unknown mode or when 3D physics is not available.
+
+**Example**
+
+```lua
+caffeine.physics3d.setSurfaceCombine("product")
+```
+
 ### `caffeine.physics3d.raycast`
 
 `raycast(ox, oy, oz, dx, dy, dz, maxDistance) -> table | nil`
@@ -69,7 +89,7 @@ if hit then caffeine.debug.log(hit.entity .. " at " .. hit.distance) end
 
 `addForce(entity, x, y, z) -> boolean`
 
-Applies a force (newtons) at the centre of mass for the next physics step.
+Applies a force (newtons) at the centre of mass. A force holds for the frame it is called in, like holding a key: call it every frame while the push should last. The push is the same at any frame rate.
 
 **Parameters**
 

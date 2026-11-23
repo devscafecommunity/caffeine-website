@@ -74,7 +74,7 @@ O heightmap interno guarda valores **normalizados** `[0, 1]` . Na mesh, `y = sam
 
 ### Collision
 
-`TerrainCollisionMeshBuilder` reutiliza `buildRegion` com `collisionSampleStep` (e.g.: 4 → ~16× less triangles). Access via `TerrainCache::collisionMeshFor(entity)` .
+`TerrainCollisionMeshBuilder` reutiliza `buildRegion` com `collisionSampleStep` (e.g.: 4 → ~16× less triangles). Access via `TerrainCache::collisionMeshFor(entity)` . That coarse mesh is for queries. **Physics** uses its own static height field at the full sample resolution, built by `PhysicsSystem3D` for every terrain with `buildCollisionMesh` on: bodies rest on the real surface, sculpting rebuilds it, and the entity's transform moves it ([Physics 3D](../physics/physics-3d.md)).
 
 ---
 

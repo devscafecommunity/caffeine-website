@@ -42,6 +42,26 @@ Define o vetor de gravidade em metros por segundo ao quadrado (por omissão 0, -
 caffeine.physics3d.setGravity(0, -3.7, 0) -- Mars
 ```
 
+### `caffeine.physics3d.setSurfaceCombine`
+
+`setSurfaceCombine(mode) -> boolean`
+
+Escolhe como as duas superfícies de um contacto são combinadas. A mistura padrão faz uma bola saltitona saltar em qualquer chão; use "product" para cenas ajustadas à regra antiga.
+
+**Parâmetros**
+
+| Parâmetro | Tipo | Descrição |
+|---|---|---|
+| `mode` | string | "blend" (padrão): o atrito é a média geométrica das duas superfícies e a restituição a maior. "product": ambos são multiplicados, a regra do próprio Bullet. |
+
+**Devolve:** `boolean` — false para um modo desconhecido ou quando a física 3D não está disponível.
+
+**Exemplo**
+
+```lua
+caffeine.physics3d.setSurfaceCombine("product")
+```
+
 ### `caffeine.physics3d.raycast`
 
 `raycast(ox, oy, oz, dx, dy, dz, maxDistance) -> table | nil`
@@ -69,7 +89,7 @@ if hit then caffeine.debug.log(hit.entity .. " at " .. hit.distance) end
 
 `addForce(entity, x, y, z) -> boolean`
 
-Aplica uma força (newtons) no centro de massa no próximo passo de física.
+Aplica uma força (newtons) no centro de massa. Uma força vale pelo frame em que é chamada, como segurar uma tecla: chame-a a cada frame enquanto o empurrão deve durar. O empurrão é o mesmo a qualquer frame rate.
 
 **Parâmetros**
 

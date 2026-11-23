@@ -122,7 +122,11 @@ doppio/
   e uma etiqueta da extensão. Cada campo de asset compõe `asset_field` (miniatura, caminho editável, **…** e **×**)
   e abre a única sobreposição `asset.pick.*`: os assets compatíveis com filtros por tipo, pesquisa, o valor atual
   primeiro e uma linha *None*. Os campos de texto do Inspector são reconhecidos pelo nome (`Mesh Path`, `Clip Path`,
-  `Script`…); os slots dos geradores de Terreno e Água usam-no também; os agentes usam `asset_pick_*` e `asset_kinds`;
+  `Script`…); os slots dos geradores de Terreno e Água usam-no também; os agentes usam `asset_pick_*` e `asset_kinds`.
+  O que é escrito ou escolhido passa primeiro pelo gestor de assets do motor (`windows/main/assetref.rs`, C ABI 24): um ficheiro
+  de fora do projeto é importado para a sua pasta e o campo guarda o caminho do projeto, um ficheiro do tipo errado é
+  recusado antes de copiar o que quer que seja, e um caminho ainda a ser escrito fica como foi escrito. Os nodes Image e
+  Normal Map do Material Generator, os slots de Terreno e Água, os nodes do Nature e o bake de um grafo seguem a regra;
 - ids de widget estáveis para a barra de ferramentas, os campos do inspector e as linhas de entidades;
 - um harness headless `iced_test` que cobre edição, painéis, filtros da consola,
   pesquisa na hierarchy, gestos do viewport e voo;

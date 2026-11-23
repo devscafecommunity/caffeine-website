@@ -41,3 +41,5 @@ make rocks, trees, water, terrain, textures and materials. The engine repository
 | [`environment-guide.md`](environment-guide.md) | Environment: clouds, height fog and rain, the Environment tab, and how they agree with the sun and Photon |
 | [`graphics-roadmap.md`](graphics-roadmap.md) | The renderer plan: Micromeshes, Photon and what is next |
 | [`photoreal-world-roadmap.md`](photoreal-world-roadmap.md) | The content plan: terrain, nature, water, scatter and streaming |
+| [`terrain-editing-roadmap.md`](terrain-editing-roadmap.md) | The terrain editing plan: custom brushes, a material palette, adaptive vegetation and the native terrain format |
+| [`terrain-editing-phase-0.md`](terrain-editing-phase-0.md) | The terrain editing foundation as built: tile model, stroke engine, native container, regional GI, brush cursor, C ABI 25 to 27 |
