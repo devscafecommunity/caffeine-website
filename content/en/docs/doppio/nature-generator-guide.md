@@ -329,7 +329,7 @@ radius and 7 m between cells), the scale range is 0.8 to 1.3, and *where* starts
 is planted by the Terrain tab's *Scatter* as a forest of two-part trees (`nature_models_scatter_from_the_terrain_tab_as_composite_instances`).
 
 <figure class="doc-figure">
-  <img src="../images/doppio/nature/material-slots.png" alt="One rock with two sub-meshes drawn with the slots moss;stone and stone;moss, and a Pink Flower placed merged">
+  <img loading="lazy" src="../images/doppio/nature/material-slots.png" alt="One rock with two sub-meshes drawn with the slots moss;stone and stone;moss, and a Pink Flower placed merged">
   <figcaption>Material slots in the engine. Left and middle: the same two-group rock, <code>Material slots</code> = <code>moss;stone</code> and
   <code>stone;moss</code>. Right: the Pink Flower placed with Merge parts, 4 entities become 2 (stem and leaf share one, petals and centre the
   other), each with its own slot list. Regenerate with <code>scripts/render-material-slots-docs.sh</code>.</figcaption>

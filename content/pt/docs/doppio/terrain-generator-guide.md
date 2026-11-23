@@ -170,7 +170,7 @@ conjunto de rochas `.nature` é disperso como variantes); `material <path>` e `c
 uma linha inválida ou um termo de bioma para uma máscara que o terreno não tem reporta um erro na barra de estado e não altera nada.
 
 <figure class="doc-figure">
-  <img src="../images/doppio/terrain/scatter-on-terrain.png" alt="A Alpine Range com scatter do plano por omissão: uma vista aérea e uma vista próxima iluminada, e as máscaras slope, wetness e height com um ponto por cada instância das classes que as leem">
+  <img loading="lazy" src="../images/doppio/terrain/scatter-on-terrain.png" alt="A Alpine Range com scatter do plano por omissão: uma vista aérea e uma vista próxima iluminada, e as máscaras slope, wetness e height com um ponto por cada instância das classes que as leem">
   <figcaption>A Alpine Range com scatter do plano incorporado (20 000 instâncias: 2 692 boulders, 651 pines, 16 657 tufts). Em cima: vistas iluminadas, pinheiros
   nas bacias. Em baixo: onde cada classe ficou sobre a máscara que lê: boulders na vertente íngreme (clara), tufts fora da rocha, pinheiros só em wetness
   seca (preta) e abaixo dos cumes nus. Regenere com <code>scripts/render-scatter-docs.sh</code>.</figcaption>

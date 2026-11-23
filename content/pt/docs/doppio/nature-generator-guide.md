@@ -329,7 +329,7 @@ raio e 7 m entre células), o intervalo de escala é 0,8 a 1,3, e *where* começ
 é plantado pelo *Scatter* do separador Terrain como uma floresta de árvores de duas partes (`nature_models_scatter_from_the_terrain_tab_as_composite_instances`).
 
 <figure class="doc-figure">
-  <img src="../images/doppio/nature/material-slots.png" alt="Uma rocha com duas sub-meshes desenhada com os slots moss;stone e stone;moss, e uma Pink Flower colocada fundida">
+  <img loading="lazy" src="../images/doppio/nature/material-slots.png" alt="Uma rocha com duas sub-meshes desenhada com os slots moss;stone e stone;moss, e uma Pink Flower colocada fundida">
   <figcaption>Material slots no motor. Esquerda e meio: a mesma rocha de dois grupos, <code>Material slots</code> = <code>moss;stone</code> e
   <code>stone;moss</code>. Direita: a Pink Flower colocada com Merge parts, 4 entidades passam a 2 (caule e folha partilham uma, pétalas e centro a
   outra), cada uma com a sua própria lista de slots. Regenere com <code>scripts/render-material-slots-docs.sh</code>.</figcaption>

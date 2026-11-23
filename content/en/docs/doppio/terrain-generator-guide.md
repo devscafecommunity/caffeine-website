@@ -170,7 +170,7 @@ A shape is `primitive <cube|sphere|cone|cylinder|capsule|pyramid|torus>` or `mes
 a bad line or a biome term for a mask the terrain does not have reports an error in the status bar and changes nothing.
 
 <figure class="doc-figure">
-  <img src="../images/doppio/terrain/scatter-on-terrain.png" alt="The Alpine Range scattered with the default plan: an aerial and a close lit view, and the slope, wetness and height masks with a dot for every instance of the classes that read them">
+  <img loading="lazy" src="../images/doppio/terrain/scatter-on-terrain.png" alt="The Alpine Range scattered with the default plan: an aerial and a close lit view, and the slope, wetness and height masks with a dot for every instance of the classes that read them">
   <figcaption>The Alpine Range scattered with the built-in plan (20 000 instances: 2 692 boulders, 651 pines, 16 657 tufts). Top: lit views, pines in
   the basins. Bottom: where each class landed over the mask it reads: boulders on the steep (bright) slope, tufts off rock, pines only on dry
   (black) wetness and below the bare summits. Regenerate with <code>scripts/render-scatter-docs.sh</code>.</figcaption>

@@ -251,6 +251,7 @@ layers and delta format before phase 5.
 
 ## 6. Related
 
+- [`world-composition.md`](world-composition.md): the World Composer design (one file that composes terrain, nature, water and materials, with position-hashed adaptation). It supersedes section 3 and phase 6 here.
 - [`material-pipeline.md`](material-pipeline.md): materials, depth, variation.
 - [`nature-generator-guide.md`](nature-generator-guide.md): recipes, LOD and instancing gaps.
 - [`terrain-generator-guide.md`](terrain-generator-guide.md): masks, splat layers, limits.
