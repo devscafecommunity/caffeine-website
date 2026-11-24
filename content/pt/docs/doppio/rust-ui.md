@@ -72,6 +72,7 @@ doppio/
   um botão de maximizar/restaurar; os menus abertos só fecham com um clique fora, Escape
   ou ao escolher um item (as atualizações de hover de widgets por trás nunca os fecham);
 - o separador **Performance** (`uikit/panels/performance.rs`, `windows/main/performance.rs`, View → Performance): onde vivem as opções de renderização.
+- o separador **Terrain Brush** (`uikit/panels/terrain_brush.rs`, `windows/main/terraineditor.rs`, View → Terrain Brush): a biblioteca de pincéis, o pincel de trabalho e a ferramenta de escultura; um traço é um passo de desfazer que leva o registro de traço do motor (`history.rs`), veja [`terrain-editing-phase-1.md`](terrain-editing-phase-1.md).
   O componente `Forward Render Features` da cena (instancing, occlusion culling, sondas de reflexão e reflexões em espaço de ecrã, luz volumétrica,
   luz difusa do céu e os seus números; **Add render features** põe-no numa nova entidade) e a escala de renderização, o anti-aliasing, as sombras das luzes e a
   grelha do viewport do editor. As edições da cena são passos de undo; as opções do viewport são do editor e não são. O editor arranca o viewport com
