@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caffeine ECS Examples · Caffeine</title>
+<meta name="description" content="Complete, compilable programs for the Caffeine ECS: creating entities, writing systems, deferring structural changes and iterating in parallel.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Caffeine ECS Examples · Caffeine">
+<meta property="og:description" content="Complete, compilable programs for the Caffeine ECS: creating entities, writing systems, deferring structural changes and iterating in parallel.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/ecs/examples/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/ecs/examples/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/ecs/examples/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/ecs/examples/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link active" href="/en/docs/ecs/examples/" aria-current="page">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">UI</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Caffeine ECS Examples</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Engine</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/ecs/World.hpp"><code>ecs/World.hpp</code></a></span>
+</div>
+<p class="doc-lede">Complete, compilable programs for the Caffeine ECS: creating
+entities, writing systems, deferring structural changes and iterating in parallel.</p>
+<h2 id="example-1-hello-world---create-entity-with-components">Example 1: Hello World - Create Entity with Components<a class="anchor" href="#example-1-hello-world---create-entity-with-components" aria-label="Link to this section">#</a></h2>
+<p>The simplest ECS example: create an entity and add components.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cassert&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::ECS;
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    World world;
+
+    <span class="hljs-comment">// Create the entity, then add components.</span>
+    <span class="hljs-comment">// The name is a call-site label; World does not store it.</span>
+    Entity player = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Player&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(player, Position2D{<span class="hljs-number">100.0f</span>, <span class="hljs-number">200.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Velocity2D&gt;(player, Velocity2D{<span class="hljs-number">10.0f</span>, <span class="hljs-number">0.0f</span>});
+
+    <span class="hljs-comment">// Verify components exist.</span>
+    <span class="hljs-built_in">assert</span>(world.<span class="hljs-built_in">has</span>&lt;Position2D&gt;(player));
+    <span class="hljs-built_in">assert</span>(world.<span class="hljs-built_in">has</span>&lt;Velocity2D&gt;(player));
+
+    <span class="hljs-comment">// Get component pointers (nullptr when absent).</span>
+    Position2D* pos = world.<span class="hljs-built_in">get</span>&lt;Position2D&gt;(player);
+    Velocity2D* vel = world.<span class="hljs-built_in">get</span>&lt;Velocity2D&gt;(player);
+
+    std::cout &lt;&lt; <span class="hljs-string">&quot;Player at (&quot;</span> &lt;&lt; pos-&gt;x &lt;&lt; <span class="hljs-string">&quot;, &quot;</span> &lt;&lt; pos-&gt;y &lt;&lt; <span class="hljs-string">&quot;)\n&quot;</span>;
+    std::cout &lt;&lt; <span class="hljs-string">&quot;Velocity (&quot;</span> &lt;&lt; vel-&gt;x &lt;&lt; <span class="hljs-string">&quot;, &quot;</span> &lt;&lt; vel-&gt;y &lt;&lt; <span class="hljs-string">&quot;)\n&quot;</span>;
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Player at (100, 200)
+Velocity (10, 0)
+</code></pre></div>
+<hr>
+<h2 id="example-2-simple-movement-system">Example 2: Simple Movement System<a class="anchor" href="#example-2-simple-movement-system" aria-label="Link to this section">#</a></h2>
+<p>Create a system that updates entity positions from velocity each frame.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::ECS;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MovementSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        world.forEach&lt;Position2D, Velocity2D&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;(),
+            [deltaTime](Entity e, Position2D&amp; pos, Velocity2D&amp; vel) {
+                pos.x += vel.x * deltaTime;
+                pos.y += vel.y * deltaTime;
+            }
+        );
+    }
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    World world;
+    SystemRegistry systems;
+
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;MovementSystem&gt;());
+
+    Entity entity = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Mover&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(entity, Position2D{<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Velocity2D&gt;(entity, Velocity2D{<span class="hljs-number">5.0f</span>, <span class="hljs-number">3.0f</span>});
+
+    <span class="hljs-comment">// Simulate 5 frames at 60 fps.</span>
+    f32 deltaTime = <span class="hljs-number">1.0f</span> / <span class="hljs-number">60.0f</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> frame = <span class="hljs-number">0</span>; frame &lt; <span class="hljs-number">5</span>; ++frame) {
+        systems.<span class="hljs-built_in">updateAll</span>(world, deltaTime);
+
+        Position2D* pos = world.<span class="hljs-built_in">get</span>&lt;Position2D&gt;(entity);
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Frame &quot;</span> &lt;&lt; frame &lt;&lt; <span class="hljs-string">&quot;: (&quot;</span> &lt;&lt; pos-&gt;x &lt;&lt; <span class="hljs-string">&quot;, &quot;</span> &lt;&lt; pos-&gt;y &lt;&lt; <span class="hljs-string">&quot;)\n&quot;</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Frame 0: (0.0833333, 0.05)
+Frame 1: (0.166667, 0.1)
+Frame 2: (0.25, 0.15)
+Frame 3: (0.333333, 0.2)
+Frame 4: (0.416667, 0.25)
+</code></pre></div>
+<hr>
+<h2 id="example-3-health-and-damage-system">Example 3: Health and Damage System<a class="anchor" href="#example-3-health-and-damage-system" aria-label="Link to this section">#</a></h2>
+<p>Damage entities and destroy them when health reaches zero.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::ECS;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HealthSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        CommandBuffer commands;
+
+        <span class="hljs-type">const</span> u32 damagePerSecond = <span class="hljs-number">10</span>;
+
+        world.forEach&lt;Health&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Health&gt;(),
+            [&amp;commands, deltaTime, damagePerSecond](Entity e, Health&amp; health) {
+                <span class="hljs-type">const</span> u32 damage = <span class="hljs-keyword">static_cast</span>&lt;u32&gt;(damagePerSecond * deltaTime);
+                health.current = (health.current &gt; damage) ? (health.current - damage) : <span class="hljs-number">0u</span>;
+
+                <span class="hljs-keyword">if</span> (health.current == <span class="hljs-number">0</span>) {
+                    std::cout &lt;&lt; <span class="hljs-string">&quot;Entity destroyed!\n&quot;</span>;
+                    commands.<span class="hljs-built_in">destroy</span>(e);
+                }
+            }
+        );
+
+        <span class="hljs-comment">// Apply deferred destruction after the iteration.</span>
+        commands.<span class="hljs-built_in">execute</span>(world);
+    }
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    World world;
+    SystemRegistry systems;
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;HealthSystem&gt;());
+
+    Entity entity = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Target&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;Health&gt;(entity, Health{<span class="hljs-number">50</span>, <span class="hljs-number">100</span>});
+
+    std::cout &lt;&lt; <span class="hljs-string">&quot;Initial health: &quot;</span> &lt;&lt; world.<span class="hljs-built_in">get</span>&lt;Health&gt;(entity)-&gt;current &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+
+    <span class="hljs-comment">// Update for 6 seconds (50 damage at 10/sec).</span>
+    f32 deltaTime = <span class="hljs-number">1.0f</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> sec = <span class="hljs-number">0</span>; sec &lt; <span class="hljs-number">6</span>; ++sec) {
+        systems.<span class="hljs-built_in">updateAll</span>(world, deltaTime);
+
+        Health* health = world.<span class="hljs-built_in">get</span>&lt;Health&gt;(entity);
+        <span class="hljs-keyword">if</span> (health &amp;&amp; world.<span class="hljs-built_in">isEntityAlive</span>(entity)) {
+            std::cout &lt;&lt; <span class="hljs-string">&quot;After &quot;</span> &lt;&lt; (sec + <span class="hljs-number">1</span>) &lt;&lt; <span class="hljs-string">&quot;s: &quot;</span> &lt;&lt; health-&gt;current &lt;&lt; <span class="hljs-string">&quot; HP\n&quot;</span>;
+        } <span class="hljs-keyword">else</span> {
+            std::cout &lt;&lt; <span class="hljs-string">&quot;After &quot;</span> &lt;&lt; (sec + <span class="hljs-number">1</span>) &lt;&lt; <span class="hljs-string">&quot;s: Entity destroyed\n&quot;</span>;
+        }
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Initial health: 50
+After 1s: 40 HP
+After 2s: 30 HP
+After 3s: 20 HP
+After 4s: 10 HP
+After 5s: 0 HP
+Entity destroyed!
+After 6s: Entity destroyed
+</code></pre></div>
+<hr>
+<h2 id="example-4-collision-detection-pattern">Example 4: Collision Detection Pattern<a class="anchor" href="#example-4-collision-detection-pattern" aria-label="Link to this section">#</a></h2>
+<p>Query entities with colliders and resolve overlaps.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::ECS;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Collider</span> {
+    f32 radius = <span class="hljs-number">10.0f</span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CollisionSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        std::vector&lt;Entity&gt; collidables;
+
+        world.forEach&lt;Position2D, Collider&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D, Collider&gt;(),
+            [&amp;collidables](Entity e, Position2D&amp; pos, Collider&amp; collider) {
+                collidables.<span class="hljs-built_in">push_back</span>(e);
+            }
+        );
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; collidables.<span class="hljs-built_in">size</span>(); ++i) {
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> j = i + <span class="hljs-number">1</span>; j &lt; collidables.<span class="hljs-built_in">size</span>(); ++j) {
+                Entity e1 = collidables[i];
+                Entity e2 = collidables[j];
+
+                Position2D* pos1 = world.<span class="hljs-built_in">get</span>&lt;Position2D&gt;(e1);
+                Position2D* pos2 = world.<span class="hljs-built_in">get</span>&lt;Position2D&gt;(e2);
+                Collider* col1 = world.<span class="hljs-built_in">get</span>&lt;Collider&gt;(e1);
+                Collider* col2 = world.<span class="hljs-built_in">get</span>&lt;Collider&gt;(e2);
+                <span class="hljs-keyword">if</span> (!pos1 || !pos2 || !col1 || !col2) <span class="hljs-keyword">continue</span>;
+
+                f32 dx = pos1-&gt;x - pos2-&gt;x;
+                f32 dy = pos1-&gt;y - pos2-&gt;y;
+                f32 distance = std::<span class="hljs-built_in">sqrt</span>(dx * dx + dy * dy);
+
+                <span class="hljs-keyword">if</span> (distance &lt; (col1-&gt;radius + col2-&gt;radius)) {
+                    std::cout &lt;&lt; <span class="hljs-string">&quot;Collision detected!\n&quot;</span>;
+                }
+            }
+        }
+    }
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    World world;
+    SystemRegistry systems;
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;CollisionSystem&gt;());
+
+    Entity entity1 = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;A&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(entity1, Position2D{<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Collider&gt;(entity1, Collider{<span class="hljs-number">10.0f</span>});
+
+    Entity entity2 = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;B&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(entity2, Position2D{<span class="hljs-number">15.0f</span>, <span class="hljs-number">0.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Collider&gt;(entity2, Collider{<span class="hljs-number">10.0f</span>});
+
+    systems.<span class="hljs-built_in">updateAll</span>(world, <span class="hljs-number">1.0f</span> / <span class="hljs-number">60.0f</span>);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Collision detected!
+</code></pre></div>
+<hr>
+<h2 id="example-5-parallel-system-execution">Example 5: Parallel System Execution<a class="anchor" href="#example-5-parallel-system-execution" aria-label="Link to this section">#</a></h2>
+<p>Use a parallel query for large, independent batches.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;threading/JobSystem.hpp&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::ECS;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ParallelMovementSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">ParallelMovementSystem</span><span class="hljs-params">(Threading::JobSystem&amp; jobs)</span> : m_jobs(jobs) {</span>}
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        world.forEachParallel&lt;Position2D, Velocity2D&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;(),
+            m_jobs,
+            [deltaTime](Entity e, Position2D&amp; pos, Velocity2D&amp; vel) {
+                <span class="hljs-comment">// Each entity is visited by exactly one worker.</span>
+                pos.x += vel.x * deltaTime;
+                pos.y += vel.y * deltaTime;
+            }
+        );
+    }
+
+<span class="hljs-keyword">private</span>:
+    Threading::JobSystem&amp; m_jobs;
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    Threading::JobSystem jobs;
+
+    World world;
+    SystemRegistry systems;
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;ParallelMovementSystem&gt;(jobs));
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100000</span>; ++i) {
+        Entity e = world.<span class="hljs-built_in">create</span>();
+        world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(e, Position2D{<span class="hljs-keyword">static_cast</span>&lt;f32&gt;(i), <span class="hljs-number">0.0f</span>});
+        world.<span class="hljs-built_in">add</span>&lt;Velocity2D&gt;(e, Velocity2D{<span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>});
+    }
+
+    std::cout &lt;&lt; <span class="hljs-string">&quot;Updating 100K entities...\n&quot;</span>;
+    systems.<span class="hljs-built_in">updateAll</span>(world, <span class="hljs-number">1.0f</span> / <span class="hljs-number">60.0f</span>);
+    std::cout &lt;&lt; <span class="hljs-string">&quot;Done (parallelized across CPU cores)\n&quot;</span>;
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Updating 100K entities...
+Done (parallelized across CPU cores)
+</code></pre></div>
+<hr>
+<h2 id="example-6-deferred-commands-pattern">Example 6: Deferred Commands Pattern<a class="anchor" href="#example-6-deferred-commands-pattern" aria-label="Link to this section">#</a></h2>
+<p>Structural changes are forbidden while a query iterates. Spawn outside the loop and
+defer destruction with <code>CommandBuffer</code>.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::ECS;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Enemy</span> {
+    u32 enemyId = <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EnemySpawner</span> : <span class="hljs-keyword">public</span> ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        timeElapsed += <span class="hljs-keyword">static_cast</span>&lt;u32&gt;(deltaTime * <span class="hljs-number">1000.0f</span>);
+
+        <span class="hljs-comment">// Spawning before iteration is safe: it is a structural change,</span>
+        <span class="hljs-comment">// but no query is running.</span>
+        <span class="hljs-keyword">if</span> (timeElapsed &gt;= <span class="hljs-number">100</span>) {
+            Entity enemy = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Enemy&quot;</span>);
+            world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(enemy, Position2D{<span class="hljs-number">100.0f</span>, <span class="hljs-number">100.0f</span>});
+            world.<span class="hljs-built_in">add</span>&lt;Velocity2D&gt;(enemy, Velocity2D{<span class="hljs-number">-5.0f</span>, <span class="hljs-number">0.0f</span>});
+            world.<span class="hljs-built_in">add</span>&lt;Enemy&gt;(enemy, Enemy{nextEnemyId++});
+            timeElapsed = <span class="hljs-number">0</span>;
+        }
+
+        <span class="hljs-comment">// Removing during iteration must be deferred.</span>
+        CommandBuffer commands;
+        world.forEach&lt;Position2D&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D&gt;().<span class="hljs-built_in">any</span>&lt;Enemy&gt;(),
+            [&amp;commands](Entity e, Position2D&amp; pos) {
+                <span class="hljs-keyword">if</span> (pos.x &lt; <span class="hljs-number">-100.0f</span>) {
+                    commands.<span class="hljs-built_in">destroy</span>(e);
+                }
+            }
+        );
+        commands.<span class="hljs-built_in">execute</span>(world);
+    }
+
+<span class="hljs-keyword">private</span>:
+    u32 timeElapsed = <span class="hljs-number">0</span>;
+    u32 nextEnemyId = <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    World world;
+    SystemRegistry systems;
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;EnemySpawner&gt;());
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">5</span>; ++i) {
+        systems.<span class="hljs-built_in">updateAll</span>(world, <span class="hljs-number">0.2f</span>);
+
+        u32 enemyCount = <span class="hljs-number">0</span>;
+        world.forEach&lt;Enemy&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Enemy&gt;(),
+            [&amp;enemyCount](Entity e, Enemy&amp; enemy) {
+                enemyCount++;
+            }
+        );
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Active enemies: &quot;</span> &lt;&lt; enemyCount &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Active enemies: 1
+Active enemies: 2
+Active enemies: 3
+Active enemies: 4
+Active enemies: 5
+</code></pre></div>
+<hr>
+<h2 id="example-7-complete-game-loop">Example 7: Complete Game Loop<a class="anchor" href="#example-7-complete-game-loop" aria-label="Link to this section">#</a></h2>
+<p>World, systems and a fixed-step update loop together.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::ECS;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MovementSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        world.forEach&lt;Position2D, Velocity2D&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;(),
+            [deltaTime](Entity e, Position2D&amp; pos, Velocity2D&amp; vel) {
+                pos.x += vel.x * deltaTime;
+                pos.y += vel.y * deltaTime;
+            }
+        );
+    }
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PhysicsSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        world.forEach&lt;Velocity2D, Acceleration2D&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Velocity2D, Acceleration2D&gt;(),
+            [deltaTime](Entity e, Velocity2D&amp; vel, Acceleration2D&amp; accel) {
+                vel.x += accel.x * deltaTime;
+                vel.y += accel.y * deltaTime;
+            }
+        );
+    }
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">RenderSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        u32 count = <span class="hljs-number">0</span>;
+        world.forEach&lt;Position2D&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D&gt;(),
+            [&amp;count](Entity e, Position2D&amp; pos) {
+                count++;
+            }
+        );
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Rendering &quot;</span> &lt;&lt; count &lt;&lt; <span class="hljs-string">&quot; entities\n&quot;</span>;
+    }
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    World world;
+    SystemRegistry systems;
+
+    <span class="hljs-comment">// Registration order is execution order.</span>
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;PhysicsSystem&gt;());
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;MovementSystem&gt;());
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;RenderSystem&gt;());
+
+    Entity entity = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Projectile&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(entity, Position2D{<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Velocity2D&gt;(entity, Velocity2D{<span class="hljs-number">10.0f</span>, <span class="hljs-number">0.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Acceleration2D&gt;(entity, Acceleration2D{<span class="hljs-number">0.0f</span>, <span class="hljs-number">9.81f</span>});  <span class="hljs-comment">// gravity</span>
+
+    f32 targetFps = <span class="hljs-number">60.0f</span>;
+    f32 deltaTime = <span class="hljs-number">1.0f</span> / targetFps;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> frame = <span class="hljs-number">0</span>; frame &lt; <span class="hljs-number">3</span>; ++frame) {
+        <span class="hljs-keyword">auto</span> frameStart = std::chrono::high_resolution_clock::<span class="hljs-built_in">now</span>();
+
+        systems.<span class="hljs-built_in">updateAll</span>(world, deltaTime);
+
+        <span class="hljs-keyword">auto</span> frameEnd = std::chrono::high_resolution_clock::<span class="hljs-built_in">now</span>();
+        <span class="hljs-keyword">auto</span> frameDuration = std::chrono::<span class="hljs-built_in">duration_cast</span>&lt;std::chrono::microseconds&gt;(
+            frameEnd - frameStart).<span class="hljs-built_in">count</span>();
+
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Frame &quot;</span> &lt;&lt; frame &lt;&lt; <span class="hljs-string">&quot; (&quot;</span> &lt;&lt; frameDuration / <span class="hljs-number">1000.0f</span> &lt;&lt; <span class="hljs-string">&quot;ms)\n&quot;</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Rendering 1 entities
+Frame 0 (0.123ms)
+Rendering 1 entities
+Frame 1 (0.145ms)
+Rendering 1 entities
+Frame 2 (0.132ms)
+</code></pre></div>
+<hr>
+<h2 id="example-8-custom-components">Example 8: Custom Components<a class="anchor" href="#example-8-custom-components" aria-label="Link to this section">#</a></h2>
+<p>Define and use application-specific components.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::ECS;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Weapon</span> {
+    std::string name;
+    u32 ammo = <span class="hljs-number">30</span>;
+    f32 fireRate = <span class="hljs-number">10.0f</span>;  <span class="hljs-comment">// rounds per second</span>
+    f32 timeSinceLastShot = <span class="hljs-number">0.0f</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AIBehavior</span> {
+    <span class="hljs-keyword">enum</span> <span class="hljs-title class_">State</span> { Idle, Patrol, Attack } state = Idle;
+    f32 sightRange = <span class="hljs-number">50.0f</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Score</span> {
+    u32 points = <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">WeaponSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        world.forEach&lt;Weapon&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Weapon&gt;(),
+            [deltaTime](Entity e, Weapon&amp; weapon) {
+                weapon.timeSinceLastShot += deltaTime;
+
+                <span class="hljs-comment">// Ammo regenerates slowly.</span>
+                <span class="hljs-keyword">if</span> (weapon.ammo &lt; <span class="hljs-number">30</span> &amp;&amp; weapon.timeSinceLastShot &gt; <span class="hljs-number">2.0f</span>) {
+                    weapon.ammo++;
+                    weapon.timeSinceLastShot = <span class="hljs-number">0.0f</span>;
+                }
+            }
+        );
+    }
+};
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    World world;
+    SystemRegistry systems;
+    systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;WeaponSystem&gt;());
+
+    Entity player = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Player&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(player, Position2D{<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Weapon&gt;(player, Weapon{<span class="hljs-string">&quot;Rifle&quot;</span>, <span class="hljs-number">30</span>, <span class="hljs-number">10.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Score&gt;(player, Score{<span class="hljs-number">1000</span>});
+
+    Entity enemy = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Enemy&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(enemy, Position2D{<span class="hljs-number">50.0f</span>, <span class="hljs-number">0.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;Velocity2D&gt;(enemy, Velocity2D{<span class="hljs-number">-2.0f</span>, <span class="hljs-number">0.0f</span>});
+    world.<span class="hljs-built_in">add</span>&lt;AIBehavior&gt;(enemy, AIBehavior{AIBehavior::Patrol, <span class="hljs-number">30.0f</span>});
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; ++i) {
+        systems.<span class="hljs-built_in">updateAll</span>(world, <span class="hljs-number">1.0f</span>);
+
+        Weapon* weapon = world.<span class="hljs-built_in">get</span>&lt;Weapon&gt;(player);
+        Score* score = world.<span class="hljs-built_in">get</span>&lt;Score&gt;(player);
+
+        std::cout &lt;&lt; <span class="hljs-string">&quot;Ammo: &quot;</span> &lt;&lt; weapon-&gt;ammo &lt;&lt; <span class="hljs-string">&quot;, Score: &quot;</span> &lt;&lt; score-&gt;points &lt;&lt; <span class="hljs-string">&quot;\n&quot;</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre></div>
+<p><strong>Output:</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Ammo: 30, Score: 1000
+Ammo: 30, Score: 1000
+Ammo: 31, Score: 1000
+</code></pre></div>
+<hr>
+<h2 id="performance-tips">Performance Tips<a class="anchor" href="#performance-tips" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><strong>Batch operations</strong>: group structural changes to reduce archetype migrations.</li>
+<li><strong>Use <code>forEachParallel</code></strong>: for large independent batches, parallel iteration is faster.</li>
+<li><strong>Keep systems focused</strong>: each system should do one thing well.</li>
+<li><strong>Profile your scene</strong>: <code>tests/benchmarks.cpp</code> covers allocators and containers, not ECS queries.</li>
+<li><strong>Defer modifications</strong>: use <code>CommandBuffer</code> inside <code>forEach</code> callbacks.</li>
+</ol>
+<h2 id="next-steps">Next Steps<a class="anchor" href="#next-steps" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Review <a href="/en/docs/ecs/core/">ECS core</a> for the short API summary.</li>
+<li>Read the <a href="/en/docs/ecs/">ECS reference</a> for the full API.</li>
+<li>See <a href="/en/docs/ecs/scene/">Scene manager</a> for hierarchy and serialization.</li>
+<li>Profile your game loop to find real optimization opportunities.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/ecs/examples.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/ecs/scene/"><span>Previous</span><strong>🗺️ Scene Manager</strong></a><a class="pager-next" href="/en/docs/ecs/core/"><span>Next</span><strong>ECS core</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#example-1-hello-world---create-entity-with-components">Example 1: Hello World - Create Entity with Components</a></li><li class="l2"><a href="#example-2-simple-movement-system">Example 2: Simple Movement System</a></li><li class="l2"><a href="#example-3-health-and-damage-system">Example 3: Health and Damage System</a></li><li class="l2"><a href="#example-4-collision-detection-pattern">Example 4: Collision Detection Pattern</a></li><li class="l2"><a href="#example-5-parallel-system-execution">Example 5: Parallel System Execution</a></li><li class="l2"><a href="#example-6-deferred-commands-pattern">Example 6: Deferred Commands Pattern</a></li><li class="l2"><a href="#example-7-complete-game-loop">Example 7: Complete Game Loop</a></li><li class="l2"><a href="#example-8-custom-components">Example 8: Custom Components</a></li><li class="l2"><a href="#performance-tips">Performance Tips</a></li><li class="l2"><a href="#next-steps">Next Steps</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

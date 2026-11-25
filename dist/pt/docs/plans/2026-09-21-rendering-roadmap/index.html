@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎨 Rendering Roadmap — 3D de Alto Volume · Caffeine</title>
+<meta name="description" content="Objetivo: renderizar ambientes 3D com alto volume de polígonos e texturas de forma otimizada, consistente e estável (sem spikes de FPS). Critério de “completo”: cena densa (terreno + centenas de meshes texturizados + ilu">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="🎨 Rendering Roadmap — 3D de Alto Volume · Caffeine">
+<meta property="og:description" content="Objetivo: renderizar ambientes 3D com alto volume de polígonos e texturas de forma otimizada, consistente e estável (sem spikes de FPS). Critério de “completo”: cena densa (terreno + centenas de meshes texturizados + ilu">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/plans/2026-09-21-rendering-roadmap/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/plans/2026-09-21-rendering-roadmap/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-09-21-rendering-roadmap/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/plans/2026-09-21-rendering-roadmap/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab active" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/plans/2026-09-21-rendering-roadmap/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/plans/2026-09-21-rendering-roadmap/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Projeto"><div class="nav-title">Projeto</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Versões</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/pt/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/pt/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Planos</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/2026-10-19-dryad-node-scripts/">Dryad e scripts por nodes</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-forward-pbr-post-session/">Sessão 2026-10-02 — Forward PBR, reflexos, pós-processamento GPU</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-editor-backlog-phase-b/">Editor backlog — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-viewport-rendering-quality-session/">Sessão 2026-09-22 — Viewport 3D, Qualidade Visual e Performance</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-phong-gpu-handles-session/">Sessão 2026-09-22 — Phong GPU, Handles e Sombras</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap de Sistemas Fundamentais</a></li><li><a class="nav-link active" href="/pt/docs/plans/2026-09-21-rendering-roadmap/" aria-current="page">🎨 Rendering Roadmap — 3D de Alto Volume</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - ANÁLISE COMPLETA &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP⁻¹ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-hot-reload-design/">Hot-Reload de Assets — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/">Marcos</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/archive/">Arquivo</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Análise</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/pt/docs/HISTORY/">História do desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/ECOSYSTEM_WORKFLOW/">Fluxo unificado de assets</a></li><li><a class="nav-link" href="/pt/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/pt/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/pt/docs/MASTER/">Índice master</a></li><li><a class="nav-link" href="/pt/docs/books/">Livros e PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/project/">Projeto</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">🎨 Rendering Roadmap — 3D de Alto Volume</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>Objetivo:</strong> renderizar ambientes 3D com alto volume de polígonos e texturas de forma <strong>otimizada, consistente e estável</strong> (sem spikes de FPS).<br>
+<strong>Critério de “completo”:</strong> cena densa (terreno + centenas de meshes texturizados + iluminação dinâmica + sombras) a 60 FPS estáveis no editor e no runtime.<br>
+<strong>Estado atual (2026-10-02):</strong> viewport GPU; cap editor 1280 px; mesh LOD; GGX + ACES; sombras no editor só com a câmara parada e <strong>1 cascata</strong>. Instancing e IBL estão no passe principal (ligados por defeito). Oclusão coarse, reflexos (planar / screen-space / probe) e volumétricos são opcionais e ficam desligados — reflexos e probes só correm com a câmara parada. Cena <code>assets/benchmarks/dense_outdoor.caf</code>. O gate p95 &lt; 16.6 ms ainda não foi medido no editor.</p>
+</blockquote>
+<hr>
+<h2 id="diagnóstico-causa-provável-dos-fps-spikes">Diagnóstico (causa provável dos FPS spikes)<a class="anchor" href="#diagnóstico-causa-provável-dos-fps-spikes" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sintoma</th>
+<th>Causa raiz</th>
+<th>Ficheiros</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spike ao mover câmara</td>
+<td>Shadow passes + resolução HiDPI alta</td>
+<td><code>GpuSceneRenderer.cpp</code>, <code>SceneViewport.cpp</code></td>
+</tr>
+<tr>
+<td>Spike ao mover câmara (mitigado)</td>
+<td>Skip shadows em movimento rápido; cap resolução 1920px</td>
+<td><code>SceneViewport.cpp</code></td>
+</tr>
+<tr>
+<td>Terreno pesado</td>
+<td>Rebuild mesh / upload GPU síncrono</td>
+<td><code>TerrainCache.cpp</code>, <code>GpuSceneRenderer.cpp</code></td>
+</tr>
+<tr>
+<td>Muitos draw calls</td>
+<td>1 <code>drawIndexed</code> por mesh, sem batching</td>
+<td><code>GpuSceneRenderer.cpp</code></td>
+</tr>
+<tr>
+<td>Sombras inconsistentes</td>
+<td><s>Runtime CPU shadows</s> resolvido; tuning CSM/PCF</td>
+<td><code>GpuDirectionalShadowMap.*</code>, <code>scene_lit.frag</code></td>
+</tr>
+<tr>
+<td>Materiais “flat”</td>
+<td>Phong ligado; PBR metallic/roughness pendente</td>
+<td><code>scene_lit.frag</code>, <code>terrain_lit.frag</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="fases-e-dependências">Fases e dependências<a class="anchor" href="#fases-e-dependências" aria-label="Link to this section">#</a></h2>
+<pre class="mermaid">flowchart TD
+    P0[P0 Fundação GPU única]
+    P1[P1 Texturas e materiais]
+    P2[P2 Geometria e LOD]
+    P3[P3 Iluminação PBR]
+    P4[P4 Shadow mapping GPU]
+    P5[P5 Reflexos]
+    P6[P6 Luz volumétrica]
+    P0 --&gt; P1 --&gt; P2
+    P1 --&gt; P3 --&gt; P4
+    P4 --&gt; P5
+    P3 --&gt; P6
+</pre>
+<p>Cada fase tem entregável testável. <strong>Não avançar</strong> para reflexos/volumétricos antes de P4 estável.</p>
+<hr>
+<h2 id="p0-fundação-um-único-caminho-gpu">P0 — Fundação: um único caminho GPU<a class="anchor" href="#p0-fundação-um-único-caminho-gpu" aria-label="Link to this section">#</a></h2>
+<p><strong>Meta:</strong> eliminar dual-path (CPU raster + GPU) no viewport 3D.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Descrição</th>
+<th>Ficheiros</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0.1</td>
+<td>GPU como default para <strong>todos</strong> os meshes texturizados</td>
+<td><code>SceneViewport.cpp</code>, <code>GpuSceneRenderer.cpp</code></td>
+</tr>
+<tr>
+<td>P0.2</td>
+<td>Remover fallback CPU exceto wireframe/debug</td>
+<td><code>SceneViewport.cpp</code></td>
+</tr>
+<tr>
+<td>P0.3</td>
+<td>Upload de buffers <strong>antes</strong> do render pass (já parcial)</td>
+<td><code>GpuSceneRenderer.cpp</code></td>
+</tr>
+<tr>
+<td>P0.4</td>
+<td>Runtime play mode usar <code>GpuSceneRenderer</code> (hoje CPU-only)</td>
+<td><code>RuntimeSceneRenderer.cpp</code></td>
+</tr>
+<tr>
+<td>P0.5</td>
+<td>Profiler markers por pass (shadow, opaque, terrain, composite)</td>
+<td><code>Profiler.hpp</code>, viewport</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Métrica de sucesso:</strong> viewport 3D sem <code>MeshCpuRasterizer</code> em modo shaded; FPS estável ±5% ao orbitar câmara.</p>
+<p><strong>Doc detalhada:</strong> <a href="/pt/docs/rendering/rhi/"><code>rendering/rhi.md</code></a> (atualizar após P0)</p>
+<hr>
+<h2 id="p1-texturas-e-materiais">P1 — Texturas e materiais<a class="anchor" href="#p1-texturas-e-materiais" aria-label="Link to this section">#</a></h2>
+<p><strong>Meta:</strong> cache GPU global, mips, sem reload por frame.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Descrição</th>
+<th>Ficheiros</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1.1</td>
+<td><code>GpuTextureCache</code> central (path → <code>GPUTexture</code>, refcount)</td>
+<td><code>src/caffeine/render/GpuTextureCache.hpp</code></td>
+</tr>
+<tr>
+<td>P1.2</td>
+<td>Geração de mipmaps no upload</td>
+<td><code>GpuTextureCache.cpp</code>, <code>RenderDevice.cpp</code></td>
+</tr>
+<tr>
+<td>P1.3</td>
+<td>Bind albedo + normal + ORM no <code>scene_lit</code></td>
+<td><code>scene_lit.frag</code>, <code>MaterialFile</code>, Material Editor</td>
+</tr>
+<tr>
+<td>P1.4</td>
+<td>Async decode (job system) + upload no frame N+1</td>
+<td><code>JobSystem</code>, <code>AssetManager</code></td>
+</tr>
+<tr>
+<td>P1.5</td>
+<td>Atlas opcional para props repetidos (instancing)</td>
+<td><code>TextureAtlas.hpp</code> (estender)</td>
+</tr>
+<tr>
+<td>P1.6</td>
+<td>LOD de texturas por distância aos visualizadores (tiers em cache)</td>
+<td><code>TextureQuality.hpp</code>, <code>GpuTextureCache.*</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Métrica:</strong> 0 <code>stbi_load</code> durante render loop; memória GPU estável após warm-up.</p>
+<p><strong>Doc:</strong> <a href="/pt/docs/assets/asset-manager/"><code>assets/asset-manager.md</code></a>, <a href="/pt/docs/rendering/texture-quality-lod/"><code>rendering/texture-quality-lod.md</code></a>, <a href="/pt/docs/rendering/materials-pbr/"><code>rendering/materials-pbr.md</code></a></p>
+<hr>
+<h2 id="p2-polígonos-meshes-e-lod">P2 — Polígonos, meshes e LOD<a class="anchor" href="#p2-polígonos-meshes-e-lod" aria-label="Link to this section">#</a></h2>
+<p><strong>Meta:</strong> cenas com 500k–2M triângulos visíveis com culling agressivo.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Descrição</th>
+<th>Ficheiros</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P2.1</td>
+<td>Mesh LOD real (simplificação ou LOD chains no import)</td>
+<td><code>MeshLOD.cpp</code>, pipeline <code>.caf</code></td>
+</tr>
+<tr>
+<td>P2.2</td>
+<td>Seleção LOD por distância + hysteresis (como terreno)</td>
+<td><code>GpuSceneRenderer.cpp</code></td>
+</tr>
+<tr>
+<td>P2.3</td>
+<td>Frustum + occlusion coarse (octree já existe)</td>
+<td><code>CoarseOcclusion.hpp</code></td>
+</tr>
+<tr>
+<td>P2.4</td>
+<td>Instancing para meshes repetidos (árvores, props)</td>
+<td><code>drawIndexedInstanced</code></td>
+</tr>
+<tr>
+<td>P2.5</td>
+<td>Terreno: collision mesh separado (feito); GPU chunks estáveis</td>
+<td><code>TerrainLodSystem.*</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Métrica:</strong> draw calls &lt; 200 para cena de referência; triângulos visíveis escalam com LOD.</p>
+<p><strong>Doc:</strong> <a href="/pt/docs/rendering/mesh-lod/"><code>rendering/mesh-lod.md</code></a></p>
+<hr>
+<h2 id="p3-iluminação">P3 — Iluminação<a class="anchor" href="#p3-iluminação" aria-label="Link to this section">#</a></h2>
+<p><strong>Meta:</strong> PBR forward+ (Cook-Torrance) com múltiplas luzes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Descrição</th>
+<th>Ficheiros</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P3.1</td>
+<td>UBO de luzes unificado (dir/point/spot, até N luzes)</td>
+<td><code>LightingSystem.*</code>, shaders</td>
+</tr>
+<tr>
+<td>P3.2</td>
+<td>PBR: metallic/roughness, Fresnel, GGX</td>
+<td><code>scene_lit.frag</code></td>
+</tr>
+<tr>
+<td>P3.4</td>
+<td>Tone mapping (ACES) + exposure</td>
+<td>shader + <code>PostProcess</code> GPU futuro</td>
+</tr>
+<tr>
+<td>P3.3</td>
+<td>IBL básico (irradiance + probe opcional)</td>
+<td><code>scene_lit.frag</code></td>
+</tr>
+<tr>
+<td>P3.5</td>
+<td>Spot lights no GPU (hoje só CPU)</td>
+<td><code>scene_lit.frag</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Métrica:</strong> esfera de referência + terreno com resposta física plausível; sem banding em gradientes.</p>
+<p><strong>Doc:</strong> atualizar <a href="/pt/docs/rendering/camera-3d/"><code>rendering/camera-3d.md</code></a></p>
+<hr>
+<h2 id="p4-shadow-mapping-gpu">P4 — Shadow mapping (GPU)<a class="anchor" href="#p4-shadow-mapping-gpu" aria-label="Link to this section">#</a></h2>
+<p><strong>Meta:</strong> sombras direcionais + spot estáveis; point opcional (cubemap).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Descrição</th>
+<th>Ficheiros</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P4.1</td>
+<td>Ligar <code>renderDirectionalShadows</code> em <code>renderWithCamera</code></td>
+<td><code>GpuSceneRenderer.cpp</code></td>
+</tr>
+<tr>
+<td>P4.2</td>
+<td>CSM 2–4 cascatas para sol</td>
+<td><code>GpuDirectionalShadowMap.*</code></td>
+</tr>
+<tr>
+<td>P4.3</td>
+<td>PCF / PCSS no <code>scene_lit.frag</code></td>
+<td>shaders</td>
+</tr>
+<tr>
+<td>P4.4</td>
+<td>Terreno <code>castShadows</code> no gather GPU</td>
+<td><code>GpuSceneRenderer.cpp</code></td>
+</tr>
+<tr>
+<td>P4.5</td>
+<td>Spot shadow maps (1–2 luzes)</td>
+<td><code>GpuSpotShadowMap.*</code></td>
+</tr>
+<tr>
+<td>P4.6</td>
+<td>Desligar CPU shadow path no editor quando GPU OK</td>
+<td><code>SceneViewport.cpp</code></td>
+</tr>
+<tr>
+<td>P4.7</td>
+<td>Point light cubemap shadows (até 2)</td>
+<td><code>GpuPointShadowMap.*</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Infra ligada:</strong> <code>GpuDirectionalShadowMap</code>, <code>GpuPointShadowMap</code>, <code>shadow_depth.*</code> — ver <a href="/pt/docs/rendering/shadow-mapping/"><code>rendering/shadow-mapping.md</code></a></p>
+<p><strong>Métrica:</strong> sombras sem acne/ peter-panning visível; custo &lt; 3 ms @ 1080p.</p>
+<p><strong>Doc:</strong> <a href="/pt/docs/rendering/shadow-mapping/"><code>rendering/shadow-mapping.md</code></a>, <a href="/pt/docs/rendering/materials-phong/"><code>rendering/materials-phong.md</code></a></p>
+<hr>
+<h2 id="p5-reflexos-em-tempo-real">P5 — Reflexos em tempo real<a class="anchor" href="#p5-reflexos-em-tempo-real" aria-label="Link to this section">#</a></h2>
+<p><strong>Meta:</strong> reflexos convincentes sem custo proibitivo.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Abordagem</th>
+<th>Quando</th>
+<th>Custo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Planar</strong> (espelhos, água plana)</td>
+<td>P5.1</td>
+<td>Baixo</td>
+</tr>
+<tr>
+<td><strong>SSR</strong> (screen-space)</td>
+<td>P5.2</td>
+<td>Médio</td>
+</tr>
+<tr>
+<td><strong>Reflection probes</strong> (cubemap local)</td>
+<td>P5.3</td>
+<td>Médio</td>
+</tr>
+<tr>
+<td><strong>RT reflections</strong></td>
+<td>futuro</td>
+<td>Alto</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P5.1</td>
+<td>Pass de reflexão planar + clip plane</td>
+</tr>
+<tr>
+<td>P5.2</td>
+<td>SSR sobre o alvo planar (passos configuráveis, sem G-buffer)</td>
+</tr>
+<tr>
+<td>P5.3</td>
+<td>Probe cubemap local, 16–128 px, recaptura quando a câmara assenta</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Pré-requisito:</strong> P4 + depth prepass ou G-buffer mínimo.</p>
+<p><strong>Doc:</strong> nova <code>docs/rendering/reflections.md</code></p>
+<hr>
+<h2 id="p6-luz-volumétrica">P6 — Luz volumétrica<a class="anchor" href="#p6-luz-volumétrica" aria-label="Link to this section">#</a></h2>
+<p><strong>Meta:</strong> god rays, fog volumétrico, shafts de luz direcional.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tarefa</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P6.1</td>
+<td>Ray march no shader forward (6 ou 12 passos)</td>
+</tr>
+<tr>
+<td>P6.2</td>
+<td>Nevoeiro por altura (sem textura 3D)</td>
+</tr>
+<tr>
+<td>P6.3</td>
+<td>Amostra opcional do shadow map no march</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Nota:</strong> <code>PostProcessRenderer</code> atual é overlay ImGui — não conta como volumétrico GPU.</p>
+<p><strong>Doc:</strong> nova <code>docs/rendering/volumetric-lighting.md</code></p>
+<hr>
+<h2 id="cena-de-referência-benchmark-interno">Cena de referência (benchmark interno)<a class="anchor" href="#cena-de-referência-benchmark-interno" aria-label="Link to this section">#</a></h2>
+<p><code>assets/benchmarks/dense_outdoor.caf</code> (constantes em <code>DenseOutdoorBenchmark.hpp</code>):</p>
+<ul>
+<li>Terreno 129² (sobe para 512 em <code>kDenseOutdoorTerrainResolution</code> quando o orçamento aguentar)</li>
+<li>240 esferas + 40 cubos, o mesmo mesh para instancing</li>
+<li>1 direcional + 2 point + 1 spot</li>
+<li>Plano de água em Y = 0 para o modo planar</li>
+<li>Frame time no profiler do editor (p50 / p95 / p99 ainda manuais)</li>
+</ul>
+<p><strong>Gate de qualidade:</strong> p95 frame time &lt; 16.6 ms @ 1080p antes de marcar fase como done.</p>
+<hr>
+<h2 id="ordem-de-execução-recomendada">Ordem de execução recomendada<a class="anchor" href="#ordem-de-execução-recomendada" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><strong>P0</strong> (esta semana) — maior impacto nos spikes</li>
+<li><strong>P1</strong> — texturas são o suspeito #1 dos spikes atuais</li>
+<li><strong>P2</strong> — polígonos sem LOD matam GPU e CPU</li>
+<li><strong>P4</strong> — sombras GPU (infra já existe)</li>
+<li><strong>P3</strong> — PBR em cima de base estável</li>
+<li><strong>P5 / P6</strong> — polish visual avançado</li>
+</ol>
+<hr>
+<h2 id="links">Links<a class="anchor" href="#links" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Documento</th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/pt/docs/rendering/rhi/"><code>rendering/rhi.md</code></a></td>
+<td>Abstração SDL_GPU</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/rendering/batch-renderer/"><code>rendering/batch-renderer.md</code></a></td>
+<td>Sprites 2D (não 3D)</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/terrain/terrain-system/"><code>terrain/terrain-system.md</code></a></td>
+<td>Terreno LOD/chunks</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/plans/2026-05-23-3d-mesh-enhancements/"><code>plans/2026-05-23-3d-mesh-enhancements.md</code></a></td>
+<td>Plano anterior meshes</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/plans/2026-09-22-viewport-rendering-quality-session/"><code>plans/2026-09-22-viewport-rendering-quality-session.md</code></a></td>
+<td>Sessão viewport: HiDPI, wireframe GPU, LOD texturas</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/rendering/texture-quality-lod/"><code>rendering/texture-quality-lod.md</code></a></td>
+<td>LOD de texturas por distância</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/editor/scene-viewport/"><code>editor/scene-viewport.md</code></a></td>
+<td>Pipeline do Scene Viewport 3D</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/rendering/mesh-lod/"><code>rendering/mesh-lod.md</code></a></td>
+<td>LOD de meshes por clustering</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/rendering/reflections/"><code>rendering/reflections.md</code></a></td>
+<td>Planar, screen-space e probe</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/rendering/volumetric-lighting/"><code>rendering/volumetric-lighting.md</code></a></td>
+<td>Nevoeiro analítico</td>
+</tr>
+</tbody>
+</table></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/plans/2026-09-21-rendering-roadmap.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/plans/2026-09-22-engine-pillars-roadmap/"><span>Anterior</span><strong>🏛️ Engine Pillars — Roadmap de Sistemas Fundamentais</strong></a><a class="pager-next" href="/pt/docs/plans/2026-05-24-doppio-ui-test-framework/"><span>Seguinte</span><strong>Doppio UI Test Framework Implementation Plan</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#diagnóstico-causa-provável-dos-fps-spikes">Diagnóstico (causa provável dos FPS spikes)</a></li><li class="l2"><a href="#fases-e-dependências">Fases e dependências</a></li><li class="l2"><a href="#p0-fundação-um-único-caminho-gpu">P0 — Fundação: um único caminho GPU</a></li><li class="l2"><a href="#p1-texturas-e-materiais">P1 — Texturas e materiais</a></li><li class="l2"><a href="#p2-polígonos-meshes-e-lod">P2 — Polígonos, meshes e LOD</a></li><li class="l2"><a href="#p3-iluminação">P3 — Iluminação</a></li><li class="l2"><a href="#p4-shadow-mapping-gpu">P4 — Shadow mapping (GPU)</a></li><li class="l2"><a href="#p5-reflexos-em-tempo-real">P5 — Reflexos em tempo real</a></li><li class="l2"><a href="#p6-luz-volumétrica">P6 — Luz volumétrica</a></li><li class="l2"><a href="#cena-de-referência-benchmark-interno">Cena de referência (benchmark interno)</a></li><li class="l2"><a href="#ordem-de-execução-recomendada">Ordem de execução recomendada</a></li><li class="l2"><a href="#links">Links</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec",mermaid:"/assets/vendor/mermaid.min.js"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

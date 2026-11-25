@@ -251,3 +251,10 @@ other `.mat` channels are stored in the file but not used for terrain layers yet
 change.
 
 Old `.terrain-graph` files load as before; their empty slots are filled the next time you apply or place.
+
+## Using it in a world
+
+The [World Composer](world-composition.md) starts from a terrain recipe: its `terrain` line names a
+`*.generator.terrain`, the editor bakes it, and the composition's classes read its masks (`slope`, `height`,
+`curvature`, `flow`, `wetness`, ...) with the same biome terms as the table above. The composer adds one mask of its
+own, `water_distance`, and a river with `carve` lowers the baked heightfield before any class reads it.

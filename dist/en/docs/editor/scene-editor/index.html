@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scene editor · Caffeine</title>
+<meta name="description" content="The editing surface of Doppio: a scene tree, a rendered viewport, an inspector built from component cards, and a command history that every editing action records.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Scene editor · Caffeine">
+<meta property="og:description" content="The editing surface of Doppio: a scene tree, a rendered viewport, an inspector built from component cards, and a command history that every editing action records.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/editor/scene-editor/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/editor/scene-editor/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/editor/scene-editor/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio editor</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/editor/scene-editor/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio editor"><div class="nav-title">Doppio editor</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link active" href="/en/docs/editor/scene-editor/" aria-current="page">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio editor</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Scene editor</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/crates/ui/src/windows/main.rs"><code>windows/main.rs</code></a></span>
+</div>
+<p class="doc-lede">The editing surface of Doppio: a scene tree, a rendered viewport,
+an inspector built from component cards, and a command history that every editing
+action records.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/editor/workspace-scene.png" alt="Doppio scene editor with the hierarchy, viewport, inspector and asset panes" loading="lazy">
+  <figcaption>A scene open in Doppio. Selection in the Hierarchy drives the Inspector; the Viewport draws the engine render with gizmos and scene markers on top.</figcaption>
+</figure>
+<h2 id="what-the-editor-edits">What the editor edits<a class="anchor" href="#what-the-editor-edits" aria-label="Link to this section">#</a></h2>
+<p>The editor reads and writes the same ECS scene data the runtime uses. A scene is a
+<code>.caf</code> file, and the project stores it under <code>scenes/</code>. The editor never owns a
+parallel scene format.</p>
+<table class="doc-table">
+  <thead>
+    <tr><th>Surface</th><th>What you can do</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Hierarchy</strong></td><td>Search, select, add and delete entities; expand parent groups; drag a row onto another to reparent it.</td></tr>
+    <tr><td><strong>Viewport</strong></td><td>Orbit, pan and fly the camera; click to select; drag the move/rotate/scale gizmo; double-click to focus.</td></tr>
+    <tr><td><strong>Inspector</strong></td><td>Rename the entity, edit the combined transform, expand component cards, remove components and add behaviours.</td></tr>
+    <tr><td><strong>Assets</strong></td><td>Browse the project, create/import assets, and pack a <code>.cap</code>.</td></tr>
+    <tr><td><strong>Console</strong></td><td>Filtered Errors, Log, Actions, Engine and UI entries.</td></tr>
+  </tbody>
+</table>
+<h2 id="hierarchy">Hierarchy<a class="anchor" href="#hierarchy" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Rows are built from <code>Scene::Parent</code> links, not a UI-only tree. Reordering or
+reparenting writes the ECS parent component, and the viewport resolves world
+transforms through the parent chain.</li>
+<li>The search field filters by entity name. Parent groups compose position, rotation
+and scale into their children.</li>
+<li>Every row and control has a stable id (<code>hierarchy.list.entity_row.&lt;n&gt;</code>,
+<code>hierarchy.search</code>, <code>hierarchy.add</code>), so flows and agents can target it.</li>
+<li>The right-click menu adds, deletes and focuses an entity.</li>
+</ul>
+<h2 id="inspector">Inspector<a class="anchor" href="#inspector" aria-label="Link to this section">#</a></h2>
+<p>The inspector is composed from reusable cards:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Card</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entity</strong></td>
+<td>Name and identity, with a material chooser.</td>
+</tr>
+<tr>
+<td><strong>Transform</strong></td>
+<td>Position, rotation and scale on one row set; values are bounded fields with drag and keyboard entry.</td>
+</tr>
+<tr>
+<td><strong>Component cards</strong></td>
+<td>One collapsible card per component, with type-specific fields and a remove button.</td>
+</tr>
+<tr>
+<td><strong>Add Behaviour</strong></td>
+<td>Opens the behaviour picker for components the engine exposes.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Colour fields use the colour picker, bounded numbers use sliders and numeric fields,
+and references use asset pickers with search. All edits publish a <code>Message</code>; none of
+the widgets call the engine directly.</p>
+<h2 id="gizmos-and-scene-markers">Gizmos and scene markers<a class="anchor" href="#gizmos-and-scene-markers" aria-label="Link to this section">#</a></h2>
+<p>The viewport overlays two components:</p>
+<ul>
+<li><strong>Transform gizmo</strong> — move (<code>1</code>), rotate (<code>2</code>) and scale (<code>3</code>) handles for the
+selected entity, with plane handles for move and a centre handle for uniform
+scale. Every drag is one undo step.</li>
+<li><strong>Scene markers</strong> — icons and frusta for lights, cameras, colliders and empties,
+which have no mesh to select. Markers sit under the gizmo in hit order: gizmo
+handle, then marker, then scene picking.</li>
+</ul>
+<p>See <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/gizmos-and-markers.md" rel="noopener" class="ext">Gizmos and markers</a>
+for the full interaction model and screenshots.</p>
+<h2 id="undo-redo-and-play-mode">Undo, redo and play mode<a class="anchor" href="#undo-redo-and-play-mode" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Every editing command calls <code>App::commit</code>, recording one undo step. <code>Ctrl+Z</code> and
+<code>Ctrl+Shift+Z</code> walk the history.</li>
+<li><strong>Scene → Play</strong> (<code>Ctrl+Enter</code>) ticks the engine. The status bar shows a
+<strong>Playing</strong> chip; play-mode changes are kept out of editor-only paths.</li>
+<li><strong>Scene → Save Scene</strong> (<code>Ctrl+S</code>) writes the <code>.caf</code> scene and updates the
+<strong>Saved</strong> badge.</li>
+</ul>
+<h2 id="prefab-palette">Prefab palette<a class="anchor" href="#prefab-palette" aria-label="Link to this section">#</a></h2>
+<p><strong>Scene → Create Entity…</strong> (<code>Ctrl+Shift+N</code>) opens a built-in palette: mesh, point,
+directional and spot lights, camera, physics body, terrain, water, empty group and
+<strong>Duplicate Selection</strong>. The same palette is available from the Hierarchy <strong>+</strong>.
+Choosing an entry adds a configured entity; no plugin is required.</p>
+<h2 id="empty-and-fixture-states">Empty and fixture states<a class="anchor" href="#empty-and-fixture-states" aria-label="Link to this section">#</a></h2>
+<p>A new scene has no entity. With no engine session (for example a headless fixture),
+the viewport shows <strong>Waiting for the engine viewport…</strong> while the rest of the editor
+remains fully interactive. The <code>scene3d</code> fixture starts an engine-backed scene with
+lights, a camera and meshes for visual tests.</p>
+<h2 id="related-pages">Related pages<a class="anchor" href="#related-pages" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/editor/scene-viewport/">Scene viewport</a> — rendering, camera and readback.</li>
+<li><a href="/en/docs/editor/ui-gallery/">UI gallery</a> — visual tour of the panes.</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md" rel="noopener" class="ext">Headless testing</a>
+— script the editor without a window.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/editor/scene-editor.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/editor/plugin-sdk/"><span>Previous</span><strong>Plugin SDK (legacy C++)</strong></a><a class="pager-next" href="/en/docs/editor/scene-viewport/"><span>Next</span><strong>Scene viewport</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#what-the-editor-edits">What the editor edits</a></li><li class="l2"><a href="#hierarchy">Hierarchy</a></li><li class="l2"><a href="#inspector">Inspector</a></li><li class="l2"><a href="#gizmos-and-scene-markers">Gizmos and scene markers</a></li><li class="l2"><a href="#undo-redo-and-play-mode">Undo, redo and play mode</a></li><li class="l2"><a href="#prefab-palette">Prefab palette</a></li><li class="l2"><a href="#empty-and-fixture-states">Empty and fixture states</a></li><li class="l2"><a href="#related-pages">Related pages</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

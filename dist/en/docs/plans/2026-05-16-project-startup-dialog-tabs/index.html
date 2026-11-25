@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProjectStartupDialog Tabs Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="ProjectStartupDialog Tabs Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/" aria-current="page">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/ECOSYSTEM_WORKFLOW/">Unified asset workflow</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">ProjectStartupDialog Tabs Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Implement a 3-tab ProjectStartupDialog (Create New, Open Recent, Browse) with toast notifications and proper ImGui window management.</p>
+<p><strong>Architecture:</strong></p>
+<ul>
+<li>Refactor render() into tab-based architecture using ImGui::BeginTabBar()</li>
+<li>Extract tab rendering into separate methods (renderCreateTab, renderRecentTab, renderBrowseTab)</li>
+<li>Implement toast notification system for error/success feedback</li>
+<li>Add progress dialog for blocking project creation flow</li>
+</ul>
+<p><strong>Tech Stack:</strong></p>
+<ul>
+<li>ImGui with tab bar API</li>
+<li>ProjectManager (existing file operations)</li>
+<li>Standard file I/O for directory scanning</li>
+</ul>
+<hr>
+<h2 id="phase-1-toast-notification-system-foundation">Phase 1: Toast Notification System (Foundation)<a class="anchor" href="#phase-1-toast-notification-system-foundation" aria-label="Link to this section">#</a></h2>
+<h3 id="task-1-add-toast-data-structure">Task 1: Add Toast Data Structure<a class="anchor" href="#task-1-add-toast-data-structure" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ProjectStartupDialog.hpp</code> (add after line 50)</li>
+</ul>
+<p><strong>Step 1: Write structure definition</strong></p>
+<p>Add this to the private section of ProjectStartupDialog class:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-comment">// ── Toast Notification System ───────────────────────────────</span>
+    <span class="hljs-keyword">enum class</span> <span class="hljs-title class_">ToastType</span> {
+        Success,  <span class="hljs-comment">// Green</span>
+        Error,    <span class="hljs-comment">// Red</span>
+        Info      <span class="hljs-comment">// Yellow</span>
+    };
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Toast</span> {
+        std::string message;
+        ToastType type;
+        <span class="hljs-type">double</span> showTime;  <span class="hljs-comment">// SDL_GetTicks() when created</span>
+        <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">double</span> DURATION_MS = <span class="hljs-number">3000.0</span>;  <span class="hljs-comment">// 3 seconds</span>
+        
+        <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isExpired</span><span class="hljs-params">(<span class="hljs-type">double</span> currentTime)</span> <span class="hljs-type">const</span> </span>{
+            <span class="hljs-keyword">return</span> (currentTime - showTime) &gt;= DURATION_MS;
+        }
+    };
+
+    std::vector&lt;Toast&gt; m_toastQueue;
+    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">int</span> MAX_VISIBLE_TOASTS = <span class="hljs-number">3</span>;
+</code></pre></div>
+<p><strong>Step 2: Add toast helper methods to ProjectStartupDialog</strong></p>
+<p>Add to private section (after line 80):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">showToast</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; message, ToastType type)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">updateToasts</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderToasts</span><span class="hljs-params">()</span></span>;
+</code></pre></div>
+<p><strong>Step 3: Include necessary headers</strong></p>
+<p>Add at top of ProjectStartupDialog.hpp:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdint&gt;</span></span>
+</code></pre></div>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectStartupDialog.hpp
+git commit -m <span class="hljs-string">&quot;feat: add toast notification data structure to ProjectStartupDialog&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-2-toast-implementation-in-cpp">Phase 2: Toast Implementation in .cpp<a class="anchor" href="#phase-2-toast-implementation-in-cpp" aria-label="Link to this section">#</a></h2>
+<h3 id="task-2-implement-toast-methods">Task 2: Implement Toast Methods<a class="anchor" href="#task-2-implement-toast-methods" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ProjectStartupDialog.cpp</code> (add after line 56 - setError method)</li>
+</ul>
+<p><strong>Step 1: Implement showToast()</strong></p>
+<p>Add after setError() method:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ProjectStartupDialog::showToast</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; message, ToastType type)</span> </span>{
+    m_toastQueue.<span class="hljs-built_in">push_back</span>({message, type, <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">double</span>&gt;(<span class="hljs-built_in">SDL_GetTicksNS</span>()) / <span class="hljs-number">1&#x27;000&#x27;000.0</span>});
+    <span class="hljs-keyword">if</span> (m_toastQueue.<span class="hljs-built_in">size</span>() &gt; MAX_VISIBLE_TOASTS) {
+        m_toastQueue.<span class="hljs-built_in">erase</span>(m_toastQueue.<span class="hljs-built_in">begin</span>());
+    }
+}
+</code></pre></div>
+<p><strong>Step 2: Implement updateToasts()</strong></p>
+<p>Add after showToast():</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ProjectStartupDialog::updateToasts</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">double</span> currentTime = <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">double</span>&gt;(<span class="hljs-built_in">SDL_GetTicksNS</span>()) / <span class="hljs-number">1&#x27;000&#x27;000.0</span>;
+    <span class="hljs-keyword">auto</span> it = m_toastQueue.<span class="hljs-built_in">begin</span>();
+    <span class="hljs-keyword">while</span> (it != m_toastQueue.<span class="hljs-built_in">end</span>()) {
+        <span class="hljs-keyword">if</span> (it-&gt;<span class="hljs-built_in">isExpired</span>(currentTime)) {
+            it = m_toastQueue.<span class="hljs-built_in">erase</span>(it);
+        } <span class="hljs-keyword">else</span> {
+            ++it;
+        }
+    }
+}
+</code></pre></div>
+<p><strong>Step 3: Implement renderToasts() (stub for now)</strong></p>
+<p>Add after updateToasts():</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ProjectStartupDialog::renderToasts</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// Will implement ImGui rendering in Phase 3</span>
+}
+</code></pre></div>
+<p><strong>Step 4: Include SDL header for time</strong></p>
+<p>Add to top of ProjectStartupDialog.cpp (in CF_HAS_IMGUI section):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;SDL3/SDL.h&gt;</span></span>
+</code></pre></div>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectStartupDialog.cpp
+git commit -m <span class="hljs-string">&quot;feat: implement toast notification methods (showToast, updateToasts)&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-3-imgui-toast-rendering">Phase 3: ImGui Toast Rendering<a class="anchor" href="#phase-3-imgui-toast-rendering" aria-label="Link to this section">#</a></h2>
+<h3 id="task-3-render-toasts-in-imgui">Task 3: Render Toasts in ImGui<a class="anchor" href="#task-3-render-toasts-in-imgui" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ProjectStartupDialog.cpp</code> (replace renderToasts stub, line ~90)</li>
+</ul>
+<p><strong>Step 1: Implement renderToasts() with ImGui</strong></p>
+<p>Replace the stub:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ProjectStartupDialog::renderToasts</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (m_toastQueue.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span>;
+
+    ImGuiIO&amp; io = ImGui::<span class="hljs-built_in">GetIO</span>();
+    <span class="hljs-type">float</span> toastWidth = <span class="hljs-number">300.0f</span>;
+    <span class="hljs-type">float</span> toastHeight = <span class="hljs-number">60.0f</span>;
+    <span class="hljs-type">float</span> padding = <span class="hljs-number">10.0f</span>;
+    <span class="hljs-type">float</span> spacing = <span class="hljs-number">5.0f</span>;
+
+    <span class="hljs-type">float</span> totalHeight = m_toastQueue.<span class="hljs-built_in">size</span>() * (toastHeight + spacing);
+    <span class="hljs-function">ImVec2 <span class="hljs-title">startPos</span><span class="hljs-params">(
+        io.DisplaySize.x - toastWidth - padding,
+        io.DisplaySize.y - totalHeight - padding
+    )</span></span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; m_toastQueue.<span class="hljs-built_in">size</span>(); ++i) {
+        <span class="hljs-type">const</span> Toast&amp; toast = m_toastQueue[i];
+        <span class="hljs-function">ImVec2 <span class="hljs-title">pos</span><span class="hljs-params">(startPos.x, startPos.y + i * (toastHeight + spacing))</span></span>;
+
+        ImGui::<span class="hljs-built_in">SetNextWindowPos</span>(pos);
+        ImGui::<span class="hljs-built_in">SetNextWindowSize</span>(<span class="hljs-built_in">ImVec2</span>(toastWidth, toastHeight));
+
+        <span class="hljs-comment">// Color based on type</span>
+        ImVec4 bgColor;
+        <span class="hljs-keyword">switch</span> (toast.type) {
+            <span class="hljs-keyword">case</span> ToastType::Success:
+                bgColor = <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0.2f</span>, <span class="hljs-number">0.7f</span>, <span class="hljs-number">0.2f</span>, <span class="hljs-number">0.8f</span>);  <span class="hljs-comment">// Green</span>
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> ToastType::Error:
+                bgColor = <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0.9f</span>, <span class="hljs-number">0.2f</span>, <span class="hljs-number">0.2f</span>, <span class="hljs-number">0.8f</span>);  <span class="hljs-comment">// Red</span>
+                <span class="hljs-keyword">break</span>;
+            <span class="hljs-keyword">case</span> ToastType::Info:
+                bgColor = <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.2f</span>, <span class="hljs-number">0.8f</span>);  <span class="hljs-comment">// Yellow</span>
+                <span class="hljs-keyword">break</span>;
+        }
+
+        ImGui::<span class="hljs-built_in">PushStyleColor</span>(ImGuiCol_WindowBg, bgColor);
+        <span class="hljs-type">char</span> label[<span class="hljs-number">64</span>];
+        <span class="hljs-built_in">snprintf</span>(label, <span class="hljs-keyword">sizeof</span>(label), <span class="hljs-string">&quot;##toast_%zu&quot;</span>, i);
+        
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Begin</span>(label, <span class="hljs-literal">nullptr</span>, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize)) {
+            ImGui::<span class="hljs-built_in">TextWrapped</span>(<span class="hljs-string">&quot;%s&quot;</span>, toast.message.<span class="hljs-built_in">c_str</span>());
+            ImGui::<span class="hljs-built_in">End</span>();
+        }
+        ImGui::<span class="hljs-built_in">PopStyleColor</span>();
+    }
+}
+</code></pre></div>
+<p><strong>Step 2: Call updateToasts() and renderToasts() in main render()</strong></p>
+<p>Find the main render() method and add at the very start (after the early return check):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">std::optional&lt;ProjectConfig&gt; <span class="hljs-title">ProjectStartupDialog::render</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (!m_open) {
+        <span class="hljs-keyword">return</span> std::<span class="hljs-literal">nullopt</span>;
+    }
+
+    <span class="hljs-built_in">updateToasts</span>();  <span class="hljs-comment">// ADD THIS LINE</span>
+    
+    <span class="hljs-comment">// ... rest of render() ...</span>
+</code></pre></div>
+<p>And add renderToasts() call at the very end of render(), right before the final return:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-comment">// At the very end of render(), before &quot;return result;&quot;</span>
+    <span class="hljs-built_in">renderToasts</span>();
+
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre></div>
+<p><strong>Step 3: Build and verify no ImGui errors</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; <span class="hljs-built_in">timeout</span> 60 make -j8 doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+</code></pre></div>
+<p>Expected: Should compile without errors</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectStartupDialog.cpp
+git commit -m <span class="hljs-string">&quot;feat: implement toast notification rendering with ImGui&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-4-refactor-render-into-tab-based-architecture">Phase 4: Refactor render() into Tab-Based Architecture<a class="anchor" href="#phase-4-refactor-render-into-tab-based-architecture" aria-label="Link to this section">#</a></h2>
+<h3 id="task-4-implement-tab-bar-structure">Task 4: Implement Tab Bar Structure<a class="anchor" href="#task-4-implement-tab-bar-structure" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ProjectStartupDialog.cpp</code> (refactor render() method, lines 66-101)</li>
+</ul>
+<p><strong>Step 1: Replace simple render() with tab structure</strong></p>
+<p>Replace the entire main render() method (from line 66 to 101) with:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">std::optional&lt;ProjectConfig&gt; <span class="hljs-title">ProjectStartupDialog::render</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (!m_open) {
+        <span class="hljs-keyword">return</span> std::<span class="hljs-literal">nullopt</span>;
+    }
+
+    <span class="hljs-built_in">updateToasts</span>();
+
+    std::optional&lt;ProjectConfig&gt; result;
+    ImVec2 center = ImGui::<span class="hljs-built_in">GetMainViewport</span>()-&gt;<span class="hljs-built_in">GetCenter</span>();
+    
+    ImGui::<span class="hljs-built_in">SetNextWindowPos</span>(center, ImGuiCond_FirstUseEver, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>));
+    ImGui::<span class="hljs-built_in">SetNextWindowSize</span>(<span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">600</span>, <span class="hljs-number">500</span>), ImGuiCond_FirstUseEver);
+    
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Begin</span>(<span class="hljs-string">&quot;Project Manager&quot;</span>, &amp;m_open, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) {
+        ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Welcome to Doppio — Select or Create a Project&quot;</span>);
+        ImGui::<span class="hljs-built_in">Separator</span>();
+
+        <span class="hljs-comment">// ── Tab Bar ─────────────────────────────────────────────────</span>
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginTabBar</span>(<span class="hljs-string">&quot;ProjectDialogTabs&quot;</span>)) {
+            
+            <span class="hljs-comment">// Tab 0: Create New</span>
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginTabItem</span>(<span class="hljs-string">&quot;Create New&quot;</span>)) {
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span> config = <span class="hljs-built_in">renderCreateTab</span>()) {
+                    result = config;
+                }
+                ImGui::<span class="hljs-built_in">EndTabItem</span>();
+            }
+
+            <span class="hljs-comment">// Tab 1: Open Recent</span>
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginTabItem</span>(<span class="hljs-string">&quot;Open Recent&quot;</span>)) {
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span> config = <span class="hljs-built_in">renderRecentTab</span>()) {
+                    result = config;
+                }
+                ImGui::<span class="hljs-built_in">EndTabItem</span>();
+            }
+
+            <span class="hljs-comment">// Tab 2: Browse Projects</span>
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginTabItem</span>(<span class="hljs-string">&quot;Browse Projects&quot;</span>)) {
+                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span> config = <span class="hljs-built_in">renderBrowseTab</span>()) {
+                    result = config;
+                }
+                ImGui::<span class="hljs-built_in">EndTabItem</span>();
+            }
+
+            ImGui::<span class="hljs-built_in">EndTabBar</span>();
+        }
+
+        <span class="hljs-built_in">renderErrorPopup</span>();
+        ImGui::<span class="hljs-built_in">End</span>();
+    }
+
+    <span class="hljs-built_in">renderToasts</span>();
+
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre></div>
+<p><strong>Step 2: Update renderCreateTab() to work standalone</strong></p>
+<p>The existing renderCreateTab() method (lines 103-129) needs adjustment. Update it:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">std::optional&lt;ProjectConfig&gt; <span class="hljs-title">ProjectStartupDialog::renderCreateTab</span><span class="hljs-params">()</span> </span>{
+    std::optional&lt;ProjectConfig&gt; result;
+
+    <span class="hljs-comment">// Project Name Input</span>
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Project Name:&quot;</span>);
+    ImGui::<span class="hljs-built_in">InputText</span>(<span class="hljs-string">&quot;##ProjectName&quot;</span>, m_projectName, <span class="hljs-keyword">sizeof</span>(m_projectName));
+    
+    <span class="hljs-keyword">if</span> (m_projectName[<span class="hljs-number">0</span>] == <span class="hljs-string">&#x27;\0&#x27;</span>) {
+        ImGui::<span class="hljs-built_in">TextDisabled</span>(<span class="hljs-string">&quot;(Enter a project name)&quot;</span>);
+    }
+
+    ImGui::<span class="hljs-built_in">Spacing</span>();
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    <span class="hljs-comment">// Template Selection (3 Cards)</span>
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Template:&quot;</span>);
+    ImGui::<span class="hljs-built_in">BeginGroup</span>();
+    
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* templates[] = {<span class="hljs-string">&quot;Empty&quot;</span>, <span class="hljs-string">&quot;2D&quot;</span>, <span class="hljs-string">&quot;3D&quot;</span>};
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* descriptions[] = {
+        <span class="hljs-string">&quot;Blank project, no starter assets&quot;</span>,
+        <span class="hljs-string">&quot;Pre-configured for 2D games&quot;</span>,
+        <span class="hljs-string">&quot;Pre-configured for 3D games&quot;</span>
+    };
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; ++i) {
+        <span class="hljs-type">bool</span> selected = (m_templateIndex == i);
+        ImVec4 borderColor = selected ? <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>) : <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>);
+        
+        ImGui::<span class="hljs-built_in">PushStyleColor</span>(ImGuiCol_Border, borderColor);
+        ImGui::<span class="hljs-built_in">PushStyleVar</span>(ImGuiStyleVar_FrameBorderSize, <span class="hljs-number">2.0f</span>);
+        
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Selectable</span>(templates[i], selected, ImGuiSelectableFlags_None, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">150</span>, <span class="hljs-number">80</span>))) {
+            m_templateIndex = i;
+        }
+        
+        ImGui::<span class="hljs-built_in">SameLine</span>();
+        ImGui::<span class="hljs-built_in">TextWrapped</span>(<span class="hljs-string">&quot;%s&quot;</span>, descriptions[i]);
+        
+        ImGui::<span class="hljs-built_in">PopStyleVar</span>();
+        ImGui::<span class="hljs-built_in">PopStyleColor</span>();
+    }
+
+    ImGui::<span class="hljs-built_in">EndGroup</span>();
+
+    ImGui::<span class="hljs-built_in">Spacing</span>();
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    <span class="hljs-comment">// Location Selector</span>
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Location: %s&quot;</span>, m_selectedLocation.<span class="hljs-built_in">c_str</span>());
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Browse Location...##Create&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">150</span>, <span class="hljs-number">0</span>))) {
+        m_locationPicked = <span class="hljs-literal">true</span>;
+        <span class="hljs-built_in">showToast</span>(<span class="hljs-string">&quot;File picker coming soon&quot;</span>, ToastType::Info);
+    }
+
+    ImGui::<span class="hljs-built_in">Spacing</span>();
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    <span class="hljs-comment">// Create Button</span>
+    <span class="hljs-type">bool</span> canCreate = (m_projectName[<span class="hljs-number">0</span>] != <span class="hljs-string">&#x27;\0&#x27;</span>);
+    <span class="hljs-keyword">if</span> (!canCreate) ImGui::<span class="hljs-built_in">BeginDisabled</span>();
+    
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Create &amp; Open&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">150</span>, <span class="hljs-number">0</span>))) {
+        result = tryCreateProject();
+        <span class="hljs-keyword">if</span> (result) {
+            <span class="hljs-built_in">showToast</span>(<span class="hljs-string">&quot;Project created successfully!&quot;</span>, ToastType::Success);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">showToast</span>(<span class="hljs-string">&quot;Failed to create project&quot;</span>, ToastType::Error);
+        }
+    }
+    
+    <span class="hljs-keyword">if</span> (!canCreate) ImGui::<span class="hljs-built_in">EndDisabled</span>();
+
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre></div>
+<p><strong>Step 3: Build and test</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; <span class="hljs-built_in">timeout</span> 60 make -j8 doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -15
+</code></pre></div>
+<p>Expected: Should compile without errors. Test: <code>./doppio</code> should show tabbed dialog.</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectStartupDialog.cpp
+git commit -m <span class="hljs-string">&quot;feat: refactor render() into tab-based architecture with BeginTabBar&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-5-implement-open-recent-tab">Phase 5: Implement &quot;Open Recent&quot; Tab<a class="anchor" href="#phase-5-implement-open-recent-tab" aria-label="Link to this section">#</a></h2>
+<h3 id="task-5-add-recent-projects-state">Task 5: Add Recent Projects State<a class="anchor" href="#task-5-add-recent-projects-state" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ProjectStartupDialog.hpp</code> (add state after line 60)</li>
+</ul>
+<p><strong>Step 1: Add state variables for Recent tab</strong></p>
+<p>Add to private section (after m_browseResults):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-comment">// ── Recent tab state ────────────────────────────────────────</span>
+    std::vector&lt;std::filesystem::path&gt; m_recentProjects;
+    <span class="hljs-type">bool</span> m_showAllRecents = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">char</span> m_searchFilter[<span class="hljs-number">256</span>] = {<span class="hljs-number">0</span>};
+    <span class="hljs-type">int</span> m_selectedRecentIndex = <span class="hljs-number">-1</span>;
+</code></pre></div>
+<p><strong>Step 2: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectStartupDialog.hpp
+git commit -m <span class="hljs-string">&quot;feat: add recent projects state variables to ProjectStartupDialog&quot;</span>
+</code></pre></div>
+<h3 id="task-6-implement-renderrecenttab">Task 6: Implement renderRecentTab()<a class="anchor" href="#task-6-implement-renderrecenttab" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ProjectStartupDialog.cpp</code> (replace stub at line ~131)</li>
+</ul>
+<p><strong>Step 1: Load recent projects in init()</strong></p>
+<p>Find the init() method and add this to load recent projects:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ProjectStartupDialog::init</span><span class="hljs-params">()</span> </span>{
+    m_locationPicked = <span class="hljs-literal">false</span>;
+    m_popupOpened = <span class="hljs-literal">false</span>;
+    m_recentProjects = m_projectManager.<span class="hljs-built_in">GetRecentProjects</span>();  <span class="hljs-comment">// ADD THIS LINE</span>
+}
+</code></pre></div>
+<p><strong>Step 2: Implement renderRecentTab()</strong></p>
+<p>Replace the existing stub:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">std::optional&lt;ProjectConfig&gt; <span class="hljs-title">ProjectStartupDialog::renderRecentTab</span><span class="hljs-params">()</span> </span>{
+    std::optional&lt;ProjectConfig&gt; result;
+
+    <span class="hljs-comment">// Search &amp; Filter Controls</span>
+    ImGui::<span class="hljs-built_in">InputTextWithHint</span>(<span class="hljs-string">&quot;##search_recent&quot;</span>, <span class="hljs-string">&quot;Search projects...&quot;</span>, m_searchFilter, <span class="hljs-keyword">sizeof</span>(m_searchFilter));
+    ImGui::<span class="hljs-built_in">SameLine</span>();
+    ImGui::<span class="hljs-built_in">Checkbox</span>(<span class="hljs-string">&quot;Show All##recent&quot;</span>, &amp;m_showAllRecents);
+
+    ImGui::<span class="hljs-built_in">Spacing</span>();
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    <span class="hljs-comment">// Project List</span>
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginChild</span>(<span class="hljs-string">&quot;recent_list&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">0</span>, <span class="hljs-number">300</span>), <span class="hljs-literal">true</span>)) {
+        <span class="hljs-keyword">if</span> (m_recentProjects.<span class="hljs-built_in">empty</span>()) {
+            ImGui::<span class="hljs-built_in">TextDisabled</span>(<span class="hljs-string">&quot;No projects yet. Create one in &#x27;Create New&#x27; tab!&quot;</span>);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; m_recentProjects.<span class="hljs-built_in">size</span>(); ++i) {
+                <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; projPath = m_recentProjects[i];
+                std::string projName = projPath.<span class="hljs-built_in">filename</span>().<span class="hljs-built_in">string</span>();
+                
+                <span class="hljs-comment">// Apply search filter</span>
+                <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strlen</span>(m_searchFilter) &gt; <span class="hljs-number">0</span>) {
+                    <span class="hljs-keyword">if</span> (projName.<span class="hljs-built_in">find</span>(m_searchFilter) == std::string::npos) {
+                        <span class="hljs-keyword">continue</span>;
+                    }
+                }
+
+                <span class="hljs-type">bool</span> selected = (m_selectedRecentIndex == (<span class="hljs-type">int</span>)i);
+                <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Selectable</span>(projName.<span class="hljs-built_in">c_str</span>(), selected)) {
+                    m_selectedRecentIndex = i;
+                }
+
+                ImGui::<span class="hljs-built_in">SameLine</span>(ImGui::<span class="hljs-built_in">GetWindowWidth</span>() - <span class="hljs-number">80</span>);
+                ImGui::<span class="hljs-built_in">PushID</span>((<span class="hljs-type">int</span>)i);
+                <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Open##recent&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">70</span>, <span class="hljs-number">0</span>))) {
+                    result = tryOpenProject(projPath);
+                    <span class="hljs-keyword">if</span> (result) {
+                        <span class="hljs-built_in">showToast</span>(<span class="hljs-string">&quot;Project opened!&quot;</span>, ToastType::Success);
+                    } <span class="hljs-keyword">else</span> {
+                        <span class="hljs-built_in">showToast</span>(<span class="hljs-string">&quot;Failed to open project&quot;</span>, ToastType::Error);
+                    }
+                }
+                ImGui::<span class="hljs-built_in">PopID</span>();
+            }
+        }
+        ImGui::<span class="hljs-built_in">EndChild</span>();
+    }
+
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre></div>
+<p><strong>Step 3: Build and test</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; <span class="hljs-built_in">timeout</span> 60 make -j8 doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -15
+</code></pre></div>
+<p>Expected: Compiles, tab shows in dialog.</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectStartupDialog.cpp src/editor/ProjectStartupDialog.hpp
+git commit -m <span class="hljs-string">&quot;feat: implement Open Recent tab with search filtering&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-6-implement-browse-projects-tab">Phase 6: Implement &quot;Browse Projects&quot; Tab<a class="anchor" href="#phase-6-implement-browse-projects-tab" aria-label="Link to this section">#</a></h2>
+<h3 id="task-7-implement-renderbrowsetab">Task 7: Implement renderBrowseTab()<a class="anchor" href="#task-7-implement-renderbrowsetab" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ProjectStartupDialog.cpp</code> (replace stub at line ~150)</li>
+</ul>
+<p><strong>Step 1: Implement renderBrowseTab()</strong></p>
+<p>Replace the existing stub:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">std::optional&lt;ProjectConfig&gt; <span class="hljs-title">ProjectStartupDialog::renderBrowseTab</span><span class="hljs-params">()</span> </span>{
+    std::optional&lt;ProjectConfig&gt; result;
+
+    <span class="hljs-comment">// Path Input</span>
+    ImGui::<span class="hljs-built_in">InputTextWithHint</span>(<span class="hljs-string">&quot;##browse_path&quot;</span>, <span class="hljs-string">&quot;Enter directory path...&quot;</span>, 
+                            m_browsePath.<span class="hljs-built_in">data</span>(), m_browsePath.<span class="hljs-built_in">capacity</span>());
+    ImGui::<span class="hljs-built_in">SameLine</span>();
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Browse Folder...##browse&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">120</span>, <span class="hljs-number">0</span>))) {
+        <span class="hljs-built_in">showToast</span>(<span class="hljs-string">&quot;File picker coming soon&quot;</span>, ToastType::Info);
+    }
+
+    ImGui::<span class="hljs-built_in">Spacing</span>();
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    <span class="hljs-comment">// Results List</span>
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginChild</span>(<span class="hljs-string">&quot;browse_list&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">0</span>, <span class="hljs-number">300</span>), <span class="hljs-literal">true</span>)) {
+        <span class="hljs-keyword">if</span> (m_browseResults.<span class="hljs-built_in">empty</span>()) {
+            ImGui::<span class="hljs-built_in">TextDisabled</span>(<span class="hljs-string">&quot;No projects found. Type a path and press Enter.&quot;</span>);
+        } <span class="hljs-keyword">else</span> {
+            ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Found %zu project(s):&quot;</span>, m_browseResults.<span class="hljs-built_in">size</span>());
+            ImGui::<span class="hljs-built_in">Separator</span>();
+
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; m_browseResults.<span class="hljs-built_in">size</span>(); ++i) {
+                <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; projPath = m_browseResults[i];
+                std::string projName = projPath.<span class="hljs-built_in">filename</span>().<span class="hljs-built_in">string</span>();
+
+                <span class="hljs-type">bool</span> selected = (m_selectedBrowseIndex == (<span class="hljs-type">int</span>)i);
+                <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Selectable</span>(projName.<span class="hljs-built_in">c_str</span>(), selected)) {
+                    m_selectedBrowseIndex = i;
+                }
+
+                ImGui::<span class="hljs-built_in">SameLine</span>(ImGui::<span class="hljs-built_in">GetWindowWidth</span>() - <span class="hljs-number">80</span>);
+                ImGui::<span class="hljs-built_in">PushID</span>((<span class="hljs-type">int</span>)i + <span class="hljs-number">1000</span>);  <span class="hljs-comment">// Offset ID to avoid collision with Recent tab</span>
+                <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Open##browse&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">70</span>, <span class="hljs-number">0</span>))) {
+                    result = tryOpenProject(projPath);
+                    <span class="hljs-keyword">if</span> (result) {
+                        <span class="hljs-built_in">showToast</span>(<span class="hljs-string">&quot;Project opened!&quot;</span>, ToastType::Success);
+                    } <span class="hljs-keyword">else</span> {
+                        <span class="hljs-built_in">showToast</span>(<span class="hljs-string">&quot;Failed to open project&quot;</span>, ToastType::Error);
+                    }
+                }
+                ImGui::<span class="hljs-built_in">PopID</span>();
+            }
+        }
+        ImGui::<span class="hljs-built_in">EndChild</span>();
+    }
+
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre></div>
+<p><strong>Step 2: Add state variables for Browse tab</strong></p>
+<p>Add to ProjectStartupDialog.hpp private section (if not already there):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-type">int</span> m_selectedBrowseIndex = <span class="hljs-number">-1</span>;
+</code></pre></div>
+<p><strong>Step 3: Build and test</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; <span class="hljs-built_in">timeout</span> 60 make -j8 doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -15
+</code></pre></div>
+<p>Expected: All 3 tabs render without errors.</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectStartupDialog.cpp src/editor/ProjectStartupDialog.hpp
+git commit -m <span class="hljs-string">&quot;feat: implement Browse Projects tab with results list&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-7-cleanup-final-testing">Phase 7: Cleanup &amp; Final Testing<a class="anchor" href="#phase-7-cleanup-final-testing" aria-label="Link to this section">#</a></h2>
+<h3 id="task-8-remove-old-tab-methods-no-longer-needed">Task 8: Remove Old Tab Methods (No Longer Needed)<a class="anchor" href="#task-8-remove-old-tab-methods-no-longer-needed" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ProjectStartupDialog.cpp</code> (remove old stubs)</li>
+</ul>
+<p><strong>Step 1: Check if old renderCreateTab, renderRecentTab, renderBrowseTab exist as separate methods</strong></p>
+<p>Look for duplicate method definitions that were stubs. If they exist as separate implementations (not the new tab-based ones), remove them to avoid confusion.</p>
+<p><strong>Step 2: Clean build</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; <span class="hljs-built_in">rm</span> -rf * &amp;&amp; cmake .. &amp;&amp; <span class="hljs-built_in">timeout</span> 120 make -j8 doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+</code></pre></div>
+<p>Expected: Full clean build succeeds.</p>
+<p><strong>Step 3: Test execution</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; <span class="hljs-built_in">timeout</span> 3 ./doppio 2&gt;&amp;1 | <span class="hljs-built_in">head</span> -20
+</code></pre></div>
+<p>Expected: No crash, 3 tabs visible, clean output.</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectStartupDialog.cpp
+git commit -m <span class="hljs-string">&quot;cleanup: remove old stub methods, verify tab-based dialog works&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="summary">Summary<a class="anchor" href="#summary" aria-label="Link to this section">#</a></h2>
+<p><strong>12 Steps Total:</strong></p>
+<ol>
+<li>Add toast data structure</li>
+<li>Implement toast helper methods</li>
+<li>Implement toast ImGui rendering</li>
+<li>Refactor render() into tabs (with updated Create tab)</li>
+<li>Add recent projects state</li>
+<li>Implement Open Recent tab</li>
+<li>Implement Browse Projects tab</li>
+<li>Cleanup &amp; final testing</li>
+</ol>
+<p><strong>Expected Output:</strong></p>
+<ul>
+<li>ProjectStartupDialog with 3 working tabs</li>
+<li>Toast notifications for success/error feedback</li>
+<li>Project creation with success feedback</li>
+<li>Recent projects list with search</li>
+<li>Browse projects (UI ready, file picker stub)</li>
+</ul>
+<hr>
+<h2 id="plan-ready">Plan Ready<a class="anchor" href="#plan-ready" aria-label="Link to this section">#</a></h2>
+<p><strong>Saved to:</strong> <code>docs/plans/2026-05-16-project-startup-dialog-tabs.md</code></p>
+<h3 id="execution-options">Execution Options:<a class="anchor" href="#execution-options" aria-label="Link to this section">#</a></h3>
+<p><strong>1. Subagent-Driven (this session)</strong> - I dispatch fresh subagent per task, review between tasks, fast iteration</p>
+<p><strong>2. Parallel Session (separate)</strong> - You continue in separate terminal with executing-plans skill</p>
+<p>Which approach do you prefer?</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-16-project-startup-dialog-tabs.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/"><span>Previous</span><strong>ProjectStartupDialog Implementation Plan</strong></a><a class="pager-next" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/"><span>Next</span><strong>ProjectStartupDialog - Tab-Based Project Management Design</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#phase-1-toast-notification-system-foundation">Phase 1: Toast Notification System (Foundation)</a></li><li class="l3"><a href="#task-1-add-toast-data-structure">Task 1: Add Toast Data Structure</a></li><li class="l2"><a href="#phase-2-toast-implementation-in-cpp">Phase 2: Toast Implementation in .cpp</a></li><li class="l3"><a href="#task-2-implement-toast-methods">Task 2: Implement Toast Methods</a></li><li class="l2"><a href="#phase-3-imgui-toast-rendering">Phase 3: ImGui Toast Rendering</a></li><li class="l3"><a href="#task-3-render-toasts-in-imgui">Task 3: Render Toasts in ImGui</a></li><li class="l2"><a href="#phase-4-refactor-render-into-tab-based-architecture">Phase 4: Refactor render() into Tab-Based Architecture</a></li><li class="l3"><a href="#task-4-implement-tab-bar-structure">Task 4: Implement Tab Bar Structure</a></li><li class="l2"><a href="#phase-5-implement-open-recent-tab">Phase 5: Implement &quot;Open Recent&quot; Tab</a></li><li class="l3"><a href="#task-5-add-recent-projects-state">Task 5: Add Recent Projects State</a></li><li class="l3"><a href="#task-6-implement-renderrecenttab">Task 6: Implement renderRecentTab()</a></li><li class="l2"><a href="#phase-6-implement-browse-projects-tab">Phase 6: Implement &quot;Browse Projects&quot; Tab</a></li><li class="l3"><a href="#task-7-implement-renderbrowsetab">Task 7: Implement renderBrowseTab()</a></li><li class="l2"><a href="#phase-7-cleanup-final-testing">Phase 7: Cleanup &amp; Final Testing</a></li><li class="l3"><a href="#task-8-remove-old-tab-methods-no-longer-needed">Task 8: Remove Old Tab Methods (No Longer Needed)</a></li><li class="l2"><a href="#summary">Summary</a></li><li class="l2"><a href="#plan-ready">Plan Ready</a></li><li class="l3"><a href="#execution-options">Execution Options:</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

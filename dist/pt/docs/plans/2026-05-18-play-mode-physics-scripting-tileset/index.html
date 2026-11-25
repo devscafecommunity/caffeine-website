@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Play Mode + Physics + Scripting + Tileset Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Play Mode + Physics + Scripting + Tileset Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab active" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Projeto"><div class="nav-title">Projeto</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Versões</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/pt/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/pt/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Planos</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/2026-10-19-dryad-node-scripts/">Dryad e scripts por nodes</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-forward-pbr-post-session/">Sessão 2026-10-02 — Forward PBR, reflexos, pós-processamento GPU</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-editor-backlog-phase-b/">Editor backlog — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-viewport-rendering-quality-session/">Sessão 2026-09-22 — Viewport 3D, Qualidade Visual e Performance</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-phong-gpu-handles-session/">Sessão 2026-09-22 — Phong GPU, Handles e Sombras</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap de Sistemas Fundamentais</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — 3D de Alto Volume</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - ANÁLISE COMPLETA &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP⁻¹ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link active" href="/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/" aria-current="page">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-hot-reload-design/">Hot-Reload de Assets — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/">Marcos</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/archive/">Arquivo</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Análise</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/pt/docs/HISTORY/">História do desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/ECOSYSTEM_WORKFLOW/">Fluxo unificado de assets</a></li><li><a class="nav-link" href="/pt/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/pt/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/pt/docs/MASTER/">Índice master</a></li><li><a class="nav-link" href="/pt/docs/books/">Livros e PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/project/">Projeto</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Play Mode + Physics + Scripting + Tileset Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Wire the already-implemented PhysicsSystem2D and ScriptEngine/Lua into the SceneEditor via a Play Mode, and add texture-based tileset loading to TilemapEditorPanel.</p>
+<p><strong>Architecture:</strong> Play Mode adds ▶/⏸/⏹ buttons to the SceneEditor toolbar. On Play, it snapshots entity state, then ticks PhysicsSystem2D and ScriptSystem each frame. On Stop, it restores the snapshot. Physics colliders are drawn as debug overlays in the viewport. The Tilemap palette is extended with a tileset texture loader that slices tiles by pixel and renders them as ImGui image buttons.</p>
+<p><strong>Tech Stack:</strong> C++20, ImGui, SDL3 (texture loading), sol2/Lua (already linked), PhysicsSystem2D (header-only), ScriptEngine/ScriptSystem (already compiled into caffeine-core)</p>
+<hr>
+<h2 id="task-1-enable-scripting-in-the-doppioeditor-build">Task 1: Enable Scripting in the doppio/editor build<a class="anchor" href="#task-1-enable-scripting-in-the-doppioeditor-build" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>CMakeLists.txt</code> (around line 19)</li>
+</ul>
+<p><strong>Context:</strong> <code>CAFFEINE_ENABLE_SCRIPTING</code> is <code>OFF</code> by default. The editor needs it ON. The CMake flag gates the sol2/lua54 fetch and links them to <code>caffeine-core</code>. We need it ON for the doppio target.</p>
+<p><strong>Step 1: Change the default to ON</strong></p>
+<p>In <code>CMakeLists.txt</code>, change:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-keyword">option</span>(CAFFEINE_ENABLE_SCRIPTING <span class="hljs-string">&quot;Enable Lua scripting support&quot;</span> <span class="hljs-keyword">OFF</span>)
+</code></pre></div>
+<p>to:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-keyword">option</span>(CAFFEINE_ENABLE_SCRIPTING <span class="hljs-string">&quot;Enable Lua scripting support&quot;</span> <span class="hljs-keyword">ON</span>)
+</code></pre></div>
+<p><strong>Step 2: Add <code>CF_HAS_SCRIPTING</code> compile definition where scripting is enabled</strong></p>
+<p>Find the <code>if(CAFFEINE_ENABLE_SCRIPTING)</code> block (around line 125) and ensure this line exists inside it:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-keyword">target_compile_definitions</span>(caffeine-core PUBLIC CF_HAS_SCRIPTING)
+</code></pre></div>
+<p>This lets headers gate code with <code>#ifdef CF_HAS_SCRIPTING</code>.</p>
+<p><strong>Step 3: Build to verify no compile errors</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> <span class="hljs-string">&quot;C:/Users/Pedro Jesus/Downloads/caffeine/build&quot;</span>
+cmake .. -DCAFFEINE_ENABLE_SCRIPTING=ON
+cmake --build . --config Release --target doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+</code></pre></div>
+<p>Expected: build succeeds, <code>doppio.exe</code> produced.</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;feat: enable Lua scripting by default for editor build&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-2-add-play-mode-state-entity-snapshot-to-sceneeditor">Task 2: Add Play Mode state + entity snapshot to SceneEditor<a class="anchor" href="#task-2-add-play-mode-state-entity-snapshot-to-sceneeditor" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneEditor.hpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneEditor.cpp</code></li>
+</ul>
+<p><strong>Context:</strong> We need three new state flags and an entity snapshot mechanism. The snapshot saves the <code>Position2D</code>, <code>Velocity2D</code>, and <code>Rotation</code> of all entities before play, and restores on stop. This matches Unity's behavior — edits in play mode are discarded.</p>
+<p><strong>Step 1: Add includes + members to SceneEditor.hpp</strong></p>
+<p>In <code>SceneEditor.hpp</code>, after the existing <code>#include</code> block (before <code>namespace Caffeine::Editor</code>), add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;physics/PhysicsSystem2D.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;events/EventBus.hpp&quot;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SCRIPTING</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptEngine.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptSystem.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+</code></pre></div>
+<p>In the <code>private:</code> section of <code>SceneEditor</code>, after the existing members, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-comment">// ── Play Mode ──────────────────────────────────────────────</span>
+    <span class="hljs-type">bool</span> m_isPlaying  = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span> m_isPaused   = <span class="hljs-literal">false</span>;
+
+    Events::EventBus m_eventBus;
+    Physics2D::PhysicsSystem2D m_physicsSystem{&amp;m_eventBus};
+
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SCRIPTING</span>
+    Script::ScriptEngine m_scriptEngine;
+    Script::ScriptSystem m_scriptSystem{<span class="hljs-literal">nullptr</span>};  <span class="hljs-comment">// set in init</span>
+    <span class="hljs-type">bool</span> m_scriptEngineReady = <span class="hljs-literal">false</span>;
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+
+    <span class="hljs-comment">// Snapshot for restoring entity state on Stop</span>
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">EntitySnapshot</span> {
+        u32 id;
+        <span class="hljs-type">float</span> px = <span class="hljs-number">0</span>, py = <span class="hljs-number">0</span>;
+        <span class="hljs-type">float</span> vx = <span class="hljs-number">0</span>, vy = <span class="hljs-number">0</span>;
+        <span class="hljs-type">float</span> rotation = <span class="hljs-number">0</span>;
+    };
+    std::vector&lt;EntitySnapshot&gt; m_playSnapshot;
+</code></pre></div>
+<p>Also add these private method declarations:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">enterPlayMode</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">exitPlayMode</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tickSystems</span><span class="hljs-params">(ECS::World&amp; world, f32 dt)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderPlaybar</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawPhysicsDebug</span><span class="hljs-params">(ECS::World&amp; world, ImVec2 origin, ImVec2 viewportSize)</span></span>;
+</code></pre></div>
+<p><strong>Step 2: Commit (header only)</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/SceneEditor.hpp
+git commit -m <span class="hljs-string">&quot;feat(editor): add play mode state and system members to SceneEditor&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-3-implement-play-mode-logic-in-sceneeditorcpp">Task 3: Implement Play Mode logic in SceneEditor.cpp<a class="anchor" href="#task-3-implement-play-mode-logic-in-sceneeditorcpp" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneEditor.cpp</code></li>
+</ul>
+<p><strong>Context:</strong> <code>render(f32 deltaTime)</code> is called every frame. When playing, we tick physics and scripting here. <code>enterPlayMode</code> snapshots entity positions; <code>exitPlayMode</code> restores them.</p>
+<p><strong>Step 1: Add includes at top of SceneEditor.cpp</strong></p>
+<p>After <code>#include &quot;editor/SceneEditor.hpp&quot;</code>, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/Components.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;physics/PhysicsComponents2D.hpp&quot;</span></span>
+</code></pre></div>
+<p><strong>Step 2: Implement <code>enterPlayMode</code></strong></p>
+<p>Add this function before the <code>render</code> method:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SceneEditor::enterPlayMode</span><span class="hljs-params">(ECS::World&amp; world)</span> </span>{
+    m_playSnapshot.<span class="hljs-built_in">clear</span>();
+
+    ECS::ComponentQuery q;
+    world.forEach&lt;ECS::Position2D&gt;(q,
+        [&amp;](ECS::Entity e, ECS::Position2D&amp; pos) {
+            EntitySnapshot snap;
+            snap.id = e.<span class="hljs-built_in">id</span>();
+            snap.px = pos.x; snap.py = pos.y;
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* v = world.<span class="hljs-built_in">get</span>&lt;ECS::Velocity2D&gt;(e)) { snap.vx = v-&gt;x; snap.vy = v-&gt;y; }
+            <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* r = world.<span class="hljs-built_in">get</span>&lt;ECS::Rotation&gt;(e))   { snap.rotation = r-&gt;angle; }
+            m_playSnapshot.<span class="hljs-built_in">push_back</span>(snap);
+        });
+
+    m_isPlaying = <span class="hljs-literal">true</span>;
+    m_isPaused  = <span class="hljs-literal">false</span>;
+
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SCRIPTING</span>
+    <span class="hljs-keyword">if</span> (!m_scriptEngineReady) {
+        Script::ScriptEngine::InitParams p;
+        p.world  = &amp;world;
+        p.events = &amp;m_eventBus;
+        m_scriptEngineReady = m_scriptEngine.<span class="hljs-built_in">init</span>(p);
+        m_scriptSystem = Script::<span class="hljs-built_in">ScriptSystem</span>(&amp;m_scriptEngine);
+    }
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+}
+</code></pre></div>
+<p><strong>Step 3: Implement <code>exitPlayMode</code></strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SceneEditor::exitPlayMode</span><span class="hljs-params">(ECS::World&amp; world)</span> </span>{
+    m_isPlaying = <span class="hljs-literal">false</span>;
+    m_isPaused  = <span class="hljs-literal">false</span>;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; snap : m_playSnapshot) {
+        <span class="hljs-function">ECS::Entity <span class="hljs-title">e</span><span class="hljs-params">(snap.id, &amp;world)</span></span>;
+        <span class="hljs-keyword">if</span> (!e.<span class="hljs-built_in">isValid</span>()) <span class="hljs-keyword">continue</span>;
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* pos = world.<span class="hljs-built_in">get</span>&lt;ECS::Position2D&gt;(e)) { pos-&gt;x = snap.px; pos-&gt;y = snap.py; }
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* v   = world.<span class="hljs-built_in">get</span>&lt;ECS::Velocity2D&gt;(e)) { v-&gt;x = snap.vx;  v-&gt;y = snap.vy;  }
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* r   = world.<span class="hljs-built_in">get</span>&lt;ECS::Rotation&gt;(e))   { r-&gt;angle = snap.rotation; }
+    }
+    m_playSnapshot.<span class="hljs-built_in">clear</span>();
+}
+</code></pre></div>
+<p><strong>Step 4: Implement <code>tickSystems</code></strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SceneEditor::tickSystems</span><span class="hljs-params">(ECS::World&amp; world, f32 dt)</span> </span>{
+    <span class="hljs-keyword">if</span> (!m_isPlaying || m_isPaused) <span class="hljs-keyword">return</span>;
+    m_physicsSystem.<span class="hljs-built_in">onUpdate</span>(world, dt);
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SCRIPTING</span>
+    <span class="hljs-keyword">if</span> (m_scriptEngineReady) m_scriptSystem.<span class="hljs-built_in">onUpdate</span>(world, dt);
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+    m_eventBus.<span class="hljs-built_in">dispatchDeferred</span>();
+}
+</code></pre></div>
+<p><strong>Step 5: Implement <code>renderPlaybar</code></strong></p>
+<p>This renders ▶/⏸/⏹ buttons in a small centered toolbar. Find where to insert it: in <code>render()</code>, right before the call to <code>m_viewport.render(...)</code>. Add a call to <code>renderPlaybar(*activeWorld)</code> there.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SceneEditor::renderPlaybar</span><span class="hljs-params">(ECS::World&amp; world)</span> </span>{
+    <span class="hljs-comment">// Render a small floating toolbar above the viewport</span>
+    ImVec2 vpPos  = ImGui::<span class="hljs-built_in">GetCursorScreenPos</span>();
+    ImVec2 vpSize = ImGui::<span class="hljs-built_in">GetContentRegionAvail</span>();
+    <span class="hljs-type">float</span> barW = <span class="hljs-number">120.0f</span>, barH = <span class="hljs-number">28.0f</span>;
+    <span class="hljs-function">ImVec2 <span class="hljs-title">barPos</span><span class="hljs-params">(vpPos.x + (vpSize.x - barW) * <span class="hljs-number">0.5f</span>, vpPos.y + <span class="hljs-number">4.0f</span>)</span></span>;
+
+    ImGui::<span class="hljs-built_in">SetNextWindowPos</span>(barPos, ImGuiCond_Always);
+    ImGui::<span class="hljs-built_in">SetNextWindowSize</span>(<span class="hljs-built_in">ImVec2</span>(barW, barH));
+    ImGui::<span class="hljs-built_in">SetNextWindowBgAlpha</span>(<span class="hljs-number">0.85f</span>);
+    ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration
+                           | ImGuiWindowFlags_NoInputs
+                           | ImGuiWindowFlags_NoNav
+                           | ImGuiWindowFlags_NoMove
+                           | ImGuiWindowFlags_NoBringToFrontOnFocus;
+    <span class="hljs-comment">// We want input, so remove NoInputs:</span>
+    flags &amp;= ~ImGuiWindowFlags_NoInputs;
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Begin</span>(<span class="hljs-string">&quot;##PlayBar&quot;</span>, <span class="hljs-literal">nullptr</span>, flags)) {
+        <span class="hljs-keyword">if</span> (!m_isPlaying) {
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">u8&quot;▶&quot;</span>)) <span class="hljs-built_in">enterPlayMode</span>(world);
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-keyword">if</span> (m_isPaused) {
+                <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">u8&quot;▶&quot;</span>)) m_isPaused = <span class="hljs-literal">false</span>;
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">u8&quot;⏸&quot;</span>)) m_isPaused = <span class="hljs-literal">true</span>;
+            }
+            ImGui::<span class="hljs-built_in">SameLine</span>();
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">u8&quot;⏹&quot;</span>)) <span class="hljs-built_in">exitPlayMode</span>(world);
+        }
+    }
+    ImGui::<span class="hljs-built_in">End</span>();
+}
+</code></pre></div>
+<p><strong>Step 6: Wire <code>tickSystems</code> and <code>renderPlaybar</code> into <code>render()</code></strong></p>
+<p>In <code>SceneEditor::render(f32 deltaTime)</code>:</p>
+<ul>
+<li>After <code>if (!activeWorld) return;</code>, add: <code>tickSystems(*activeWorld, deltaTime);</code></li>
+<li>Before <code>m_viewport.render(*activeWorld, m_ctx);</code>, add: <code>renderPlaybar(*activeWorld);</code></li>
+</ul>
+<p><strong>Step 7: Build and verify</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cmake --build <span class="hljs-string">&quot;C:/Users/Pedro Jesus/Downloads/caffeine/build&quot;</span> --config Release --target doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+</code></pre></div>
+<p>Expected: compiles cleanly.</p>
+<p><strong>Step 8: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/SceneEditor.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): implement play/pause/stop mode with entity snapshot and system ticking&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-4-physics-debug-overlay-in-sceneviewport">Task 4: Physics Debug Overlay in SceneViewport<a class="anchor" href="#task-4-physics-debug-overlay-in-sceneviewport" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.hpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code></li>
+</ul>
+<p><strong>Context:</strong> <code>drawSprites</code> already has access to <code>ImDrawList*</code> via <code>ImGui::GetWindowDrawList()</code>. We add <code>drawPhysicsDebug</code> that draws collider outlines: green for static, cyan for dynamic, yellow for kinematic, red for triggers.</p>
+<p><strong>Step 1: Add declaration to SceneViewport.hpp</strong></p>
+<p>In <code>SceneViewport.hpp</code>, in the <code>private:</code> method declarations section, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawPhysicsDebug</span><span class="hljs-params">(ECS::World&amp; world, EditorContext&amp; ctx, ImVec2 origin, ImVec2 viewportSize)</span></span>;
+</code></pre></div>
+<p>Also add include at top:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;physics/PhysicsComponents2D.hpp&quot;</span></span>
+</code></pre></div>
+<p><strong>Step 2: Implement <code>drawPhysicsDebug</code> in SceneViewport.cpp</strong></p>
+<p>Add after <code>drawGizmo</code>:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SceneViewport::drawPhysicsDebug</span><span class="hljs-params">(ECS::World&amp; world, EditorContext&amp; ctx,
+                                      ImVec2 origin, ImVec2 viewportSize)</span> </span>{
+    <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Physics2D;
+    ImDrawList* dl = ImGui::<span class="hljs-built_in">GetWindowDrawList</span>();
+
+    <span class="hljs-type">float</span> zoom = ctx.zoom;
+    <span class="hljs-type">float</span> camX = ctx.cameraOffset.x;
+    <span class="hljs-type">float</span> camY = ctx.cameraOffset.y;
+
+    <span class="hljs-keyword">auto</span> worldToScreen = [&amp;](<span class="hljs-type">float</span> wx, <span class="hljs-type">float</span> wy) -&gt; ImVec2 {
+        <span class="hljs-type">float</span> sx = origin.x + (wx - camX) * zoom + viewportSize.x * <span class="hljs-number">0.5f</span>;
+        <span class="hljs-type">float</span> sy = origin.y + (wy - camY) * zoom + viewportSize.y * <span class="hljs-number">0.5f</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">ImVec2</span>(sx, sy);
+    };
+
+    ECS::ComponentQuery q;
+    world.forEach&lt;Collider2D, ECS::Position2D&gt;(q,
+        [&amp;](ECS::Entity, Collider2D&amp; col, ECS::Position2D&amp; pos) {
+            <span class="hljs-type">float</span> cx = pos.x + col.offset.x;
+            <span class="hljs-type">float</span> cy = pos.y + col.offset.y;
+
+            ImU32 color = col.isTrigger          ? <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">255</span>, <span class="hljs-number">80</span>,  <span class="hljs-number">80</span>,  <span class="hljs-number">200</span>)
+                        : col.isStatic           ? <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">80</span>,  <span class="hljs-number">255</span>, <span class="hljs-number">80</span>,  <span class="hljs-number">200</span>)
+                        : <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">80</span>,  <span class="hljs-number">200</span>, <span class="hljs-number">255</span>, <span class="hljs-number">200</span>);
+
+            <span class="hljs-keyword">if</span> (col.shape == ColliderShape::AABB) {
+                <span class="hljs-type">float</span> hw = col.size.x * <span class="hljs-number">0.5f</span> * zoom;
+                <span class="hljs-type">float</span> hh = col.size.y * <span class="hljs-number">0.5f</span> * zoom;
+                ImVec2 sc = <span class="hljs-built_in">worldToScreen</span>(cx, cy);
+                dl-&gt;<span class="hljs-built_in">AddRect</span>(<span class="hljs-built_in">ImVec2</span>(sc.x - hw, sc.y - hh),
+                            <span class="hljs-built_in">ImVec2</span>(sc.x + hw, sc.y + hh),
+                            color, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1.5f</span>);
+            } <span class="hljs-keyword">else</span> {
+                ImVec2 sc = <span class="hljs-built_in">worldToScreen</span>(cx, cy);
+                dl-&gt;<span class="hljs-built_in">AddCircle</span>(sc, col.radius * zoom, color, <span class="hljs-number">32</span>, <span class="hljs-number">1.5f</span>);
+            }
+        });
+}
+</code></pre></div>
+<p><strong>Step 3: Call it in <code>SceneViewport::render</code></strong></p>
+<p>In <code>SceneViewport.cpp</code>, inside <code>render()</code>, after <code>drawSprites(...)</code>, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-comment">// Physics debug (always visible for now; gate behind a flag later)</span>
+    <span class="hljs-built_in">drawPhysicsDebug</span>(world, ctx, origin, viewportSize);
+</code></pre></div>
+<p><strong>Step 4: Build</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cmake --build <span class="hljs-string">&quot;C:/Users/Pedro Jesus/Downloads/caffeine/build&quot;</span> --config Release --target doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+</code></pre></div>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/SceneViewport.hpp src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): add physics collider debug overlay to scene viewport&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-5-scriptcomponent-inspector-drawer-script-path-load">Task 5: ScriptComponent Inspector drawer (script path + Load)<a class="anchor" href="#task-5-scriptcomponent-inspector-drawer-script-path-load" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/InspectorPanel.cpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneEditor.cpp</code> (wire ScriptEngine to drawer)</li>
+</ul>
+<p><strong>Context:</strong> <code>drawScript</code> already exists but is likely a stub. We need it to show the script path (editable text), a &quot;Load&quot; button, and error feedback. The drawer needs access to the <code>ScriptEngine</code> — pass it via a lambda capture when registering.</p>
+<p><strong>Step 1: Check current <code>drawScript</code> implementation</strong></p>
+<p>Read <code>doppio-archived/src/doppio/editor/InspectorPanel.cpp</code> around line 274 to see the current stub.</p>
+<p><strong>Step 2: Replace <code>drawScript</code> stub</strong></p>
+<p>Replace whatever is there with:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">InspectorPanel::drawScript</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, EditorContext&amp; ctx)</span> </span>{
+    <span class="hljs-keyword">auto</span>* sc = world.<span class="hljs-built_in">get</span>&lt;Script::ScriptComponent&gt;(e);
+    <span class="hljs-keyword">if</span> (!sc) {
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Add Script Component&quot;</span>)) {
+            world.<span class="hljs-built_in">add</span>&lt;Script::ScriptComponent&gt;(e);
+        }
+        <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-type">static</span> <span class="hljs-type">char</span> pathBuf[<span class="hljs-number">512</span>] = {};
+    <span class="hljs-type">static</span> std::string lastError;
+
+    <span class="hljs-comment">// Sync buffer to component path</span>
+    <span class="hljs-keyword">if</span> (std::<span class="hljs-built_in">strlen</span>(pathBuf) == <span class="hljs-number">0</span> || std::<span class="hljs-built_in">string</span>(pathBuf) != sc-&gt;scriptPath) {
+        std::<span class="hljs-built_in">strncpy</span>(pathBuf, sc-&gt;scriptPath.<span class="hljs-built_in">c_str</span>(), <span class="hljs-keyword">sizeof</span>(pathBuf) - <span class="hljs-number">1</span>);
+    }
+
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Script&quot;</span>);
+    ImGui::<span class="hljs-built_in">SetNextItemWidth</span>(<span class="hljs-number">-80.0f</span>);
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">InputText</span>(<span class="hljs-string">&quot;##scriptPath&quot;</span>, pathBuf, <span class="hljs-keyword">sizeof</span>(pathBuf))) {
+        sc-&gt;scriptPath = pathBuf;
+    }
+
+    ImGui::<span class="hljs-built_in">SameLine</span>();
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Load&quot;</span>) &amp;&amp; ctx.scriptEngine) {
+        std::string err;
+        <span class="hljs-type">bool</span> ok = ctx.scriptEngine-&gt;<span class="hljs-built_in">loadScript</span>(sc-&gt;scriptPath, &amp;err);
+        lastError = ok ? <span class="hljs-string">&quot;&quot;</span> : err;
+    }
+
+    <span class="hljs-keyword">if</span> (!lastError.<span class="hljs-built_in">empty</span>()) {
+        ImGui::<span class="hljs-built_in">PushStyleColor</span>(ImGuiCol_Text, <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">1</span>, <span class="hljs-number">0.3f</span>, <span class="hljs-number">0.3f</span>, <span class="hljs-number">1</span>));
+        ImGui::<span class="hljs-built_in">TextWrapped</span>(<span class="hljs-string">&quot;%s&quot;</span>, lastError.<span class="hljs-built_in">c_str</span>());
+        ImGui::<span class="hljs-built_in">PopStyleColor</span>();
+    }
+}
+</code></pre></div>
+<p><strong>Step 3: Add <code>scriptEngine</code> to <code>EditorContext</code></strong></p>
+<p>In <code>src/caffeine/scene/EditorContext.hpp</code>, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SCRIPTING</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptEngine.hpp&quot;</span></span>
+    Script::ScriptEngine* scriptEngine = <span class="hljs-literal">nullptr</span>;
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+</code></pre></div>
+<p><strong>Step 4: Wire <code>m_scriptEngine</code> into context in SceneEditor</strong></p>
+<p>In <code>SceneEditor::init(...)</code>, after <code>m_scriptEngineReady = m_scriptEngine.init(p);</code>, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    m_ctx.scriptEngine = &amp;m_scriptEngine;
+</code></pre></div>
+<p><strong>Step 5: Build + commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cmake --build <span class="hljs-string">&quot;C:/Users/Pedro Jesus/Downloads/caffeine/build&quot;</span> --config Release --target doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+git add src/editor/InspectorPanel.cpp src/editor/EditorContext.hpp src/editor/SceneEditor.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): add script component inspector drawer with path and load button&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-6-tileset-asset-loading">Task 6: Tileset Asset loading<a class="anchor" href="#task-6-tileset-asset-loading" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>doppio-archived/src/doppio/editor/TilesetAsset.hpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/TilemapEditor.hpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/TilemapEditor.cpp</code></li>
+</ul>
+<p><strong>Context:</strong> The current palette in <code>renderPalette()</code> shows numbers 0–63. We replace it with a proper tileset: load a PNG, divide it into NxM tiles by pixel dimensions, and display each tile as an <code>ImGui::Image</code> button. We use SDL3's <code>SDL_LoadBMP</code>/<code>SDL_CreateTexture</code> or the existing <code>AssetManager</code> if available.</p>
+<p><strong>Step 1: Create TilesetAsset.hpp</strong></p>
+<p>Create <code>doppio-archived/src/doppio/editor/TilesetAsset.hpp</code>:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_IMGUI</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">TileUV</span> {
+    <span class="hljs-type">float</span> u0, v0, u1, v1;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">TilesetAsset</span> {
+    std::string path;
+    i32 tileWidth  = <span class="hljs-number">32</span>;
+    i32 tileHeight = <span class="hljs-number">32</span>;
+    i32 columns    = <span class="hljs-number">0</span>;
+    i32 rows       = <span class="hljs-number">0</span>;
+    std::vector&lt;TileUV&gt; tiles;  <span class="hljs-comment">// UV coords per tile</span>
+
+    <span class="hljs-comment">// Opaque handle to GPU texture (void* for SDL3 ImGui texture)</span>
+    <span class="hljs-type">void</span>* textureHandle = <span class="hljs-literal">nullptr</span>;
+    i32 textureW = <span class="hljs-number">0</span>, textureH = <span class="hljs-number">0</span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isLoaded</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> textureHandle != <span class="hljs-literal">nullptr</span>; }
+
+    <span class="hljs-comment">// Compute tile UVs from texture dimensions + tile size</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">computeUVs</span><span class="hljs-params">()</span> </span>{
+        tiles.<span class="hljs-built_in">clear</span>();
+        <span class="hljs-keyword">if</span> (textureW &lt;= <span class="hljs-number">0</span> || textureH &lt;= <span class="hljs-number">0</span> || tileWidth &lt;= <span class="hljs-number">0</span> || tileHeight &lt;= <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span>;
+        columns = textureW / tileWidth;
+        rows    = textureH / tileHeight;
+        <span class="hljs-keyword">for</span> (i32 row = <span class="hljs-number">0</span>; row &lt; rows; ++row) {
+            <span class="hljs-keyword">for</span> (i32 col = <span class="hljs-number">0</span>; col &lt; columns; ++col) {
+                TileUV uv;
+                uv.u0 = <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">float</span>&gt;(col * tileWidth)  / textureW;
+                uv.v0 = <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">float</span>&gt;(row * tileHeight) / textureH;
+                uv.u1 = <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">float</span>&gt;((col + <span class="hljs-number">1</span>) * tileWidth)  / textureW;
+                uv.v1 = <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">float</span>&gt;((row + <span class="hljs-number">1</span>) * tileHeight) / textureH;
+                tiles.<span class="hljs-built_in">push_back</span>(uv);
+            }
+        }
+    }
+
+    <span class="hljs-function">i32 <span class="hljs-title">tileCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;i32&gt;(tiles.<span class="hljs-built_in">size</span>()); }
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 2: Add TilesetAsset member and load method to TilemapEditorPanel</strong></p>
+<p>In <code>TilemapEditor.hpp</code>, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/TilesetAsset.hpp&quot;</span></span>
+</code></pre></div>
+<p>In <code>TilemapEditorPanel</code> private section, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    TilesetAsset m_tileset;
+    <span class="hljs-type">char</span> m_tilesetPathBuf[<span class="hljs-number">512</span>] = {};
+    i32  m_tileDisplaySize = <span class="hljs-number">32</span>;
+</code></pre></div>
+<p>In public section, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">loadTileset</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, <span class="hljs-type">void</span>* renderer)</span></span>;
+</code></pre></div>
+<p><strong>Step 3: Implement <code>loadTileset</code> in TilemapEditor.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SDL3</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;SDL3/SDL.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;SDL3/SDL_image.h&gt;</span>  <span class="hljs-comment">// or use SDL_LoadBMP for BMP-only</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">TilemapEditorPanel::loadTileset</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, <span class="hljs-type">void</span>* renderer)</span> </span>{
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SDL3</span>
+    SDL_Renderer* r = <span class="hljs-keyword">static_cast</span>&lt;SDL_Renderer*&gt;(renderer);
+    SDL_Surface* surf = <span class="hljs-built_in">SDL_LoadBMP</span>(path.<span class="hljs-built_in">c_str</span>());
+    <span class="hljs-keyword">if</span> (!surf) {
+        <span class="hljs-comment">// Try with SDL_image if available, else fail</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    SDL_Texture* tex = <span class="hljs-built_in">SDL_CreateTextureFromSurface</span>(r, surf);
+    <span class="hljs-built_in">SDL_DestroySurface</span>(surf);
+    <span class="hljs-keyword">if</span> (!tex) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+    <span class="hljs-type">float</span> w = <span class="hljs-number">0</span>, h = <span class="hljs-number">0</span>;
+    <span class="hljs-built_in">SDL_GetTextureSize</span>(tex, &amp;w, &amp;h);
+
+    m_tileset.path = path;
+    m_tileset.textureHandle = tex;
+    m_tileset.textureW = <span class="hljs-keyword">static_cast</span>&lt;i32&gt;(w);
+    m_tileset.textureH = <span class="hljs-keyword">static_cast</span>&lt;i32&gt;(h);
+    m_tileset.tileWidth  = <span class="hljs-keyword">static_cast</span>&lt;i32&gt;(m_tilemap.<span class="hljs-built_in">tileSize</span>());
+    m_tileset.tileHeight = <span class="hljs-keyword">static_cast</span>&lt;i32&gt;(m_tilemap.<span class="hljs-built_in">tileSize</span>());
+    m_tileset.<span class="hljs-built_in">computeUVs</span>();
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+<span class="hljs-meta">#<span class="hljs-keyword">else</span></span>
+    (<span class="hljs-type">void</span>)path; (<span class="hljs-type">void</span>)renderer;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+}
+</code></pre></div>
+<p><strong>Step 4: Replace <code>renderPalette</code> with texture-aware version</strong></p>
+<p>Replace the existing <code>renderPalette()</code> in <code>TilemapEditor.cpp</code> (inside <code>#ifdef CF_HAS_IMGUI</code>) with:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">TilemapEditorPanel::renderPalette</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Tile Palette&quot;</span>);
+
+    <span class="hljs-comment">// Tileset loader row</span>
+    ImGui::<span class="hljs-built_in">SetNextItemWidth</span>(ImGui::<span class="hljs-built_in">GetContentRegionAvail</span>().x - <span class="hljs-number">60.0f</span>);
+    ImGui::<span class="hljs-built_in">InputText</span>(<span class="hljs-string">&quot;##tilesetPath&quot;</span>, m_tilesetPathBuf, <span class="hljs-keyword">sizeof</span>(m_tilesetPathBuf));
+    ImGui::<span class="hljs-built_in">SameLine</span>();
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Load&quot;</span>)) {
+        <span class="hljs-comment">// Tileset loading requires renderer access — handled via SceneEditor calling loadTileset()</span>
+        <span class="hljs-comment">// For now, show a placeholder message</span>
+        ImGui::<span class="hljs-built_in">OpenPopup</span>(<span class="hljs-string">&quot;TilesetLoadNote&quot;</span>);
+    }
+
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginPopup</span>(<span class="hljs-string">&quot;TilesetLoadNote&quot;</span>)) {
+        ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Call loadTileset(\&quot;%s\&quot;, renderer) from SceneEditor&quot;</span>, m_tilesetPathBuf);
+        ImGui::<span class="hljs-built_in">EndPopup</span>();
+    }
+
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    <span class="hljs-comment">// If a tileset is loaded, show texture tiles; else fallback to numbered grid</span>
+    <span class="hljs-keyword">if</span> (m_tileset.<span class="hljs-built_in">isLoaded</span>()) {
+        ImTextureID texId = <span class="hljs-keyword">reinterpret_cast</span>&lt;ImTextureID&gt;(m_tileset.textureHandle);
+        <span class="hljs-type">float</span> dispSize = <span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">float</span>&gt;(m_tileDisplaySize);
+        i32 tilesPerRow = std::<span class="hljs-built_in">max</span>(<span class="hljs-number">1</span>, <span class="hljs-keyword">static_cast</span>&lt;i32&gt;(ImGui::<span class="hljs-built_in">GetContentRegionAvail</span>().x / (dispSize + <span class="hljs-number">4</span>)));
+
+        <span class="hljs-keyword">for</span> (i32 i = <span class="hljs-number">0</span>; i &lt; m_tileset.<span class="hljs-built_in">tileCount</span>(); ++i) {
+            <span class="hljs-keyword">if</span> (i % tilesPerRow != <span class="hljs-number">0</span>) ImGui::<span class="hljs-built_in">SameLine</span>();
+            <span class="hljs-type">const</span> TileUV&amp; uv = m_tileset.tiles[i];
+            <span class="hljs-type">bool</span> isSelected = (i == m_selectedTileID);
+
+            <span class="hljs-function">ImVec2 <span class="hljs-title">uv0</span><span class="hljs-params">(uv.u0, uv.v0)</span>, <span class="hljs-title">uv1</span><span class="hljs-params">(uv.u1, uv.v1)</span></span>;
+            ImVec4 bg    = isSelected ? <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0.3f</span>, <span class="hljs-number">0.6f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.5f</span>) : <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);
+            ImVec4 tint  = <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>);
+
+            ImGui::<span class="hljs-built_in">PushID</span>(i);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">ImageButton</span>(<span class="hljs-string">&quot;##tile&quot;</span>, texId, <span class="hljs-built_in">ImVec2</span>(dispSize, dispSize), uv0, uv1, bg, tint)) {
+                m_selectedTileID = i;
+            }
+            ImGui::<span class="hljs-built_in">PopID</span>();
+        }
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// Fallback: numbered grid (existing behavior)</span>
+        <span class="hljs-type">static</span> <span class="hljs-type">const</span> i32 tilesPerRow = <span class="hljs-number">8</span>;
+        <span class="hljs-type">static</span> <span class="hljs-type">const</span> i32 paletteSize = <span class="hljs-number">64</span>;
+        <span class="hljs-keyword">for</span> (i32 i = <span class="hljs-number">0</span>; i &lt; paletteSize; ++i) {
+            <span class="hljs-keyword">if</span> (i % tilesPerRow != <span class="hljs-number">0</span>) ImGui::<span class="hljs-built_in">SameLine</span>();
+            <span class="hljs-type">bool</span> isSelected = (i == m_selectedTileID);
+            std::string label = std::<span class="hljs-built_in">to_string</span>(i);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Selectable</span>(label.<span class="hljs-built_in">c_str</span>(), isSelected, <span class="hljs-number">0</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">28</span>, <span class="hljs-number">28</span>))) {
+                m_selectedTileID = i;
+            }
+        }
+    }
+
+    ImGui::<span class="hljs-built_in">Separator</span>();
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Selected: %d&quot;</span>, m_selectedTileID);
+}
+</code></pre></div>
+<p><strong>Step 5: Build + commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cmake --build <span class="hljs-string">&quot;C:/Users/Pedro Jesus/Downloads/caffeine/build&quot;</span> --config Release --target doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+git add src/editor/TilesetAsset.hpp src/editor/TilemapEditor.hpp src/editor/TilemapEditor.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): add tileset asset loading with texture-based tile palette&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-7-wire-tileset-loader-to-sceneeditor-renderer-access">Task 7: Wire tileset loader to SceneEditor (renderer access)<a class="anchor" href="#task-7-wire-tileset-loader-to-sceneeditor-renderer-access" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneEditor.cpp</code> (init section)</li>
+</ul>
+<p><strong>Context:</strong> <code>loadTileset</code> needs an SDL_Renderer pointer. The <code>RenderDevice</code> holds the renderer. We expose a &quot;Load Tileset&quot; button in the Tilemap Editor toolbar that calls <code>m_tilemapEditor.loadTileset(path, renderer)</code>.</p>
+<p><strong>Step 1: Get renderer pointer from RenderDevice</strong></p>
+<p>In <code>SceneEditor.cpp</code>, in <code>TilemapEditorPanel::renderToolbar</code>, the &quot;Resize&quot; button exists. Add after it in <code>SceneEditor.cpp</code> <code>init()</code>:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-comment">// Wire tileset loading command</span>
+    m_commandPalette.registerCommand(<span class="hljs-string">&quot;action_load_tileset&quot;</span>, <span class="hljs-string">&quot;Load Tileset&quot;</span>, <span class="hljs-string">&quot;Actions&quot;</span>, [<span class="hljs-keyword">this</span>]() {
+        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> open file picker, then call m_tilemapEditor.loadTileset(path, renderer)</span>
+    });
+</code></pre></div>
+<p>For now the &quot;Load&quot; button in the palette UI shows a popup indicating it needs renderer access — this is an acceptable Phase 1 state. Tileset loading works fully when called programmatically via <code>loadTileset</code>.</p>
+<p><strong>Step 2: Final build verification</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cmake --build <span class="hljs-string">&quot;C:/Users/Pedro Jesus/Downloads/caffeine/build&quot;</span> --config Release --target doppio 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -30
+</code></pre></div>
+<p>Expected: zero errors.</p>
+<p><strong>Step 3: Final commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/SceneEditor.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): wire tileset load command into command palette&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="acceptance-criteria">Acceptance Criteria<a class="anchor" href="#acceptance-criteria" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[ ] <code>cmake --build build --config Release --target doppio</code> succeeds with no errors</li>
+<li>[ ] doppio.exe launches without crash</li>
+<li>[ ] ▶ button appears centered above the viewport</li>
+<li>[ ] Pressing ▶ starts physics: entities with RigidBody2D fall due to gravity</li>
+<li>[ ] Pressing ⏹ restores entities to pre-play positions</li>
+<li>[ ] Green/cyan/red collider outlines visible in viewport</li>
+<li>[ ] Script component in Inspector shows path field + Load button</li>
+<li>[ ] Tilemap palette shows texture tiles when a tileset is loaded, numbers otherwise</li>
+<li>[ ] <code>CAFFEINE_ENABLE_SCRIPTING=ON</code> builds without errors</li>
+</ul>
+<hr>
+<h2 id="known-limitations-out-of-scope-for-this-plan">Known Limitations (out of scope for this plan)<a class="anchor" href="#known-limitations-out-of-scope-for-this-plan" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Physics debug overlay is always visible (no toggle yet)</li>
+<li>Tileset loading via UI requires renderer pointer plumbing (deferred)</li>
+<li>Script hot-reload UI not yet wired (ScriptWatcher exists but not connected to editor)</li>
+<li>Tilemap is not yet a scene ECS entity/component (it's a standalone panel)</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/"><span>Anterior</span><strong>Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</strong></a><a class="pager-next" href="/pt/docs/plans/2026-05-18-inspector-v2/"><span>Seguinte</span><strong>Inspector 2.0 Implementation Plan</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#task-1-enable-scripting-in-the-doppioeditor-build">Task 1: Enable Scripting in the doppio/editor build</a></li><li class="l2"><a href="#task-2-add-play-mode-state-entity-snapshot-to-sceneeditor">Task 2: Add Play Mode state + entity snapshot to SceneEditor</a></li><li class="l2"><a href="#task-3-implement-play-mode-logic-in-sceneeditorcpp">Task 3: Implement Play Mode logic in SceneEditor.cpp</a></li><li class="l2"><a href="#task-4-physics-debug-overlay-in-sceneviewport">Task 4: Physics Debug Overlay in SceneViewport</a></li><li class="l2"><a href="#task-5-scriptcomponent-inspector-drawer-script-path-load">Task 5: ScriptComponent Inspector drawer (script path + Load)</a></li><li class="l2"><a href="#task-6-tileset-asset-loading">Task 6: Tileset Asset loading</a></li><li class="l2"><a href="#task-7-wire-tileset-loader-to-sceneeditor-renderer-access">Task 7: Wire tileset loader to SceneEditor (renderer access)</a></li><li class="l2"><a href="#acceptance-criteria">Acceptance Criteria</a></li><li class="l2"><a href="#known-limitations-out-of-scope-for-this-plan">Known Limitations (out of scope for this plan)</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

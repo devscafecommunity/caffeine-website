@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>caffeine-render-snapshot · Caffeine</title>
+<meta name="description" content="Uma ferramenta offscreen pequena que renderiza a cena de referência de materiais pelo pipeline GPU completo e escreve um PNG para regressões visuais.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="caffeine-render-snapshot · Caffeine">
+<meta property="og:description" content="Uma ferramenta offscreen pequena que renderiza a cena de referência de materiais pelo pipeline GPU completo e escreve um PNG para regressões visuais.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/rendering/render-snapshot/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/rendering/render-snapshot/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/rendering/render-snapshot/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/rendering/render-snapshot/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab active" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/rendering/render-snapshot/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/rendering/render-snapshot/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Motor"><div class="nav-title">Motor</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Arquitetura</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/architecture/cafpack/">Cafpack — Camada Unificada de Assets</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Núcleo</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/pt/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/pt/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/pt/docs/core/types/">Módulo Core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/ecs/">ECS e cenas</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/pt/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/pt/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Matemática</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/pt/docs/math/vectors/">Módulo de Matemática</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memória</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/memory/memory-model/">🧠 Memory Model — Especificação de Allocators</a></li><li><a class="nav-link" href="/pt/docs/memory/containers/">Módulo de Contentores</a></li><li><a class="nav-link" href="/pt/docs/memory/allocators/">Módulo de Memória</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Física</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/pt/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/pt/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Renderização</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/pt/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/pt/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link active" href="/pt/docs/rendering/render-snapshot/" aria-current="page">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/pt/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-phong/">Materiais no passe forward 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/pt/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/pt/docs/rendering/overlay-2d-rhi/">Overlays vectoriais 2D (caminho RHI)</a></li><li><a class="nav-link" href="/pt/docs/rendering/reflections/">Reflexos</a></li><li><a class="nav-link" href="/pt/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/pt/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/pt/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/pt/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terreno</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Áudio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/audio/audio-system/">🎵 Audio System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animação</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/pt/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Entrada</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Interface</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/pt/docs/ui/editor-ui/">Host ImGui (runtime e plugins legados)</a></li><li><a class="nav-link" href="/pt/docs/ui/ui-kit/">UI kit composável</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Depuração</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/pt/docs/debug/testing/">Testes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/performance/">Desempenho</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/performance/editor-viewport-performance/">Performance — Editor Viewport &amp; GPU Scene</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concorrência</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/engine/">Motor</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">caffeine-render-snapshot</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/tools/render-snapshot/main.cpp"><code>tools/render-snapshot/main.cpp</code></a></span>
+</div>
+<p class="doc-lede">Uma ferramenta offscreen pequena que renderiza a cena de referência de
+materiais pelo pipeline GPU completo e escreve um PNG para regressões visuais.</p>
+<blockquote>
+<p><strong>Target CMake:</strong> <code>caffeine-render-snapshot</code> (requer SDL3 e <code>CAFFEINE_BUILD_HEADLESS=OFF</code>)
+<strong>Fonte:</strong> <code>tools/render-snapshot/main.cpp</code></p>
+</blockquote>
+<p>Renderiza uma cena de referência pelo mesmo pipeline do jogo/editor (HDR, probes, SSR,
+sombras, <code>PostProcessStack</code>) e grava um PNG — útil para regressões visuais sem abrir o Doppio.</p>
+<hr>
+<h2 id="build">Build<a class="anchor" href="#build" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cmake -S . -B build -DCAFFEINE_BUILD_HEADLESS=OFF
+cmake --build build --target caffeine-render-snapshot -j
+</code></pre></div>
+<hr>
+<h2 id="utilização">Utilização<a class="anchor" href="#utilização" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine-render-snapshot [out.png] [width] [height] [frames] [skyboxIndex] [view]
+</code></pre></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Argumento</th>
+<th>Default</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out.png</code></td>
+<td><code>snapshot.png</code></td>
+<td>Ficheiro de saída</td>
+</tr>
+<tr>
+<td><code>width</code> / <code>height</code></td>
+<td>1280 × 720</td>
+<td>Resolução interna</td>
+</tr>
+<tr>
+<td><code>frames</code></td>
+<td>24</td>
+<td>Frames para o TAA/probes assentarem</td>
+</tr>
+<tr>
+<td><code>skyboxIndex</code></td>
+<td>0</td>
+<td>Índice de céu builtin (<code>Scene::resolveBuiltinSkyboxPath</code>)</td>
+</tr>
+<tr>
+<td><code>view</code></td>
+<td>0</td>
+<td>0 ao nível dos olhos, 1 alto, 2 afastado, 3 rasante ao chão, 4 close-up do chão</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="variáveis-de-ambiente">Variáveis de ambiente<a class="anchor" href="#variáveis-de-ambiente" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Efeito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SNAP_NO_IBL=1</code></td>
+<td>Desliga o IBL</td>
+</tr>
+<tr>
+<td><code>SNAP_NO_SHADOWS=1</code></td>
+<td>Desliga as sombras direcionais</td>
+</tr>
+<tr>
+<td><code>SNAP_FLOOR_MAT=&lt;path&gt;</code></td>
+<td>Usa um <code>.mat</code> no chão</td>
+</tr>
+<tr>
+<td><code>SNAP_ONLY_FLOOR=1</code></td>
+<td>Deixa só o chão e o sol</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="cena-de-referência">Cena de referência<a class="anchor" href="#cena-de-referência" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Chão 24×24 (roughness ~0.35)</li>
+<li>Esferas: Mirror (centro), Gold, Clear Glass</li>
+<li>Cubos coloridos + Glossy Plastic</li>
+<li>Sol direcional (intensidade ~2.5, shadow distance 20 m)</li>
+</ul>
+<p>Os materiais vêm de <code>Assets::materialPresets()</code>.</p>
+<hr>
+<h2 id="ver-também">Ver também<a class="anchor" href="#ver-também" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/pt/docs/rendering/reflections/"><code>reflections.md</code></a></li>
+<li><a href="/pt/docs/rendering/post-processing/"><code>post-processing.md</code></a></li>
+<li><a href="/pt/docs/rendering/forward-render-features/"><code>forward-render-features.md</code></a></li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/rendering/render-snapshot.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/rendering/batch-renderer/"><span>Anterior</span><strong>Batch Renderer</strong></a><a class="pager-next" href="/pt/docs/rendering/camera-3d/"><span>Seguinte</span><strong>Camera 3D</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#build">Build</a></li><li class="l2"><a href="#utilização">Utilização</a></li><li class="l3"><a href="#variáveis-de-ambiente">Variáveis de ambiente</a></li><li class="l2"><a href="#cena-de-referência">Cena de referência</a></li><li class="l2"><a href="#ver-também">Ver também</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🗺️ Scene Manager · Caffeine</title>
+<meta name="description" content="The scene layer adds a parent/child hierarchy, world transforms and a scene stack on top of the ECS, plus the serializers that write a world to a .caf file.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="🗺️ Scene Manager · Caffeine">
+<meta property="og:description" content="The scene layer adds a parent/child hierarchy, world transforms and a scene stack on top of the ECS, plus the serializers that write a world to a .caf file.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/ecs/scene/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/ecs/scene/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/ecs/scene/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/ecs/scene/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/en/docs/ecs/scene/" aria-current="page">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">UI</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">🗺️ Scene Manager</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Engine</span>
+  <span><strong>Namespace:</strong> <code>Caffeine::Scene</code></span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/scene/SceneManager.hpp"><code>scene/SceneManager.hpp</code></a></span>
+</div>
+<p class="doc-lede">The scene layer adds a parent/child hierarchy, world transforms and a
+scene stack on top of the ECS, plus the serializers that write a world to a
+<code>.caf</code> file.</p>
+<hr>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>The scene layer is a handful of small pieces on top of <code>ECS::World</code>:</p>
+<ul>
+<li><code>Scene::Parent</code> — the parent link used by the hierarchy.</li>
+<li><code>Scene::WorldTransform</code> — the resolved matrix for each entity.</li>
+<li><code>Scene::EntityLayer</code> — the inherited render layer.</li>
+<li><code>Scene::propagateTransforms</code> — recomputes world matrices and inherited layers.</li>
+<li><code>Scene::SceneManager</code> — a stack of worlds and a transition timer.</li>
+<li><code>Scene::SceneSerializer</code> — the minimal binary/JSON scene serializer.</li>
+<li><code>Editor::SceneSerializer</code> — the full project scene serializer used by Doppio, the
+runtime and the C ABI.</li>
+</ul>
+<dl>
+  <dt><code>Parent</code></dt>
+  <dd>Stores the parent entity and a <code>dirty</code> flag. The flag is serialized but
+  <code>propagateTransforms</code> recomputes every entity each call; it does not skip
+  clean entries.</dd>
+  <dt><code>WorldTransform</code></dt>
+  <dd>One <code>Mat4</code> per entity, written by <code>propagateTransforms</code>. Local
+  <code>Transform</code> components are never rewritten by inheritance.</dd>
+  <dt><code>EntityLayer</code></dt>
+  <dd>A <code>u8</code> layer inherited from the parent when the child has no layer of
+  its own.</dd>
+</dl>
+<hr>
+<h2 id="api">API<a class="anchor" href="#api" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Scene {
+
+<span class="hljs-comment">// ── Components ───────────────────────────────────────────────────────────────</span>
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Parent</span> {
+    ECS::Entity parent = ECS::Entity::INVALID;
+    <span class="hljs-type">bool</span>        dirty  = <span class="hljs-literal">true</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">WorldTransform</span> {
+    Mat4 matrix = Mat4::<span class="hljs-built_in">identity</span>();
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">EntityLayer</span> {
+    u8 layer = <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-comment">// ── Hierarchy ────────────────────────────────────────────────────────────────</span>
+
+<span class="hljs-function">Mat4 <span class="hljs-title">buildLocalTRS</span><span class="hljs-params">(<span class="hljs-type">const</span> ECS::Transform&amp; t)</span></span>;
+<span class="hljs-function">Mat4 <span class="hljs-title">buildLocalTRS_3D</span><span class="hljs-params">(<span class="hljs-type">const</span> ECS::Position3D* p,
+                      <span class="hljs-type">const</span> ECS::Rotation3D* r,
+                      <span class="hljs-type">const</span> ECS::Scale3D* s)</span></span>;
+<span class="hljs-function">Mat4 <span class="hljs-title">localMatrix</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e)</span></span>;
+<span class="hljs-function">Mat4 <span class="hljs-title">computeWorldMatrix</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">int</span> depth = <span class="hljs-number">0</span>)</span></span>;
+
+<span class="hljs-comment">// Recomputes WorldTransform for every entity and inherits EntityLayer.</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">propagateTransforms</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+
+<span class="hljs-comment">// True when the entity or any ancestor has ECS::DisabledTag.</span>
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isEffectivelyDisabled</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e)</span></span>;
+
+<span class="hljs-comment">// ── Minimal scene serializer (Scene::) ───────────────────────────────────────</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SceneSerializer</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">SceneSerializer</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">serialize</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span> <span class="hljs-type">const</span></span>;    <span class="hljs-comment">// binary .caf via CafWriter</span>
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">deserialize</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">serializeJson</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span> <span class="hljs-type">const</span></span>;  <span class="hljs-comment">// debug dump</span>
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">deserializeJson</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;      <span class="hljs-comment">// currently returns false</span>
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">serializeToMemory</span><span class="hljs-params">(std::vector&lt;u8&gt;&amp; out)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">deserializeFromMemory</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;u8&gt;&amp; data)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    ECS::World&amp; m_world;
+};
+
+<span class="hljs-comment">// ── Scene manager ────────────────────────────────────────────────────────────</span>
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Color</span> {
+    u8 r = <span class="hljs-number">0</span>, g = <span class="hljs-number">0</span>, b = <span class="hljs-number">0</span>, a = <span class="hljs-number">255</span>;
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">TransitionType</span> : u8 { None, Fade, Slide, Custom };
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">TransitionConfig</span> {
+    TransitionType type      = TransitionType::Fade;
+    f32            duration  = <span class="hljs-number">0.5f</span>;
+    Color          fadeColor = {};
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SceneManager</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">using</span> SceneHandle = u32;
+    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> SceneHandle kInvalidHandle = ~<span class="hljs-built_in">u32</span>(<span class="hljs-number">0</span>);
+
+    <span class="hljs-function">SceneHandle <span class="hljs-title">loadScene</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path, <span class="hljs-type">bool</span> async = <span class="hljs-literal">false</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span>        <span class="hljs-title">switchScene</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path, TransitionConfig trans = {})</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span>        <span class="hljs-title">pushScene</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>        <span class="hljs-title">popScene</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setActiveWorld</span><span class="hljs-params">(std::unique_ptr&lt;ECS::World&gt; world)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pushWorld</span><span class="hljs-params">(std::unique_ptr&lt;ECS::World&gt; world)</span></span>;
+
+    <span class="hljs-function">ECS::World* <span class="hljs-title">activeWorld</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span>        <span class="hljs-title">isTransitioning</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32         <span class="hljs-title">transitionProgress</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(f64 dt)</span></span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Scene</span>
+</code></pre></div>
+<h3 id="what-the-manager-actually-does">What the manager actually does<a class="anchor" href="#what-the-manager-actually-does" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>loadScene</code> deserializes immediately, stores the world in a preload map and returns a
+handle. The <code>async</code> argument is accepted but ignored, and there is no public call that
+activates a preloaded handle yet; use <code>switchScene</code> or <code>pushScene</code>.</li>
+<li><code>switchScene</code> clears the world stack and pushes the newly loaded world. It returns
+<code>false</code> when the file cannot be read.</li>
+<li><code>pushScene</code> loads and pushes a world without clearing the stack; <code>popScene</code> removes the
+top world.</li>
+<li><code>update(dt)</code> only advances the transition timer and clears it at 1.0. No renderer
+consumes <code>TransitionType</code> or <code>fadeColor</code> in the engine; a frontend that wants a fade
+draws it from <code>transitionProgress()</code>.</li>
+<li><code>activeWorld()</code> is the top of the stack, or <code>nullptr</code> when the stack is empty.</li>
+<li><code>SceneSerializer::deserialize</code> appends to the world it was given; it does not clear
+it first. Use a fresh <code>ECS::World</code> (as <code>SceneManager</code> does) or call <code>destroyAll()</code>.</li>
+</ul>
+<hr>
+<h2 id="serialization-format-caf-scene">Serialization Format (.caf Scene)<a class="anchor" href="#serialization-format-caf-scene" aria-label="Link to this section">#</a></h2>
+<p>The scene format uses the engine-internal <code>CafHeader</code> (<code>magic = 0xCAFECAFE</code>), not the
+caf-pack asset format (<code>magic = 0x43414621</code>).</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">[CafHeader]       32 bytes: magic, version, type=Scene, flags, crc32,
+                  metadataSize, dataSize
+[SceneMetadata]   entityCount, archetypeCount, stringTableOffset,
+                  assetRefTableOffset, reserved
+[Payload]         a sequence of sections:
+                    u32 typeId
+                    u32 count
+                    count × (u32 entityId + component bytes)
+[CRC32]           4-byte whole-file checksum (memory serializer)
+</code></pre></div>
+<p><code>Scene::SceneSerializer</code> writes exactly four section types:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:right">Type id</th>
+<th>Component</th>
+<th>Size per entity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td><code>ECS::Transform</code></td>
+<td><code>sizeof(Transform)</code></td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td><code>ECS::Acceleration2D</code></td>
+<td><code>sizeof(Acceleration2D)</code></td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td><code>Scene::Parent</code></td>
+<td><code>u32 parentId + u8 dirty</code></td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td><code>Scene::WorldTransform</code></td>
+<td><code>sizeof(WorldTransform)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><mark>Limits.</mark> Entity names are not written (the header stores
+<code>stringTableOffset = 0</code>), there is no asset-reference table, and every other component
+type is dropped. <code>serializeJson</code> writes only a transform/world-transform debug dump and
+<code>deserializeJson</code> returns <code>false</code>.</p>
+<p>For real projects use <code>Editor::SceneSerializer</code>
+(<code>src/caffeine/scene/EditorSceneSerializer.hpp</code>). It is the serializer behind
+<code>caffeine_session_save_scene</code> / <code>load_scene</code>, covers the component ids listed in that
+header (names, transforms, lights, meshes, physics, scripts, UI, terrain, skinned poses
+and more), and keeps entity names and parent links.</p>
+<hr>
+<h2 id="sistema-de-hierarquia-transformsystem">Sistema de Hierarquia (TransformSystem)<a class="anchor" href="#sistema-de-hierarquia-transformsystem" aria-label="Link to this section">#</a></h2>
+<p>The hierarchy is a free function, not an <code>ISystem</code> subclass. Call it once per frame
+before rendering:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;scene/HierarchySystem.hpp&quot;</span></span>
+
+<span class="hljs-comment">// Local transform sources:</span>
+<span class="hljs-comment">//   ECS::Position3D + Rotation3D + Scale3D   (3D, quaternion rotation)</span>
+<span class="hljs-comment">//   ECS::Transform                           (position + Euler degrees + scale)</span>
+Caffeine::Scene::<span class="hljs-built_in">propagateTransforms</span>(world);
+
+<span class="hljs-comment">// The resolved matrix is now on every entity that has a Transform/Position3D.</span>
+Mat4 worldMatrix = world.<span class="hljs-built_in">get</span>&lt;Caffeine::Scene::WorldTransform&gt;(entity)-&gt;matrix;
+</code></pre></div>
+<p>How it resolves:</p>
+<ol>
+<li>Every entity with <code>ECS::Transform</code> or <code>ECS::Position3D</code> gets a <code>WorldTransform</code>
+containing its local matrix.</li>
+<li>Up to <code>MAX_DEPTH</code> (8) passes compose each child's local matrix with its parent's
+world matrix. Parents may appear after children in the entity list.</li>
+<li>A second set of passes copies the parent's <code>EntityLayer</code> to children that do not
+already have one.</li>
+<li>Adding <code>WorldTransform</code> while iterating would invalidate the iteration, so updates
+are collected first and written afterwards. This is why the function is safe on
+children that never had a world transform.</li>
+</ol>
+<p><code>Parent.dirty</code> is not consulted; removing a <code>Parent</code> and calling
+<code>propagateTransforms</code> again resolves the child back to local space.</p>
+<p><code>isEffectivelyDisabled</code> walks the parent chain so a disabled root disables its subtree
+without touching each child.</p>
+<hr>
+<h2 id="exemplos-de-uso">Exemplos de Uso<a class="anchor" href="#exemplos-de-uso" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;debug/LogSystem.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;scene/HierarchySystem.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;scene/SceneManager.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;scene/SceneSerializer.hpp&quot;</span></span>
+
+<span class="hljs-comment">// ── Save and load a minimal scene ─────────────────────────────</span>
+Caffeine::<span class="hljs-function">Scene::SceneSerializer <span class="hljs-title">serializer</span><span class="hljs-params">(world)</span></span>;
+<span class="hljs-keyword">if</span> (!serializer.<span class="hljs-built_in">serialize</span>(<span class="hljs-string">&quot;saves/level1.caf&quot;</span>)) {
+    <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Scene&quot;</span>, <span class="hljs-string">&quot;Failed to save level1&quot;</span>);
+}
+
+<span class="hljs-comment">// ── Load into the manager ─────────────────────────────────────</span>
+Caffeine::Scene::SceneManager sceneManager;
+
+<span class="hljs-comment">// Replace the current world with level2, with a 0.5 s timer.</span>
+Caffeine::Scene::TransitionConfig transition;
+transition.type     = Caffeine::Scene::TransitionType::Fade;
+transition.duration = <span class="hljs-number">0.5f</span>;
+<span class="hljs-keyword">if</span> (!sceneManager.switchScene(<span class="hljs-string">&quot;assets/scenes/level2.caf&quot;</span>, transition)) {
+    <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Scene&quot;</span>, <span class="hljs-string">&quot;Could not load level2&quot;</span>);
+}
+
+<span class="hljs-comment">// Push a pause menu over the gameplay world, then pop it.</span>
+<span class="hljs-keyword">if</span> (!sceneManager.<span class="hljs-built_in">pushScene</span>(<span class="hljs-string">&quot;assets/scenes/pause_menu.caf&quot;</span>)) {
+    <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Scene&quot;</span>, <span class="hljs-string">&quot;Could not load pause_menu&quot;</span>);
+}
+<span class="hljs-comment">// ...later</span>
+sceneManager.<span class="hljs-built_in">popScene</span>();
+
+<span class="hljs-comment">// Advance the transition timer once per frame.</span>
+sceneManager.<span class="hljs-built_in">update</span>(dt);
+<span class="hljs-type">float</span> fade = sceneManager.<span class="hljs-built_in">transitionProgress</span>();
+
+<span class="hljs-comment">// ── Hierarchy ────────────────────────────────────────────────</span>
+Entity player = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Player&quot;</span>);
+world.<span class="hljs-built_in">add</span>&lt;Caffeine::ECS::Transform&gt;(player).position = {<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>};
+
+Entity sword = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Sword&quot;</span>);
+<span class="hljs-comment">// Local position relative to the player.</span>
+world.<span class="hljs-built_in">add</span>&lt;Caffeine::ECS::Transform&gt;(sword).position = {<span class="hljs-number">1.5f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>};
+world.<span class="hljs-built_in">add</span>&lt;Caffeine::Scene::Parent&gt;(sword).parent = player;
+
+Caffeine::Scene::<span class="hljs-built_in">propagateTransforms</span>(world);
+<span class="hljs-comment">// sword&#x27;s WorldTransform = player&#x27;s WorldTransform * sword&#x27;s local transform.</span>
+</code></pre></div>
+<hr>
+<h2 id="design-decisions">Design Decisions<a class="anchor" href="#design-decisions" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hierarchy on top of ECS components</td>
+<td>Parent links are data; any system or frontend can read them</td>
+</tr>
+<tr>
+<td><code>WorldTransform</code> separate from local <code>Transform</code></td>
+<td>The inspector keeps editing local values while rendering uses resolved matrices</td>
+</tr>
+<tr>
+<td>Up to 8 composition passes</td>
+<td>Handles parents that appear after children without a topological sort</td>
+</tr>
+<tr>
+<td>Collect-then-write updates</td>
+<td>Adding components during iteration invalidates archetype iteration</td>
+</tr>
+<tr>
+<td>Scene stack</td>
+<td>Keeps a gameplay world alive under a menu world</td>
+</tr>
+<tr>
+<td>Engine-internal <code>.caf</code> header</td>
+<td>Scene files are versioned separately from caf-pack assets</td>
+</tr>
+<tr>
+<td>Minimal <code>Scene::SceneSerializer</code></td>
+<td>Small, testable four-component round-trip; the full format lives in <code>Editor::SceneSerializer</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="acceptance-criteria">Acceptance Criteria<a class="anchor" href="#acceptance-criteria" aria-label="Link to this section">#</a></h2>
+<p>The <code>tests/test_scenemanager.cpp</code> suite covers:</p>
+<ul>
+<li>[x] <code>Parent</code> defaults to <code>Entity::INVALID</code> with <code>dirty = true</code></li>
+<li>[x] <code>WorldTransform</code> defaults to identity</li>
+<li>[x] Empty-world and header round-trips through <code>serializeToMemory</code></li>
+<li>[x] Round-trip of <code>Transform</code>, <code>Acceleration2D</code>, <code>WorldTransform</code> and <code>Parent</code></li>
+<li>[x] <code>SceneManager</code> stack push/pop and <code>activeWorld()</code></li>
+<li>[x] <code>propagateTransforms</code> composes three levels of parent/child transforms</li>
+<li>[x] Children with no <code>WorldTransform</code> are handled without invalidating iteration</li>
+<li>[x] Removing <code>Parent</code> resolves the child back to local space</li>
+</ul>
+<p>The suite does not assert a 1K-entity load budget or a scene-stack leak count; measure
+those in your own project if they matter.</p>
+<hr>
+<h2 id="dependencies">Dependencies<a class="anchor" href="#dependencies" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Upstream:</strong> <a href="/en/docs/ecs/core/">ECS Core</a>, <a href="/en/docs/assets/caf-format/">CafTypes</a>, <a href="/en/docs/math/vectors/">Mat4</a></li>
+<li><strong>Downstream:</strong> Doppio scene I/O and the C ABI (<code>caffeine_session_save_scene</code> / <code>load_scene</code>)</li>
+</ul>
+<hr>
+<h2 id="-related-topics">🔗 Related Topics<a class="anchor" href="#-related-topics" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/en/docs/ecs/core/">ECS Core</a></td>
+<td>Entities, components and queries used by the scene layer</td>
+</tr>
+<tr>
+<td><a href="/en/docs/ecs/examples/">ECS examples</a></td>
+<td>Programs that use the world API</td>
+</tr>
+<tr>
+<td><a href="/en/docs/api/headless-engine-api/">Headless engine API</a></td>
+<td>Saving and loading scenes through the C ABI</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="references">References<a class="anchor" href="#references" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/scene/HierarchySystem.hpp" rel="noopener" class="ext"><code>src/caffeine/scene/HierarchySystem.hpp</code></a> — hierarchy composition</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/scene/SceneManager.hpp" rel="noopener" class="ext"><code>src/caffeine/scene/SceneManager.hpp</code></a> — scene stack</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/scene/EditorSceneSerializer.hpp" rel="noopener" class="ext"><code>src/caffeine/scene/EditorSceneSerializer.hpp</code></a> — full project scene format</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/tests/test_scenemanager.cpp" rel="noopener" class="ext"><code>tests/test_scenemanager.cpp</code></a> — hierarchy and serializer suite</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/ecs/scene.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/ecs/"><span>Previous</span><strong>Caffeine ECS Core Documentation</strong></a><a class="pager-next" href="/en/docs/ecs/examples/"><span>Next</span><strong>Caffeine ECS Examples</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#overview">Overview</a></li><li class="l2"><a href="#api">API</a></li><li class="l3"><a href="#what-the-manager-actually-does">What the manager actually does</a></li><li class="l2"><a href="#serialization-format-caf-scene">Serialization Format (.caf Scene)</a></li><li class="l2"><a href="#sistema-de-hierarquia-transformsystem">Sistema de Hierarquia (TransformSystem)</a></li><li class="l2"><a href="#exemplos-de-uso">Exemplos de Uso</a></li><li class="l2"><a href="#design-decisions">Design Decisions</a></li><li class="l2"><a href="#acceptance-criteria">Acceptance Criteria</a></li><li class="l2"><a href="#dependencies">Dependencies</a></li><li class="l2"><a href="#-related-topics">🔗 Related Topics</a></li><li class="l2"><a href="#references">References</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

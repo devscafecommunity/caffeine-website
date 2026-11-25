@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scripting Module Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Scripting Module Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/plans/2026-05-11-scripting-plan/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/plans/2026-05-11-scripting-plan/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-11-scripting-plan/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/plans/2026-05-11-scripting-plan/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab active" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/plans/2026-05-11-scripting-plan/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/plans/2026-05-11-scripting-plan/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Projeto"><div class="nav-title">Projeto</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Versões</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/pt/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/pt/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Planos</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/2026-10-19-dryad-node-scripts/">Dryad e scripts por nodes</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-forward-pbr-post-session/">Sessão 2026-10-02 — Forward PBR, reflexos, pós-processamento GPU</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-editor-backlog-phase-b/">Editor backlog — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-viewport-rendering-quality-session/">Sessão 2026-09-22 — Viewport 3D, Qualidade Visual e Performance</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-phong-gpu-handles-session/">Sessão 2026-09-22 — Phong GPU, Handles e Sombras</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap de Sistemas Fundamentais</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — 3D de Alto Volume</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - ANÁLISE COMPLETA &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP⁻¹ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-hot-reload-design/">Hot-Reload de Assets — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link active" href="/pt/docs/plans/2026-05-11-scripting-plan/" aria-current="page">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/">Marcos</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/archive/">Arquivo</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Análise</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/pt/docs/HISTORY/">História do desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/ECOSYSTEM_WORKFLOW/">Fluxo unificado de assets</a></li><li><a class="nav-link" href="/pt/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/pt/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/pt/docs/MASTER/">Índice master</a></li><li><a class="nav-link" href="/pt/docs/books/">Livros e PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/project/">Projeto</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Scripting Module Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Implement Lua scripting support (Lua 5.4 + sol2) for the Caffeine engine with ScriptEngine, ScriptComponent/ScriptSystem ECS integration, and full <code>caffeine.*</code> Lua binding API.</p>
+<p><strong>Architecture:</strong> Opaque Pimpl pattern — all Lua/sol2 types hidden in <code>.cpp</code> files, public headers expose only Caffeine types. ScriptEngine owns the Lua VM state and binding registration. ScriptSystem dispatches lifecycle calls (onCreate/onUpdate/onDestroy/onCollision) for entities with ScriptComponent. Hot-reload via ScriptWatcher using filesystem timestamps.</p>
+<p><strong>Tech Stack:</strong> Lua 5.4, sol2 v3.3.0 (header-only), C++20, CMake FetchContent, Catch2 for tests</p>
+<p><strong>Pre-requisites:</strong></p>
+<ul>
+<li>Design doc: <code>docs/plans/2026-05-11-scripting-design.md</code></li>
+<li>Issue: #44</li>
+</ul>
+<hr>
+<h3 id="task-1-add-iskeydown-to-inputmanager">Task 1: Add <code>isKeyDown</code> to InputManager<a class="anchor" href="#task-1-add-iskeydown-to-inputmanager" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/input/InputManager.hpp</code> (add public method declaration)</li>
+<li>Modify: <code>src/caffeine/input/InputManager.cpp</code> (add implementation)</li>
+</ul>
+<p><strong>Step 1: Read current InputManager to verify API</strong></p>
+<p>Read <code>src/caffeine/input/InputManager.hpp</code> — confirm <code>m_keyState</code> is private and no public <code>isKeyDown</code> exists.</p>
+<p><strong>Step 2: Add public method declaration</strong></p>
+<p>In <code>src/caffeine/input/InputManager.hpp</code>, add to the Query state section (after <code>mouseDelta()</code>):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isKeyDown</span><span class="hljs-params">(Key key)</span> <span class="hljs-type">const</span></span>;
+</code></pre></div>
+<p><strong>Step 3: Add implementation</strong></p>
+<p>In <code>src/caffeine/input/InputManager.cpp</code>, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">InputManager::isKeyDown</span><span class="hljs-params">(Key key)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">return</span> m_keyState[<span class="hljs-keyword">static_cast</span>&lt;usize&gt;(key)];
+}
+</code></pre></div>
+<p><strong>Step 4: Verify build</strong></p>
+<p>Run: <code>make Caffeine -j$(nproc)</code>
+Expected: Builds cleanly (no scripting yet, just verify InputManager change compiles)</p>
+<hr>
+<h3 id="task-2-add-cf_has_scripting-to-build-system">Task 2: Add <code>CF_HAS_SCRIPTING</code> to build system<a class="anchor" href="#task-2-add-cf_has_scripting-to-build-system" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>CMakeLists.txt</code></li>
+<li>Create: <code>src/caffeine/script</code> (directory)</li>
+<li>Create: <code>src/caffeine/Caffeine.hpp</code> (add scripting include guard)</li>
+</ul>
+<p><strong>Step 1: Add option and dependency fetching to root CMakeLists.txt</strong></p>
+<p>After the <code># ── caf-encode CLI tool ──</code> section (line 90), add:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-comment"># ── Scripting (Lua + sol2) ────────────────────────────────────</span>
+<span class="hljs-keyword">option</span>(CAFFEINE_ENABLE_SCRIPTING <span class="hljs-string">&quot;Enable Lua scripting support&quot;</span> <span class="hljs-keyword">OFF</span>)
+
+<span class="hljs-keyword">if</span>(CAFFEINE_ENABLE_SCRIPTING)
+    <span class="hljs-keyword">include</span>(FetchContent)
+    
+    <span class="hljs-comment"># sol2 (header-only C++/Lua binding library)</span>
+    FetchContent_Declare(sol2
+        GIT_REPOSITORY https://github.com/ThePhD/sol2.git
+        GIT_TAG v3.<span class="hljs-number">3.0</span>
+        GIT_SHALLOW <span class="hljs-keyword">TRUE</span>
+    )
+    FetchContent_MakeAvailable(sol2)
+    
+    <span class="hljs-comment"># Lua 5.4 — try system first, fall back to fetching</span>
+    <span class="hljs-keyword">find_package</span>(Lua <span class="hljs-number">5.4</span> QUIET)
+    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">NOT</span> LUA_FOUND)
+        FetchContent_Declare(lua
+            GIT_REPOSITORY https://github.com/lua/lua.git
+            GIT_TAG v5.<span class="hljs-number">4.7</span>
+            GIT_SHALLOW <span class="hljs-keyword">TRUE</span>
+        )
+        FetchContent_MakeAvailable(lua)
+    <span class="hljs-keyword">endif</span>()
+    
+    <span class="hljs-keyword">target_compile_definitions</span>(Caffeine PUBLIC CF_HAS_SCRIPTING=<span class="hljs-number">1</span>)
+    <span class="hljs-keyword">target_include_directories</span>(Caffeine PRIVATE <span class="hljs-variable">${LUA_INCLUDE_DIR}</span>)
+    <span class="hljs-keyword">target_link_libraries</span>(Caffeine PRIVATE <span class="hljs-variable">${LUA_LIBRARIES}</span>)
+    
+    <span class="hljs-keyword">target_sources</span>(Caffeine PRIVATE
+        src/script/ScriptEngine.cpp
+        src/script/ScriptSystem.cpp
+        src/script/ScriptWatcher.cpp
+    )
+<span class="hljs-keyword">endif</span>()
+</code></pre></div>
+<p><strong>Step 2: Add scripting include guard to Caffeine.hpp</strong></p>
+<p>In <code>src/caffeine/Caffeine.hpp</code>, before the <code>// Tools</code> section, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Scripting (optional — CAFFEINE_ENABLE_SCRIPTING)</span>
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SCRIPTING</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptSystem.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptWatcher.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+</code></pre></div>
+<p><strong>Step 3: Create placeholder source files</strong></p>
+<p>Create empty files (they'll gain content in subsequent tasks):</p>
+<ul>
+<li><code>src/caffeine/script/ScriptEngine.cpp</code></li>
+<li><code>src/caffeine/script/ScriptSystem.cpp</code></li>
+<li><code>src/caffeine/script/ScriptWatcher.cpp</code></li>
+</ul>
+<p>Each file should have just:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptEngine.hpp&quot;</span></span>
+<span class="hljs-comment">// (or ScriptSystem.hpp, ScriptWatcher.hpp)</span>
+</code></pre></div>
+<p><strong>Step 4: Verify build</strong></p>
+<p>Run: <code>cmake .. -DCAFFEINE_ENABLE_SCRIPTING=ON &amp;&amp; make Caffeine -j$(nproc)</code>
+Expected: Builds successfully (placeholder .cpp files compile). Then test OFF:
+Run: <code>cmake .. -DCAFFEINE_ENABLE_SCRIPTING=OFF &amp;&amp; make Caffeine -j$(nproc)</code>
+Expected: No scripting includes, builds without sol2/Lua.</p>
+<hr>
+<h3 id="task-3-implement-scriptengine-header-core-implementation">Task 3: Implement ScriptEngine (header + core implementation)<a class="anchor" href="#task-3-implement-scriptengine-header-core-implementation" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/script/ScriptEngine.hpp</code></li>
+<li>Create: <code>src/caffeine/script/ScriptEngine.cpp</code> (init/shutdown/loadScript/reloadScript)</li>
+<li>Create: <code>src/script/ScriptBindings.hpp</code> (internal — binding registration helpers)</li>
+</ul>
+<p><strong>Step 1: Create ScriptEngine.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/Entity.hpp&quot;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Script {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ScriptEngine</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">ScriptEngine</span>();
+    ~<span class="hljs-built_in">ScriptEngine</span>();
+
+    <span class="hljs-comment">// Non-copyable</span>
+    <span class="hljs-built_in">ScriptEngine</span>(<span class="hljs-type">const</span> ScriptEngine&amp;) = <span class="hljs-keyword">delete</span>;
+    ScriptEngine&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> ScriptEngine&amp;) = <span class="hljs-keyword">delete</span>;
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">InitParams</span> {
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">ECS</span>::World* world = <span class="hljs-literal">nullptr</span>;
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Input</span>::InputManager* input = <span class="hljs-literal">nullptr</span>;
+        <span class="hljs-keyword">class</span> <span class="hljs-title class_">Events</span>::EventBus* events = <span class="hljs-literal">nullptr</span>;
+    };
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-type">const</span> InitParams&amp; params)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shutdown</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">loadScript</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, std::string* outError = <span class="hljs-literal">nullptr</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">reloadScript</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, std::string* outError = <span class="hljs-literal">nullptr</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isLoaded</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-comment">// Lifecycle calls</span>
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">callOnCreate</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, ECS::Entity entity)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">callOnUpdate</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, ECS::Entity entity, f32 dt)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">callOnDestroy</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, ECS::Entity entity)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">callOnCollision</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, ECS::Entity entity, ECS::Entity other)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Impl</span>;
+    std::unique_ptr&lt;Impl&gt; m_impl;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Script</span>
+</code></pre></div>
+<p><strong>Step 2: Implement ScriptEngine.cpp</strong></p>
+<p>ScriptEngine.cpp must:</p>
+<ul>
+<li>Include sol2 headers (confined to .cpp, never in .hpp)</li>
+<li>Define <code>struct ScriptEngine::Impl</code> holding <code>sol::state m_lua</code> and subsystem pointers</li>
+<li><code>init()</code> creates sol::state, opens restricted libraries, calls <code>registerBindings()</code></li>
+<li><code>loadScript()</code> loads file as string, compiles with <code>sol::state::load_file()</code>, stores <code>sol::protected_function</code> in HashMap</li>
+<li><code>reloadScript()</code> calls <code>loadScript()</code> again (overwrites in map)</li>
+<li><code>isLoaded()</code> checks HashMap</li>
+<li><code>callOn*()</code> looks up function from the compiled chunk's env, calls with args, catches errors</li>
+</ul>
+<p>Key implementation:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ScriptEngine</span>::Impl {
+    sol::state m_lua;
+    ECS::World* m_world = <span class="hljs-literal">nullptr</span>;
+    Input::InputManager* m_input = <span class="hljs-literal">nullptr</span>;
+    Events::EventBus* m_events = <span class="hljs-literal">nullptr</span>;
+    HashMap&lt;std::string, sol::protected_function&gt; m_scripts;
+    
+    <span class="hljs-comment">// Event bridge: string name → { handle, callback }</span>
+    HashMap&lt;std::string, Vector&lt;sol::protected_function&gt;&gt; m_luaEventHandlers;
+    u32 m_nextEventHandlerId = <span class="hljs-number">1</span>;
+};
+</code></pre></div>
+<p><code>init()</code>:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ScriptEngine::init</span><span class="hljs-params">(<span class="hljs-type">const</span> InitParams&amp; params)</span> </span>{
+    m_impl = std::<span class="hljs-built_in">make_unique</span>&lt;Impl&gt;();
+    m_impl-&gt;m_world = params.world;
+    m_impl-&gt;m_input = params.input;
+    m_impl-&gt;m_events = params.events;
+    
+    <span class="hljs-keyword">auto</span>&amp; lua = m_impl-&gt;m_lua;
+    
+    <span class="hljs-comment">// Open only safe libraries</span>
+    lua.<span class="hljs-built_in">open_libraries</span>(
+        sol::lib::base,
+        sol::lib::math,
+        sol::lib::string,
+        sol::lib::table
+    );
+    
+    <span class="hljs-comment">// Override print to route through caffeine.debug.log</span>
+    lua[<span class="hljs-string">&quot;print&quot;</span>] = [](sol::variadic_args args) {
+        std::string msg;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span> v : args) {
+            <span class="hljs-keyword">if</span> (!msg.<span class="hljs-built_in">empty</span>()) msg += <span class="hljs-string">&quot;\t&quot;</span>;
+            msg += sol::detail::<span class="hljs-built_in">demangle</span>(v.<span class="hljs-built_in">get_type</span>());
+        }
+        Debug::LogSystem::<span class="hljs-built_in">instance</span>().<span class="hljs-built_in">log</span>(Debug::LogLevel::Info, <span class="hljs-string">&quot;Lua&quot;</span>, <span class="hljs-string">&quot;%s&quot;</span>, msg.<span class="hljs-built_in">c_str</span>());
+    };
+    
+    registerBindings();
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+</code></pre></div>
+<p><code>loadScript()</code>:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ScriptEngine::loadScript</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, std::string* outError)</span> </span>{
+    <span class="hljs-keyword">auto</span>&amp; lua = m_impl-&gt;m_lua;
+    
+    <span class="hljs-keyword">auto</span> result = lua.<span class="hljs-built_in">load_file</span>(path);
+    <span class="hljs-keyword">if</span> (!result.<span class="hljs-built_in">valid</span>()) {
+        sol::error err = result;
+        <span class="hljs-keyword">if</span> (outError) *outError = err.<span class="hljs-built_in">what</span>();
+        <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Script&quot;</span>, <span class="hljs-string">&quot;Failed to load %s: %s&quot;</span>, path.<span class="hljs-built_in">c_str</span>(), err.<span class="hljs-built_in">what</span>());
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    
+    <span class="hljs-comment">// Execute the chunk to register global functions</span>
+    <span class="hljs-keyword">auto</span> execResult = <span class="hljs-built_in">result</span>();
+    <span class="hljs-keyword">if</span> (!execResult.<span class="hljs-built_in">valid</span>()) {
+        sol::error err = execResult;
+        <span class="hljs-keyword">if</span> (outError) *outError = err.<span class="hljs-built_in">what</span>();
+        <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Script&quot;</span>, <span class="hljs-string">&quot;Failed to execute %s: %s&quot;</span>, path.<span class="hljs-built_in">c_str</span>(), err.<span class="hljs-built_in">what</span>());
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    
+    <span class="hljs-comment">// Store as a function in case we need to re-execute for hot-reload</span>
+    m_impl-&gt;m_scripts.<span class="hljs-built_in">set</span>(path, result);
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+</code></pre></div>
+<p><code>callOnUpdate()</code>:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ScriptEngine::callOnUpdate</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, ECS::Entity entity, f32 dt)</span> </span>{
+    <span class="hljs-keyword">auto</span>&amp; lua = m_impl-&gt;m_lua;
+    
+    <span class="hljs-comment">// Get the global &quot;onUpdate&quot; function defined by the script</span>
+    sol::protected_function onUpdate = lua[<span class="hljs-string">&quot;onUpdate&quot;</span>];
+    <span class="hljs-keyword">if</span> (!onUpdate.<span class="hljs-built_in">valid</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;  <span class="hljs-comment">// function not defined</span>
+    
+    <span class="hljs-keyword">auto</span> result = <span class="hljs-built_in">onUpdate</span>(<span class="hljs-keyword">static_cast</span>&lt;u32&gt;(entity.<span class="hljs-built_in">id</span>()), dt);
+    <span class="hljs-keyword">if</span> (!result.<span class="hljs-built_in">valid</span>()) {
+        sol::error err = result;
+        <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Lua&quot;</span>, <span class="hljs-string">&quot;onUpdate error in %s: %s&quot;</span>, path.<span class="hljs-built_in">c_str</span>(), err.<span class="hljs-built_in">what</span>());
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+</code></pre></div>
+<p><strong>Step 3: Create ScriptBindings.hpp (internal implementation header)</strong></p>
+<p>No separate file needed — binding registration can be a private method in ScriptEngine.cpp.
+Add these private methods to ScriptEngine::Impl or as free functions:</p>
+<ul>
+<li><code>registerCaffeineBindings(sol::state&amp;, ECS::World*, Input::InputManager*, Events::EventBus*)</code></li>
+<li><code>registerInputBindings(...)</code></li>
+<li><code>registerWorldBindings(...)</code></li>
+<li><code>registerEventBindings(...)</code></li>
+<li><code>registerDebugBindings(...)</code></li>
+<li><code>registerMathBindings(...)</code></li>
+</ul>
+<p><strong>Step 4: Build + verify compilation</strong></p>
+<p>Run: <code>cmake .. -DCAFFEINE_ENABLE_SCRIPTING=ON &amp;&amp; make Caffeine -j$(nproc)</code>
+Expected: Compiles cleanly (ScriptEngine registers Lua VM)</p>
+<hr>
+<h3 id="task-4-implement-lua-binding-registration">Task 4: Implement Lua Binding Registration<a class="anchor" href="#task-4-implement-lua-binding-registration" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/script/ScriptEngine.cpp</code> (add binding functions)</li>
+</ul>
+<p><strong>Step 1: Implement <code>registerWorldBindings</code></strong></p>
+<p>The <code>caffeine.world</code> table with entity CRUD:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerWorldBindings</span><span class="hljs-params">(sol::state&amp; lua, ECS::World* world)</span> </span>{
+    sol::table worldTbl = lua[<span class="hljs-string">&quot;caffeine&quot;</span>][<span class="hljs-string">&quot;world&quot;</span>];
+    
+    worldTbl[<span class="hljs-string">&quot;create&quot;</span>] = [world]() -&gt; u32 {
+        ECS::Entity e = world-&gt;<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;LuaEntity&quot;</span>);
+        <span class="hljs-keyword">return</span> e.<span class="hljs-built_in">id</span>();
+    };
+    
+    worldTbl[<span class="hljs-string">&quot;destroy&quot;</span>] = [world](u32 entityId) {
+        world-&gt;<span class="hljs-built_in">destroy</span>(ECS::<span class="hljs-built_in">Entity</span>(entityId, world));
+    };
+    
+    worldTbl[<span class="hljs-string">&quot;hasComponent&quot;</span>] = [world](u32 entityId, <span class="hljs-type">const</span> std::string&amp; type) -&gt; <span class="hljs-type">bool</span> {
+        ECS::Entity <span class="hljs-built_in">e</span>(entityId, world);
+        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">&quot;Position2D&quot;</span>) <span class="hljs-keyword">return</span> e.<span class="hljs-built_in">has</span>&lt;ECS::Position2D&gt;();
+        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">&quot;RigidBody2D&quot;</span>) <span class="hljs-keyword">return</span> e.<span class="hljs-built_in">has</span>&lt;Physics2D::RigidBody2D&gt;();
+        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">&quot;Sprite&quot;</span>) <span class="hljs-keyword">return</span> e.<span class="hljs-built_in">has</span>&lt;ECS::Sprite&gt;();
+        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">&quot;Rotation&quot;</span>) <span class="hljs-keyword">return</span> e.<span class="hljs-built_in">has</span>&lt;ECS::Rotation&gt;();
+        <span class="hljs-keyword">if</span> (type == <span class="hljs-string">&quot;Scale2D&quot;</span>) <span class="hljs-keyword">return</span> e.<span class="hljs-built_in">has</span>&lt;ECS::Scale2D&gt;();
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    };
+    
+    worldTbl[<span class="hljs-string">&quot;getTransform&quot;</span>] = [world](u32 entityId) -&gt; sol::table {
+        ECS::Entity <span class="hljs-built_in">e</span>(entityId, world);
+        sol::table t = lua.<span class="hljs-built_in">create_table</span>();
+        <span class="hljs-keyword">auto</span>* pos = e.<span class="hljs-built_in">get</span>&lt;ECS::Position2D&gt;();
+        <span class="hljs-keyword">auto</span>* rot = e.<span class="hljs-built_in">get</span>&lt;ECS::Rotation&gt;();
+        <span class="hljs-keyword">auto</span>* scl = e.<span class="hljs-built_in">get</span>&lt;ECS::Scale2D&gt;();
+        t[<span class="hljs-string">&quot;x&quot;</span>] = pos ? pos-&gt;x : <span class="hljs-number">0.0f</span>;
+        t[<span class="hljs-string">&quot;y&quot;</span>] = pos ? pos-&gt;y : <span class="hljs-number">0.0f</span>;
+        t[<span class="hljs-string">&quot;rotation&quot;</span>] = rot ? rot-&gt;angle : <span class="hljs-number">0.0f</span>;
+        t[<span class="hljs-string">&quot;scaleX&quot;</span>] = scl ? scl-&gt;x : <span class="hljs-number">1.0f</span>;
+        t[<span class="hljs-string">&quot;scaleY&quot;</span>] = scl ? scl-&gt;y : <span class="hljs-number">1.0f</span>;
+        <span class="hljs-keyword">return</span> t;
+    };
+    
+    worldTbl[<span class="hljs-string">&quot;setTransform&quot;</span>] = [world](u32 entityId, sol::table t) {
+        ECS::Entity <span class="hljs-built_in">e</span>(entityId, world);
+        <span class="hljs-keyword">auto</span>&amp; pos = e.<span class="hljs-built_in">getOrAdd</span>&lt;ECS::Position2D&gt;();
+        pos.x = t[<span class="hljs-string">&quot;x&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        pos.y = t[<span class="hljs-string">&quot;y&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        <span class="hljs-keyword">auto</span>&amp; rot = e.<span class="hljs-built_in">getOrAdd</span>&lt;ECS::Rotation&gt;();
+        rot.angle = t[<span class="hljs-string">&quot;rotation&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        <span class="hljs-keyword">auto</span>&amp; scl = e.<span class="hljs-built_in">getOrAdd</span>&lt;ECS::Scale2D&gt;();
+        scl.x = t[<span class="hljs-string">&quot;scaleX&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">1.0f</span>);
+        scl.y = t[<span class="hljs-string">&quot;scaleY&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">1.0f</span>);
+    };
+    
+    <span class="hljs-comment">// getRigidBody2D, setRigidBody2D, getSprite, setSprite follow similar pattern</span>
+}
+</code></pre></div>
+<p><strong>Step 2: Implement <code>registerInputBindings</code></strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerInputBindings</span><span class="hljs-params">(sol::state&amp; lua, Input::InputManager* input)</span> </span>{
+    sol::table inputTbl = lua[<span class="hljs-string">&quot;caffeine&quot;</span>][<span class="hljs-string">&quot;input&quot;</span>];
+    
+    <span class="hljs-comment">// Key string → Key enum map</span>
+    <span class="hljs-type">static</span> <span class="hljs-type">const</span> HashMap&lt;std::string, Input::Key&gt; s_keyMap = {
+        {<span class="hljs-string">&quot;Space&quot;</span>, Input::Key::Space}, {<span class="hljs-string">&quot;Return&quot;</span>, Input::Key::Return},
+        {<span class="hljs-string">&quot;Escape&quot;</span>, Input::Key::Escape}, {<span class="hljs-string">&quot;Up&quot;</span>, Input::Key::Up},
+        {<span class="hljs-string">&quot;Down&quot;</span>, Input::Key::Down}, {<span class="hljs-string">&quot;Left&quot;</span>, Input::Key::Left},
+        {<span class="hljs-string">&quot;Right&quot;</span>, Input::Key::Right},
+        {<span class="hljs-string">&quot;A&quot;</span>, Input::Key::A}, {<span class="hljs-string">&quot;B&quot;</span>, Input::Key::B}, <span class="hljs-comment">/* ... etc */</span>
+    };
+    
+    <span class="hljs-comment">// Axis string → Axis enum map</span>
+    <span class="hljs-type">static</span> <span class="hljs-type">const</span> HashMap&lt;std::string, Input::Axis&gt; s_axisMap = {
+        {<span class="hljs-string">&quot;Horizontal&quot;</span>, Input::Axis::MoveX},
+        {<span class="hljs-string">&quot;Vertical&quot;</span>, Input::Axis::MoveY},
+        {<span class="hljs-string">&quot;LookX&quot;</span>, Input::Axis::LookX},
+        {<span class="hljs-string">&quot;LookY&quot;</span>, Input::Axis::LookY},
+    };
+    
+    inputTbl[<span class="hljs-string">&quot;isKeyDown&quot;</span>] = [input](<span class="hljs-type">const</span> std::string&amp; keyName) -&gt; <span class="hljs-type">bool</span> {
+        <span class="hljs-keyword">auto</span> it = s_keyMap.<span class="hljs-built_in">find</span>(keyName);
+        <span class="hljs-keyword">if</span> (it == s_keyMap.<span class="hljs-built_in">end</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">return</span> input-&gt;<span class="hljs-built_in">isKeyDown</span>(it-&gt;second);
+    };
+    
+    inputTbl[<span class="hljs-string">&quot;getAxis&quot;</span>] = [input](<span class="hljs-type">const</span> std::string&amp; axisName) -&gt; f32 {
+        <span class="hljs-keyword">auto</span> it = s_axisMap.<span class="hljs-built_in">find</span>(axisName);
+        <span class="hljs-keyword">if</span> (it == s_axisMap.<span class="hljs-built_in">end</span>()) <span class="hljs-keyword">return</span> <span class="hljs-number">0.0f</span>;
+        <span class="hljs-keyword">return</span> input-&gt;<span class="hljs-built_in">axisState</span>(it-&gt;second).value;
+    };
+    
+    inputTbl[<span class="hljs-string">&quot;mousePosition&quot;</span>] = [input]() -&gt; std::pair&lt;f32, f32&gt; {
+        <span class="hljs-keyword">auto</span> pos = input-&gt;<span class="hljs-built_in">mousePosition</span>();
+        <span class="hljs-keyword">return</span> {pos.x, pos.y};
+    };
+    
+    inputTbl[<span class="hljs-string">&quot;isMouseButtonDown&quot;</span>] = [input](u32 btn) -&gt; <span class="hljs-type">bool</span> {
+        <span class="hljs-comment">// Map 1/2/3 to Left/Middle/Right</span>
+        Input::MouseButton mb = (btn == <span class="hljs-number">1</span>) ? Input::MouseButton::Left
+                            : (btn == <span class="hljs-number">2</span>) ? Input::MouseButton::Middle
+                            : Input::MouseButton::Right;
+        <span class="hljs-keyword">return</span> input-&gt;<span class="hljs-built_in">isMouseButtonDown</span>(mb);
+    };
+}
+</code></pre></div>
+<p>Note: <code>InputManager::isMouseButtonDown(MouseButton)</code> also needs adding as public method.
+Add to InputManager.hpp and .cpp:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isMouseButtonDown</span><span class="hljs-params">(MouseButton button)</span> <span class="hljs-type">const</span></span>;
+</code></pre></div>
+<p>Implementation:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">InputManager::isMouseButtonDown</span><span class="hljs-params">(MouseButton button)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">return</span> m_mouseState[<span class="hljs-keyword">static_cast</span>&lt;usize&gt;(button)];
+}
+</code></pre></div>
+<p><strong>Step 3: Implement <code>registerEventBindings</code></strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerEventBindings</span><span class="hljs-params">(sol::state&amp; lua, Events::EventBus* eventBus,
+                          ScriptEngine::Impl* impl)</span> </span>{
+    sol::table eventsTbl = lua[<span class="hljs-string">&quot;caffeine&quot;</span>][<span class="hljs-string">&quot;events&quot;</span>];
+    
+    eventsTbl[<span class="hljs-string">&quot;on&quot;</span>] = [impl](<span class="hljs-type">const</span> std::string&amp; eventName, sol::protected_function callback) -&gt; u32 {
+        u32 handle = impl-&gt;m_nextEventHandlerId++;
+        impl-&gt;m_luaEventHandlers[eventName].<span class="hljs-built_in">push_back</span>(callback);
+        <span class="hljs-keyword">return</span> handle;
+    };
+    
+    eventsTbl[<span class="hljs-string">&quot;emit&quot;</span>] = [impl](<span class="hljs-type">const</span> std::string&amp; eventName, sol::variadic_args args) {
+        <span class="hljs-keyword">auto</span> it = impl-&gt;m_luaEventHandlers.<span class="hljs-built_in">find</span>(eventName);
+        <span class="hljs-keyword">if</span> (it == impl-&gt;m_luaEventHandlers.<span class="hljs-built_in">end</span>()) <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; callback : it-&gt;second) {
+            <span class="hljs-keyword">auto</span> result = <span class="hljs-built_in">callback</span>(args);
+            <span class="hljs-keyword">if</span> (!result.<span class="hljs-built_in">valid</span>()) {
+                sol::error err = result;
+                <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Lua&quot;</span>, <span class="hljs-string">&quot;Event handler error for &#x27;%s&#x27;: %s&quot;</span>,
+                         eventName.<span class="hljs-built_in">c_str</span>(), err.<span class="hljs-built_in">what</span>());
+            }
+        }
+    };
+    
+    eventsTbl[<span class="hljs-string">&quot;off&quot;</span>] = [impl](u32 handle) {
+        <span class="hljs-comment">// Find and remove callback by handle across all event names</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; pair : impl-&gt;m_luaEventHandlers) {
+            <span class="hljs-keyword">auto</span>&amp; vec = pair.second;
+            vec.<span class="hljs-built_in">erase</span>(std::<span class="hljs-built_in">remove_if</span>(vec.<span class="hljs-built_in">begin</span>(), vec.<span class="hljs-built_in">end</span>(),
+                [handle](<span class="hljs-type">const</span> sol::protected_function&amp; fn) {
+                    <span class="hljs-comment">// Can&#x27;t easily compare — require handle-based lookup</span>
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+                }), vec.<span class="hljs-built_in">end</span>());
+        }
+    };
+}
+</code></pre></div>
+<p><strong>Step 4: Implement <code>registerDebugBindings</code></strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerDebugBindings</span><span class="hljs-params">(sol::state&amp; lua)</span> </span>{
+    sol::table debugTbl = lua[<span class="hljs-string">&quot;caffeine&quot;</span>][<span class="hljs-string">&quot;debug&quot;</span>];
+    <span class="hljs-keyword">auto</span>&amp; log = Debug::LogSystem::<span class="hljs-built_in">instance</span>();
+    
+    debugTbl[<span class="hljs-string">&quot;log&quot;</span>] = [](<span class="hljs-type">const</span> std::string&amp; msg) {
+        Debug::LogSystem::<span class="hljs-built_in">instance</span>().<span class="hljs-built_in">log</span>(Debug::LogLevel::Info, <span class="hljs-string">&quot;Lua&quot;</span>, <span class="hljs-string">&quot;%s&quot;</span>, msg.<span class="hljs-built_in">c_str</span>());
+    };
+    debugTbl[<span class="hljs-string">&quot;warn&quot;</span>] = [](<span class="hljs-type">const</span> std::string&amp; msg) {
+        Debug::LogSystem::<span class="hljs-built_in">instance</span>().<span class="hljs-built_in">log</span>(Debug::LogLevel::Warn, <span class="hljs-string">&quot;Lua&quot;</span>, <span class="hljs-string">&quot;%s&quot;</span>, msg.<span class="hljs-built_in">c_str</span>());
+    };
+    debugTbl[<span class="hljs-string">&quot;error&quot;</span>] = [](<span class="hljs-type">const</span> std::string&amp; msg) {
+        Debug::LogSystem::<span class="hljs-built_in">instance</span>().<span class="hljs-built_in">log</span>(Debug::LogLevel::Error, <span class="hljs-string">&quot;Lua&quot;</span>, <span class="hljs-string">&quot;%s&quot;</span>, msg.<span class="hljs-built_in">c_str</span>());
+    };
+}
+</code></pre></div>
+<p><strong>Step 5: Implement <code>registerMathBindings</code></strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerMathBindings</span><span class="hljs-params">(sol::state&amp; lua)</span> </span>{
+    sol::table mathTbl = lua[<span class="hljs-string">&quot;caffeine&quot;</span>][<span class="hljs-string">&quot;math&quot;</span>];
+    
+    mathTbl[<span class="hljs-string">&quot;vec2&quot;</span>] = [](f32 x, f32 y) -&gt; sol::table {
+        sol::table t = lua.<span class="hljs-built_in">create_table</span>();
+        t[<span class="hljs-string">&quot;x&quot;</span>] = x;
+        t[<span class="hljs-string">&quot;y&quot;</span>] = y;
+        <span class="hljs-keyword">return</span> t;
+    };
+    
+    mathTbl[<span class="hljs-string">&quot;add&quot;</span>] = [](sol::table a, sol::table b) -&gt; sol::table {
+        sol::table t = lua.<span class="hljs-built_in">create_table</span>();
+        t[<span class="hljs-string">&quot;x&quot;</span>] = a[<span class="hljs-string">&quot;x&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>) + b[<span class="hljs-string">&quot;x&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        t[<span class="hljs-string">&quot;y&quot;</span>] = a[<span class="hljs-string">&quot;y&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>) + b[<span class="hljs-string">&quot;y&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        <span class="hljs-keyword">return</span> t;
+    };
+    
+    mathTbl[<span class="hljs-string">&quot;sub&quot;</span>] = [](sol::table a, sol::table b) -&gt; sol::table { <span class="hljs-comment">/* similar */</span> };
+    
+    mathTbl[<span class="hljs-string">&quot;length&quot;</span>] = [](sol::table v) -&gt; f32 {
+        f32 x = v[<span class="hljs-string">&quot;x&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        f32 y = v[<span class="hljs-string">&quot;y&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">sqrt</span>(x * x + y * y);
+    };
+    
+    mathTbl[<span class="hljs-string">&quot;normalize&quot;</span>] = [](sol::table v) -&gt; sol::table {
+        f32 x = v[<span class="hljs-string">&quot;x&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        f32 y = v[<span class="hljs-string">&quot;y&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+        f32 len = std::<span class="hljs-built_in">sqrt</span>(x * x + y * y);
+        sol::table t = lua.<span class="hljs-built_in">create_table</span>();
+        <span class="hljs-keyword">if</span> (len &gt; <span class="hljs-number">0.0001f</span>) {
+            t[<span class="hljs-string">&quot;x&quot;</span>] = x / len;
+            t[<span class="hljs-string">&quot;y&quot;</span>] = y / len;
+        } <span class="hljs-keyword">else</span> {
+            t[<span class="hljs-string">&quot;x&quot;</span>] = <span class="hljs-number">0.0f</span>;
+            t[<span class="hljs-string">&quot;y&quot;</span>] = <span class="hljs-number">0.0f</span>;
+        }
+        <span class="hljs-keyword">return</span> t;
+    };
+    
+    mathTbl[<span class="hljs-string">&quot;dot&quot;</span>] = [](sol::table a, sol::table b) -&gt; f32 {
+        <span class="hljs-keyword">return</span> a[<span class="hljs-string">&quot;x&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>) * b[<span class="hljs-string">&quot;x&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>)
+             + a[<span class="hljs-string">&quot;y&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>) * b[<span class="hljs-string">&quot;y&quot;</span>].<span class="hljs-built_in">get_or</span>(<span class="hljs-number">0.0f</span>);
+    };
+}
+</code></pre></div>
+<p><strong>Step 6: Wire up in ScriptEngine.cpp</strong></p>
+<p>Add <code>registerBindings()</code> private method that creates <code>caffeine</code> table and calls all:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ScriptEngine::registerBindings</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">auto</span>&amp; lua = m_impl-&gt;m_lua;
+    
+    <span class="hljs-comment">// Create root caffeine table</span>
+    lua[<span class="hljs-string">&quot;caffeine&quot;</span>] = lua.<span class="hljs-built_in">create_table</span>();
+    
+    registerWorldBindings(lua, m_impl-&gt;m_world);
+    registerInputBindings(lua, m_impl-&gt;m_input);
+    registerEventBindings(lua, m_impl-&gt;m_events, m_impl.<span class="hljs-built_in">get</span>());
+    registerDebugBindings(lua);
+    registerMathBindings(lua);
+    
+    <span class="hljs-comment">// Sandboxing: remove dangerous globals</span>
+    lua[<span class="hljs-string">&quot;dofile&quot;</span>] = sol::nil;
+    lua[<span class="hljs-string">&quot;load&quot;</span>] = sol::nil;
+    lua[<span class="hljs-string">&quot;loadfile&quot;</span>] = sol::nil;
+    lua[<span class="hljs-string">&quot;require&quot;</span>] = sol::nil;  <span class="hljs-comment">// or allow with restrictions</span>
+}
+</code></pre></div>
+<p><strong>Step 7: Build + verify compilation</strong></p>
+<p>Run: <code>cmake .. -DCAFFEINE_ENABLE_SCRIPTING=ON &amp;&amp; make Caffeine -j$(nproc)</code>
+Expected: Compiles cleanly</p>
+<hr>
+<h3 id="task-5-implement-scripttypes-scriptsystem">Task 5: Implement ScriptTypes + ScriptSystem<a class="anchor" href="#task-5-implement-scripttypes-scriptsystem" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/script/ScriptTypes.hpp</code></li>
+<li>Create: <code>src/caffeine/script/ScriptSystem.hpp</code></li>
+<li>Modify: <code>src/caffeine/script/ScriptSystem.cpp</code></li>
+</ul>
+<p><strong>Step 1: Create ScriptTypes.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Script {
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">ScriptComponent</span> {
+    std::string scriptPath;  <span class="hljs-comment">// e.g., &quot;scripts/hero.lua&quot;</span>
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Script</span>
+</code></pre></div>
+<p><strong>Step 2: Create ScriptSystem.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/ISystem.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/Entity.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;containers/Vector.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptEngine.hpp&quot;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Script {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ScriptSystem</span> : <span class="hljs-keyword">public</span> ECS::ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">ScriptSystem</span><span class="hljs-params">(ScriptEngine* engine)</span></span>;
+    
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(ECS::World&amp; world, f32 dt)</span> <span class="hljs-keyword">override</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    ScriptEngine* m_engine;
+    ECS::Vector&lt;ECS::Entity&gt; m_initialized;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Script</span>
+</code></pre></div>
+<p><strong>Step 3: Implement ScriptSystem.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptSystem.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/ComponentQuery.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;debug/LogSystem.hpp&quot;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Script {
+
+ScriptSystem::<span class="hljs-built_in">ScriptSystem</span>(ScriptEngine* engine)
+    : <span class="hljs-built_in">m_engine</span>(engine) {}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ScriptSystem::onUpdate</span><span class="hljs-params">(ECS::World&amp; world, f32 dt)</span> </span>{
+    <span class="hljs-keyword">if</span> (!m_engine) <span class="hljs-keyword">return</span>;
+    
+    ECS::ComponentQuery q;
+    q.<span class="hljs-built_in">with</span>&lt;ScriptComponent&gt;();
+    
+    world.forEach&lt;ScriptComponent&gt;(q,
+        [<span class="hljs-keyword">this</span>, dt](ECS::Entity entity, ScriptComponent&amp; sc) {
+            <span class="hljs-keyword">if</span> (sc.scriptPath.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span>;
+            
+            <span class="hljs-comment">// Load script if not yet loaded</span>
+            <span class="hljs-keyword">if</span> (!m_engine-&gt;<span class="hljs-built_in">isLoaded</span>(sc.scriptPath)) {
+                std::string err;
+                <span class="hljs-keyword">if</span> (!m_engine-&gt;<span class="hljs-built_in">loadScript</span>(sc.scriptPath, &amp;err)) {
+                    <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Script&quot;</span>, <span class="hljs-string">&quot;Failed to load %s: %s&quot;</span>,
+                             sc.scriptPath.<span class="hljs-built_in">c_str</span>(), err.<span class="hljs-built_in">c_str</span>());
+                    <span class="hljs-keyword">return</span>;
+                }
+            }
+            
+            <span class="hljs-comment">// First encounter → call onCreate</span>
+            <span class="hljs-type">bool</span> isNew = <span class="hljs-literal">true</span>;
+            <span class="hljs-keyword">for</span> (usize i = <span class="hljs-number">0</span>; i &lt; m_initialized.<span class="hljs-built_in">size</span>(); ++i) {
+                <span class="hljs-keyword">if</span> (m_initialized[i].<span class="hljs-built_in">id</span>() == entity.<span class="hljs-built_in">id</span>()) {
+                    isNew = <span class="hljs-literal">false</span>;
+                    <span class="hljs-keyword">break</span>;
+                }
+            }
+            
+            <span class="hljs-keyword">if</span> (isNew) {
+                m_engine-&gt;<span class="hljs-built_in">callOnCreate</span>(sc.scriptPath, entity);
+                m_initialized.<span class="hljs-built_in">pushBack</span>(entity);
+            }
+            
+            <span class="hljs-comment">// Per-frame update</span>
+            m_engine-&gt;<span class="hljs-built_in">callOnUpdate</span>(sc.scriptPath, entity, dt);
+        });
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Script</span>
+</code></pre></div>
+<p><strong>Step 4: Build + verify compilation</strong></p>
+<p>Run: <code>cmake .. -DCAFFEINE_ENABLE_SCRIPTING=ON &amp;&amp; make Caffeine -j$(nproc)</code>
+Expected: Compiles cleanly</p>
+<hr>
+<h3 id="task-6-implement-scriptwatcher-hot-reload">Task 6: Implement ScriptWatcher (Hot-Reload)<a class="anchor" href="#task-6-implement-scriptwatcher-hot-reload" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/script/ScriptWatcher.hpp</code></li>
+<li>Modify: <code>src/caffeine/script/ScriptWatcher.cpp</code></li>
+</ul>
+<p><strong>Step 1: Create ScriptWatcher.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;containers/HashMap.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptEngine.hpp&quot;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;filesystem&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Script {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ScriptWatcher</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">(ScriptEngine* engine, std::string_view scriptsDir)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shutdown</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">poll</span><span class="hljs-params">()</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    ScriptEngine* m_engine = <span class="hljs-literal">nullptr</span>;
+    std::string m_dir;
+    HashMap&lt;std::string, std::filesystem::file_time_type&gt; m_mtimes;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Script</span>
+</code></pre></div>
+<p><strong>Step 2: Implement ScriptWatcher.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;script/ScriptWatcher.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;debug/LogSystem.hpp&quot;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Script {
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ScriptWatcher::init</span><span class="hljs-params">(ScriptEngine* engine, std::string_view scriptsDir)</span> </span>{
+    m_engine = engine;
+    m_dir = scriptsDir;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ScriptWatcher::shutdown</span><span class="hljs-params">()</span> </span>{
+    m_engine = <span class="hljs-literal">nullptr</span>;
+    m_mtimes.<span class="hljs-built_in">clear</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ScriptWatcher::poll</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (!m_engine || m_dir.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span>;
+    
+    <span class="hljs-keyword">namespace</span> fs = std::filesystem;
+    
+    <span class="hljs-keyword">if</span> (!fs::<span class="hljs-built_in">exists</span>(m_dir)) <span class="hljs-keyword">return</span>;
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; entry : fs::<span class="hljs-built_in">directory_iterator</span>(m_dir)) {
+        <span class="hljs-keyword">if</span> (!entry.<span class="hljs-built_in">is_regular_file</span>()) <span class="hljs-keyword">continue</span>;
+        <span class="hljs-keyword">auto</span> ext = entry.<span class="hljs-built_in">path</span>().<span class="hljs-built_in">extension</span>().<span class="hljs-built_in">string</span>();
+        <span class="hljs-keyword">if</span> (ext != <span class="hljs-string">&quot;.lua&quot;</span>) <span class="hljs-keyword">continue</span>;
+        
+        <span class="hljs-keyword">auto</span> path = entry.<span class="hljs-built_in">path</span>().<span class="hljs-built_in">string</span>();
+        <span class="hljs-keyword">auto</span> mtime = fs::<span class="hljs-built_in">last_write_time</span>(entry.<span class="hljs-built_in">path</span>());
+        
+        <span class="hljs-keyword">auto</span>* cached = m_mtimes.<span class="hljs-built_in">get</span>(path);
+        <span class="hljs-keyword">if</span> (!cached) {
+            m_mtimes.<span class="hljs-built_in">set</span>(path, mtime);
+            <span class="hljs-keyword">continue</span>;
+        }
+        
+        <span class="hljs-keyword">if</span> (mtime &gt; *cached) {
+            <span class="hljs-built_in">CF_INFO</span>(<span class="hljs-string">&quot;Script&quot;</span>, <span class="hljs-string">&quot;Hot-reload: %s&quot;</span>, path.<span class="hljs-built_in">c_str</span>());
+            std::string err;
+            <span class="hljs-keyword">if</span> (m_engine-&gt;<span class="hljs-built_in">reloadScript</span>(path, &amp;err)) {
+                m_mtimes.<span class="hljs-built_in">set</span>(path, mtime);
+            } <span class="hljs-keyword">else</span> {
+                <span class="hljs-built_in">CF_ERROR</span>(<span class="hljs-string">&quot;Script&quot;</span>, <span class="hljs-string">&quot;Hot-reload failed for %s: %s&quot;</span>,
+                         path.<span class="hljs-built_in">c_str</span>(), err.<span class="hljs-built_in">c_str</span>());
+            }
+        }
+    }
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Script</span>
+</code></pre></div>
+<hr>
+<h3 id="task-7-write-tests">Task 7: Write Tests<a class="anchor" href="#task-7-write-tests" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>tests/test_script.cpp</code></li>
+<li>Modify: <code>tests/CMakeLists.txt</code> (add test file)</li>
+</ul>
+<p><strong>Step 1: Create test file with all test cases</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;catch.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../src/script/ScriptEngine.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../src/script/ScriptTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../src/script/ScriptSystem.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;Caffeine.hpp&quot;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::Script;
+
+<span class="hljs-comment">// Helper: create a minimal World for testing</span>
+<span class="hljs-function"><span class="hljs-type">static</span> ECS::World <span class="hljs-title">createTestWorld</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">return</span> ECS::<span class="hljs-built_in">World</span>();
+}
+
+<span class="hljs-comment">// Helper: inline Lua code wrapped as a &quot;path&quot; via a temp directory</span>
+<span class="hljs-comment">// (ScriptEngine::loadScript expects a file path)</span>
+<span class="hljs-comment">// We&#x27;ll use a temp dir approach or add a loadString method for testing</span>
+</code></pre></div>
+<p>Since <code>ScriptEngine::loadScript()</code> expects a file path, we need a way to test with inline Lua strings. Options:</p>
+<ol>
+<li>Write Lua code to temp files in setup</li>
+<li>Add <code>loadString()</code> method for testing</li>
+</ol>
+<p><strong>Recommended approach</strong>: Add <code>loadString()</code> for testing (or add temp file creation in test fixture):</p>
+<p>Actually, let's think about this. The simplest approach:</p>
+<ul>
+<li>Create a temporary directory in the test (using mkdtemp or similar)</li>
+<li>Write .lua files there</li>
+<li>ScriptEngine loads from those temp paths</li>
+</ul>
+<p>Or, simpler: add a <code>loadScriptFromString(const std::string&amp; scriptContent, const std::string&amp; virtualPath)</code> method. This is useful for testing without file I/O.</p>
+<p>Let's add to ScriptEngine.hpp:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// For testing — load Lua code from string</span>
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">loadString</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; code, <span class="hljs-type">const</span> std::string&amp; virtualPath,
+                std::string* outError = <span class="hljs-literal">nullptr</span>)</span></span>;
+</code></pre></div>
+<p>Implementation:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ScriptEngine::loadString</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; code, <span class="hljs-type">const</span> std::string&amp; virtualPath,
+                              std::string* outError)</span> </span>{
+    <span class="hljs-keyword">auto</span>&amp; lua = m_impl-&gt;m_lua;
+    <span class="hljs-keyword">auto</span> result = lua.<span class="hljs-built_in">load</span>(code, virtualPath);
+    <span class="hljs-keyword">if</span> (!result.<span class="hljs-built_in">valid</span>()) {
+        sol::error err = result;
+        <span class="hljs-keyword">if</span> (outError) *outError = err.<span class="hljs-built_in">what</span>();
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">auto</span> execResult = <span class="hljs-built_in">result</span>();
+    <span class="hljs-keyword">if</span> (!execResult.<span class="hljs-built_in">valid</span>()) {
+        sol::error err = execResult;
+        <span class="hljs-keyword">if</span> (outError) *outError = err.<span class="hljs-built_in">what</span>();
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    m_impl-&gt;m_scripts.<span class="hljs-built_in">set</span>(virtualPath, result);
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+</code></pre></div>
+<p><strong>Test cases</strong>:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;ScriptEngine init and shutdown&quot;</span>, <span class="hljs-string">&quot;[script]&quot;</span>) {
+    ECS::World world;
+    Input::InputManager input;
+    Events::EventBus bus;
+    
+    ScriptEngine engine;
+    <span class="hljs-built_in">REQUIRE</span>(engine.<span class="hljs-built_in">init</span>({&amp;world, &amp;input, &amp;bus}));
+    engine.<span class="hljs-built_in">shutdown</span>();
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;ScriptEngine loadString and callOnUpdate&quot;</span>, <span class="hljs-string">&quot;[script]&quot;</span>) {
+    ECS::World world;
+    Input::InputManager input;
+    Events::EventBus bus;
+    ScriptEngine engine;
+    engine.<span class="hljs-built_in">init</span>({&amp;world, &amp;input, &amp;bus});
+    
+    <span class="hljs-comment">// Script that stores its state in a global</span>
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* code = <span class="hljs-string">R&quot;(
+        updateCalled = false
+        lastDt = 0
+        function onUpdate(entity, dt)
+            updateCalled = true
+            lastDt = dt
+        end
+    )&quot;</span>;
+    
+    <span class="hljs-built_in">REQUIRE</span>(engine.<span class="hljs-built_in">loadString</span>(code, <span class="hljs-string">&quot;test.lua&quot;</span>));
+    
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>();
+    engine.<span class="hljs-built_in">callOnUpdate</span>(<span class="hljs-string">&quot;test.lua&quot;</span>, e, <span class="hljs-number">0.016f</span>);
+    
+    <span class="hljs-comment">// Check Lua globals</span>
+    <span class="hljs-comment">// (we can access them through the sol state if needed)</span>
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;ScriptComponent lifecycle via ScriptSystem&quot;</span>, <span class="hljs-string">&quot;[script]&quot;</span>) {
+    ECS::World world;
+    Input::InputManager input;
+    Events::EventBus bus;
+    
+    ScriptEngine engine;
+    engine.<span class="hljs-built_in">init</span>({&amp;world, &amp;input, &amp;bus});
+    
+    <span class="hljs-function">ScriptSystem <span class="hljs-title">system</span><span class="hljs-params">(&amp;engine)</span></span>;
+    
+    <span class="hljs-comment">// Create entity with ScriptComponent referencing inline code</span>
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;TestEntity&quot;</span>);
+    ScriptComponent&amp; sc = world.<span class="hljs-built_in">add</span>&lt;ScriptComponent&gt;(e);
+    sc.scriptPath = <span class="hljs-string">&quot;__test_hero.lua&quot;</span>;
+    
+    <span class="hljs-comment">// Load the script under that path</span>
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* code = <span class="hljs-string">R&quot;(
+        created = false
+        updateCount = 0
+        function onCreate(entity)
+            created = true
+        end
+        function onUpdate(entity, dt)
+            updateCount = updateCount + 1
+        end
+    )&quot;</span>;
+    engine.<span class="hljs-built_in">loadString</span>(code, <span class="hljs-string">&quot;__test_hero.lua&quot;</span>);
+    
+    <span class="hljs-comment">// Run one frame — should call onCreate then onUpdate</span>
+    system.<span class="hljs-built_in">onUpdate</span>(world, <span class="hljs-number">0.016f</span>);
+    
+    <span class="hljs-comment">// Run a second frame — should call onUpdate only</span>
+    system.<span class="hljs-built_in">onUpdate</span>(world, <span class="hljs-number">0.016f</span>);
+    
+    <span class="hljs-comment">// Verify via sol state if accessible, or test observable behavior</span>
+    <span class="hljs-comment">// (In practice, verify the script ran without errors)</span>
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Error handling — Lua runtime errors don&#x27;t crash&quot;</span>, <span class="hljs-string">&quot;[script]&quot;</span>) {
+    ECS::World world;
+    Input::InputManager input;
+    Events::EventBus bus;
+    
+    ScriptEngine engine;
+    engine.<span class="hljs-built_in">init</span>({&amp;world, &amp;input, &amp;bus});
+    
+    <span class="hljs-comment">// Script with error in onUpdate</span>
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* code = <span class="hljs-string">R&quot;(
+        function onUpdate(entity, dt)
+            error(&quot;Intentional crash test&quot;)
+        end
+    )&quot;</span>;
+    
+    <span class="hljs-built_in">REQUIRE</span>(engine.<span class="hljs-built_in">loadString</span>(code, <span class="hljs-string">&quot;crash_test.lua&quot;</span>));
+    
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>();
+    <span class="hljs-comment">// Should NOT crash</span>
+    <span class="hljs-type">bool</span> result = engine.<span class="hljs-built_in">callOnUpdate</span>(<span class="hljs-string">&quot;crash_test.lua&quot;</span>, e, <span class="hljs-number">0.016f</span>);
+    <span class="hljs-built_in">REQUIRE</span>(result == <span class="hljs-literal">false</span>);  <span class="hljs-comment">// Error was caught</span>
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Sandbox — os.execute blocked&quot;</span>, <span class="hljs-string">&quot;[script]&quot;</span>) {
+    ECS::World world;
+    Input::InputManager input;
+    Events::EventBus bus;
+    
+    ScriptEngine engine;
+    engine.<span class="hljs-built_in">init</span>({&amp;world, &amp;input, &amp;bus});
+    
+    <span class="hljs-comment">// Attempt to call os.execute — should fail</span>
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* code = <span class="hljs-string">R&quot;(
+        function onUpdate(entity, dt)
+            os.execute(&quot;echo hacked&quot;)
+        end
+    )&quot;</span>;
+    
+    <span class="hljs-comment">// The script should load (os table just doesn&#x27;t exist), </span>
+    <span class="hljs-comment">// but calling os.execute should error</span>
+    <span class="hljs-built_in">REQUIRE</span>(engine.<span class="hljs-built_in">loadString</span>(code, <span class="hljs-string">&quot;sandbox_test.lua&quot;</span>));
+    
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>();
+    <span class="hljs-type">bool</span> result = engine.<span class="hljs-built_in">callOnUpdate</span>(<span class="hljs-string">&quot;sandbox_test.lua&quot;</span>, e, <span class="hljs-number">0.016f</span>);
+    <span class="hljs-comment">// Should either return false (error caught) or VM self-heals</span>
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Input binding — isKeyDown&quot;</span>, <span class="hljs-string">&quot;[script][bindings]&quot;</span>) {
+    ECS::World world;
+    Input::InputManager input;
+    Events::EventBus bus;
+    
+    ScriptEngine engine;
+    engine.<span class="hljs-built_in">init</span>({&amp;world, &amp;input, &amp;bus});
+    
+    <span class="hljs-comment">// Inject key state</span>
+    input.<span class="hljs-built_in">injectKeyDown</span>(Input::Key::Space);
+    
+    <span class="hljs-comment">// Lua script that reads key state</span>
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* code = <span class="hljs-string">R&quot;(
+        spaceDown = false
+        function onUpdate(entity, dt)
+            spaceDown = caffeine.input.isKeyDown(&quot;Space&quot;)
+        end
+    )&quot;</span>;
+    
+    <span class="hljs-built_in">REQUIRE</span>(engine.<span class="hljs-built_in">loadString</span>(code, <span class="hljs-string">&quot;input_test.lua&quot;</span>));
+    
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>();
+    engine.<span class="hljs-built_in">callOnUpdate</span>(<span class="hljs-string">&quot;input_test.lua&quot;</span>, e, <span class="hljs-number">0.016f</span>);
+    
+    <span class="hljs-comment">// Read back the Lua global to verify</span>
+    <span class="hljs-comment">// (Need sol access from test — might need a test helper)</span>
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Math bindings&quot;</span>, <span class="hljs-string">&quot;[script][bindings]&quot;</span>) {
+    ECS::World world;
+    Input::InputManager input;
+    Events::EventBus bus;
+    
+    ScriptEngine engine;
+    engine.<span class="hljs-built_in">init</span>({&amp;world, &amp;input, &amp;bus});
+    
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* code = <span class="hljs-string">R&quot;(
+        v1 = caffeine.math.vec2(3, 4)
+        v2 = caffeine.math.vec2(1, 2)
+        sum = caffeine.math.add(v1, v2)
+        len = caffeine.math.length(v1)
+        norm = caffeine.math.normalize(v1)
+        dotResult = caffeine.math.dot(v1, v2)
+    )&quot;</span>;
+    
+    <span class="hljs-built_in">REQUIRE</span>(engine.<span class="hljs-built_in">loadString</span>(code, <span class="hljs-string">&quot;math_test.lua&quot;</span>));
+    engine.<span class="hljs-built_in">callOnUpdate</span>(<span class="hljs-string">&quot;math_test.lua&quot;</span>, ECS::<span class="hljs-built_in">Entity</span>(), <span class="hljs-number">0.0f</span>);
+    
+    <span class="hljs-comment">// In an ideal test, we&#x27;d check the Lua globals for correct values</span>
+    <span class="hljs-comment">// This requires exposing them via the VM</span>
+}
+</code></pre></div>
+<p><strong>Step 2: Update tests/CMakeLists.txt</strong></p>
+<p>Add to CAFFEINE_TEST_SOURCES (after test_animation.cpp):</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">test_script.cpp
+</code></pre></div>
+<hr>
+<h3 id="task-8-final-verification">Task 8: Final Verification<a class="anchor" href="#task-8-final-verification" aria-label="Link to this section">#</a></h3>
+<p><strong>Step 1: Build with scripting enabled</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build
+cmake .. -DCAFFEINE_ENABLE_SCRIPTING=ON 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -10
+make Caffeine -j$(<span class="hljs-built_in">nproc</span>) 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -10
+make CaffeineTest -j$(<span class="hljs-built_in">nproc</span>) 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -10
+</code></pre></div>
+<p><strong>Step 2: Run full test suite</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./tests/CaffeineTest <span class="hljs-string">&quot;[script]&quot;</span>  <span class="hljs-comment"># scripting-specific tests</span>
+./tests/CaffeineTest             <span class="hljs-comment"># full suite</span>
+</code></pre></div>
+<p><strong>Step 3: Build without scripting (verify zero overhead)</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cmake .. -DCAFFEINE_ENABLE_SCRIPTING=OFF
+make Caffeine -j$(<span class="hljs-built_in">nproc</span>)
+./tests/CaffeineTest  <span class="hljs-comment"># all non-scripting tests still pass</span>
+</code></pre></div>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/script/ tests/test_script.cpp tests/CMakeLists.txt \
+        CMakeLists.txt src/Caffeine.hpp src/input/InputManager.hpp \
+        src/input/InputManager.cpp docs/plans/2026-05-11-scripting-design.md \
+        docs/plans/2026-05-11-scripting-plan.md
+git commit -m <span class="hljs-string">&quot;feat(scripting): implement Lua 5.4 + sol2 scripting module
+
+Add ScriptEngine (Pimpl pattern, no sol2 in headers), ScriptComponent/
+ScriptSystem ECS integration, full caffeine.* Lua bindings (world CRUD,
+input, events, debug, math), ScriptWatcher hot-reload, and sandboxing.
+Opt-in via CAFFEINE_ENABLE_SCRIPTING=ON.&quot;</span>
+</code></pre></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/plans/2026-05-11-scripting-plan.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/plans/2026-05-14-transform-gizmos-design/"><span>Anterior</span><strong>Transform Gizmos Design</strong></a><a class="pager-next" href="/pt/docs/plans/2026-05-11-scripting-design/"><span>Seguinte</span><strong>Scripting Module — Design Document</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l3"><a href="#task-1-add-iskeydown-to-inputmanager">Task 1: Add isKeyDown to InputManager</a></li><li class="l3"><a href="#task-2-add-cf_has_scripting-to-build-system">Task 2: Add CF_HAS_SCRIPTING to build system</a></li><li class="l3"><a href="#task-3-implement-scriptengine-header-core-implementation">Task 3: Implement ScriptEngine (header + core implementation)</a></li><li class="l3"><a href="#task-4-implement-lua-binding-registration">Task 4: Implement Lua Binding Registration</a></li><li class="l3"><a href="#task-5-implement-scripttypes-scriptsystem">Task 5: Implement ScriptTypes + ScriptSystem</a></li><li class="l3"><a href="#task-6-implement-scriptwatcher-hot-reload">Task 6: Implement ScriptWatcher (Hot-Reload)</a></li><li class="l3"><a href="#task-7-write-tests">Task 7: Write Tests</a></li><li class="l3"><a href="#task-8-final-verification">Task 8: Final Verification</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

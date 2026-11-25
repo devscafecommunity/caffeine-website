@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capacidades de runtime (RFC) — lacunas genéricas · Caffeine</title>
+<meta name="description" content="Decisão: Aprovar como P2 .">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Capacidades de runtime (RFC) — lacunas genéricas · Caffeine">
+<meta property="og:description" content="Decisão: Aprovar como P2 .">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab active" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Projeto"><div class="nav-title">Projeto</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Versões</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/pt/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/pt/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Planos</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/2026-10-19-dryad-node-scripts/">Dryad e scripts por nodes</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-forward-pbr-post-session/">Sessão 2026-10-02 — Forward PBR, reflexos, pós-processamento GPU</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-editor-backlog-phase-b/">Editor backlog — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-viewport-rendering-quality-session/">Sessão 2026-09-22 — Viewport 3D, Qualidade Visual e Performance</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-phong-gpu-handles-session/">Sessão 2026-09-22 — Phong GPU, Handles e Sombras</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap de Sistemas Fundamentais</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — 3D de Alto Volume</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - ANÁLISE COMPLETA &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP⁻¹ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-hot-reload-design/">Hot-Reload de Assets — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir open"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/">Marcos</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link active" href="/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/" aria-current="page">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/archive/">Arquivo</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Análise</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/pt/docs/HISTORY/">História do desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/ECOSYSTEM_WORKFLOW/">Fluxo unificado de assets</a></li><li><a class="nav-link" href="/pt/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/pt/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/pt/docs/MASTER/">Índice master</a></li><li><a class="nav-link" href="/pt/docs/books/">Livros e PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/project/">Projeto</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Capacidades de runtime (RFC) — lacunas genéricas</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+> **Âmbito:** Caffeine runtime + core (Doppio fora de scope)  
+> **Origem:** feedback de migração de jogo 2D complexo; refinado com princípio **engine neutra**
+<hr>
+<h2 id="princípios-obrigatórios-em-todas-as-entregas">Princípios (obrigatórios em todas as entregas)<a class="anchor" href="#princípios-obrigatórios-em-todas-as-entregas" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><strong>Opcional e modular</strong> — cada capacidade pode ser ignorada por projetos que não precisam; sem “taxa” obrigatória em startup ou em APIs core.</li>
+<li><strong>Sem viés de produto</strong> — nada nomeado ou desenhado para um título, provedor de mapas, ou género; extensões via componentes, serviços e Lua, não hardcode de domínio.</li>
+<li><strong>Integração seamless</strong> — reutilizar ECS, <code>UISystem</code>, input, render RHI, assets e docs existentes; evitar segundo pipeline paralelo (ex.: UI só ImGui no shipping sem caminho RHI).</li>
+<li><strong>Editor vs runtime</strong> — extrair do Doppio apenas o que for reutilizável; contratos documentados em <code>docs/scripting/runtime-apis.md</code>.</li>
+<li><strong>Runtime native ≠ editor plugin</strong> — <code>PluginAPI</code> / <code>.so</code> do IDE permanece separado de módulos nativos carregados em play mode.</li>
+</ol>
+<hr>
+<h2 id="estado-atual-referência-rápida">Estado atual (referência rápida)<a class="anchor" href="#estado-atual-referência-rápida" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Já existe</th>
+<th>Falta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UI retained</td>
+<td><code>UISystem</code>, componentes, <code>hitTest</code>, runtime desenha widgets</td>
+<td>Lua/HUD pipeline, contrato play-mode, render fora de ImGui (meta longo prazo)</td>
+</tr>
+<tr>
+<td>Picking</td>
+<td>Editor (<code>pickEntity2D</code>, raycast), UI <code>hitTest</code>, colisão 2D</td>
+<td>Serviço unificado runtime + Lua</td>
+</tr>
+<tr>
+<td>Spatial</td>
+<td><code>Octree</code> 3D</td>
+<td>Serviço 2D opcional, LOD 2D política genérica</td>
+</tr>
+<tr>
+<td>Scripting</td>
+<td><code>loadScript</code>, search roots</td>
+<td><code>require</code>, <code>AssetText</code>, <code>fixedUpdate</code> / tempo</td>
+</tr>
+<tr>
+<td>Mapas</td>
+<td>Terrain 3D, tilemap editor (grelha)</td>
+<td>Componente mapa <strong>genérico</strong> (ver §2)</td>
+</tr>
+<tr>
+<td>Overlays 2D</td>
+<td>Debug/gizmos editor</td>
+<td>Batch vectorial play mode + API Lua</td>
+</tr>
+<tr>
+<td>Native play</td>
+<td>—</td>
+<td><code>dlopen</code> + contrato C + bridge Lua (P2)</td>
+</tr>
+<tr>
+<td>Game loop helpers</td>
+<td><code>onUpdate</code></td>
+<td>Scene stack / <code>timeScale</code> fino (opcional)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="1-módulos-nativos-no-runtime">1. Módulos nativos no runtime<a class="anchor" href="#1-módulos-nativos-no-runtime" aria-label="Link to this section">#</a></h2>
+<p><strong>Decisão:</strong> Aprovar como <strong>P2</strong>.</p>
+<ul>
+<li>Carregar bibliotecas do projeto (<code>native/</code> ou path no <code>project.caffeine</code>) com ciclo de vida ligado ao play mode.</li>
+<li>Contrato C estável documentado; ponte Lua genérica (<code>caffeine.native.call</code> ou equivalente), sem namespaces por jogo.</li>
+<li>Documentar threading (main thread vs worker) e ABI/CI desde o início.</li>
+</ul>
+<p><strong>Não fazer:</strong> misturar com plugins do Doppio.</p>
+<p><strong>Pastas sugeridas:</strong> <code>src/caffeine/script</code> (bridge), <code>docs/scripting/native-modules.md</code>.</p>
+<hr>
+<h2 id="2-mapas-2d-componente-genérico-não-mapa-da-vida-real">2. Mapas 2D — componente genérico (não mapa “da vida real”)<a class="anchor" href="#2-mapas-2d-componente-genérico-não-mapa-da-vida-real" aria-label="Link to this section">#</a></h2>
+<p><strong>Decisão:</strong> <strong>Não</strong> implementar MapView Mercator, HTTP tiles, OSM, ou pipeline georreferenciado fixo — isso está <strong>fora de scope</strong> da engine e enviesa terceiros.</p>
+<p><strong>Em vez disso:</strong></p>
+<ul>
+<li>Componente e/ou serviço <strong>genérico</strong> (ex. <code>MapLayer</code>, <code>TiledSurface2D</code>) para organizar <strong>camadas de conteúdo 2D em espaço mundo</strong> com:
+<ul>
+<li>bounds / região lógica (coordenadas definidas pelo projeto, não WGS84 obrigatório);</li>
+<li>hooks para <strong>carregamento assíncrono de chunks</strong> (callback C++/Lua: “preciso desta região” → utilizador devolve textura/mesh/dados);</li>
+<li>integração opcional com <strong>LOD</strong> e <strong>spatial queries</strong> (§6) quando o projeto quiser escala.</li>
+</ul>
+</li>
+<li>Zoom/pan como <strong>comportamento de câmara 2D</strong> ou helper no componente, sem assumir projeção específica.</li>
+<li>Qualquer HTTP, lat/lon, ou raster mundial fica <strong>100% no jogo/plugin do utilizador</strong>, usando os hooks acima.</li>
+</ul>
+<p><strong>Beneficia:</strong> estratégia, overworld, dashboards — cada um com o seu sistema de coordenadas e fonte de dados.</p>
+<p><strong>Prioridade:</strong> <strong>P1</strong> (depois de overlays + picking + contrato UI), não bloqueante para P0.</p>
+<p><strong>Pastas sugeridas:</strong> <code>src/map/</code> (leve, sem deps de rede), ou extensão ECS em <code>src/ecs/components/</code>.</p>
+<hr>
+<h2 id="3-overlays-vectoriais-2d-em-play-mode">3. Overlays vectoriais 2D em play mode<a class="anchor" href="#3-overlays-vectoriais-2d-em-play-mode" aria-label="Link to this section">#</a></h2>
+<p><strong>Decisão:</strong> Aprovar — <strong>P0</strong>.</p>
+<ul>
+<li>Camada <code>Overlay2D</code> (batch) no forward 2D: linhas, arcos, círculos, polígonos, trails; cor/alpha; espaço world ou screen.</li>
+<li>API Lua: <code>caffeine.draw2d.*</code> (nomes finais na doc).</li>
+<li>Ordem de desenho documentada relativamente a sprites e UI.</li>
+<li>Implementar sobre <strong>RHI/render 2D</strong>, não depender de ImGui <code>ImDrawList</code> no runtime de produção (ImGui pode permanecer no editor/preview).</li>
+</ul>
+<p><strong>Pastas:</strong> <code>src/caffeine/render/Overlay2D.hpp</code> / <code>.cpp</code>, bindings em <code>src/caffeine/script</code>.</p>
+<hr>
+<h2 id="4-ui-de-runtime-retained-mode">4. UI de runtime (retained mode)<a class="anchor" href="#4-ui-de-runtime-retained-mode" aria-label="Link to this section">#</a></h2>
+<p><strong>Decisão:</strong> Aprovar — <strong>P0</strong>, com reserva: <strong>evoluir o que existe</strong>, não reescrever.</p>
+<ul>
+<li>Base: <code>UISystem</code>, <code>UIComponents</code>, <code>UIRenderer::drawWidgets</code>, testes em <code>tests/test_ui.cpp</code>.</li>
+<li>Entregar: contrato play-mode, exposição Lua (criar/ligar widgets ou consumir HUD serializado do Doppio), input routing e foco.</li>
+<li>Documentar relação <code>HudEditorPanel</code> → runtime.</li>
+</ul>
+<p><strong>Pastas:</strong> <code>src/caffeine/ui</code>, <code>docs/scripting/runtime-apis.md</code>.</p>
+<hr>
+<h2 id="5-picking-em-coordenadas-de-mundo">5. Picking em coordenadas de mundo<a class="anchor" href="#5-picking-em-coordenadas-de-mundo" aria-label="Link to this section">#</a></h2>
+<p><strong>Decisão:</strong> Aprovar — <strong>P0</strong> (junto com §3).</p>
+<ul>
+<li>Serviço <code>PickQuery</code>: screen → world → candidatos (entidades, layers registados, callbacks Lua).</li>
+<li>Refatorar lógica útil do editor (<code>SceneViewport</code>) para core reutilizável; runtime não depende do viewport do Doppio.</li>
+<li>Colisão ECS permanece caminho opcional, não o único.</li>
+</ul>
+<p><strong>Pastas:</strong> <code>src/caffeine/scene/PickQuery.hpp</code> ou <code>src/caffeine/input</code>.</p>
+<hr>
+<h2 id="6-escala-marcadores-lod-culling">6. Escala: marcadores, LOD, culling<a class="anchor" href="#6-escala-marcadores-lod-culling" aria-label="Link to this section">#</a></h2>
+<p><strong>Decisão:</strong> Aprovar — <strong>P2</strong> (ativar quando projetos precisarem).</p>
+<ul>
+<li>Política de LOD por distância/zoom <strong>genérica</strong> (sprites / instancing 2D).</li>
+<li>Índice espacial 2D opcional (grid/quadtree) como <strong>serviço</strong>, utilizável por render, picking e §2.</li>
+<li>Reutilizar ideias de <code>Octree</code> onde fizer sentido; não forçar 3D em jogos 2D.</li>
+<li>Budgets documentados (orientação, não limites rígidos no core).</li>
+</ul>
+<p><strong>Pastas:</strong> <code>src/caffeine/spatial</code>, ligação opcional em <code>src/map/</code> e render.</p>
+<hr>
+<h2 id="7-scripting-módulos-lua-e-dados-tabulares">7. Scripting: módulos Lua e dados tabulares<a class="anchor" href="#7-scripting-módulos-lua-e-dados-tabulares" aria-label="Link to this section">#</a></h2>
+<p><strong>Decisão:</strong> Aprovar — <strong>P1</strong>.</p>
+<ul>
+<li><code>package.path</code> alinhado a <code>project.caffeine</code> → <code>scripts/</code> (comportamento <code>require</code> previsível).</li>
+<li><code>AssetText.load</code> (ou equivalente) para JSON/CSV/texto em <code>assets/</code>, cache e hot-reload opcional no editor.</li>
+<li>Não duplicar APIs de asset já existentes; consolidar na doc.</li>
+</ul>
+<p><strong>Pastas:</strong> <code>src/caffeine/script</code>, <code>docs/scripting/</code>.</p>
+<hr>
+<h2 id="8-loop-de-jogo-estados-tempo-e-determinismo">8. Loop de jogo: estados, tempo e determinismo<a class="anchor" href="#8-loop-de-jogo-estados-tempo-e-determinismo" aria-label="Link to this section">#</a></h2>
+<p><strong>Decisão:</strong> Aprovar — <strong>opcional fino</strong>, <strong>P1–P2</strong>.</p>
+<ul>
+<li>Helpers <code>GameState</code> / scene stack (push/pop/pause), independentes de domínio.</li>
+<li>Relógio pausável, <code>timeScale</code>; <code>fixedUpdate(dt)</code> alinhado ao passo de física quando existir timestep fixo.</li>
+<li>Hook de seed/replay para testes — sem impor arquitetura de jogo completa.</li>
+</ul>
+<p><strong>Pastas:</strong> <code>src/caffeine/core</code> ou <code>src/caffeine/runtime</code>, doc em <code>runtime-apis.md</code>.</p>
+<hr>
+<h2 id="priorização-de-implementação-engine">Priorização de implementação (engine)<a class="anchor" href="#priorização-de-implementação-engine" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ordem</th>
+<th>Entrega</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>§5 Picking + §3 Overlay2D</td>
+<td>Mesmo espaço de coordenadas; desbloqueia interação em mapas custom</td>
+</tr>
+<tr>
+<td>2</td>
+<td>§4 Contrato UI play + Lua/HUD</td>
+<td>Sobre <code>UISystem</code> existente</td>
+</tr>
+<tr>
+<td>3</td>
+<td>§7 <code>require</code> + AssetText</td>
+<td>Higiene projetos médios</td>
+</tr>
+<tr>
+<td>4</td>
+<td>§2 Componente mapa genérico</td>
+<td>Hooks async/LOD; <strong>sem</strong> HTTP/Mercator na engine</td>
+</tr>
+<tr>
+<td>5</td>
+<td>§8 Game state / tempo</td>
+<td>Fino, opt-in</td>
+</tr>
+<tr>
+<td>6</td>
+<td>§6 Spatial/LOD + §1 Native</td>
+<td>Quando escala ou sim fora da VM exigir</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="critérios-de-aceitação-transversais">Critérios de aceitação transversais<a class="anchor" href="#critérios-de-aceitação-transversais" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] Projeto mínimo (sprite + script) não linka nem inicializa módulos não usados.</li>
+<li>[x] APIs novas aparecem em <code>docs/scripting/runtime-apis.md</code> com exemplos neutros.</li>
+<li>[x] Testes unitários onde há lógica pura (<code>hitTest</code>, pick, layout, require paths).</li>
+<li>[x] Nenhum provedor externo, URL template, ou tipo de coordenada geográfica hardcoded no core.</li>
+</ul>
+<hr>
+<h2 id="changelog-do-rfc">Changelog do RFC<a class="anchor" href="#changelog-do-rfc" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>2025-10-14:</strong> Consolidação pós-revisão — §2 redefinido (mapa genérico, liberdade do utilizador); §1–8 aprovados com princípios de neutralidade e modularidade.</li>
+<li><strong>2026-10-14:</strong> Phase 1 + Phase 2 implemented. Public patch notes (English): <a href="/pt/docs/releases/runtime-capabilities-patch-notes/">docs/releases/runtime-capabilities-patch-notes.md</a>.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/plans/milestones/engine-runtime-capabilities-rfc.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/plans/milestones/caffeine-studio-ide/"><span>Anterior</span><strong>🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</strong></a><a class="pager-next" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/"><span>Seguinte</span><strong>🔧 Asset Browser (v1)</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#princípios-obrigatórios-em-todas-as-entregas">Princípios (obrigatórios em todas as entregas)</a></li><li class="l2"><a href="#estado-atual-referência-rápida">Estado atual (referência rápida)</a></li><li class="l2"><a href="#1-módulos-nativos-no-runtime">1. Módulos nativos no runtime</a></li><li class="l2"><a href="#2-mapas-2d-componente-genérico-não-mapa-da-vida-real">2. Mapas 2D — componente genérico (não mapa “da vida real”)</a></li><li class="l2"><a href="#3-overlays-vectoriais-2d-em-play-mode">3. Overlays vectoriais 2D em play mode</a></li><li class="l2"><a href="#4-ui-de-runtime-retained-mode">4. UI de runtime (retained mode)</a></li><li class="l2"><a href="#5-picking-em-coordenadas-de-mundo">5. Picking em coordenadas de mundo</a></li><li class="l2"><a href="#6-escala-marcadores-lod-culling">6. Escala: marcadores, LOD, culling</a></li><li class="l2"><a href="#7-scripting-módulos-lua-e-dados-tabulares">7. Scripting: módulos Lua e dados tabulares</a></li><li class="l2"><a href="#8-loop-de-jogo-estados-tempo-e-determinismo">8. Loop de jogo: estados, tempo e determinismo</a></li><li class="l2"><a href="#priorização-de-implementação-engine">Priorização de implementação (engine)</a></li><li class="l2"><a href="#critérios-de-aceitação-transversais">Critérios de aceitação transversais</a></li><li class="l2"><a href="#changelog-do-rfc">Changelog do RFC</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

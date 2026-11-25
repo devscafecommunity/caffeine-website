@@ -251,3 +251,10 @@ outros canais do `.mat` ficam guardados no ficheiro mas ainda não são usados n
 alteração ao shader.
 
 Os ficheiros `.terrain-graph` antigos carregam como antes; os seus slots vazios são preenchidos da próxima vez que aplicar ou colocar.
+
+## Usar num mundo
+
+O [World Composer](world-composition.md) parte de uma receita de terreno: a sua linha `terrain` indica um
+`*.generator.terrain`, o editor faz o bake e as classes da composição leem as suas máscaras (`slope`, `height`,
+`curvature`, `flow`, `wetness`, ...) com os mesmos termos de bioma da tabela acima. O composer acrescenta uma máscara
+própria, `water_distance`, e um rio com `carve` rebaixa o heightfield antes de qualquer classe o ler.

@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🧠 Memory Model — Especificação de Allocators · Caffeine</title>
+<meta name="description" content="A política de memória por trás dos allocators personalizados da engine: o que está implementado hoje, que sistemas injetam allocators e que peças continuam a ser intenção de design.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="🧠 Memory Model — Especificação de Allocators · Caffeine">
+<meta property="og:description" content="A política de memória por trás dos allocators personalizados da engine: o que está implementado hoje, que sistemas injetam allocators e que peças continuam a ser intenção de design.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/memory/memory-model/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/memory/memory-model/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/memory/memory-model/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/memory/memory-model/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab active" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/memory/memory-model/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/memory/memory-model/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Motor"><div class="nav-title">Motor</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Arquitetura</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/architecture/cafpack/">Cafpack — Camada Unificada de Assets</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Núcleo</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/pt/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/pt/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/pt/docs/core/types/">Módulo Core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/ecs/">ECS e cenas</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/pt/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/pt/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Matemática</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/pt/docs/math/vectors/">Módulo de Matemática</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memória</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/pt/docs/memory/memory-model/" aria-current="page">🧠 Memory Model — Especificação de Allocators</a></li><li><a class="nav-link" href="/pt/docs/memory/containers/">Módulo de Contentores</a></li><li><a class="nav-link" href="/pt/docs/memory/allocators/">Módulo de Memória</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Física</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/pt/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/pt/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Renderização</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/pt/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/pt/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/pt/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/pt/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-phong/">Materiais no passe forward 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/pt/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/pt/docs/rendering/overlay-2d-rhi/">Overlays vectoriais 2D (caminho RHI)</a></li><li><a class="nav-link" href="/pt/docs/rendering/reflections/">Reflexos</a></li><li><a class="nav-link" href="/pt/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/pt/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/pt/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/pt/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terreno</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Áudio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/audio/audio-system/">🎵 Audio System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animação</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/pt/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Entrada</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Interface</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/pt/docs/ui/editor-ui/">Host ImGui (runtime e plugins legados)</a></li><li><a class="nav-link" href="/pt/docs/ui/ui-kit/">UI kit composável</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Depuração</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/pt/docs/debug/testing/">Testes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/performance/">Desempenho</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/performance/editor-viewport-performance/">Performance — Editor Viewport &amp; GPU Scene</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concorrência</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/engine/">Motor</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">🧠 Memory Model — Especificação de Allocators</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Engine</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/tree/main/src/caffeine/memory"><code>src/caffeine/memory</code></a></span>
+</div>
+<p class="doc-lede">A política de memória por trás dos allocators personalizados
+da engine: o que está implementado hoje, que sistemas injetam allocators e que
+peças continuam a ser intenção de design.</p>
+<blockquote>
+<p>⚠️ <strong>Status:</strong> Revisto contra o código em 2026-11-18.
+Seções A–B.1–B.3 e F descrevem código real (<code>src/caffeine/memory</code>).
+<strong>ProxyAllocator (§B.4) e AllocatorRegistry (§C) NÃO existem no código</strong> —
+estão marcados como planejados.
+Para contexto completo, consulte <a href="/pt/docs/MASTER/"><code>../MASTER.md</code></a> e
+<a href="/pt/docs/architecture_specs/"><code>../architecture_specs.md</code></a>.</p>
+</blockquote>
+<p>Este documento contém as <strong>especificações técnicas detalhadas</strong> dos sistemas de gerenciamento de memória da Caffeine Engine.</p>
+<hr>
+<h2 id="-índice">📋 Índice<a class="anchor" href="#-índice" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Allocator</th>
+<th>Fase</th>
+<th>Status</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IAllocator (Interface)</strong></td>
+<td>1</td>
+<td>✅ Completo</td>
+<td>Base para todos os allocators</td>
+</tr>
+<tr>
+<td><strong>Linear Allocator</strong></td>
+<td>1</td>
+<td>✅ Completo</td>
+<td>Scratch space por frame</td>
+</tr>
+<tr>
+<td><strong>Pool Allocator</strong></td>
+<td>1</td>
+<td>✅ Completo</td>
+<td>Blocos de tamanho fixo</td>
+</tr>
+<tr>
+<td><strong>Stack Allocator</strong></td>
+<td>1</td>
+<td>✅ Completo</td>
+<td>Escopos aninhados</td>
+</tr>
+<tr>
+<td><strong>Proxy Allocator</strong></td>
+<td>1</td>
+<td>📅 Planejado</td>
+<td>Wrappers com logging/debug</td>
+</tr>
+<tr>
+<td><strong>TLSF Allocator</strong></td>
+<td>Planned</td>
+<td>💡 Ideia</td>
+<td>Fallback para alocações gerais</td>
+</tr>
+<tr>
+<td><strong>Buddy Allocator</strong></td>
+<td>Planned</td>
+<td>💡 Ideia</td>
+<td>Para o sistema de levels</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="a-visão-geral-política-de-memória">A. Visão Geral — Política de Memória<a class="anchor" href="#a-visão-geral-política-de-memória" aria-label="Link to this section">#</a></h2>
+<h3 id="a1-the-golden-rule">A.1 The Golden Rule<a class="anchor" href="#a1-the-golden-rule" aria-label="Link to this section">#</a></h3>
+<blockquote>
+<p>REGRA: hot paths da engine usam Custom Allocators.
+Toda alocação de sistema deve aceitar IAllocator*.</p>
+</blockquote>
+<blockquote>
+<p>Realidade verificada: a regra vale para o núcleo (ECS <code>World</code>/<code>Archetype</code>/
+<code>CommandBuffer</code>, <code>AssetManager</code> com <code>LinearAllocator</code> próprio, <code>BlobLoader</code>,
+<code>Vector&lt;T&gt;</code> com <code>IAllocator*</code> opcional). <code>Vector</code> sem allocator usa
+<code>new</code>/<code>delete</code> global, os próprios allocators alocam o buffer inicial com
+<code>new u8[]</code>, e subsistemas de ferramenta/editor usam STL livremente. Ou seja:
+a política é &quot;allocator injetável nos sistemas&quot;, não &quot;zero <code>new</code> no repositório&quot;.</p>
+</blockquote>
+<h3 id="a2-mapa-de-allocators-por-uso-política-alvo">A.2 Mapa de Allocators por Uso (política-alvo)<a class="anchor" href="#a2-mapa-de-allocators-por-uso-política-alvo" aria-label="Link to this section">#</a></h3>
+<blockquote>
+<p>⚠️ O diagrama abaixo é a <strong>política desejada</strong>, não o uso verificado.
+O uso real confirmado em código está na tabela &quot;Uso real verificado&quot; logo após.</p>
+</blockquote>
+<pre class="mermaid">flowchart TB
+    subgraph MEM[&quot;📊 POLÍTICA DE MEMÓRIA DA CAFFEINE&quot;]
+        subgraph PERS[&quot;💾 PERSISTENT&lt;br/&gt;&lt;small&gt;(malloc/bootstrap)&lt;/small&gt;&quot;]
+            P1[&quot;🗂️ Asset registry&lt;br/&gt;&lt;small&gt;texturas, áudio carregados&lt;/small&gt;&quot;]
+            P2[&quot;📦 Scene data&lt;br/&gt;&lt;small&gt;entidades serializadas&lt;/small&gt;&quot;]
+            P3[&quot;🔹 Shader bytecode&quot;]
+            P4[&quot;🏗️ ECS archetype storage&quot;]
+        end
+
+        subgraph POOL[&quot;🎯 POOL&lt;br/&gt;&lt;small&gt;(tamanho fixo, rápido)&lt;/small&gt;&quot;]
+            PL1[&quot;🔊 Audio voices/emitters&quot;]
+            PL2[&quot;🎨 UI widgets&quot;]
+            PL3[&quot;🎮 Input bindings&lt;br/&gt;&lt;small&gt;gamepad state&lt;/small&gt;&quot;]
+            PL4[&quot;✨ Particle instances&quot;]
+            PL5[&quot;🔉 Active audio buffers&quot;]
+        end
+
+        subgraph LIN[&quot;⚡ LINEAR / FRAME&lt;br/&gt;&lt;small&gt;(reset a cada frame)&lt;/small&gt;&quot;]
+            L1[&quot;💥 Contact manifolds&lt;br/&gt;&lt;small&gt;physics&lt;/small&gt;&quot;]
+            L2[&quot;🖼️ Debug draw primitives&quot;]
+            L3[&quot;📮 Event queue&quot;]
+            L4[&quot;🔄 Temporary transforms&quot;]
+            L5[&quot;📋 Render command scratch&quot;]
+        end
+
+        subgraph STK[&quot;📚 STACK&lt;br/&gt;&lt;small&gt;(escopo aninhado)&lt;/small&gt;&quot;]
+            S1[&quot;🔓 Level load/unload&quot;]
+            S2[&quot;🔄 Scene transitions&quot;]
+            S3[&quot;⏱️ Task scopes&lt;br/&gt;&lt;small&gt;job sub-scopes&lt;/small&gt;&quot;]
+            S4[&quot;📊 Profiler markers&quot;]
+        end
+    end
+
+    style PERS fill:#2d5016,stroke:#4a9,color:#fff,stroke-width:2px
+    style POOL fill:#1a3a5c,stroke:#4af,color:#fff,stroke-width:2px
+    style LIN fill:#5c2d1a,stroke:#fa4,color:#fff,stroke-width:2px
+    style STK fill:#3a2d5c,stroke:#a4f,color:#fff,stroke-width:2px
+    style MEM fill:#1a1a2e,stroke:#888,color:#fff
+
+    style P1 fill:#3d6b26,stroke:#6d9,color:#fff
+    style P2 fill:#3d6b26,stroke:#6d9,color:#fff
+    style P3 fill:#3d6b26,stroke:#6d9,color:#fff
+    style P4 fill:#3d6b26,stroke:#6d9,color:#fff
+
+    style PL1 fill:#2d5a7f,stroke:#6df,color:#fff
+    style PL2 fill:#2d5a7f,stroke:#6df,color:#fff
+    style PL3 fill:#2d5a7f,stroke:#6df,color:#fff
+    style PL4 fill:#2d5a7f,stroke:#6df,color:#fff
+    style PL5 fill:#2d5a7f,stroke:#6df,color:#fff
+
+    style L1 fill:#7a4a2d,stroke:#d96,color:#fff
+    style L2 fill:#7a4a2d,stroke:#d96,color:#fff
+    style L3 fill:#7a4a2d,stroke:#d96,color:#fff
+    style L4 fill:#7a4a2d,stroke:#d96,color:#fff
+    style L5 fill:#7a4a2d,stroke:#d96,color:#fff
+
+    style S1 fill:#5a4a7f,stroke:#b8d,color:#fff
+    style S2 fill:#5a4a7f,stroke:#b8d,color:#fff
+    style S3 fill:#5a4a7f,stroke:#b8d,color:#fff
+    style S4 fill:#5a4a7f,stroke:#b8d,color:#fff
+</pre>
+<h3 id="a2b-uso-real-verificado-código-2026-11-18">A.2b Uso real verificado (código, 2026-11-18)<a class="anchor" href="#a2b-uso-real-verificado-código-2026-11-18" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sistema</th>
+<th>Uso real</th>
+<th>Arquivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ECS</strong></td>
+<td><code>World</code>, <code>Archetype</code>/<code>ComponentPool</code>, <code>CommandBuffer</code> aceitam <code>IAllocator*</code> (opcional, pode ser <code>nullptr</code>)</td>
+<td><code>src/caffeine/ecs/World.hpp</code>, <code>Archetype.hpp</code>, <code>CommandBuffer.hpp</code></td>
+</tr>
+<tr>
+<td><strong>Assets</strong></td>
+<td><code>AssetManager</code> possui <code>LinearAllocator</code> próprio (arena por asset)</td>
+<td><code>src/caffeine/assets/AssetManager.hpp</code></td>
+</tr>
+<tr>
+<td><strong>IO</strong></td>
+<td><code>BlobLoader::load(path, IAllocator*)</code> carrega binários no allocator dado</td>
+<td><code>src/caffeine/core/io/BlobLoader.hpp</code></td>
+</tr>
+<tr>
+<td><strong>Containers</strong></td>
+<td><code>Vector&lt;T&gt;</code> aceita <code>IAllocator*</code>; sem allocator usa <code>new</code>/<code>delete</code> global</td>
+<td><code>src/caffeine/containers/Vector.hpp</code></td>
+</tr>
+<tr>
+<td><strong>Testes/bench</strong></td>
+<td><code>tests/test_allocators.cpp</code>, <code>BENCHMARK</code>s em <code>tests/benchmarks.cpp</code></td>
+<td><code>tests/</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Physics, EventBus, Render, JobSystem, Audio, UI e Debug <strong>não</strong> usam estes
+allocators hoje (usam std/malloc) — a migração para o mapa-alvo acima está pendente.</p>
+<h3 id="a3-interface-base">A.3 Interface Base<a class="anchor" href="#a3-interface-base" aria-label="Link to this section">#</a></h3>
+<blockquote>
+<p>Namespace real: <code>Caffeine</code> (não <code>Caffeine::Memory</code>).</p>
+</blockquote>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Interface base para todos os allocators.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Todos os allocators da Caffeine implementam esta interface.</span>
+<span class="hljs-comment">//  Isso permite trocar allocators em runtime e usar patterns como</span>
+<span class="hljs-comment">//  ProxyAllocator para debug.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">IAllocator</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">IAllocator</span>() = <span class="hljs-keyword">default</span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Aloca memória alinhada.</span>
+    <span class="hljs-comment">// @param  size      Tamanho em bytes.</span>
+    <span class="hljs-comment">// @param  alignment Alinhamento (deve ser potência de 2).</span>
+    <span class="hljs-comment">// @return Ponteiro para a memória alocada ou nullptr se falhou.</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span>* <span class="hljs-title">alloc</span><span class="hljs-params">(usize size, usize alignment = <span class="hljs-number">8</span>)</span> </span>= <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Libera memória alocada.</span>
+    <span class="hljs-comment">// @note   Para Linear e Stack, free() pode não fazer nada (reset limpa tudo).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">free</span><span class="hljs-params">(<span class="hljs-type">void</span>* ptr)</span> </span>= <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Para Linear/Stack: volta ao início.</span>
+    <span class="hljs-comment">//          Para Pool: não faz nada.</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna a memória atualmente em uso (bytes).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> usize <span class="hljs-title">usedMemory</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna a memória total alocada pelo allocator (bytes).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> usize <span class="hljs-title">totalSize</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna o pico de memória já usado (bytes).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> usize <span class="hljs-title">peakMemory</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna o número de alocações feitas.</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> usize <span class="hljs-title">allocationCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna o nome do allocator (para debugging).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-comment">// Helpers livres (Allocator.hpp)</span>
+<span class="hljs-function"><span class="hljs-keyword">inline</span> usize <span class="hljs-title">calculatePadding</span><span class="hljs-params">(<span class="hljs-type">void</span>* ptr, usize alignment)</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">inline</span> usize <span class="hljs-title">calculateAlignedSize</span><span class="hljs-params">(usize size, usize alignment)</span></span>;
+
+}  <span class="hljs-comment">// namespace Caffeine</span>
+</code></pre></div>
+<hr>
+<h2 id="b-allocators-detalhados">B. Allocators Detalhados<a class="anchor" href="#b-allocators-detalhados" aria-label="Link to this section">#</a></h2>
+<hr>
+<h2 id="1-linear-allocator">1. Linear Allocator<a class="anchor" href="#1-linear-allocator" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 1</p>
+<h3 id="propósito">Propósito<a class="anchor" href="#propósito" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Quando usar</th>
+<th>Quando NÃO usar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Memória volátil por frame</td>
+<td>Persistência entre frames</td>
+</tr>
+<tr>
+<td>Scratch space para cálculos</td>
+<td>Alocações de tamanho variável que precisam de free individual</td>
+</tr>
+<tr>
+<td>Buffers temporários (contact manifolds, events)</td>
+<td>Alocações que sobrevivem ao escopo</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="interface">Interface<a class="anchor" href="#interface" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Allocator linear — aloca do início ao fim, reset limpa tudo.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Algoritmo:</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  ┌─────────────────────────────────────────────────────────────┐</span>
+<span class="hljs-comment">//  │  [ Usado │............. Livre ...................] [ Fim ]   │</span>
+<span class="hljs-comment">//  │          ▲                                          ▲      │</span>
+<span class="hljs-comment">//  │        m_cursor                                    m_end  │</span>
+<span class="hljs-comment">//  └─────────────────────────────────────────────────────────────┘</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  alloc() avança m_cursor e retorna ponteiro.</span>
+<span class="hljs-comment">//  reset() volta m_cursor para m_start.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Performance: O(1) para todas as operações.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Thread Safety: NÃO thread-safe. Usar apenas na main thread.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LinearAllocator</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> IAllocator {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Constrói com um buffer pré-alocado.</span>
+    <span class="hljs-comment">// @param  buffer  Ponteiro para o buffer (ownership não é transferido).</span>
+    <span class="hljs-comment">// @param  size    Tamanho do buffer em bytes.</span>
+    <span class="hljs-comment">// @note   O buffer deve permanecer válido durante a vida do allocator.</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-built_in">LinearAllocator</span>(<span class="hljs-type">void</span>* buffer, usize size);
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Constrói e aloca buffer internamente (via new u8[]).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">LinearAllocator</span><span class="hljs-params">(usize size)</span></span>;
+
+    ~<span class="hljs-built_in">LinearAllocator</span>() <span class="hljs-keyword">override</span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">alloc</span><span class="hljs-params">(usize size, usize alignment = <span class="hljs-number">8</span>)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>  <span class="hljs-title">free</span><span class="hljs-params">(<span class="hljs-type">void</span>* ptr)</span> <span class="hljs-keyword">override</span></span>;   <span class="hljs-comment">// No-op (reset limpa tudo)</span>
+    <span class="hljs-function"><span class="hljs-type">void</span>  <span class="hljs-title">reset</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span>;           <span class="hljs-comment">// Volta ao início (zera allocCount)</span>
+
+    <span class="hljs-function">usize <span class="hljs-title">usedMemory</span><span class="hljs-params">()</span>   <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_cursor - m_start; }
+    <span class="hljs-function">usize <span class="hljs-title">totalSize</span><span class="hljs-params">()</span>    <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_end - m_start; }
+    <span class="hljs-function">usize <span class="hljs-title">peakMemory</span><span class="hljs-params">()</span>   <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_peak; }
+    <span class="hljs-function">usize <span class="hljs-title">allocationCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_allocCount; }
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">name</span><span class="hljs-params">()</span>    <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Linear&quot;</span>; }
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna a memória livre disponível.</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function">usize <span class="hljs-title">availableMemory</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_end - m_cursor; }
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna o cursor atual (para debugging).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">currentPointer</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_cursor; }
+
+<span class="hljs-keyword">private</span>:
+    u8*  m_start;
+    u8*  m_end;
+    u8*  m_cursor;
+    usize m_peak = <span class="hljs-number">0</span>;
+    usize m_allocCount = <span class="hljs-number">0</span>;
+    <span class="hljs-type">bool</span>  m_ownsBuffer = <span class="hljs-literal">false</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine</span>
+</code></pre></div>
+<h3 id="implementação">Implementação<a class="anchor" href="#implementação" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">LinearAllocator::alloc</span><span class="hljs-params">(usize size, usize alignment)</span> </span>{
+    <span class="hljs-comment">// Align up cursor</span>
+    usize padding = <span class="hljs-built_in">calculatePadding</span>(m_cursor, alignment);
+    usize totalSize = size + padding;
+
+    <span class="hljs-comment">// Check overflow</span>
+    <span class="hljs-keyword">if</span> (m_cursor + totalSize &gt; m_end) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;  <span class="hljs-comment">// Out of memory</span>
+    }
+
+    <span class="hljs-type">void</span>* ptr = m_cursor + padding;
+    m_cursor += totalSize;
+
+    <span class="hljs-comment">// Track stats</span>
+    usize used = <span class="hljs-built_in">usedMemory</span>();
+    <span class="hljs-keyword">if</span> (used &gt; m_peak) m_peak = used;
+    ++m_allocCount;
+
+    <span class="hljs-keyword">return</span> ptr;
+}
+</code></pre></div>
+<h3 id="uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual">Uso por Sistema (alvo — ver §A.2b para o uso real atual)<a class="anchor" href="#uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sistema</th>
+<th>Uso</th>
+<th>Tamanho típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Physics</strong></td>
+<td>Contact manifolds, collision pairs</td>
+<td>64KB - 256KB</td>
+</tr>
+<tr>
+<td><strong>Events</strong></td>
+<td>Event queue temporário</td>
+<td>32KB</td>
+</tr>
+<tr>
+<td><strong>Debug Draw</strong></td>
+<td>Primitive lists</td>
+<td>128KB</td>
+</tr>
+<tr>
+<td><strong>Render</strong></td>
+<td>Vertex buffer staging</td>
+<td>1MB</td>
+</tr>
+<tr>
+<td><strong>Job System</strong></td>
+<td>Task scratch memory</td>
+<td>64KB por worker</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="2-pool-allocator">2. Pool Allocator<a class="anchor" href="#2-pool-allocator" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 1</p>
+<h3 id="propósito-1">Propósito<a class="anchor" href="#propósito-1" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Quando usar</th>
+<th>Quando NÃO usar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Objetos de tamanho fixo</td>
+<td>Tamanhos variáveis</td>
+</tr>
+<tr>
+<td>Alocações/desalocações frequentes</td>
+<td>Dados que precisam sobreviver ao reset</td>
+</tr>
+<tr>
+<td>Emitters, particles, audio voices</td>
+<td>Assets carregados</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="interface-1">Interface<a class="anchor" href="#interface-1" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Pool Allocator — aloca blocos de tamanho fixo.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Algoritmo:</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  ┌─────────────────────────────────────────────────────────────┐</span>
+<span class="hljs-comment">//  │  Slot[0] │ Slot[1] │ Slot[2] │ ... │ Slot[N-1]          │</span>
+<span class="hljs-comment">//  │    ●      │    ○    │    ●    │     │    ○               │</span>
+<span class="hljs-comment">//  │  (usado)  │ (livre) │ (usado) │     │   (livre)         │</span>
+<span class="hljs-comment">//  └─────────────────────────────────────────────────────────────┘</span>
+<span class="hljs-comment">//       ▲</span>
+<span class="hljs-comment">//     m_freeList ──── free list intrusiva (cada slot livre guarda</span>
+<span class="hljs-comment">//                     o ponteiro do próximo; slot mínimo: 8 bytes)</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Performance: O(1) para alloc e free.</span>
+<span class="hljs-comment">//  Thread Safety: NÃO thread-safe. Usar TLS se necessário.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PoolAllocator</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> IAllocator {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Constrói com buffer e tamanho de slot.</span>
+    <span class="hljs-comment">// @param  buffer    Ponteiro para o buffer (sem ownership).</span>
+    <span class="hljs-comment">// @param  poolSize  Tamanho total do buffer.</span>
+    <span class="hljs-comment">// @param  slotSize  Tamanho de cada slot (mínimo 8 bytes).</span>
+    <span class="hljs-comment">// @param  alignment Alinhamento (padrão 8; exige &gt;= 8 e potência de 2,</span>
+    <span class="hljs-comment">//         verificado com CF_ASSERT no construtor).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-built_in">PoolAllocator</span>(<span class="hljs-type">void</span>* buffer, usize poolSize, usize slotSize,
+                  usize alignment = <span class="hljs-number">8</span>);
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Constrói e aloca buffer internamente (via new u8[]).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">PoolAllocator</span><span class="hljs-params">(usize poolSize, usize slotSize, usize alignment = <span class="hljs-number">8</span>)</span></span>;
+    ~<span class="hljs-built_in">PoolAllocator</span>() <span class="hljs-keyword">override</span>;
+
+    <span class="hljs-comment">// @note  alloc() IGNORA size/alignment e retorna sempre 1 slot fixo.</span>
+    <span class="hljs-comment">//        Em debug, CF_ASSERT(size &lt;= m_slotSize). Retorna nullptr se</span>
+    <span class="hljs-comment">//        o pool estiver exausto.</span>
+    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">alloc</span><span class="hljs-params">(usize size, usize alignment = <span class="hljs-number">8</span>)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-comment">// @note  free(nullptr) é seguro (no-op). NÃO há detecção de double-free:</span>
+    <span class="hljs-comment">//        liberar 2x o mesmo slot corrompe silenciosamente a free list.</span>
+    <span class="hljs-function"><span class="hljs-type">void</span>  <span class="hljs-title">free</span><span class="hljs-params">(<span class="hljs-type">void</span>* ptr)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>  <span class="hljs-title">reset</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span>;  <span class="hljs-comment">// Reconstrói a free list, zera usados</span>
+
+    <span class="hljs-function">usize <span class="hljs-title">usedMemory</span><span class="hljs-params">()</span>    <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_usedCount * m_slotSize; }
+    <span class="hljs-function">usize <span class="hljs-title">totalSize</span><span class="hljs-params">()</span>     <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_poolSize; }
+    <span class="hljs-function">usize <span class="hljs-title">peakMemory</span><span class="hljs-params">()</span>   <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_peakSlots * m_slotSize; }
+    <span class="hljs-function">usize <span class="hljs-title">allocationCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_usedCount; }
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">name</span><span class="hljs-params">()</span>    <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Pool&quot;</span>; }
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna quantos slots estão livres.</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function">usize <span class="hljs-title">freeSlots</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_maxSlots - m_usedCount; }
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna o tamanho de cada slot.</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function">usize <span class="hljs-title">slotSize</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_slotSize; }
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Retorna o número máximo de slots (poolSize / slotSize).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function">usize <span class="hljs-title">maxSlots</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_maxSlots; }
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">initializeFreeList</span><span class="hljs-params">()</span></span>;  <span class="hljs-comment">// Reconstrói a free list (usado no ctor/reset)</span>
+
+    u8*    m_freeList = <span class="hljs-literal">nullptr</span>;
+    u8*    m_poolStart = <span class="hljs-literal">nullptr</span>;
+    usize  m_poolSize = <span class="hljs-number">0</span>;
+    usize  m_slotSize = <span class="hljs-number">0</span>;
+    usize  m_alignment = <span class="hljs-number">8</span>;
+    usize  m_maxSlots = <span class="hljs-number">0</span>;
+    usize  m_usedCount = <span class="hljs-number">0</span>;
+    usize  m_peakSlots = <span class="hljs-number">0</span>;
+    <span class="hljs-type">bool</span>   m_ownsBuffer = <span class="hljs-literal">false</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine</span>
+</code></pre></div>
+<h3 id="implementação-1">Implementação<a class="anchor" href="#implementação-1" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">PoolAllocator::alloc</span><span class="hljs-params">(usize size, usize alignment)</span> </span>{
+    <span class="hljs-comment">// Pool allocator ignora size — usa slotSize fixo</span>
+    <span class="hljs-built_in">CF_ASSERT</span>(size &lt;= m_slotSize, <span class="hljs-string">&quot;Requested size exceeds slot size&quot;</span>);
+
+    <span class="hljs-keyword">if</span> (!m_freeList) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;  <span class="hljs-comment">// Pool exausto</span>
+    }
+
+    <span class="hljs-type">void</span>* ptr = m_freeList;
+    m_freeList = *<span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(ptr);  <span class="hljs-comment">// Pop do free list</span>
+    ++m_usedCount;
+    <span class="hljs-keyword">if</span> (m_usedCount &gt; m_peakSlots) m_peakSlots = m_usedCount;
+
+    <span class="hljs-keyword">return</span> ptr;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">PoolAllocator::free</span><span class="hljs-params">(<span class="hljs-type">void</span>* ptr)</span> </span>{
+    <span class="hljs-keyword">if</span> (!ptr) <span class="hljs-keyword">return</span>;
+
+    <span class="hljs-comment">// Push para o free list</span>
+    *<span class="hljs-keyword">static_cast</span>&lt;<span class="hljs-type">void</span>**&gt;(ptr) = m_freeList;
+    m_freeList = ptr;
+    --m_usedCount;
+}
+</code></pre></div>
+<h3 id="uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual-1">Uso por Sistema (alvo — ver §A.2b para o uso real atual)<a class="anchor" href="#uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual-1" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sistema</th>
+<th>Uso</th>
+<th>Tamanho de slot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Audio</strong></td>
+<td>AudioSource/voice instances</td>
+<td>128 bytes</td>
+</tr>
+<tr>
+<td><strong>Particles</strong></td>
+<td>Particle instances</td>
+<td>64 bytes</td>
+</tr>
+<tr>
+<td><strong>UI</strong></td>
+<td>Widget instances</td>
+<td>256 bytes</td>
+</tr>
+<tr>
+<td><strong>ECS</strong></td>
+<td>Component arrays (internal)</td>
+<td>varies</td>
+</tr>
+<tr>
+<td><strong>Input</strong></td>
+<td>Gamepad state records</td>
+<td>64 bytes</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="3-stack-allocator">3. Stack Allocator<a class="anchor" href="#3-stack-allocator" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 1</p>
+<h3 id="propósito-2">Propósito<a class="anchor" href="#propósito-2" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Quando usar</th>
+<th>Quando NÃO usar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Escopos aninhados (levels)</td>
+<td>Persistência entre resets</td>
+</tr>
+<tr>
+<td>Frames com alocações que precisam de free ordenado</td>
+<td>Free fora de ordem</td>
+</tr>
+<tr>
+<td>Temporary task scopes</td>
+<td>Alocações de threads diferentes</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="interface-2">Interface<a class="anchor" href="#interface-2" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine {
+
+<span class="hljs-comment">// Marker = offset em bytes a partir do início do buffer (usize, não ponteiro).</span>
+<span class="hljs-keyword">using</span> Marker = usize;
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Stack Allocator — aloca em pilha com marcadores.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Algoritmo:</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  1. Allocate: avança cursor como LinearAllocator</span>
+<span class="hljs-comment">//  2. SetMarker: salva posição atual (offset)</span>
+<span class="hljs-comment">//  3. FreeToMarker: libera tudo após o marker</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  ┌─────────────────────────────────────────────────────────────┐</span>
+<span class="hljs-comment">//  │  [ Usado A ] │ [ Marker ] │ [ Usado B ] │.....│ Livre   │</span>
+<span class="hljs-comment">//  │                          ▲           ▲                    │</span>
+<span class="hljs-comment">//  │                       marker1      cursor                │</span>
+<span class="hljs-comment">//  │                                                           │</span>
+<span class="hljs-comment">//  │  freeToMarker(marker1) ───▶ libera [Usado B]           │</span>
+<span class="hljs-comment">//  └───────────────────────────────────────────────────────────┘</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Performance: O(1) para todas as operações.</span>
+<span class="hljs-comment">//  Thread Safety: NÃO thread-safe.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">StackAllocator</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> IAllocator {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">StackAllocator</span>(<span class="hljs-type">void</span>* buffer, usize size);
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">StackAllocator</span><span class="hljs-params">(usize size)</span></span>;
+    ~<span class="hljs-built_in">StackAllocator</span>() <span class="hljs-keyword">override</span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">alloc</span><span class="hljs-params">(usize size, usize alignment = <span class="hljs-number">8</span>)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>  <span class="hljs-title">free</span><span class="hljs-params">(<span class="hljs-type">void</span>* ptr)</span> <span class="hljs-keyword">override</span></span>;  <span class="hljs-comment">// No-op total (ignora ptr)</span>
+    <span class="hljs-function"><span class="hljs-type">void</span>  <span class="hljs-title">reset</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Salva um marcador (offset atual).</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function">Marker <span class="hljs-title">setMarker</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-comment">// @brief  Libera tudo após o marcador. Markers além do cursor são</span>
+    <span class="hljs-comment">//         ignorados (guard). Zera allocationCount.</span>
+    <span class="hljs-comment">// -----------------------------------------------------------------------</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">freeToMarker</span><span class="hljs-params">(Marker marker)</span></span>;
+
+    <span class="hljs-function">usize <span class="hljs-title">usedMemory</span><span class="hljs-params">()</span>      <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function">usize <span class="hljs-title">totalSize</span><span class="hljs-params">()</span>       <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_end - m_start; }
+    <span class="hljs-function">usize <span class="hljs-title">peakMemory</span><span class="hljs-params">()</span>      <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_peak; }
+    <span class="hljs-function">usize <span class="hljs-title">allocationCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> m_allocCount; }
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">name</span><span class="hljs-params">()</span>     <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Stack&quot;</span>; }
+
+<span class="hljs-keyword">private</span>:
+    u8*  m_start;
+    u8*  m_end;
+    u8*  m_cursor;
+    usize m_peak = <span class="hljs-number">0</span>;
+    usize m_allocCount = <span class="hljs-number">0</span>;
+    <span class="hljs-type">bool</span>  m_ownsBuffer = <span class="hljs-literal">false</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine</span>
+</code></pre></div>
+<h3 id="uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual-2">Uso por Sistema (alvo — ver §A.2b para o uso real atual)<a class="anchor" href="#uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual-2" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sistema</th>
+<th>Uso</th>
+<th>Tamanho típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scene</strong></td>
+<td>Level load/unload</td>
+<td>1MB - 16MB</td>
+</tr>
+<tr>
+<td><strong>Job System</strong></td>
+<td>Task sub-scopes</td>
+<td>64KB por worker</td>
+</tr>
+<tr>
+<td><strong>Profiler</strong></td>
+<td>Markers de escopo</td>
+<td>4KB</td>
+</tr>
+<tr>
+<td><strong>Asset Manager</strong></td>
+<td>Asset loading arena</td>
+<td>8MB</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="4-proxy-allocator">4. Proxy Allocator<a class="anchor" href="#4-proxy-allocator" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>❌ <strong>NÃO IMPLEMENTADO</strong> — seção de especificação futura. Não existe
+<code>ProxyAllocator</code> em <code>src/caffeine/memory</code> (apenas <code>Allocator</code>, <code>Linear</code>, <code>Pool</code>,
+<code>Stack</code>). Mantido aqui como intenção de design.</p>
+</blockquote>
+<p><strong>Fase:</strong> 1 (planejado)</p>
+<h3 id="propósito-planejado">Propósito (planejado)<a class="anchor" href="#propósito-planejado" aria-label="Link to this section">#</a></h3>
+<p>Wrapper que adiciona logging, debugging ou accounting a qualquer allocator
+existente. Útil para debugging de memory leaks e profiling de alocações.
+Interface prevista: <code>ProxyAllocator(IAllocator* backend, const char* name)</code>
+com relatório <code>AllocationReport</code> (uso atual, pico, total de allocs/frees/falhas)
+e header de tracking por alocação.</p>
+<hr>
+<h2 id="c-allocator-registry">C. Allocator Registry<a class="anchor" href="#c-allocator-registry" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>❌ <strong>NÃO IMPLEMENTADO</strong> — não existe <code>AllocatorRegistry</code> no código.
+Mantido como intenção de design.</p>
+</blockquote>
+<p><strong>Fase:</strong> 1 (planejado)</p>
+<h3 id="visão-geral-planejada">Visão Geral (planejada)<a class="anchor" href="#visão-geral-planejada" aria-label="Link to this section">#</a></h3>
+<p>Para debugging e profiling, todo allocator seria registrado em um registry
+global, permitindo verificar memory leaks no shutdown, profiling de uso e
+detecção de fragmentação (<code>registerAllocator</code> / <code>unregisterAllocator</code> /
+<code>globalStats</code> / <code>printReport</code> / <code>hasLeaks</code>).</p>
+<h3 id="exemplo-de-saída-formato-desejado-não-gerado-hoje">Exemplo de Saída (formato desejado, não gerado hoje)<a class="anchor" href="#exemplo-de-saída-formato-desejado-não-gerado-hoje" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">=== Memory Report ===
+[Linear]  Physics Scratch:   64.0 KB /  256.0 KB (used/peak)
+[Pool]    Audio Voices:       16.0 KB /   32.0 KB (32 slots, 16 used)
+[Pool]    UI Widgets:          8.0 KB /   16.0 KB (64 slots, 8 used)
+[Stack]   Level Arena:       512.0 KB / 2048.0 KB (marker at 25%)
+[Linear]  Render Staging:    64.0 KB / 1024.0 KB (used/peak)
+
+Total: 664.0 KB used, 3.3 MB peak, 1.2M allocs
+</code></pre></div>
+<hr>
+<h2 id="d-uso-por-sistema-mapa-completo-política-alvo">D. Uso por Sistema — Mapa Completo (política-alvo)<a class="anchor" href="#d-uso-por-sistema-mapa-completo-política-alvo" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>⚠️ Mapa desejado, não uso verificado — ver §A.2b.</p>
+</blockquote>
+<pre class="mermaid">flowchart TB
+    subgraph SYSMAP[&quot;🔗 SYSTEM → ALLOCATOR MAP&quot;]
+        subgraph GL[&quot;🎮 Game Loop &amp; Job System&quot;]
+            GL1[&quot;Game Loop → Linear frame&lt;br/&gt;Event Bus → Linear frame&quot;]
+            GL2[&quot;Job System → Linear scratch&lt;br/&gt;Job System → Stack task scope&quot;]
+        end
+
+        subgraph INPUT[&quot;⌨️ Input &amp; Events&quot;]
+            IN1[&quot;Input Manager → Pool&lt;br/&gt;Event Bus → Linear listener&quot;]
+        end
+
+        subgraph ECS[&quot;🏗️ ECS World&quot;]
+            ECS1[&quot;ECS World → Pool&lt;br/&gt;ECS World → Persistent archetype&quot;]
+        end
+
+        subgraph PHYS[&quot;⚙️ Physics &amp; Collision&quot;]
+            PHYS1[&quot;Physics 2D → Linear frame&lt;br/&gt;Physics 2D → Pool proxies&quot;]
+        end
+
+        subgraph ASSET[&quot;📦 Asset &amp; Rendering&quot;]
+            ASSET1[&quot;Asset Manager → Persistent registry&lt;br/&gt;Asset Manager → Linear load&quot;]
+            ASSET2[&quot;Render/RHI → Linear frame&lt;br/&gt;Batch Renderer → Linear frame&quot;]
+        end
+
+        subgraph AUDIO[&quot;🔊 Audio &amp; Animation&quot;]
+            AUDIO1[&quot;Audio System → Pool instances&lt;br/&gt;Audio System → Persistent clips&quot;]
+            AUDIO2[&quot;Animation System → Pool instances&quot;]
+        end
+
+        subgraph UI[&quot;🎨 UI &amp; Debug&quot;]
+            UI1[&quot;UI System → Pool widgets&lt;br/&gt;UI System → Persistent styles&quot;]
+            UI2[&quot;Debug Draw → Linear frame&quot;]
+        end
+
+        subgraph SCENE[&quot;🎭 Scene &amp; Camera&quot;]
+            SCENE1[&quot;Scene Manager → Stack level&lt;br/&gt;Scene Manager → Persistent metadata&quot;]
+            SCENE2[&quot;Camera System → Linear frame&quot;]
+        end
+
+        subgraph SERIAL[&quot;💾 Profiler &amp; Serializer&quot;]
+            SERIAL1[&quot;Debug Profiler → Stack markers&lt;br/&gt;Serializer → Linear frame&quot;]
+        end
+    end
+
+    style SYSMAP fill:#1a1a2e,stroke:#888,color:#fff
+
+    style GL fill:#2d5016,stroke:#4a9,color:#fff,stroke-width:2px
+    style INPUT fill:#1a3a5c,stroke:#4af,color:#fff,stroke-width:2px
+    style ECS fill:#5c2d1a,stroke:#fa4,color:#fff,stroke-width:2px
+    style PHYS fill:#3a2d5c,stroke:#a4f,color:#fff,stroke-width:2px
+    style ASSET fill:#2d5016,stroke:#4a9,color:#fff,stroke-width:2px
+    style AUDIO fill:#1a3a5c,stroke:#4af,color:#fff,stroke-width:2px
+    style UI fill:#5c2d1a,stroke:#fa4,color:#fff,stroke-width:2px
+    style SCENE fill:#3a2d5c,stroke:#a4f,color:#fff,stroke-width:2px
+    style SERIAL fill:#2d5016,stroke:#4a9,color:#fff,stroke-width:2px
+</pre>
+<hr>
+<h2 id="e-benchmarks-de-referência">E. Benchmarks de Referência<a class="anchor" href="#e-benchmarks-de-referência" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>⚠️ Metas de projeto <strong>não medidas</strong> — <code>tests/benchmarks.cpp</code> contém apenas
+<code>BENCHMARK</code>s básicos de Linear/Pool sem números-alvo assertados. Os valores
+abaixo são estimativas, não resultados.</p>
+</blockquote>
+<h3 id="e1-linear-allocator">E.1 Linear Allocator<a class="anchor" href="#e1-linear-allocator" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alloc()</code> throughput</td>
+<td>~50M allocs/segundo</td>
+</tr>
+<tr>
+<td><code>reset()</code> throughput</td>
+<td>~500M resets/segundo</td>
+</tr>
+<tr>
+<td>Fragmentação</td>
+<td>0% (reset limpa tudo)</td>
+</tr>
+<tr>
+<td>Overhead por alloc</td>
+<td>~0 bytes</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="e2-pool-allocator">E.2 Pool Allocator<a class="anchor" href="#e2-pool-allocator" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alloc()</code> throughput</td>
+<td>~30M allocs/segundo</td>
+</tr>
+<tr>
+<td><code>free()</code> throughput</td>
+<td>~40M frees/segundo</td>
+</tr>
+<tr>
+<td>Fragmentação</td>
+<td>0% (slots fixos)</td>
+</tr>
+<tr>
+<td>Overhead por slot</td>
+<td>0 bytes (free list intrusiva usa o próprio slot livre)</td>
+</tr>
+<tr>
+<td>Max slots</td>
+<td><code>poolSize / slotSize</code> (sem teto fixo no código)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="e3-stack-allocator">E.3 Stack Allocator<a class="anchor" href="#e3-stack-allocator" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alloc()</code> throughput</td>
+<td>~50M allocs/segundo</td>
+</tr>
+<tr>
+<td><code>freeToMarker()</code> throughput</td>
+<td>~100M frees/segundo</td>
+</tr>
+<tr>
+<td>Fragmentação</td>
+<td>0% (free to marker)</td>
+</tr>
+<tr>
+<td>Max markers por stack</td>
+<td>Ilimitado (marker = offset, sem tabela)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="f-checklist-de-integração">F. Checklist de Integração<a class="anchor" href="#f-checklist-de-integração" aria-label="Link to this section">#</a></h2>
+<p>Antes de usar um allocator em um novo sistema:</p>
+<ul>
+<li>[ ] Sistema usa <code>IAllocator*</code> como parâmetro (não hardcoded)</li>
+<li>[ ] Sistema reseta allocators lineares no início de cada frame</li>
+<li>[ ] Sistema usa Pool para objetos de tamanho fixo</li>
+<li>[ ] Sistema usa Stack para escopos aninhados</li>
+<li>[ ] Sistema verifica <code>alloc()</code> retornou <code>nullptr</code> (out-of-memory)</li>
+<li>[ ] Sistema NÃO guarda ponteiros após <code>reset()</code> ou <code>freeToMarker()</code></li>
+<li>[ ] (Futuro) Sistema loga estatísticas via AllocatorRegistry — ainda não existe (§C)</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/memory/memory-model.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/math/vectors/"><span>Anterior</span><strong>Módulo de Matemática</strong></a><a class="pager-next" href="/pt/docs/memory/containers/"><span>Seguinte</span><strong>Módulo de Contentores</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#-índice">📋 Índice</a></li><li class="l2"><a href="#a-visão-geral-política-de-memória">A. Visão Geral — Política de Memória</a></li><li class="l3"><a href="#a1-the-golden-rule">A.1 The Golden Rule</a></li><li class="l3"><a href="#a2-mapa-de-allocators-por-uso-política-alvo">A.2 Mapa de Allocators por Uso (política-alvo)</a></li><li class="l3"><a href="#a2b-uso-real-verificado-código-2026-11-18">A.2b Uso real verificado (código, 2026-11-18)</a></li><li class="l3"><a href="#a3-interface-base">A.3 Interface Base</a></li><li class="l2"><a href="#b-allocators-detalhados">B. Allocators Detalhados</a></li><li class="l2"><a href="#1-linear-allocator">1. Linear Allocator</a></li><li class="l3"><a href="#propósito">Propósito</a></li><li class="l3"><a href="#interface">Interface</a></li><li class="l3"><a href="#implementação">Implementação</a></li><li class="l3"><a href="#uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual">Uso por Sistema (alvo — ver §A.2b para o uso real atual)</a></li><li class="l2"><a href="#2-pool-allocator">2. Pool Allocator</a></li><li class="l3"><a href="#propósito-1">Propósito</a></li><li class="l3"><a href="#interface-1">Interface</a></li><li class="l3"><a href="#implementação-1">Implementação</a></li><li class="l3"><a href="#uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual-1">Uso por Sistema (alvo — ver §A.2b para o uso real atual)</a></li><li class="l2"><a href="#3-stack-allocator">3. Stack Allocator</a></li><li class="l3"><a href="#propósito-2">Propósito</a></li><li class="l3"><a href="#interface-2">Interface</a></li><li class="l3"><a href="#uso-por-sistema-alvo-ver-a2b-para-o-uso-real-atual-2">Uso por Sistema (alvo — ver §A.2b para o uso real atual)</a></li><li class="l2"><a href="#4-proxy-allocator">4. Proxy Allocator</a></li><li class="l3"><a href="#propósito-planejado">Propósito (planejado)</a></li><li class="l2"><a href="#c-allocator-registry">C. Allocator Registry</a></li><li class="l3"><a href="#visão-geral-planejada">Visão Geral (planejada)</a></li><li class="l3"><a href="#exemplo-de-saída-formato-desejado-não-gerado-hoje">Exemplo de Saída (formato desejado, não gerado hoje)</a></li><li class="l2"><a href="#d-uso-por-sistema-mapa-completo-política-alvo">D. Uso por Sistema — Mapa Completo (política-alvo)</a></li><li class="l2"><a href="#e-benchmarks-de-referência">E. Benchmarks de Referência</a></li><li class="l3"><a href="#e1-linear-allocator">E.1 Linear Allocator</a></li><li class="l3"><a href="#e2-pool-allocator">E.2 Pool Allocator</a></li><li class="l3"><a href="#e3-stack-allocator">E.3 Stack Allocator</a></li><li class="l2"><a href="#f-checklist-de-integração">F. Checklist de Integração</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec",mermaid:"/assets/vendor/mermaid.min.js"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

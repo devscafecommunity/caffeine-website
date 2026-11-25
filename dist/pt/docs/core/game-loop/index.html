@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎬 Game Loop · Caffeine</title>
+<meta name="description" content="O acumulador de timestep fixo que separa atualizações de simulação determinísticas da renderização a ritmo variável, com pausa/retoma e interpolação.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="🎬 Game Loop · Caffeine">
+<meta property="og:description" content="O acumulador de timestep fixo que separa atualizações de simulação determinísticas da renderização a ritmo variável, com pausa/retoma e interpolação.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/core/game-loop/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/core/game-loop/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/core/game-loop/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/core/game-loop/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab active" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/core/game-loop/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/core/game-loop/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Motor"><div class="nav-title">Motor</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Arquitetura</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/architecture/cafpack/">Cafpack — Camada Unificada de Assets</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Núcleo</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link active" href="/pt/docs/core/game-loop/" aria-current="page">🎬 Game Loop</a></li><li><a class="nav-link" href="/pt/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/pt/docs/core/types/">Módulo Core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/ecs/">ECS e cenas</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/pt/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/pt/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Matemática</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/pt/docs/math/vectors/">Módulo de Matemática</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memória</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/memory/memory-model/">🧠 Memory Model — Especificação de Allocators</a></li><li><a class="nav-link" href="/pt/docs/memory/containers/">Módulo de Contentores</a></li><li><a class="nav-link" href="/pt/docs/memory/allocators/">Módulo de Memória</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Física</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/pt/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/pt/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Renderização</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/pt/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/pt/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/pt/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/pt/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-phong/">Materiais no passe forward 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/pt/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/pt/docs/rendering/overlay-2d-rhi/">Overlays vectoriais 2D (caminho RHI)</a></li><li><a class="nav-link" href="/pt/docs/rendering/reflections/">Reflexos</a></li><li><a class="nav-link" href="/pt/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/pt/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/pt/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/pt/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terreno</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Áudio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/audio/audio-system/">🎵 Audio System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animação</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/pt/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Entrada</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Interface</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/pt/docs/ui/editor-ui/">Host ImGui (runtime e plugins legados)</a></li><li><a class="nav-link" href="/pt/docs/ui/ui-kit/">UI kit composável</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Depuração</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/pt/docs/debug/testing/">Testes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/performance/">Desempenho</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/performance/editor-viewport-performance/">Performance — Editor Viewport &amp; GPU Scene</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concorrência</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/engine/">Motor</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">🎬 Game Loop</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Engine</span>
+  <span><strong>Namespace:</strong> <code>Caffeine</code> (não <code>Caffeine::Core</code>)</span>
+  <span><strong>Arquivos:</strong> <code>src/caffeine/core/GameLoop.hpp</code>, <code>src/caffeine/core/GameLoop.cpp</code></span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p class="doc-lede">O acumulador de timestep fixo que separa atualizações de
+simulação determinísticas da renderização a ritmo variável, com pausa/retoma e
+interpolação.</p>
+<blockquote>
+<p><strong>Testes:</strong> <code>tests/test_gameloop.cpp</code> (27 casos)
+<strong>RFs:</strong> RF2.7, RF2.8</p>
+</blockquote>
+<hr>
+<h2 id="visão-geral">Visão Geral<a class="anchor" href="#visão-geral" aria-label="Link to this section">#</a></h2>
+<p>O Game Loop é o coração da engine — o ciclo que corre do início ao fim do jogo. A Caffeine implementa o padrão <strong>Fixed Timestep com Acumulador</strong>: desvincula a lógica de física (que precisa de tempo consistente) da renderização (que pode variar livremente).</p>
+<p><strong>Padrão:</strong> <code>accumulator += dt</code> → <code>while (accum &gt;= fixedDt) update(fixedDt)</code> → <code>render(alpha)</code></p>
+<p>Inspirado em <a href="https://gameprogrammingpatterns.com/game-loop.html" rel="noopener" class="ext">Game Programming Patterns — Game Loop</a>.</p>
+<blockquote>
+<p><strong>Responsabilidade do chamador:</strong> o <code>GameLoop</code> não possui clock próprio e não
+faz polling de input — ele recebe <code>deltaTime</code> pronto via <code>tick(dt)</code>. Medir o
+tempo real (ex: com <a href="/pt/docs/core/timer/"><code>Timer</code></a>) e bombear <code>SDL_PollEvent</code> é tarefa do
+código que chama <code>tick()</code>, normalmente o <code>main</code> da aplicação.</p>
+</blockquote>
+<hr>
+<h2 id="api">API<a class="anchor" href="#api" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine {
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">GameState</span> : u8 {
+    Init,      <span class="hljs-comment">// tick() é ignorado; aguardando init()</span>
+    Running,   <span class="hljs-comment">// update + render</span>
+    Paused,    <span class="hljs-comment">// sem fixed update; render continua (UI, menu)</span>
+    Shutdown   <span class="hljs-comment">// tick() é ignorado</span>
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">GameLoopConfig</span> {
+    f64  fixedDeltaTime = <span class="hljs-number">1.0</span> / <span class="hljs-number">60.0</span>;  <span class="hljs-comment">// 60 updates lógicos/segundo</span>
+    f64  maxFrameTime   = <span class="hljs-number">0.25</span>;          <span class="hljs-comment">// clamp do dt — evita &quot;spiral of death&quot;</span>
+    u32  targetFPS      = <span class="hljs-number">0</span>;             <span class="hljs-comment">// 0 = unlimited (armazenado; não aplicado pelo loop)</span>
+    <span class="hljs-type">bool</span> vsync          = <span class="hljs-literal">true</span>;          <span class="hljs-comment">// idem — controle real é do RHI/janela</span>
+    <span class="hljs-type">bool</span> interpolation  = <span class="hljs-literal">true</span>;          <span class="hljs-comment">// calcula alpha; se false, alpha = 0</span>
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Interface alternativa aos std::function: derive e registre via</span>
+<span class="hljs-comment">//  setCallbacks(). Os dois mecanismos coexistem e AMBOS são chamados</span>
+<span class="hljs-comment">//  (primeiro m_callbacks, depois os std::function).</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">IGameCallbacks</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">IGameCallbacks</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onBeginFrame</span><span class="hljs-params">()</span> </span>{}
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onFixedUpdate</span><span class="hljs-params">(f64 dt)</span> </span>{ (<span class="hljs-type">void</span>)dt; }
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onRender</span><span class="hljs-params">(f64 alpha)</span> </span>{ (<span class="hljs-type">void</span>)alpha; }
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onEndFrame</span><span class="hljs-params">()</span> </span>{}
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">GameLoop</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">GameLoop</span><span class="hljs-params">(<span class="hljs-type">const</span> GameLoopConfig&amp; config = {})</span></span>;
+    ~<span class="hljs-built_in">GameLoop</span>();
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>;            <span class="hljs-comment">// Init → Running (só a partir de Init)</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tick</span><span class="hljs-params">(f64 deltaTime)</span></span>;  <span class="hljs-comment">// um frame; ignorado em Init/Shutdown</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pause</span><span class="hljs-params">()</span></span>;           <span class="hljs-comment">// Running → Paused (só a partir de Running)</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resume</span><span class="hljs-params">()</span></span>;          <span class="hljs-comment">// Paused → Running (só a partir de Paused)</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shutdown</span><span class="hljs-params">()</span></span>;        <span class="hljs-comment">// Running/Paused → Shutdown</span>
+
+    <span class="hljs-function">GameState <span class="hljs-title">state</span><span class="hljs-params">()</span>              <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_state; }
+    <span class="hljs-function">f64       <span class="hljs-title">elapsedTime</span><span class="hljs-params">()</span>        <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_elapsedTime; }
+    <span class="hljs-function">f64       <span class="hljs-title">interpolationAlpha</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_alpha; }
+    <span class="hljs-function">u64       <span class="hljs-title">frameCount</span><span class="hljs-params">()</span>         <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_frameCount; }
+    <span class="hljs-function">f64       <span class="hljs-title">accumulator</span><span class="hljs-params">()</span>        <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_accumulator; }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setCallbacks</span><span class="hljs-params">(IGameCallbacks* callbacks)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> GameLoopConfig&amp; <span class="hljs-title">config</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_config; }
+
+    <span class="hljs-comment">// Hooks livres (chamados DEPOIS do IGameCallbacks, se ambos existirem)</span>
+    std::function&lt;<span class="hljs-type">void</span>(f64 dt)&gt;    onFixedUpdate;
+    std::function&lt;<span class="hljs-type">void</span>(f64 alpha)&gt; onRender;
+    std::function&lt;<span class="hljs-type">void</span>()&gt;          onBeginFrame;
+    std::function&lt;<span class="hljs-type">void</span>()&gt;          onEndFrame;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processFixedUpdate</span><span class="hljs-params">(f64 dt)</span></span>;
+
+    GameLoopConfig  m_config;
+    IGameCallbacks* m_callbacks   = <span class="hljs-literal">nullptr</span>;
+    GameState       m_state       = GameState::Init;
+    f64             m_accumulator = <span class="hljs-number">0.0</span>;
+    f64             m_elapsedTime = <span class="hljs-number">0.0</span>;
+    f64             m_alpha       = <span class="hljs-number">0.0</span>;
+    u64             m_frameCount  = <span class="hljs-number">0</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine</span>
+</code></pre></div>
+<hr>
+<h2 id="fluxo-detalhado-por-frame-tickdt">Fluxo Detalhado por Frame (<code>tick(dt)</code>)<a class="anchor" href="#fluxo-detalhado-por-frame-tickdt" aria-label="Link to this section">#</a></h2>
+<pre class="mermaid">flowchart TD
+  START([tick dt]) --&gt; GUARD{state Init or Shutdown?}
+  GUARD --&gt;|yes| SKIP[no-op]
+  GUARD --&gt;|no| BEGIN[onBeginFrame]
+  BEGIN --&gt; CLAMP[&quot;dt = min(dt, maxFrameTime)&quot;]
+  CLAMP --&gt; ELAPSED[elapsedTime += dt; frameCount++]
+  ELAPSED --&gt; RUNNING{state Running?}
+  RUNNING --&gt;|no| RENDER[onRender alpha]
+  RUNNING --&gt;|yes| ACC[accumulator += dt]
+  ACC --&gt; LOOP{accumulator &gt;= fixedDt?}
+  LOOP --&gt;|yes| FIX[onFixedUpdate; accumulator -= fixedDt]
+  FIX --&gt; LOOP
+  LOOP --&gt;|no| ALPHA[alpha from interpolation]
+  ALPHA --&gt; RENDER
+  RENDER --&gt; END[onEndFrame]
+</pre>
+<p>Notas de comportamento (confirmadas pelo código e pelos testes):</p>
+<ul>
+<li><strong>Pausado:</strong> <code>onRender</code>/<code>onBeginFrame</code>/<code>onEndFrame</code> continuam; <code>accumulator</code>
+fica congelado e os steps pendentes disparam ao dar <code>resume()</code>.</li>
+<li><strong><code>targetFPS</code>/<code>vsync</code>:</strong> apenas armazenados — o loop não dorme nem sincroniza;
+cabe ao chamador/RHI aplicar throttling e vsync.</li>
+<li><strong><code>shutdown()</code></strong> a partir de <code>Init</code> é ignorado (sem transição).</li>
+</ul>
+<hr>
+<h2 id="spiral-of-death-prevention">Spiral of Death Prevention<a class="anchor" href="#spiral-of-death-prevention" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">deltaTime = std::<span class="hljs-built_in">min</span>(deltaTime, m_config.maxFrameTime);  <span class="hljs-comment">// default 250ms</span>
+</code></pre></div>
+<p><strong>Efeito:</strong> em hardware lento, o jogo entra em &quot;slow motion&quot; temporário em vez de travar num loop infinito de catch-up.</p>
+<hr>
+<h2 id="interpolação-de-renderização">Interpolação de Renderização<a class="anchor" href="#interpolação-de-renderização" aria-label="Link to this section">#</a></h2>
+<p>Sem interpolação, entidades &quot;teletransportam&quot; entre posições a cada fixed step:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">Caffeine::Vec2 renderPos = Caffeine::Math::<span class="hljs-built_in">lerp</span>(entity.prevPos, entity.currPos, alpha);
+<span class="hljs-comment">// alpha = 0.0 → início do step atual</span>
+<span class="hljs-comment">// alpha = 1.0 → fim do step atual</span>
+</code></pre></div>
+<p><strong>Requisito:</strong> sistemas de física devem salvar <code>prevPos</code> antes de atualizar <code>currPos</code>. Com <code>interpolation = false</code>, <code>alpha</code> é sempre <code>0.0</code>.</p>
+<hr>
+<h2 id="exemplos-de-uso">Exemplos de Uso<a class="anchor" href="#exemplos-de-uso" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// ── Setup básico ──────────────────────────────────────────────</span>
+Caffeine::GameLoopConfig cfg;
+cfg.fixedDeltaTime = <span class="hljs-number">1.0</span> / <span class="hljs-number">60.0</span>;
+cfg.interpolation  = <span class="hljs-literal">true</span>;
+
+<span class="hljs-function">Caffeine::GameLoop <span class="hljs-title">loop</span><span class="hljs-params">(cfg)</span></span>;
+
+loop.onFixedUpdate = [&amp;](Caffeine::f64 dt) {
+    world.<span class="hljs-built_in">update</span>(dt);
+    eventBus.<span class="hljs-built_in">dispatch</span>();
+};
+
+loop.onRender = [&amp;](Caffeine::f64 alpha) {
+    renderer.<span class="hljs-built_in">render</span>(alpha);
+};
+
+loop.<span class="hljs-built_in">init</span>();
+
+<span class="hljs-comment">// ── Main loop (o chamador mede o tempo e bombeia input) ───────</span>
+Caffeine::Core::Timer timer;
+timer.<span class="hljs-built_in">start</span>();
+<span class="hljs-keyword">while</span> (loop.<span class="hljs-built_in">state</span>() != Caffeine::GameState::Shutdown) {
+    <span class="hljs-built_in">SDL_PumpEvents</span>();  <span class="hljs-comment">// ou InputManager::beginFrame(), conforme o app</span>
+    Caffeine::Core::Duration dt = timer.<span class="hljs-built_in">tick</span>();
+    loop.<span class="hljs-built_in">tick</span>(dt.seconds);
+}
+</code></pre></div>
+<p>Com <code>IGameCallbacks</code> em vez de lambdas:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyGame</span> : <span class="hljs-keyword">public</span> Caffeine::IGameCallbacks {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onFixedUpdate</span><span class="hljs-params">(Caffeine::f64 dt)</span> <span class="hljs-keyword">override</span> </span>{ world.<span class="hljs-built_in">update</span>(dt); }
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onRender</span><span class="hljs-params">(Caffeine::f64 alpha)</span> <span class="hljs-keyword">override</span> </span>{ renderer.<span class="hljs-built_in">render</span>(alpha); }
+};
+MyGame game;
+loop.<span class="hljs-built_in">setCallbacks</span>(&amp;game);
+</code></pre></div>
+<hr>
+<h2 id="estados-do-loop">Estados do Loop<a class="anchor" href="#estados-do-loop" aria-label="Link to this section">#</a></h2>
+<pre class="mermaid">stateDiagram-v2
+  [*] --&gt; Init
+  Init --&gt; Running: init()
+  Running --&gt; Paused: pause()
+  Paused --&gt; Running: resume()
+  Running --&gt; Shutdown: shutdown()
+  Paused --&gt; Shutdown: shutdown()
+</pre>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Comportamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Init</code></td>
+<td><code>tick()</code> ignorado; <code>pause()</code>/<code>resume()</code>/<code>shutdown()</code> ignorados</td>
+</tr>
+<tr>
+<td><code>Running</code></td>
+<td>Loop normal: begin → N×fixed update → render(alpha) → end</td>
+</tr>
+<tr>
+<td><code>Paused</code></td>
+<td>Sem fixed update; <code>elapsedTime</code> e <code>frameCount</code> avançam; render continua</td>
+</tr>
+<tr>
+<td><code>Shutdown</code></td>
+<td>Terminal; <code>tick()</code> ignorado</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="decisões-de-design">Decisões de Design<a class="anchor" href="#decisões-de-design" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decisão</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fixed timestep para lógica</td>
+<td>Física determinística, replay, multiplayer</td>
+</tr>
+<tr>
+<td>Acumulador com clamp (<code>min</code>)</td>
+<td>Evita &quot;spiral of death&quot; em hardware lento</td>
+</tr>
+<tr>
+<td>Loop sem clock/input próprios</td>
+<td>Testável (<code>tick(dt)</code> determinístico) e sem acoplamento a SDL</td>
+</tr>
+<tr>
+<td><code>IGameCallbacks</code> + <code>std::function</code></td>
+<td>Classe de jogo ou lambdas, à escolha do chamador</td>
+</tr>
+<tr>
+<td><code>targetFPS</code>/<code>vsync</code> só armazenados</td>
+<td>Throttling real pertence ao RHI/janela, não ao loop</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="critério-de-aceitação">Critério de Aceitação<a class="anchor" href="#critério-de-aceitação" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] <code>tests/test_gameloop.cpp</code>: defaults, transições de estado, contagem de frames, taxa de fixed update, clamp anti-spiral, <code>alpha ∈ [0,1)</code></li>
+<li>[x] Spiral of death não ocorre: FPS pode cair mas loop não trava</li>
+<li>[x] <code>state()</code> transiciona Init → Running ⇄ Paused → Shutdown (transições inválidas ignoradas)</li>
+<li>[ ] 3600 frames com <code>fixedDt</code> acumulado = 60.0 ± 0.001 (sem drift) — teste de longa duração ainda pendente</li>
+</ul>
+<hr>
+<h2 id="dependências">Dependências<a class="anchor" href="#dependências" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Upstream:</strong> <a href="/pt/docs/core/timer/">Timer</a> (chamador mede <code>dt</code>), tipos de <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/core/Types.hpp" rel="noopener" class="ext"><code>src/caffeine/core/Types.hpp</code></a></li>
+<li><strong>Downstream:</strong> ECS World (<a href="/pt/docs/ecs/core/"><code>../ecs/core.md</code></a>), Renderer, Input (<a href="/pt/docs/input/input-system/"><code>../input/input-system.md</code></a>) — todos via callbacks, sem acoplamento</li>
+</ul>
+<hr>
+<h2 id="referências">Referências<a class="anchor" href="#referências" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/core/GameLoop.hpp" rel="noopener" class="ext"><code>src/caffeine/core/GameLoop.hpp</code></a> / <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/core/GameLoop.cpp" rel="noopener" class="ext"><code>src/caffeine/core/GameLoop.cpp</code></a></li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/tests/test_gameloop.cpp" rel="noopener" class="ext"><code>tests/test_gameloop.cpp</code></a></li>
+<li><a href="/pt/docs/architecture_specs/"><code>docs/architecture_specs.md</code></a> — §1 Game Loop</li>
+<li><a href="/pt/docs/core/timer/"><code>core/timer.md</code></a> — Mede o <code>dt</code> alimentado ao loop</li>
+<li><a href="https://gameprogrammingpatterns.com/game-loop.html" rel="noopener" class="ext">Game Programming Patterns — Game Loop</a></li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/core/game-loop.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/core/timer/"><span>Anterior</span><strong>⏱️ High-Resolution Timer</strong></a><a class="pager-next" href="/pt/docs/core/events/"><span>Seguinte</span><strong>📢 Event Bus</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#visão-geral">Visão Geral</a></li><li class="l2"><a href="#api">API</a></li><li class="l2"><a href="#fluxo-detalhado-por-frame-tickdt">Fluxo Detalhado por Frame (tick(dt))</a></li><li class="l2"><a href="#spiral-of-death-prevention">Spiral of Death Prevention</a></li><li class="l2"><a href="#interpolação-de-renderização">Interpolação de Renderização</a></li><li class="l2"><a href="#exemplos-de-uso">Exemplos de Uso</a></li><li class="l2"><a href="#estados-do-loop">Estados do Loop</a></li><li class="l2"><a href="#decisões-de-design">Decisões de Design</a></li><li class="l2"><a href="#critério-de-aceitação">Critério de Aceitação</a></li><li class="l2"><a href="#dependências">Dependências</a></li><li class="l2"><a href="#referências">Referências</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec",mermaid:"/assets/vendor/mermaid.min.js"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

@@ -535,3 +535,14 @@ PNG with its old path). The Leaves node is wired to its leaf part's texture so i
 and its old size in metres becomes a share of the tree height (measured on that tree), with fold and droop
 kept. Saving writes the new format (`NATUREGRAPH2`), which older builds cannot open. A leaf-shape choice
 of "atlas" on a single-picture texture is not carried over: the layout now comes from the texture.
+
+## Using it in a world
+
+The [World Composer](world-composition.md) places nature recipes by reference: a `class` line names a
+`*.generator.nature` recipe and the composer bakes its variant pool, so editing the recipe changes every tree of the
+world. Expose a parameter of the graph and a composition can drive it from the ground with
+`adapt param.<name> <mask>`: a crown that grows larger near water, for instance. The graph text declares it with one
+line per parameter, `expose <name> <node>.<param> [min max]` (for example `expose rough 2.amount 0.1 1.25`); without
+a range the parameter's own range applies, and a graph with nothing exposed is unchanged, so old recipes and their
+bake caches stay valid. A `unique on` class is baked once
+per instance, for hero objects.

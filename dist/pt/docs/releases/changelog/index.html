@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog · Caffeine</title>
+<meta name="description" content="Alterações notáveis na engine e no Doppio até novembro de 2026, das mais recentes para as mais antigas, seguidas de um apêndice de commits capturado em 2026-09-22.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Changelog · Caffeine">
+<meta property="og:description" content="Alterações notáveis na engine e no Doppio até novembro de 2026, das mais recentes para as mais antigas, seguidas de um apêndice de commits capturado em 2026-09-22.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/releases/changelog/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/releases/changelog/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/releases/changelog/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/releases/changelog/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab active" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/releases/changelog/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/releases/changelog/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Projeto"><div class="nav-title">Projeto</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Versões</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link active" href="/pt/docs/releases/changelog/" aria-current="page">Changelog</a></li><li><a class="nav-link" href="/pt/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Planos</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/2026-10-19-dryad-node-scripts/">Dryad e scripts por nodes</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-forward-pbr-post-session/">Sessão 2026-10-02 — Forward PBR, reflexos, pós-processamento GPU</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-editor-backlog-phase-b/">Editor backlog — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-viewport-rendering-quality-session/">Sessão 2026-09-22 — Viewport 3D, Qualidade Visual e Performance</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-phong-gpu-handles-session/">Sessão 2026-09-22 — Phong GPU, Handles e Sombras</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap de Sistemas Fundamentais</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — 3D de Alto Volume</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - ANÁLISE COMPLETA &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP⁻¹ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-hot-reload-design/">Hot-Reload de Assets — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/">Marcos</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/archive/">Arquivo</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Análise</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/pt/docs/HISTORY/">História do desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/ECOSYSTEM_WORKFLOW/">Fluxo unificado de assets</a></li><li><a class="nav-link" href="/pt/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/pt/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/pt/docs/MASTER/">Índice master</a></li><li><a class="nav-link" href="/pt/docs/books/">Livros e PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/project/">Projeto</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Changelog</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p class="doc-lede">Alterações notáveis na engine e no Doppio até novembro de 2026, das mais recentes para as mais antigas, seguidas de um apêndice de commits capturado em 2026-09-22.</p>
+<p>Todas as alterações notáveis do projeto <strong>Caffeine Engine</strong> / <strong>Doppio IDE</strong> estão documentadas neste ficheiro.</p>
+<p>O formato segue <a href="https://keepachangelog.com/pt-BR/1.1.0/" rel="noopener" class="ext">Keep a Changelog</a> e o histórico completo (desde 2026-04-06) está no <a href="#ap%C3%AAndice--hist%C3%B3rico-completo-de-commits">Apêndice</a>.</p>
+<p>Legenda de categorias: <strong>Added</strong> · <strong>Changed</strong> · <strong>Fixed</strong> · <strong>Removed</strong> · <strong>Deprecated</strong> · <strong>Security</strong></p>
+<hr>
+<h2 id="unreleased">[Unreleased]<a class="anchor" href="#unreleased" aria-label="Link to this section">#</a></h2>
+<p><em>Nada por agora.</em></p>
+<hr>
+<h2 id="2026-11-18-documentation-refresh">[2026-11-18] — Documentation refresh<a class="anchor" href="#2026-11-18-documentation-refresh" aria-label="Link to this section">#</a></h2>
+<h3 id="added">Added<a class="anchor" href="#added" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>HTML-first authoring standard (<code>DOCS_STYLE.md</code>) with metadata strips, figures,
+callouts, collapsible reference blocks and rich tables.</li>
+<li><code>scripts/audit-docs.py</code>, <code>scripts/fix-doc-paths.py</code> and <code>scripts/modernize-docs.py</code>
+for links, source paths and HTML structure.</li>
+<li><code>scripts/capture-editor-docs.sh</code> and <code>scripts/capture-editor-tour.sh</code> for headless
+editor screenshots and MP4/GIF tours.</li>
+</ul>
+<h3 id="changed">Changed<a class="anchor" href="#changed" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Every documentation page now has a <code>doc-meta</code> strip and source links use absolute
+GitHub URLs.</li>
+<li>Editor pages describe the Rust/Iced Doppio; legacy C++/ImGui editor and plugin
+pages are explicitly marked.</li>
+<li>EN/PT mirrors are checked by structure (headings, fences, images) instead of exact
+line counts.</li>
+</ul>
+<h3 id="fixed">Fixed<a class="anchor" href="#fixed" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Stale source paths, broken relative links, missing Portuguese pages and outdated
+status fields across the documentation tree.</li>
+</ul>
+<h2 id="2026-09-23-performance-do-editor-profiler-hierárquico-skybox">[2026-09-23] — Performance do editor, profiler hierárquico &amp; skybox<a class="anchor" href="#2026-09-23-performance-do-editor-profiler-hierárquico-skybox" aria-label="Link to this section">#</a></h2>
+<h3 id="added-1">Added<a class="anchor" href="#added-1" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Profiler hierárquico</strong> — árvore de scopes com <code>self ms</code> (exclusivo), <code>total ms</code> (inclusivo), <code>% frame</code>, <code>% parent</code> e caminho completo no tooltip.</li>
+<li>Documentação <a href="/pt/docs/performance/editor-viewport-performance/"><code>docs/performance/editor-viewport-performance.md</code></a> e índice em <a href="/pt/docs/performance/"><code>docs/performance/README.md</code></a>.</li>
+<li><code>CF_PROFILE_SCOPE</code> granular em <code>SceneEditor</code>, <code>SceneViewport</code>, <code>GpuSceneRenderer</code> (<code>renderWithCamera</code>, <code>gather</code>, <code>shadows</code>, <code>draw</code>).</li>
+<li>Cache de GPU nos previews (Gameplay / Camera) — re-render só quando câmera ou tamanho mudam.</li>
+<li>Skybox <strong>motion-adaptive</strong>: raster a 384 px enquanto a câmera move; resolução completa após parar.</li>
+</ul>
+<h3 id="changed-1">Changed<a class="anchor" href="#changed-1" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Editor viewport ~10 → ~100 FPS</strong> — separação GPU/CPU por frame, shadow UBO uma vez por pass, cache de texturas de terreno, LOD ×2, cap 1280 px, sombras off no editor.</li>
+<li><code>GpuSceneRenderer</code>: samplers de sombra <strong>sempre</strong> ligados (evita SIGSEGV NVIDIA); passes de sombra omitidos no editor.</li>
+<li><code>SceneViewport</code>: skip de <code>gpuPass</code> quando câmera/canvas/modo inalterados.</li>
+<li>Previews: throttle GPU (intervalo 2 quando parado), caps de skybox reduzidos (256–640 px).</li>
+<li>Profiler UI: refresh da árvore a cada 15 frames; <code>Expand All</code> off por defeito.</li>
+</ul>
+<h3 id="fixed-1">Fixed<a class="anchor" href="#fixed-1" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Skybox a piscar e atrasar o terreno nos previews (sky + GPU dessincronizados).</li>
+<li>Erros ImGui <code>Missing TreePop()</code> / <code>PushID/PopID</code> na árvore do Profiler.</li>
+<li>Stutters ao mover câmera após remoção do throttle do skybox (raster adaptativo + menos GPU redundante).</li>
+<li>Correção de link em <code>tests/CMakeLists.txt</code> (<code>PluginSymbolExports.cpp</code>) para <code>CaffeineTest</code>.</li>
+</ul>
+<hr>
+<h2 id="2026-09-22-plugins-opcionais-qualidade-gpu">[2026-09-22] — Plugins opcionais &amp; qualidade GPU<a class="anchor" href="#2026-09-22-plugins-opcionais-qualidade-gpu" aria-label="Link to this section">#</a></h2>
+<h3 id="added-2">Added<a class="anchor" href="#added-2" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Plugin SDK</strong> público (<code>include/caffeine/plugin/</code>) com host API, service registry e carregamento dinâmico (<code>dlopen</code> + <code>-rdynamic</code>).</li>
+<li>Plugins opcionais: <strong>Git</strong>, <strong>Terrain Generator</strong>, <strong>Procedural Tools</strong>, <strong>Post Processing</strong>, <strong>Hello</strong> (demo).</li>
+<li>Painel Git com status, stage/unstage, commit, branches, remotes, stash, log e diff.</li>
+<li>Sistema procedural modular (terrain profile, structure spawner, benchmarks Lua).</li>
+<li>Post-processing modular por efeito + presets benchmark + bindings Lua.</li>
+<li>Terrain heightmap importer, collision mesh builder, algoritmo ultra-realistic (Node.js).</li>
+<li>Roadmaps: engine pillars, rendering, Phong GPU handles, viewport quality.</li>
+<li>Documentação: <code>plugin-sdk.md</code>, <code>git-plugin.md</code>, terrain, post-processing.</li>
+</ul>
+<h3 id="changed-2">Changed<a class="anchor" href="#changed-2" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Doppio core <strong>lean</strong>: geração de terrain e UI de features movidas para plugins.</li>
+<li><code>CAFFEINE_BUNDLE_DEFAULT_PLUGINS</code> (OFF por defeito) — plugins não copiados automaticamente.</li>
+<li>Inspector delega drawers de Post Process ao plugin; mensagens quando plugin ausente.</li>
+<li>Preview de post-process no <strong>Scene Viewport</strong> + overlays mais visíveis.</li>
+<li>Command palette: atalho <strong>Ctrl+L</strong> (mantém Ctrl+Shift+P).</li>
+<li>IDs estáveis de plugin (stem do <code>.so</code>) — corrige crash SIGSEGV ao carregar múltiplos plugins.</li>
+<li>Melhorias GPU: Phong materials, shadow maps (directional/point/spot), texture LOD/cache, <code>GpuSceneRenderer</code>, shaders <code>scene_lit</code>/<code>terrain_lit</code>.</li>
+<li><code>TimerScheduler</code>, <code>Camera3DSystem</code>, <code>PluginSymbolExports</code> para símbolos exportados a plugins.</li>
+<li>Viewport: pan/zoom 2D melhorado, click-to-select, qualidade de rendering.</li>
+</ul>
+<h3 id="removed">Removed<a class="anchor" href="#removed" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Geração procedural de terrain embutida no core (<code>src/caffeine/terrain/</code>).</li>
+<li>Bridges builtin terrain/procedural do Doppio (<code>TerrainBridge</code>, <code>ProceduralBridge</code> no core).</li>
+</ul>
+<hr>
+<h2 id="2026-09-18-runtime-build-pipeline-polish">[2026-09-18] — Runtime, build pipeline &amp; polish<a class="anchor" href="#2026-09-18-runtime-build-pipeline-polish" aria-label="Link to this section">#</a></h2>
+<h3 id="added-3">Added<a class="anchor" href="#added-3" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Pipeline de build do jogo (<code>BuildDialog</code>, <code>BuildSystem</code>, 7 estágios).</li>
+<li>Executável <code>caffeine-runtime</code> para play sem editor.</li>
+<li>Sistema de plugins inicial no Doppio.</li>
+<li>Melhorias de workflow: startup dialog, asset browser, project manager.</li>
+</ul>
+<h3 id="changed-3">Changed<a class="anchor" href="#changed-3" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Refinamentos de UX do editor e correções gerais (&quot;major fix&quot; ×3).</li>
+</ul>
+<hr>
+<h2 id="2026-05-24-testes-ui-seleção-3d">[2026-05-24] — Testes UI &amp; seleção 3D<a class="anchor" href="#2026-05-24-testes-ui-seleção-3d" aria-label="Link to this section">#</a></h2>
+<h3 id="added-4">Added<a class="anchor" href="#added-4" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Framework de testes UI JSON (<code>TestUIMapper</code>, <code>TestRequestHandler</code>, headless Doppio).</li>
+<li>Raycasting de seleção 3D, multi-select, focus camera (double-click).</li>
+<li>Gizmo com raycast em eixos finitos.</li>
+</ul>
+<hr>
+<h2 id="2026-05-23-mesh-prefabs-rendering-3d">[2026-05-23] — Mesh, prefabs &amp; rendering 3D<a class="anchor" href="#2026-05-23-mesh-prefabs-rendering-3d" aria-label="Link to this section">#</a></h2>
+<h3 id="added-5">Added<a class="anchor" href="#added-5" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Pipeline glTF/GLB → <code>.caf</code>, mesh cache, LOD framework.</li>
+<li>Drag-and-drop de meshes no viewport, &quot;Save as Prefab&quot;.</li>
+<li>Rendering 3D de meshes glTF com texturas embutidas e fill semi-transparente.</li>
+</ul>
+<hr>
+<h2 id="2026-05-20-2026-05-22-viewport-3d-animação-ecs">[2026-05-20 — 2026-05-22] — Viewport 3D, animação &amp; ECS<a class="anchor" href="#2026-05-20-2026-05-22-viewport-3d-animação-ecs" aria-label="Link to this section">#</a></h2>
+<h3 id="added-6">Added<a class="anchor" href="#added-6" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>View modes 2D / 3D / Isometric, orbit camera, grid 3D, gizmos XYZ.</li>
+<li>Componente <code>Transform</code> unificado (remove Position2D/Rotation/Scale2D).</li>
+<li>Animator Controller, timeline com scrubber, parâmetros nomeados.</li>
+<li>Hierarquia com herança de transform, auto-expand no drag-drop.</li>
+</ul>
+<h3 id="changed-4">Changed<a class="anchor" href="#changed-4" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Removidos <code>Health</code> e <code>Velocity2D</code> (migrado para <code>RigidBody2D</code>).</li>
+</ul>
+<hr>
+<h2 id="2026-05-17-2026-05-19-play-mode-inspector-scripting">[2026-05-17 — 2026-05-19] — Play mode, inspector &amp; scripting<a class="anchor" href="#2026-05-17-2026-05-19-play-mode-inspector-scripting" aria-label="Link to this section">#</a></h2>
+<h3 id="added-7">Added<a class="anchor" href="#added-7" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Play / Pause / Stop</strong> com snapshot de entidades.</li>
+<li>Component registry unificado, Add Component pesquisável.</li>
+<li>Camera Preview panel, frustum Camera2D/3D no viewport.</li>
+<li>Collider debug overlay, tileset loading, dual scripting Lua + C++.</li>
+<li>CAP browsing, waveform preview, drag-drop auto-pack no Asset Browser.</li>
+<li>Grid no viewport, componentes Camera/Light/MeshRenderer.</li>
+</ul>
+<hr>
+<h2 id="2026-05-14-2026-05-16-doppio-ide-caffeine-studio">[2026-05-14 — 2026-05-16] — Doppio IDE (Caffeine Studio)<a class="anchor" href="#2026-05-14-2026-05-16-doppio-ide-caffeine-studio" aria-label="Link to this section">#</a></h2>
+<h3 id="added-8">Added<a class="anchor" href="#added-8" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Split <strong>caffeine-core</strong> + <strong>doppio</strong> executável.</li>
+<li>Painéis: Hierarchy, Inspector, Viewport, Asset Browser, Scene Editor orchestrator.</li>
+<li>Undo/redo snapshot-based, SceneSerializer binário, Transform Gizmos.</li>
+<li>Drag-and-drop AssetBrowser→Viewport, ProjectManager, SceneTabManager.</li>
+<li>Asset Pipeline (TextureCompiler, HotReloader), FileWatcher nativo Windows.</li>
+<li>Script Editor, NativeScriptComponent, sandboxing Lua, ECS Lua bindings.</li>
+<li>Particle System, Animation Timeline, Tilemap Editor, Command Palette.</li>
+<li>Material Editor (ShaderGraph + ImNodes), Audio Preview, BuildDialog.</li>
+<li>ProjectStartupDialog com toasts e projetos recentes.</li>
+</ul>
+<h3 id="changed-5">Changed<a class="anchor" href="#changed-5" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Refactor dos painéis editor para <code>.hpp/.cpp</code> com design por membros.</li>
+</ul>
+<hr>
+<h2 id="2026-05-07-2026-05-11-ecs-sistemas-editor-base">[2026-05-07 — 2026-05-11] — ECS, sistemas &amp; editor base<a class="anchor" href="#2026-05-07-2026-05-11-ecs-sistemas-editor-base" aria-label="Link to this section">#</a></h2>
+<h3 id="added-9">Added<a class="anchor" href="#added-9" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>ECS</strong> archetype-based, CommandBuffer, ComponentQuery.</li>
+<li><strong>EventBus</strong> pub/sub com dispatch diferido.</li>
+<li><strong>AssetManager</strong> async/sync, cache, hot-reload.</li>
+<li><strong>BatchRenderer</strong>, TextureAtlas, Camera2D.</li>
+<li><strong>SceneManager</strong> + SceneSerializer, Physics2D, UI System, Audio (SDL3 spatial).</li>
+<li>Animation2D state machine, MeshLoader OBJ, Asset Pipeline encoders.</li>
+<li>ImGui integration (Profiler, Console, StatsOverlay).</li>
+<li>Quaternion/SLERP, Camera3D (FPS/Orbital/Follow), Octree, Frustum culling.</li>
+<li>Skeletal animation (bones, blend tree).</li>
+<li>Lua scripting (sol2), <code>caffeine-studio</code> executable.</li>
+</ul>
+<hr>
+<h2 id="2026-04-24-build-scripts-binários">[2026-04-24] — Build scripts &amp; binários<a class="anchor" href="#2026-04-24-build-scripts-binários" aria-label="Link to this section">#</a></h2>
+<h3 id="added-10">Added<a class="anchor" href="#added-10" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Build manager Python, scripts <code>.sh</code> / <code>.bat</code> / <code>.fish</code>.</li>
+<li>Gestão de versões e binários.</li>
+</ul>
+<hr>
+<h2 id="2026-04-14-concorrência-rhi">[2026-04-14] — Concorrência &amp; RHI<a class="anchor" href="#2026-04-14-concorrência-rhi" aria-label="Link to this section">#</a></h2>
+<h3 id="added-11">Added<a class="anchor" href="#added-11" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>High-resolution Timer (µs).</li>
+<li>Game Loop fixed timestep (60 Hz) + interpolação.</li>
+<li>Input System action-based remapeável.</li>
+<li>Debug tools (Log, Profiler, DebugDraw).</li>
+<li>Job System work-stealing (RF2.2–RF2.6).</li>
+<li><strong>RHI</strong> sobre SDL_GPU: RenderDevice, CommandBuffer (RF3.1–RF3.2).</li>
+</ul>
+<hr>
+<h2 id="2026-04-07-fase-1-fundação-atómica">[2026-04-07] — Fase 1: Fundação atómica<a class="anchor" href="#2026-04-07-fase-1-fundação-atómica" aria-label="Link to this section">#</a></h2>
+<h3 id="added-12">Added<a class="anchor" href="#added-12" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Tipos core (<code>u8</code>–<code>u64</code>, <code>f32</code>, platform defines).</li>
+<li>Allocators custom (Linear, Pool, Stack, <code>IAllocator</code>).</li>
+<li>Containers (<code>Vector</code>, <code>HashMap</code>, <code>FixedString</code>, <code>StringView</code>).</li>
+<li>Math (<code>Vec2</code>–<code>Vec4</code>, <code>Mat4</code>).</li>
+<li>CMake + Catch2 test suite.</li>
+<li>CI GitHub Actions (build + test).</li>
+</ul>
+<h3 id="changed-6">Changed<a class="anchor" href="#changed-6" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Documentação consolidada em <code>docs/</code>, diagramas Mermaid no ROADMAP.</li>
+</ul>
+<hr>
+<h2 id="2026-04-06-início-do-projeto">[2026-04-06] — Início do projeto<a class="anchor" href="#2026-04-06-início-do-projeto" aria-label="Link to this section">#</a></h2>
+<h3 id="added-13">Added<a class="anchor" href="#added-13" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Repositório inicial, README, dev manifesto, roadmap.</li>
+<li>Estrutura de documentação e planos de fases 0–6.</li>
+</ul>
+<hr>
+<hr>
+<h2 id="apêndice-histórico-completo-de-commits">Apêndice — Histórico completo de commits<a class="anchor" href="#apêndice-histórico-completo-de-commits" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p>Apêndice capturado em 2026-09-22: 419 commits desde 2026-04-06.</p>
+</blockquote>
+<h3 id="2026-04-81-commits">2026-04 (81 commits)<a class="anchor" href="#2026-04-81-commits" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>2026-04-06</code> [<code>387aeaa</code>] Initial commit</li>
+<li><code>2026-04-06</code> [<code>53b9af6</code>] Create README.md</li>
+<li><code>2026-04-06</code> [<code>8d2a6b1</code>] Update README.md</li>
+<li><code>2026-04-06</code> [<code>dc6bac5</code>] Create dev_manifesto.md</li>
+<li><code>2026-04-06</code> [<code>629d4c1</code>] Create roadmap.md</li>
+<li><code>2026-04-06</code> [<code>ee8b146</code>] Update README.md</li>
+<li><code>2026-04-06</code> [<code>d8e8abe</code>] feat/major refactor</li>
+<li><code>2026-04-06</code> [<code>020038d</code>] Update README.md</li>
+<li><code>2026-04-06</code> [<code>068c964</code>] Rename MASTER.md to README.md</li>
+<li><code>2026-04-06</code> [<code>5f34a2d</code>] feat/major refactor</li>
+<li><code>2026-04-06</code> [<code>d8e8d61</code>] Update README.md</li>
+<li><code>2026-04-06</code> [<code>06bdae7</code>] docs: convert ASCII diagrams to Mermaid in ROADMAP.md</li>
+<li><code>2026-04-06</code> [<code>8d58880</code>] feat/major refactor</li>
+<li><code>2026-04-07</code> [<code>2b97375</code>] feat(core): add core types and platform definitions</li>
+<li><code>2026-04-07</code> [<code>339cef7</code>] feat(memory): add custom allocator system</li>
+<li><code>2026-04-07</code> [<code>7ffde40</code>] feat(containers): add custom containers and math types</li>
+<li><code>2026-04-07</code> [<code>79fa9c9</code>] feat(build): add main include header and CMake setup</li>
+<li><code>2026-04-07</code> [<code>ede0f3e</code>] feat(tests): add test system design doc</li>
+<li><code>2026-04-07</code> [<code>5fc9cf8</code>] fix(ci): use correct std versions per compiler</li>
+<li><code>2026-04-07</code> [<code>73cece3</code>] fix(ci): use integer std versions (20/17 instead of c++20/c++17)</li>
+<li><code>2026-04-07</code> [<code>5c469a0</code>] fix(tests): replace MSVC-only /W4 flags with cross-platform equivalents</li>
+<li><code>2026-04-07</code> [<code>2933910</code>] fix(tests): add Catch2 subdirectory to include path</li>
+<li><code>2026-04-07</code> [<code>92cf593</code>] fix(containers): move HashMap constructor implementation out of class body</li>
+<li><code>2026-04-07</code> [<code>adab94f</code>] fix(tests): qualify all Math namespace functions to avoid ambiguity with std::</li>
+<li><code>2026-04-07</code> [<code>ff95152</code>] fix(tests): fix CF_INLINE test - macro expands to keywords, not value</li>
+<li><code>2026-04-07</code> [<code>cef1270</code>] fix(tests): add CATCH_CONFIG_MAIN to provide main() function</li>
+<li><code>2026-04-07</code> [<code>49cf0d0</code>] fix(tests): remove benchmarks - Catch2 v2 doesn't support BENCHMARK</li>
+<li><code>2026-04-07</code> [<code>11fd8d6</code>] fix(ci): fix executable paths - tests are in build/tests/</li>
+<li><code>2026-04-07</code> [<code>c530caa</code>] simplify(ci): minimal test workflow - build + run only</li>
+<li><code>2026-04-07</code> [<code>70e8314</code>] fix(ci): skip stress tests in CI - 1M allocations is too slow</li>
+<li><code>2026-04-07</code> [<code>f78952f</code>] fix(containers): add null allocator checks to prevent segfault</li>
+<li><code>2026-04-07</code> [<code>be79322</code>] fix(containers): support Vector without allocator - use global new/delete</li>
+<li><code>2026-04-07</code> [<code>8e6f522</code>] fix(tests): correct failing test assertions</li>
+<li><code>2026-04-07</code> [<code>56b6975</code>] docs(tests): add test summary with architecture principles</li>
+<li><code>2026-04-07</code> [<code>f858054</code>] Merge pull request #2 from devscafecommunity/feature/fase-1-test-system</li>
+<li><code>2026-04-07</code> [<code>3e27864</code>] docs: consolidate documentation into docs/ directory</li>
+<li><code>2026-04-07</code> [<code>1456645</code>] Merge pull request #3 from devscafecommunity/feature/fase-1-atomic-foundation</li>
+<li><code>2026-04-07</code> [<code>5c2f3fc</code>] docs: add Phase 1 technical documentation with cross-references</li>
+<li><code>2026-04-07</code> [<code>29e360d</code>] docs: add Phase 1 detailed review document</li>
+<li><code>2026-04-07</code> [<code>e4269f3</code>] docs: move Phase1 review to docs/reviews/ and add stress test workflow</li>
+<li><code>2026-04-07</code> [<code>f4ea9b6</code>] Update docs/containers/vector.md</li>
+<li><code>2026-04-07</code> [<code>fe41527</code>] Update docs/containers/vector.md</li>
+<li><code>2026-04-07</code> [<code>b13753b</code>] Apply suggestion from @Copilot</li>
+<li><code>2026-04-07</code> [<code>a6fcaf9</code>] Apply suggestion from @Copilot</li>
+<li><code>2026-04-08</code> [<code>62b6d0f</code>] docs: add 4.2 Caffeine Binary System (.caf) asset format section</li>
+<li><code>2026-04-08</code> [<code>2dfdaee</code>] Update README.md</li>
+<li><code>2026-04-11</code> [<code>aa75781</code>] Merge pull request #4 from devscafecommunity/feature/fase-1-atomic-foundation</li>
+<li><code>2026-04-11</code> [<code>c80fb7f</code>] feat/setup documentation guidelines for job system</li>
+<li><code>2026-04-14</code> [<code>fea12c2</code>] feat/setup guide docs</li>
+<li><code>2026-04-14</code> [<code>6866ed3</code>] feat(timer): implement high-resolution timer with RF2.1 microsecond precision</li>
+<li><code>2026-04-14</code> [<code>66a91d1</code>] Merge pull request #20 from devscafecommunity/9-high-resolution-timer</li>
+<li><code>2026-04-14</code> [<code>eb4edae</code>] feat(timer): port high-resolution timer from main branch</li>
+<li><code>2026-04-14</code> [<code>6a17572</code>] feat(gameloop): implement fixed timestep game loop with accumulator pattern (RF2.7, RF2.8)</li>
+<li><code>2026-04-14</code> [<code>04d39cf</code>] Merge remote-tracking branch 'origin/main' into 11-the-master-game-loop</li>
+<li><code>2026-04-14</code> [<code>ee19801</code>] Merge pull request #21 from devscafecommunity/11-the-master-game-loop</li>
+<li><code>2026-04-14</code> [<code>467d7e5</code>] feat(input): implement action-based input system with remappable bindings (RF2.9)</li>
+<li><code>2026-04-14</code> [<code>4f36538</code>] Merge pull request #24 from devscafecommunity/22-input-system</li>
+<li><code>2026-04-14</code> [<code>63f116e</code>] feat/debug tools</li>
+<li><code>2026-04-14</code> [<code>5275a05</code>] Merge pull request #25 from devscafecommunity/23-debug-tools</li>
+<li><code>2026-04-14</code> [<code>9630ee2</code>] build(rhi): integrate SDL3 dependency with find_package and DLL auto-copy</li>
+<li><code>2026-04-14</code> [<code>6e3bcb6</code>] feat(rhi): implement RenderDevice and CommandBuffer abstraction over SDL_GPU (RF3.1, RF3.2)</li>
+<li><code>2026-04-14</code> [<code>fc2a10c</code>] build(rhi): make SDL3 optional so CI builds without it</li>
+<li><code>2026-04-14</code> [<code>166c910</code>] Merge pull request #46 from devscafecommunity/12-rendering-hardware-interface-rhi</li>
+<li><code>2026-04-14</code> [<code>7f34033</code>] feat(threading): implement Job System with work-stealing thread pool (RF2.2-RF2.6)</li>
+<li><code>2026-04-14</code> [<code>34e9cc8</code>] Merge pull request #47 from devscafecommunity/10-job-system-worker-threads</li>
+<li><code>2026-04-15</code> [<code>57c45b0</code>] docs: consolidate legacy plans/ into fase2-6 structure</li>
+<li><code>2026-04-15</code> [<code>033b08a</code>] Merge pull request #49 from devscafecommunity/48-validate-and-standardize-systems</li>
+<li><code>2026-04-16</code> [<code>d0a8329</code>] Update README.md</li>
+<li><code>2026-04-16</code> [<code>c7e3e1d</code>] docs(readme): update documentation structure with phase details and status</li>
+<li><code>2026-04-16</code> [<code>13fa742</code>] Merge branch 'main' into 48-validate-and-standardize-systems</li>
+<li><code>2026-04-16</code> [<code>c48c78f</code>] Merge pull request #50 from devscafecommunity/48-validate-and-standardize-systems</li>
+<li><code>2026-04-24</code> [<code>283b483</code>] feat: add Python build manager core</li>
+<li><code>2026-04-24</code> [<code>c86b199</code>] fix: correct build_manager spec compliance (missing methods, return types, directories)</li>
+<li><code>2026-04-24</code> [<code>ad2aa24</code>] feat: add Windows build script (.bat)</li>
+<li><code>2026-04-24</code> [<code>e5347b0</code>] feat: add Unix build script (.sh)</li>
+<li><code>2026-04-24</code> [<code>e6e8873</code>] docs: add scripts documentation</li>
+<li><code>2026-04-24</code> [<code>72a8a84</code>] feat: add Fish shell build script (.fish)</li>
+<li><code>2026-04-24</code> [<code>c22f359</code>] feat: add binary management scripts</li>
+<li><code>2026-04-24</code> [<code>1897f13</code>] feat: add version manager for binaries</li>
+<li><code>2026-04-24</code> [<code>3406df0</code>] docs: add implementation summary for binary management scripts</li>
+<li><code>2026-04-24</code> [<code>02ca6f7</code>] Merge pull request #52 from devscafecommunity/51-compilation-and-binary-managment-scripts</li>
+</ul>
+<h3 id="2026-05-329-commits">2026-05 (329 commits)<a class="anchor" href="#2026-05-329-commits" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>2026-05-07</code> [<code>67ee38a</code>] Task 14: Expose ECS Core in Caffeine.hpp public API</li>
+<li><code>2026-05-07</code> [<code>6e9ba1b</code>] Task 15: Add comprehensive ECS documentation and examples</li>
+<li><code>2026-05-07</code> [<code>4761f52</code>] Add ECS development artifacts and planning documents</li>
+<li><code>2026-05-07</code> [<code>756de69</code>] Fix: Include <functional> in ComponentSet.hpp to enable std::hash specialization</li>
+<li><code>2026-05-07</code> [<code>50fe0ee</code>] Merge pull request #53 from devscafecommunity/32-ecs-core</li>
+<li><code>2026-05-07</code> [<code>bec1364</code>] feat(io): implement .caf Caffeine Asset Format (Issue #28)</li>
+<li><code>2026-05-07</code> [<code>5900f39</code>] fix(io): address validation findings from engineering requirements audit</li>
+<li><code>2026-05-07</code> [<code>1cde368</code>] Merge pull request #54 from devscafecommunity/28-formato-caf-caffeine-asset-format</li>
+<li><code>2026-05-08</code> [<code>07ec865</code>] feat(events): implement EventBus with pub/sub, deferred dispatch, and thread-safe queue</li>
+<li><code>2026-05-08</code> [<code>6143b62</code>] docs: update events.md and caf-format.md to reflect implemented state</li>
+<li><code>2026-05-08</code> [<code>67ddda7</code>] Merge pull request #55 from devscafecommunity/17-event-bus</li>
+<li><code>2026-05-08</code> [<code>ec86b12</code>] feat(assets): implement AssetManager with async/sync loading, cache, and hot-reload</li>
+<li><code>2026-05-08</code> [<code>209b1fe</code>] Merge pull request #56 from devscafecommunity/26-asset-manager</li>
+<li><code>2026-05-08</code> [<code>c787dcb</code>] feat(render): implement Camera2D system (RF3.7)</li>
+<li><code>2026-05-08</code> [<code>6c1f893</code>] Merge pull request #57 from devscafecommunity/29-camera-system</li>
+<li><code>2026-05-08</code> [<code>8f228ed</code>] feat(render): implement BatchRenderer and TextureAtlas (#27)</li>
+<li><code>2026-05-08</code> [<code>91e3d68</code>] Merge pull request #58 from devscafecommunity/27-batch-renderer</li>
+<li><code>2026-05-08</code> [<code>5835df2</code>] feat(scene): implement SceneManager and SceneSerializer (RF4.5)</li>
+<li><code>2026-05-08</code> [<code>33fbe84</code>] fix(scene): remove Color static const members, fix GCC default arg error</li>
+<li><code>2026-05-08</code> [<code>03fa4f3</code>] fix(scene): add explicit default ctor to TransitionConfig for GCC compat</li>
+<li><code>2026-05-08</code> [<code>14acfd3</code>] fix(scene): move TransitionType+TransitionConfig to namespace scope, fix GCC nested class error</li>
+<li><code>2026-05-08</code> [<code>4ec9f23</code>] Merge pull request #59 from devscafecommunity/34-scene-manager</li>
+<li><code>2026-05-08</code> [<code>e858991</code>] feat(physics): implement Physics2D system (RF4.10)</li>
+<li><code>2026-05-08</code> [<code>fb69c78</code>] fix(physics): qualify ComponentQuery as ECS::ComponentQuery for GCC</li>
+<li><code>2026-05-08</code> [<code>c7da097</code>] fix(physics): use std::fabs/sqrt/floor/fmin/fmax for GCC compatibility</li>
+<li><code>2026-05-08</code> [<code>645d402</code>] fix(physics): fix std::fabsf in test file for GCC</li>
+<li><code>2026-05-08</code> [<code>6ddd514</code>] fix(physics): replace Entity::get<T>() with World::get<T>(entity) for GCC compat</li>
+<li><code>2026-05-08</code> [<code>8c69ef4</code>] fix(physics): fix layerMask test - set collider layerMask to exclude query layer</li>
+<li><code>2026-05-08</code> [<code>a97fb1f</code>] Merge pull request #60 from devscafecommunity/33-physics-2d</li>
+<li><code>2026-05-08</code> [<code>90970b6</code>] feat(ui): implement UI system — RF4.11</li>
+<li><code>2026-05-08</code> [<code>412d36f</code>] fix(ui): replace c_str() with cStr() for FixedString GCC compat</li>
+<li><code>2026-05-08</code> [<code>145fe34</code>] fix(ui): exclude Canvas from hitTest — layout roots are not interactive targets</li>
+<li><code>2026-05-08</code> [<code>c143f95</code>] Merge pull request #61 from devscafecommunity/35-ui-system</li>
+<li><code>2026-05-08</code> [<code>416cee1</code>] feat(audio): implement AudioSystem with SDL3 streaming and spatial 2D audio</li>
+<li><code>2026-05-08</code> [<code>d191486</code>] Merge pull request #62 from devscafecommunity/31-audio-system</li>
+<li><code>2026-05-08</code> [<code>7dc9ae7</code>] feat(animation): implement AnimationSystem with sprite state machine (RF4.9)</li>
+<li><code>2026-05-08</code> [<code>1e2e05d</code>] Merge pull request #63 from devscafecommunity/30-animation-system</li>
+<li><code>2026-05-08</code> [<code>30096cb</code>] feat(mesh): implement MeshLoader with OBJ parser and MeshSystem (RF5.2)</li>
+<li><code>2026-05-08</code> [<code>b69fcfa</code>] Merge pull request #64 from devscafecommunity/40-mesh-loading</li>
+<li><code>2026-05-08</code> [<code>68589d8</code>] feat(editor): implement Dear ImGui integration with ProfilerWindow, ConsoleWindow, StatsOverlay (RF6.1, RF6.2)</li>
+<li><code>2026-05-08</code> [<code>6fb645c</code>] Merge pull request #65 from devscafecommunity/42-embedded-ui-dear-imgui</li>
+<li><code>2026-05-08</code> [<code>dbc1559</code>] feat(pipeline): implement Asset Pipeline with TextureEncoder, AudioEncoder, MeshEncoder, AssetManifest (RF6.5)</li>
+<li><code>2026-05-08</code> [<code>055f3bc</code>] fix(pipeline): fix AssetManifest load parsing multiple entries</li>
+<li><code>2026-05-09</code> [<code>31e055a</code>] fix(pipeline): fix AssetManifest load parsing of string fields (id, path, type)</li>
+<li><code>2026-05-09</code> [<code>928cc4c</code>] fix(pipeline): remove orphaned brace from AssetManifest load</li>
+<li><code>2026-05-09</code> [<code>e41c8d9</code>] Merge pull request #66 from devscafecommunity/41-asset-pipeline</li>
+<li><code>2026-05-09</code> [<code>bc46871</code>] feat(math): implement Quaternion with SLERP/NLERP, Euler, axis-angle (RF5.1)</li>
+<li><code>2026-05-10</code> [<code>69bc719</code>] Update README.md</li>
+<li><code>2026-05-10</code> [<code>5669b0f</code>] Update README.md</li>
+<li><code>2026-05-10</code> [<code>6aa80de</code>] fix(tests): correct Quat toEuler pitch/yaw, FP comparisons, PoolAllocator assertions, CF_ASSERT signal handling</li>
+<li><code>2026-05-10</code> [<code>4209091</code>] Merge pull request #67 from devscafecommunity/36-3d-math-extension</li>
+<li><code>2026-05-10</code> [<code>46af94d</code>] feat(editor): implement EditorContext and NameComponent</li>
+<li><code>2026-05-10</code> [<code>0be4783</code>] feat(editor): implement Hierarchy, Inspector, Viewport, and AssetBrowser panels</li>
+<li><code>2026-05-10</code> [<code>b0ee6a5</code>] feat(editor): implement SceneEditor orchestrator</li>
+<li><code>2026-05-10</code> [<code>d0d272d</code>] feat(editor): integrate editor includes into Caffeine.hpp and mark RF6.3/RF6.4 complete</li>
+<li><code>2026-05-10</code> [<code>f0130e2</code>] Merge pull request #68 from devscafecommunity/43-scene-editor</li>
+<li><code>2026-05-10</code> [<code>c461c5c</code>] feat(spatial): implement Octree with AABB3D, Frustum, and spatial queries</li>
+<li><code>2026-05-10</code> [<code>ef1b64b</code>] feat(spatial): integrate Octree module into main engine header</li>
+<li><code>2026-05-10</code> [<code>97fb937</code>] docs(spatial): update spatial partitioning documentation for Octree module</li>
+<li><code>2026-05-10</code> [<code>1025e0b</code>] Merge pull request #69 from devscafecommunity/43-scene-editor</li>
+<li><code>2026-05-10</code> [<code>97af1c6</code>] feat(math): add Mat4::inverted() using cofactor expansion</li>
+<li><code>2026-05-10</code> [<code>228162c</code>] feat(camera3d): implement Camera3D with FPS, Orbital, Follow modes and frustum culling</li>
+<li><code>2026-05-10</code> [<code>c556d52</code>] test(camera3d): add 20+ test cases for Camera3D</li>
+<li><code>2026-05-10</code> [<code>6de934c</code>] fix(camera3d): correct Mat4::inverted() transpose bug and Camera3D sync directions</li>
+<li><code>2026-05-10</code> [<code>b364116</code>] Merge pull request #70 from devscafecommunity/37-camera-3d</li>
+<li><code>2026-05-10</code> [<code>e305f90</code>] feat(skeletal-animation): implement Bone/Skeleton, keyframe interpolation, blend tree, and ECS system</li>
+<li><code>2026-05-10</code> [<code>b1efbc3</code>] Merge pull request #71 from devscafecommunity/39-skeletal-animation</li>
+<li><code>2026-05-11</code> [<code>578605a</code>] feat(script): implement Lua scripting with sol2 and fix SIGSEGV from archetype mutation</li>
+<li><code>2026-05-11</code> [<code>f6f5ecf</code>] Merge pull request #72 from devscafecommunity/39-skeletal-animation</li>
+<li><code>2026-05-11</code> [<code>e32eb57</code>] docs: remove old phase-based documentation structure</li>
+<li><code>2026-05-11</code> [<code>70848a6</code>] docs: reorganize documentation into functional modules</li>
+<li><code>2026-05-11</code> [<code>9ccda52</code>] docs: add Caffeine Studio IDE planning (M1-M4 milestones)</li>
+<li><code>2026-05-11</code> [<code>493b651</code>] Merge pull request #73 from devscafecommunity/docs/docs-reorganization</li>
+<li><code>2026-05-11</code> [<code>cdf9b4f</code>] ci: add release workflow for v0.0.1-beta with core, ide, and bundle artifacts</li>
+<li><code>2026-05-11</code> [<code>bf024d7</code>] ci: fix release workflow - separate core/full builds to avoid ImGui API errors</li>
+<li><code>2026-05-11</code> [<code>f78401f</code>] feat(ide): add caffeine-studio executable and fix ImGui 1.91.9 API compatibility</li>
+<li><code>2026-05-11</code> [<code>76c5db5</code>] fix(ide): fix ImGui 1.91.9 API compat and AssetManager constructor</li>
+<li><code>2026-05-11</code> [<code>1848649</code>] fix(ide): change InspectorPanel HashMap key from ComponentID to u32</li>
+<li><code>2026-05-14</code> [<code>5bb352b</code>] docs(planning): add T0 - core/IDE decoupling into caffeine-engine and doppio</li>
+<li><code>2026-05-14</code> [<code>1e4a782</code>] refactor(build): split into caffeine-core library and doppio IDE executable (T0)</li>
+<li><code>2026-05-14</code> [<code>d6f939f</code>] fix(tools): add missing <cstring> include in TextureEncoder.hpp</li>
+<li><code>2026-05-14</code> [<code>80aaa56</code>] Merge pull request #82 from devscafecommunity/74-caffeine-studio-ide-plano-de-desenvolvimento</li>
+<li><code>2026-05-14</code> [<code>881e136</code>] feat(editor): implement EditorContext with snapshot-based undo/redo</li>
+<li><code>2026-05-14</code> [<code>4c924cd</code>] Merge pull request #83 from devscafecommunity/75-editorcontext-undoredo</li>
+<li><code>2026-05-14</code> [<code>7b425ed</code>] feat(editor): implement dedicated HierarchyPanel with search, context menu, delete key</li>
+<li><code>2026-05-14</code> [<code>806a30b</code>] Fix build: add missing HierarchyPanel.hpp include in test_editor.cpp</li>
+<li><code>2026-05-14</code> [<code>98df3de</code>] Merge pull request #84 from devscafecommunity/76-hierarchy-panel</li>
+<li><code>2026-05-14</code> [<code>7361406</code>] refactor(editor): split SceneViewport into .hpp/.cpp with member-based design (RF6.4)</li>
+<li><code>2026-05-14</code> [<code>1fc0865</code>] Merge pull request #85 from devscafecommunity/78-scene-viewport</li>
+<li><code>2026-05-14</code> [<code>e0e4bbe</code>] refactor(editor): split AssetBrowser into .hpp/.cpp with filesystem navigation (RF6.5)</li>
+<li><code>2026-05-14</code> [<code>5b91eda</code>] Merge pull request #86 from devscafecommunity/79-asset-browser-v1</li>
+<li><code>2026-05-14</code> [<code>c27ae3e</code>] refactor(editor): split InspectorPanel into .hpp/.cpp with component drawers (RF6.3)</li>
+<li><code>2026-05-14</code> [<code>eb74478</code>] Merge pull request #87 from devscafecommunity/77-inspector-panel</li>
+<li><code>2026-05-14</code> [<code>c262926</code>] feat(editor): split SceneEditor into .hpp/.cpp with dockspace, menus, console, profiler (RF6.6)</li>
+<li><code>2026-05-14</code> [<code>9cdd3c2</code>] Merge pull request #88 from devscafecommunity/80-scene-editor-orchestrator</li>
+<li><code>2026-05-14</code> [<code>64f0f86</code>] feat(editor): SceneSerializer with binary save/load + unsaved changes popup (RF6.7)</li>
+<li><code>2026-05-14</code> [<code>0a07a0e</code>] Merge pull request #89 from devscafecommunity/81-saveload-scene</li>
+<li><code>2026-05-14</code> [<code>ede11e9</code>] docs: add Transform Gizmos design document</li>
+<li><code>2026-05-14</code> [<code>2dc4298</code>] docs: add Transform Gizmos implementation plan</li>
+<li><code>2026-05-14</code> [<code>671a48d</code>] feat(editor): implement Transform Gizmos with translate/rotate/scale modes</li>
+<li><code>2026-05-14</code> [<code>cbb395c</code>] Merge origin/main into 39-skeletal-animation</li>
+<li><code>2026-05-14</code> [<code>52ce138</code>] fix: remove glm dependency, use Caffeine::Vec2/Vec3 instead</li>
+<li><code>2026-05-14</code> [<code>ddbd1c4</code>] Merge pull request #97 from devscafecommunity/39-skeletal-animation</li>
+<li><code>2026-05-15</code> [<code>0260fdf</code>] feat(editor): DragDropSystem with AssetBrowser→Viewport and Inspector asset drops (RF6.2)</li>
+<li><code>2026-05-15</code> [<code>227a87e</code>] chore: retrigger CI</li>
+<li><code>2026-05-15</code> [<code>77b0c05</code>] Merge pull request #98 from devscafecommunity/91-drag-and-drop</li>
+<li><code>2026-05-15</code> [<code>4431659</code>] docs: add Asset Pipeline design document</li>
+<li><code>2026-05-15</code> [<code>dc842ae</code>] feat(core): add native Windows FileWatcher (ReadDirectoryChangesW)</li>
+<li><code>2026-05-15</code> [<code>36aa01d</code>] feat(assets): add AssetPipeline with IAssetCompiler interface and manifest system</li>
+<li><code>2026-05-15</code> [<code>d4be1cd</code>] feat(assets): add TextureCompiler with stb_image PNG/JPG to .caf conversion</li>
+<li><code>2026-05-15</code> [<code>4b3c025</code>] fix(core): guard FileWatcher Windows API behind _WIN32 for cross-platform build</li>
+<li><code>2026-05-15</code> [<code>15ff33d</code>] Merge pull request #99 from devscafecommunity/92-asset-pipeline-integration</li>
+<li><code>2026-05-15</code> [<code>e095133</code>] feat(assets): implement HotReloader for .caf asset hot-reloading</li>
+<li><code>2026-05-15</code> [<code>03dd9f2</code>] docs: add HotReloader design document</li>
+<li><code>2026-05-15</code> [<code>fb3eb55</code>] Merge pull request #100 from devscafecommunity/93-hot-reload-de-assets</li>
+<li><code>2026-05-15</code> [<code>a9ed4b3</code>] feat(editor): implement ProjectManager for project lifecycle</li>
+<li><code>2026-05-15</code> [<code>5aec7d4</code>] fix: add missing <algorithm> include for std::find on GCC/Linux</li>
+<li><code>2026-05-15</code> [<code>65d7246</code>] Merge pull request #101 from devscafecommunity/94-project-manager</li>
+<li><code>2026-05-15</code> [<code>8292dc7</code>] feat(editor): implement AssetBrowser v2 with data/UI separation</li>
+<li><code>2026-05-15</code> [<code>a3e5119</code>] Merge pull request #102 from devscafecommunity/95-asset-browser-v2</li>
+<li><code>2026-05-15</code> [<code>137e577</code>] feat(editor): add SceneTabManager with data/UI layers</li>
+<li><code>2026-05-15</code> [<code>7301491</code>] feat(editor): integrate SceneTabManager into SceneEditor</li>
+<li><code>2026-05-15</code> [<code>2aa4a9b</code>] test(editor): add SceneTabManager tests</li>
+<li><code>2026-05-15</code> [<code>81eaf5a</code>] Merge pull request #103 from devscafecommunity/96-multiple-scene-tabs</li>
+<li><code>2026-05-15</code> [<code>466de9e</code>] build: add caffeine-ui interface library and caffeine-combined executable targets</li>
+<li><code>2026-05-15</code> [<code>a071c6d</code>] fix(assets,audio): fix MeshLoader createBuffer signature and SDL3 audio device constant</li>
+<li><code>2026-05-15</code> [<code>858c074</code>] fix(rhi): fix frame lifecycle — acquire swapchain in beginFrame, create real render pass in beginRenderPass</li>
+<li><code>2026-05-15</code> [<code>88fbcc4</code>] fix(editor): fix doppio startup crash — enable docking, guard null viewport texture, add imgui_internal</li>
+<li><code>2026-05-15</code> [<code>3a91665</code>] feat(apps): add caffeine-combined app demonstrating core + ui integration</li>
+<li><code>2026-05-15</code> [<code>3c9885a</code>] Merge pull request #104 from devscafecommunity/96-multiple-scene-tabs</li>
+<li><code>2026-05-15</code> [<code>30eff55</code>] feat(editor): add native Script Editor for .lua files</li>
+<li><code>2026-05-15</code> [<code>737d0cd</code>] fix(doppio): fix SceneViewport default Config + add ScriptEditorWindow to build</li>
+<li><code>2026-05-15</code> [<code>fa32f00</code>] Merge pull request #113 from devscafecommunity/105-31-lua-vm</li>
+<li><code>2026-05-15</code> [<code>b03e195</code>] feat(script): add NativeScriptComponent for C++ scripts</li>
+<li><code>2026-05-15</code> [<code>e620b92</code>] Merge pull request #114 from devscafecommunity/106-32-script-component-system</li>
+<li><code>2026-05-15</code> [<code>a00f557</code>] feat(script): complete sandboxing implementation</li>
+<li><code>2026-05-15</code> [<code>824c359</code>] Merge pull request #115 from devscafecommunity/108-34-sandboxing</li>
+<li><code>2026-05-15</code> [<code>ca8dbc1</code>] feat(script): add addTransform/addSprite aliases to match spec API</li>
+<li><code>2026-05-15</code> [<code>cd301c2</code>] Merge pull request #116 from devscafecommunity/107-33-ecs-lua-bindings</li>
+<li><code>2026-05-15</code> [<code>0122d6b</code>] feat(editor): add ScriptComponent to InspectorPanel</li>
+<li><code>2026-05-16</code> [<code>b78c2d1</code>] Merge pull request #117 from devscafecommunity/110-36-editor-script-integration</li>
+<li><code>2026-05-16</code> [<code>fb3853e</code>] feat(graphics): add Particle System</li>
+<li><code>2026-05-16</code> [<code>47e431e</code>] Merge pull request #118 from devscafecommunity/111-37-particle-system</li>
+<li><code>2026-05-16</code> [<code>a0dfb46</code>] feat(editor): add Animation Timeline Editor panel</li>
+<li><code>2026-05-16</code> [<code>a982a0d</code>] Merge pull request #127 from devscafecommunity/119-41-animation-timeline-editor</li>
+<li><code>2026-05-16</code> [<code>a615c03</code>] feat(editor): add Tilemap Editor panel</li>
+<li><code>2026-05-16</code> [<code>ec33ede</code>] Merge pull request #128 from devscafecommunity/120-42-tilemap-editor</li>
+<li><code>2026-05-16</code> [<code>7e93ba4</code>] feat(editor): add Command Palette</li>
+<li><code>2026-05-16</code> [<code>55a6eda</code>] feat(editor): integrate new panels into SceneEditor</li>
+<li><code>2026-05-16</code> [<code>5e090b1</code>] fix: suppress unused parameter warnings</li>
+<li><code>2026-05-16</code> [<code>46f12b5</code>] fix: resolve CI build warnings and test failures</li>
+<li><code>2026-05-16</code> [<code>9aae1b8</code>] Merge pull request #129 from devscafecommunity/feature/command-palette</li>
+<li><code>2026-05-16</code> [<code>59f7db8</code>] docs: add Material &amp; Shader Editor design document</li>
+<li><code>2026-05-16</code> [<code>4a292f8</code>] feat(editor): add ShaderNode hierarchy with code generation</li>
+<li><code>2026-05-16</code> [<code>9b58e63</code>] feat(editor): add ShaderGraph with GLSL compilation</li>
+<li><code>2026-05-16</code> [<code>458804b</code>] feat(editor): add Material Editor panel with ImNodes graph</li>
+<li><code>2026-05-16</code> [<code>380282a</code>] feat(editor): add PreviewRenderer with ImGui fallback</li>
+<li><code>2026-05-16</code> [<code>b108fcf</code>] feat(editor): add edge case handling for node deletion and empty graph</li>
+<li><code>2026-05-16</code> [<code>00e2dce</code>] docs: add implementation plan, remove fmt dependency from shader files</li>
+<li><code>2026-05-16</code> [<code>93348df</code>] Merge branch 'main' into 122-43-material-shader-editor</li>
+<li><code>2026-05-16</code> [<code>90f6d9a</code>] Merge pull request #130 from devscafecommunity/122-43-material-shader-editor</li>
+<li><code>2026-05-16</code> [<code>8ae3c74</code>] feat(editor): add Audio Preview &amp; Spatial Placement (#121)</li>
+<li><code>2026-05-16</code> [<code>7fbca5d</code>] fix(editor): add ImNodes CreateContext and fix query ordering to prevent MaterialEditorPanel crash</li>
+<li><code>2026-05-16</code> [<code>8400763</code>] test: add E2E testing infrastructure with imgui_test_engine and DoppioTest</li>
+<li><code>2026-05-16</code> [<code>81855ed</code>] docs: complete frontend audit - implement drawRigidBody2D, document unfinished stubs</li>
+<li><code>2026-05-16</code> [<code>477d959</code>] feat: add universal build script for easy project compilation</li>
+<li><code>2026-05-16</code> [<code>d65b19b</code>] docs: add BuildSystem Integration design document</li>
+<li><code>2026-05-16</code> [<code>80d5611</code>] feat: implement BuildSystem integration with 7-stage pipeline, BuildDialog UI, and AssetCooker stubs</li>
+<li><code>2026-05-16</code> [<code>81e8245</code>] fix: add imgui_test_engine sources to doppio executable linking</li>
+<li><code>2026-05-16</code> [<code>0bf8067</code>] feat: implement ProjectStartupDialog - critical project startup workflow</li>
+<li><code>2026-05-16</code> [<code>c1c7d67</code>] feat: add drag-drop support to ScriptEditorWindow - drag .lua files from Asset Browser</li>
+<li><code>2026-05-16</code> [<code>0413395</code>] feat: add drag-drop support to AudioPreviewPanel - drag .wav/.ogg files from Asset Browser</li>
+<li><code>2026-05-16</code> [<code>60d5957</code>] feat: implement AnimationTimeline playback with delta time - add frame timing and advance animations during render</li>
+<li><code>2026-05-16</code> [<code>238637f</code>] feat: implement TilemapEditor visual grid canvas with tile painting and tools - adds interactive grid display with brush, bucket, eraser, and picker tools</li>
+<li><code>2026-05-16</code> [<code>e118639</code>] fix: use BeginPopupModal for ProjectStartupDialog to ensure proper rendering</li>
+<li><code>2026-05-16</code> [<code>d4e48d7</code>] Fix ProjectStartupDialog: switch from modal popup to regular window, simplify UI</li>
+<li><code>2026-05-16</code> [<code>a135349</code>] Fix: ProjectStartupDialog ImGui rendering</li>
+<li><code>2026-05-16</code> [<code>4cb2f45</code>] docs: add ProjectStartupDialog tabs design specification</li>
+<li><code>2026-05-16</code> [<code>a4aef38</code>] docs: add ProjectStartupDialog tabs implementation plan</li>
+<li><code>2026-05-16</code> [<code>6ef22e6</code>] feat: add toast notification data structure to ProjectStartupDialog</li>
+<li><code>2026-05-16</code> [<code>946af26</code>] feat: implement toast notification methods (showToast, updateToasts)</li>
+<li><code>2026-05-16</code> [<code>af1a708</code>] feat: implement toast notification rendering with ImGui</li>
+<li><code>2026-05-16</code> [<code>fa5b334</code>] feat: refactor render() into tab-based architecture with BeginTabBar</li>
+<li><code>2026-05-16</code> [<code>6e7b7f9</code>] feat: add recent projects state variables to ProjectStartupDialog</li>
+<li><code>2026-05-16</code> [<code>690affe</code>] feat: implement Open Recent tab with search filtering</li>
+<li><code>2026-05-16</code> [<code>4f1031f</code>] feat: implement Browse Projects tab with results list</li>
+<li><code>2026-05-16</code> [<code>27177fc</code>] feat: implement file picker for project creation and browsing</li>
+<li><code>2026-05-16</code> [<code>ba207d4</code>] fix: prevent state pollution between multiple file pickers</li>
+<li><code>2026-05-16</code> [<code>6096d96</code>] fix: file picker state management and integration</li>
+<li><code>2026-05-16</code> [<code>67e85c5</code>] fix: prevent file picker from re-opening after cancellation</li>
+<li><code>2026-05-16</code> [<code>ec1a61b</code>] fix: call ImGui::End() regardless of Begin() return value</li>
+<li><code>2026-05-16</code> [<code>feea0ee</code>] fix: ImGui ID conflicts in Open Recent and Browse tabs</li>
+<li><code>2026-05-16</code> [<code>107ed2c</code>] fix: close ProjectStartupDialog when project is selected</li>
+<li><code>2026-05-16</code> [<code>adf49c4</code>] docs: add comprehensive session summary for ProjectStartupDialog implementation</li>
+<li><code>2026-05-17</code> [<code>23d3f57</code>] chore: add .worktrees/ to gitignore</li>
+<li><code>2026-05-17</code> [<code>fc6094d</code>] docs: add three-phase design for doppio editor integration + phase 2-3 features</li>
+<li><code>2026-05-17</code> [<code>45db648</code>] docs: add detailed three-phase implementation plan with bite-sized tasks</li>
+<li><code>2026-05-17</code> [<code>fc4c941</code>] feat: add CAP file browsing mode to Asset Browser</li>
+<li><code>2026-05-17</code> [<code>9abec52</code>] feat: add audio waveform generator for Asset Browser previews</li>
+<li><code>2026-05-17</code> [<code>715a95c</code>] feat: add drag-drop auto-pack import to Asset Browser</li>
+<li><code>2026-05-17</code> [<code>b2e2108</code>] feat: add placeholder for game.cap auto-load on project open</li>
+<li><code>2026-05-17</code> [<code>5c2187b</code>] feat: add Phase 1 integration tests with Catch2</li>
+<li><code>2026-05-17</code> [<code>bb5135d</code>] chore: update caf-pack submodule reference (Task 2.1: Mesh Processor)</li>
+<li><code>2026-05-17</code> [<code>7ed1c73</code>] chore: update caf-pack submodule reference (Task 2.2: Compression)</li>
+<li><code>2026-05-17</code> [<code>24a517c</code>] Submodule: Update caf-pack to include Task 2.3 (Asset ID Header Generator)</li>
+<li><code>2026-05-17</code> [<code>4ad5118</code>] Task 3.1: Implement async asset loading infrastructure</li>
+<li><code>2026-05-17</code> [<code>33ec08d</code>] Task 3.2: Document complete ecosystem workflow</li>
+<li><code>2026-05-17</code> [<code>0c7f14d</code>] Task 3.3: Add Phase 2 &amp; 3 verification tests</li>
+<li><code>2026-05-17</code> [<code>9103dc0</code>] fix: add missing CapLoader and AudioWaveformRenderer to DoppioTest</li>
+<li><code>2026-05-17</code> [<code>2a5de94</code>] fix: update caf-pack submodule to use FNV-1a per specification</li>
+<li><code>2026-05-17</code> [<code>4596a2d</code>] feat: add grid rendering to Scene Viewport</li>
+<li><code>2026-05-17</code> [<code>d5fb975</code>] feat: add Camera2D and Camera3D components</li>
+<li><code>2026-05-17</code> [<code>45b9d6b</code>] feat: add Light components (Directional, Point, Spot)</li>
+<li><code>2026-05-17</code> [<code>c5f5bd0</code>] feat: add MeshRenderer components</li>
+<li><code>2026-05-17</code> [<code>770c4a0</code>] feat: add entity type selector UI to Hierarchy Panel</li>
+<li><code>2026-05-17</code> [<code>99152ef</code>] fix: rename ECS components to avoid namespace collisions</li>
+<li><code>2026-05-18</code> [<code>6eaad41</code>] Fix namespace collision and build errors - remove using namespace Caffeine from editor headers</li>
+<li><code>2026-05-18</code> [<code>fa7b949</code>] Fix caf-pack subdirectory reference in CMakeLists.txt</li>
+<li><code>2026-05-18</code> [<code>0ccdfb8</code>] fix: make caf-pack submodule optional in CMake build</li>
+<li><code>2026-05-18</code> [<code>57bd09d</code>] fix: make editor dependencies optional for headless build</li>
+<li><code>2026-05-18</code> [<code>88d768a</code>] fix: wrap caf-pack dependencies in AssetBrowser and disable tests</li>
+<li><code>2026-05-18</code> [<code>e097e67</code>] fix: resolve ProjectStartupDialog linker errors in doppio</li>
+<li><code>2026-05-18</code> [<code>2767410</code>] fix: enable FilePicker on Windows for Browse and Recent tabs</li>
+<li><code>2026-05-18</code> [<code>40a575b</code>] feat: apply cleaner default layout profile on IDE startup</li>
+<li><code>2026-05-18</code> [<code>05ef449</code>] fix: increase FilePicker window size to reduce scrolling</li>
+<li><code>2026-05-18</code> [<code>417a0d4</code>] feat: enable Lua scripting by default for editor build</li>
+<li><code>2026-05-18</code> [<code>ac7125a</code>] feat(editor): add play mode state and system members to SceneEditor</li>
+<li><code>2026-05-18</code> [<code>d30b98d</code>] feat(editor): implement play/pause/stop mode with entity snapshot and system ticking</li>
+<li><code>2026-05-18</code> [<code>dd6e12f</code>] feat(editor): add physics collider debug overlay to scene viewport</li>
+<li><code>2026-05-18</code> [<code>ae5161d</code>] feat(editor): add script component inspector drawer with path and load button</li>
+<li><code>2026-05-18</code> [<code>1f47794</code>] feat(editor): add tileset asset loading with texture-based tile palette</li>
+<li><code>2026-05-18</code> [<code>59929fa</code>] feat(editor): wire tileset load command into command palette</li>
+<li><code>2026-05-18</code> [<code>5f33437</code>] feat(editor): add Collider2D, Velocity2D and Health inspector drawers</li>
+<li><code>2026-05-18</code> [<code>52ab107</code>] fix(editor): sync recent projects list from ProjectManager on every render</li>
+<li><code>2026-05-18</code> [<code>b0ddf27</code>] feat: multi-select, copy/paste/duplicate, physics debug toggle, snap to grid, undo coverage, settings apply</li>
+<li><code>2026-05-18</code> [<code>71ccdf6</code>] feat: add GameObject primitives, UI components, and UISystem integration</li>
+<li><code>2026-05-18</code> [<code>3cd1d10</code>] docs: add Inspector 2.0 implementation plan</li>
+<li><code>2026-05-18</code> [<code>092717e</code>] feat(ecs): add Transform component and DisabledTag</li>
+<li><code>2026-05-18</code> [<code>0bdef6d</code>] feat(editor): add InspectorWidgets helper library</li>
+<li><code>2026-05-18</code> [<code>71eef32</code>] feat(editor): add ComponentRegistry with all component entries</li>
+<li><code>2026-05-18</code> [<code>7b4148c</code>] feat(inspector): unified Transform drawer and ComponentHeader lifecycle</li>
+<li><code>2026-05-18</code> [<code>79fea16</code>] feat(inspector): asset picker fields for Sprite, AudioSource, MeshFilter</li>
+<li><code>2026-05-18</code> [<code>8d97efe</code>] feat(inspector): searchable Add Component menu via ComponentRegistry</li>
+<li><code>2026-05-18</code> [<code>9790e25</code>] feat(hierarchy): new entities created with Transform component</li>
+<li><code>2026-05-19</code> [<code>70c0a23</code>] fix: 4 editor bugs - transform sync, gizmo, component popup, tab flickering</li>
+<li><code>2026-05-19</code> [<code>de326a0</code>] feat: dual script system - Lua and C++ scripts</li>
+<li><code>2026-05-19</code> [<code>60f61e2</code>] refactor: move game scripts from scripts/ to assets/scripts/</li>
+<li><code>2026-05-19</code> [<code>3191715</code>] feat(editor): move play/pause/stop buttons into main menu bar</li>
+<li><code>2026-05-19</code> [<code>b03e83f</code>] fix(editor): add missing Position2D constraint in enterPlayMode query to prevent segfault</li>
+<li><code>2026-05-19</code> [<code>2e4979c</code>] feat(editor): empty entities now include Transform/Position2D/Rotation/Scale2D by default</li>
+<li><code>2026-05-19</code> [<code>d4101f3</code>] feat(viewport): draw diamond marker for empty entities with Position2D but no Sprite</li>
+<li><code>2026-05-19</code> [<code>59434b2</code>] fix(editor): add Transform/Position2D to entities created via toolbar + button</li>
+<li><code>2026-05-19</code> [<code>d035dac</code>] feat(editor): collider debug color per-collider + ColorEdit4 in inspector</li>
+<li><code>2026-05-19</code> [<code>800b1aa</code>] fix(physics): remove Collider2D dependency from integrate/sleep; auto-add Velocity2D with RigidBody2D</li>
+<li><code>2026-05-19</code> [<code>454fef1</code>] fix(collider): world-unit sizes — default 1x1, drag step 0.01 so colliders appear at correct scale</li>
+<li><code>2026-05-19</code> [<code>cdc2ad4</code>] fix(physics): correct gravity (-9.81 not *60), disable sleep under gravity, lower sleep threshold to 0.05</li>
+<li><code>2026-05-19</code> [<code>b781a2f</code>] fix(collider): default size 1x1 radius 0.5 in ComponentRegistry (was hardcoded 64x64)</li>
+<li><code>2026-05-19</code> [<code>1d88045</code>] feat(editor): Camera Preview dock panel — shows scene from camera POV, No Cameras detected fallback</li>
+<li><code>2026-05-19</code> [<code>1563e7a</code>] chore: remove stale example script files</li>
+<li><code>2026-05-20</code> [<code>ad87924</code>] feat(editor): Camera2D auto-adds Position2D; draw camera frustum in scene viewport</li>
+<li><code>2026-05-20</code> [<code>ce447ae</code>] feat(ecs): unify Transform component, remove Position2D/Rotation/Scale2D</li>
+<li><code>2026-05-20</code> [<code>5b6e004</code>] feat(editor): add ViewMode + camera orbit state to EditorContext</li>
+<li><code>2026-05-20</code> [<code>1005469</code>] feat(viewport): 3D/2D/Iso modes, XYZ gizmos, orbit camera, 3D grid</li>
+<li><code>2026-05-20</code> [<code>08b802a</code>] fix(viewport): infinite grid, 3D pan, projected gizmo axes</li>
+<li><code>2026-05-20</code> [<code>654a565</code>] fix(viewport): extend grid to horizon, normalize gizmo axis lengths</li>
+<li><code>2026-05-20</code> [<code>2269540</code>] fix(viewport): depth-clip grid, arrow key navigation, revert middle mouse</li>
+<li><code>2026-05-20</code> [<code>874e3e2</code>] fix(viewport): arrow key ux, grid quadrant, gizmo Z fallback, nav widget label</li>
+<li><code>2026-05-20</code> [<code>1467b5c</code>] fix(viewport): near-plane clip grid lines instead of skipping</li>
+<li><code>2026-05-20</code> [<code>2897f47</code>] fix(viewport): camera-oriented mini gizmo, gizmo Z/Y overlap guard, arrow key directions</li>
+<li><code>2026-05-20</code> [<code>13d241a</code>] docs: add formal LaTeX specification for Caffeine Engine internals</li>
+<li><code>2026-05-20</code> [<code>d478a11</code>] refactor(docs): split caffeine-internals into folder structure with sub-files</li>
+<li><code>2026-05-20</code> [<code>2745396</code>] fix(docs): prevent orphan headings and split lists with needspace + widow/club penalties</li>
+<li><code>2026-05-20</code> [<code>91d2b3d</code>] docs: complete caffeine-internals LaTeX spec with 11 new chapters</li>
+<li><code>2026-05-20</code> [<code>b455de7</code>] fix(editor): TransformGizmo absolute drag, MaterialEditorPanel layout + fix(docs): LaTeX errors, add provisional logo to cover</li>
+<li><code>2026-05-20</code> [<code>f118777</code>] Changes</li>
+<li><code>2026-05-21</code> [<code>94be56e</code>] docs(latex): fix LaTeX syntax errors in specbox environments and compile PDF</li>
+<li><code>2026-05-21</code> [<code>a6a7662</code>] fix(gizmo): world-space axes \u2014 remove hardcoded screen-space fallback, show dot when axis collapses toward camera</li>
+<li><code>2026-05-21</code> [<code>bf30b8b</code>] fix(editor): TransformGizmo analytic foreshortening for 3D world-space axes</li>
+<li><code>2026-05-21</code> [<code>21df694</code>] fix(editor): drawGizmo 3D analytic foreshortening with depth sort and alpha</li>
+<li><code>2026-05-21</code> [<code>f249394</code>] feat(editor): gizmo 3D rotate rings, axis hover highlight, X/Y/Z key constraint</li>
+<li><code>2026-05-21</code> [<code>50a45a6</code>] fix(editor): gizmo local space + inspector 3D rotation/scale fields</li>
+<li><code>2026-05-21</code> [<code>12d4e94</code>] feat(editor): entity hierarchy with transform inheritance</li>
+<li><code>2026-05-21</code> [<code>56092cd</code>] feat(editor): auto-expand parent after drag-drop + Unparent action</li>
+<li><code>2026-05-21</code> [<code>943c412</code>] feat(hierarchy): transform/disabled/layer inheritance</li>
+<li><code>2026-05-22</code> [<code>b63c0b1</code>] feat(animation): named parameter system with SetBool/SetFloat/SetTrigger and HashMap range-for</li>
+<li><code>2026-05-22</code> [<code>5f59e97</code>] feat(editor): AnimationTimeline ruler, scrubber and keyframe diamonds</li>
+<li><code>2026-05-22</code> [<code>1376a53</code>] feat(editor): AnimatorController window with state machine canvas and internal animator</li>
+<li><code>2026-05-22</code> [<code>a0b511d</code>] feat(editor): wire AnimatorController into SceneEditor docking, command palette and View menu</li>
+<li><code>2026-05-22</code> [<code>56fe630</code>] refactor(ecs): remove game-specific Health struct and migrate Velocity2D into RigidBody2D</li>
+<li><code>2026-05-22</code> [<code>a90dcbd</code>] refactor(editor): remove Health and Velocity2D from inspector, registry, serializer and hierarchy</li>
+<li><code>2026-05-22</code> [<code>ee2c2e4</code>] refactor(engine): remove Health and Velocity2D from scene serializer and Lua scripting bindings</li>
+<li><code>2026-05-22</code> [<code>d9fbb23</code>] feat(editor): AssetBrowser updates</li>
+<li><code>2026-05-22</code> [<code>d9fb901</code>] docs(animation): add scripting reference chapter 11 covering animation API</li>
+<li><code>2026-05-23</code> [<code>bf94a16</code>] fix: support Position3D/Rotation3D in light gizmo rendering</li>
+<li><code>2026-05-23</code> [<code>4ab0a9d</code>] docs: add chapter on polygons and 3D representations to internal reference</li>
+<li><code>2026-05-23</code> [<code>3fb5eaa</code>] feat: implement glTF/glb mesh encoding to .caf format</li>
+<li><code>2026-05-23</code> [<code>351e759</code>] feat: add mesh asset resolution to runtime AssetManager</li>
+<li><code>2026-05-23</code> [<code>e925027</code>] feat: add prefab asset resolution to runtime AssetManager</li>
+<li><code>2026-05-23</code> [<code>95c61e1</code>] feat: enable mesh drag-and-drop in scene viewport</li>
+<li><code>2026-05-23</code> [<code>2892631</code>] feat: add 'Save as Prefab' command to inspector</li>
+<li><code>2026-05-23</code> [<code>01aa9cd</code>] fix: update PrefabSerializer to use CAF format instead of custom binary</li>
+<li><code>2026-05-23</code> [<code>3ee31f7</code>] feat: complete mesh and prefab pipeline wiring with editor integration</li>
+<li><code>2026-05-23</code> [<code>883b45a</code>] wiring: integrate mesh and prefab components with editor systems</li>
+<li><code>2026-05-23</code> [<code>0f33e1d</code>] feat: Implement 3D glTF mesh rendering in viewport</li>
+<li><code>2026-05-23</code> [<code>03d5d30</code>] feat: add mesh caching system to avoid reloading per frame</li>
+<li><code>2026-05-23</code> [<code>dbc6319</code>] feat: integrate mesh cache into viewport rendering</li>
+<li><code>2026-05-23</code> [<code>0d222a3</code>] feat: add filled geometry rendering with semi-transparent blue fill</li>
+<li><code>2026-05-23</code> [<code>d6568a9</code>] feat: load and display embedded glTF textures in viewport</li>
+<li><code>2026-05-23</code> [<code>826fae3</code>] feat: add LOD level generation framework for mesh simplification</li>
+<li><code>2026-05-23</code> [<code>53bfd40</code>] docs: add detailed implementation plan for gizmo raycasting with VP-inverse</li>
+<li><code>2026-05-23</code> [<code>6737367</code>] feat(gizmo): add screenToWorldRay helper for VP-inverse raycasting</li>
+<li><code>2026-05-23</code> [<code>a4dd94e</code>] feat(gizmo): add rayToAxisSegmentDistance for finite axis picking</li>
+<li><code>2026-05-23</code> [<code>bafbc47</code>] feat(gizmo): integrate raycasting into intersectTest for world-space picking</li>
+<li><code>2026-05-23</code> [<code>561ec8e</code>] fix(gizmo): add edge case handling for VP inverse and axis length validation</li>
+<li><code>2026-05-23</code> [<code>9a569f3</code>] docs(gizmo): add performance &amp; threshold tuning analysis</li>
+<li><code>2026-05-23</code> [<code>3d8c1a9</code>] feat(selection): add rayIntersectsAABB and raycastSelectEntity functions</li>
+<li><code>2026-05-23</code> [<code>3044f14</code>] feat(selection): integrate click detection and raycasting into viewport</li>
+<li><code>2026-05-23</code> [<code>6f200fc</code>] fix(selection): add edge case handling for invalid AABBs and point entities</li>
+<li><code>2026-05-23</code> [<code>f76d062</code>] feat(editor): add delete key to remove selected entity with undo</li>
+<li><code>2026-05-23</code> [<code>f3e8a10</code>] feat(editor): add multi-select with Shift+Click (toggle selection)</li>
+<li><code>2026-05-23</code> [<code>638db40</code>] feat(editor): add double-click to focus camera on selected entity</li>
+<li><code>2026-05-24</code> [<code>3ce2bf0</code>] feat: add TestUIMapper and TestRequestHandler headers for UI test framework</li>
+<li><code>2026-05-24</code> [<code>ccb42ea</code>] feat: implement TestUIMapper::captureViewportState and clickAtCoordinate</li>
+<li><code>2026-05-24</code> [<code>91b0f7e</code>] feat: implement TestRequestHandler JSON parsing and response generation</li>
+<li><code>2026-05-24</code> [<code>2d0886b</code>] feat: integrate TestRequestHandler into SceneViewport render loop</li>
+<li><code>2026-05-24</code> [<code>3b7346c</code>] feat: add JSON-based UI test framework with headless Doppio</li>
+<li><code>2026-05-24</code> [<code>5950274</code>] Content update</li>
+<li><code>2026-05-26</code> [<code>38668c8</code>] fix: correct 3D rendering pipeline and add automated UI tests</li>
+<li><code>2026-05-29</code> [<code>0a7146b</code>] fix(math): correct Mat4::transformVector() for non-diagonal matrices</li>
+</ul>
+<h3 id="2026-09-9-commits">2026-09 (9 commits)<a class="anchor" href="#2026-09-9-commits" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>2026-09-18</code> [<code>716a990</code>] feat(editor): add build pipeline, runtime, plugins, and editor UX fixes</li>
+<li><code>2026-09-18</code> [<code>72cc4dc</code>] feat(editor): polish project workflow, asset browser, and editor UX</li>
+<li><code>2026-09-18</code> [<code>461971e</code>] Major changes</li>
+<li><code>2026-09-18</code> [<code>90abf19</code>] major fix</li>
+<li><code>2026-09-19</code> [<code>33b9bd2</code>] major fix</li>
+<li><code>2026-09-20</code> [<code>60e83a2</code>] major fix</li>
+<li><code>2026-09-21</code> [<code>d9aa52d</code>] updating documentation</li>
+<li><code>2026-09-22</code> [<code>ba774aa</code>] Add optional editor plugin SDK and move feature tooling out of Doppio core.</li>
+<li><code>2026-09-22</code> [<code>cfbc012</code>] Improve GPU viewport rendering quality, shadows, and texture LOD.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/releases/changelog.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/releases/build-checklist/"><span>Anterior</span><strong>✅ Caffeine Engine - Build Checklist</strong></a><a class="pager-next" href="/pt/docs/releases/runtime-capabilities-patch-notes/"><span>Seguinte</span><strong>Runtime capabilities — patch notes</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#unreleased">[Unreleased]</a></li><li class="l2"><a href="#2026-11-18-documentation-refresh">[2026-11-18] — Documentation refresh</a></li><li class="l3"><a href="#added">Added</a></li><li class="l3"><a href="#changed">Changed</a></li><li class="l3"><a href="#fixed">Fixed</a></li><li class="l2"><a href="#2026-09-23-performance-do-editor-profiler-hierárquico-skybox">[2026-09-23] — Performance do editor, profiler hierárquico &amp; skybox</a></li><li class="l3"><a href="#added-1">Added</a></li><li class="l3"><a href="#changed-1">Changed</a></li><li class="l3"><a href="#fixed-1">Fixed</a></li><li class="l2"><a href="#2026-09-22-plugins-opcionais-qualidade-gpu">[2026-09-22] — Plugins opcionais &amp; qualidade GPU</a></li><li class="l3"><a href="#added-2">Added</a></li><li class="l3"><a href="#changed-2">Changed</a></li><li class="l3"><a href="#removed">Removed</a></li><li class="l2"><a href="#2026-09-18-runtime-build-pipeline-polish">[2026-09-18] — Runtime, build pipeline &amp; polish</a></li><li class="l3"><a href="#added-3">Added</a></li><li class="l3"><a href="#changed-3">Changed</a></li><li class="l2"><a href="#2026-05-24-testes-ui-seleção-3d">[2026-05-24] — Testes UI &amp; seleção 3D</a></li><li class="l3"><a href="#added-4">Added</a></li><li class="l2"><a href="#2026-05-23-mesh-prefabs-rendering-3d">[2026-05-23] — Mesh, prefabs &amp; rendering 3D</a></li><li class="l3"><a href="#added-5">Added</a></li><li class="l2"><a href="#2026-05-20-2026-05-22-viewport-3d-animação-ecs">[2026-05-20 — 2026-05-22] — Viewport 3D, animação &amp; ECS</a></li><li class="l3"><a href="#added-6">Added</a></li><li class="l3"><a href="#changed-4">Changed</a></li><li class="l2"><a href="#2026-05-17-2026-05-19-play-mode-inspector-scripting">[2026-05-17 — 2026-05-19] — Play mode, inspector &amp; scripting</a></li><li class="l3"><a href="#added-7">Added</a></li><li class="l2"><a href="#2026-05-14-2026-05-16-doppio-ide-caffeine-studio">[2026-05-14 — 2026-05-16] — Doppio IDE (Caffeine Studio)</a></li><li class="l3"><a href="#added-8">Added</a></li><li class="l3"><a href="#changed-5">Changed</a></li><li class="l2"><a href="#2026-05-07-2026-05-11-ecs-sistemas-editor-base">[2026-05-07 — 2026-05-11] — ECS, sistemas &amp; editor base</a></li><li class="l3"><a href="#added-9">Added</a></li><li class="l2"><a href="#2026-04-24-build-scripts-binários">[2026-04-24] — Build scripts &amp; binários</a></li><li class="l3"><a href="#added-10">Added</a></li><li class="l2"><a href="#2026-04-14-concorrência-rhi">[2026-04-14] — Concorrência &amp; RHI</a></li><li class="l3"><a href="#added-11">Added</a></li><li class="l2"><a href="#2026-04-07-fase-1-fundação-atómica">[2026-04-07] — Fase 1: Fundação atómica</a></li><li class="l3"><a href="#added-12">Added</a></li><li class="l3"><a href="#changed-6">Changed</a></li><li class="l2"><a href="#2026-04-06-início-do-projeto">[2026-04-06] — Início do projeto</a></li><li class="l3"><a href="#added-13">Added</a></li><li class="l2"><a href="#apêndice-histórico-completo-de-commits">Apêndice — Histórico completo de commits</a></li><li class="l3"><a href="#2026-04-81-commits">2026-04 (81 commits)</a></li><li class="l3"><a href="#2026-05-329-commits">2026-05 (329 commits)</a></li><li class="l3"><a href="#2026-09-9-commits">2026-09 (9 commits)</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

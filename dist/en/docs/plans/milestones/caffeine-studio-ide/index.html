@@ -1,0 +1,1125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🛠️ Caffeine Studio IDE — Plano de Desenvolvimento · Caffeine</title>
+<meta name="description" content="O Caffeine Studio IDE é a camada de ferramentas visuais da Caffeine Engine. Atualmente existem componentes-base implementados (ImGuiIntegration, ProfilerWindow, ConsoleWindow, StatsOverlay, AssetPipeline CLI), mas falta ">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="🛠️ Caffeine Studio IDE — Plano de Desenvolvimento · Caffeine">
+<meta property="og:description" content="O Caffeine Studio IDE é a camada de ferramentas visuais da Caffeine Engine. Atualmente existem componentes-base implementados (ImGuiIntegration, ProfilerWindow, ConsoleWindow, StatsOverlay, AssetPipeline CLI), mas falta ">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/milestones/caffeine-studio-ide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/milestones/caffeine-studio-ide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/milestones/caffeine-studio-ide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/milestones/caffeine-studio-ide/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir open"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/en/docs/plans/milestones/caffeine-studio-ide/" aria-current="page">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/ECOSYSTEM_WORKFLOW/">Unified asset workflow</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--planned">Planned</span>
+  <span><strong>Milestone:</strong> 2.0 — Caffeine Studio</span>
+  <span><strong>Namespace:</strong> `Caffeine::Editor`</span>
+  <span><strong>RFs:</strong> RF6.1–RF6.6, RF4.7</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<hr>
+<h2 id="sumário-executivo">Sumário Executivo<a class="anchor" href="#sumário-executivo" aria-label="Link to this section">#</a></h2>
+<p>O Caffeine Studio IDE é a camada de ferramentas visuais da Caffeine Engine. Atualmente existem componentes-base implementados (ImGuiIntegration, ProfilerWindow, ConsoleWindow, StatsOverlay, AssetPipeline CLI), mas falta o <strong>Scene Editor</strong> — o coração do IDE — e os sistemas de <strong>Scripting</strong>, <strong>Gestão de Projetos</strong> e <strong>Ferramentas Avançadas</strong>.</p>
+<p>Este plano divide o desenvolvimento em <strong>4 milestones</strong> progressivas:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:center">Milestone</th>
+<th>Nome</th>
+<th>Foco</th>
+<th>Dependências</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>M1</strong></td>
+<td>Scene Editor Foundation</td>
+<td>Painéis core, viewport, serialização</td>
+<td>ECS, RHI, ImGui</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>M2</strong></td>
+<td>Visual Editing &amp; Assets</td>
+<td>Gizmos, drag-and-drop, pipeline integrado, projeto</td>
+<td>M1 + AssetPipeline</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>M3</strong></td>
+<td>Scripting &amp; Runtime</td>
+<td>LuaVM, ScriptSystem, bindings ECS, hot-reload</td>
+<td>M1 + ECS</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>M4</strong></td>
+<td>Advanced Tools &amp; Polish</td>
+<td>Timeline, tilemap, materiais, build, prefabs, extensões</td>
+<td>M1–M3</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Nota:</strong> Cada milestone é autónoma — pode ser entregue e testada independentemente.</p>
+</blockquote>
+<blockquote>
+<p><strong>Engine pillars:</strong> subsistemas de runtime (rendering Phong, Bullet3, OpenAL, networking, PBR, etc.) estão no roadmap de pilares — <a href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/"><code>docs/plans/2026-09-22-engine-pillars-roadmap.md</code></a>.</p>
+</blockquote>
+<hr>
+<h2 id="estado-atual-pré-m1">Estado Atual (Pré-M1)<a class="anchor" href="#estado-atual-pré-m1" aria-label="Link to this section">#</a></h2>
+<h3 id="-já-implementado">✅ Já Implementado<a class="anchor" href="#-já-implementado" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Ficheiros</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ImGuiIntegration</strong></td>
+<td><code>doppio-archived/src/doppio/editor/ImGuiIntegration.hpp</code></td>
+<td>✅ Integração SDL3+ImGui</td>
+</tr>
+<tr>
+<td><strong>ProfilerWindow</strong></td>
+<td><code>doppio-archived/src/doppio/editor/ProfilerWindow.hpp</code></td>
+<td>✅ Gráfico de frame times</td>
+</tr>
+<tr>
+<td><strong>ConsoleWindow</strong></td>
+<td><code>doppio-archived/src/doppio/editor/ConsoleWindow.hpp</code></td>
+<td>✅ Log filtering por nível</td>
+</tr>
+<tr>
+<td><strong>StatsOverlay</strong></td>
+<td><code>doppio-archived/src/doppio/editor/StatsOverlay.hpp</code></td>
+<td>✅ FPS, cache stats</td>
+</tr>
+<tr>
+<td><strong>EditorTypes</strong></td>
+<td><code>doppio-archived/src/doppio/editor/EditorTypes.hpp</code></td>
+<td>✅ FrameStats, tipos base</td>
+</tr>
+<tr>
+<td><strong>AssetPipeline CLI</strong></td>
+<td><code>src/caffeine/tools/</code></td>
+<td>✅ Texture, Audio, Mesh encoders</td>
+</tr>
+<tr>
+<td><strong>UISystem (game)</strong></td>
+<td><code>src/caffeine/ui/UISystem.hpp</code></td>
+<td>✅ UI retained mode para jogos</td>
+</tr>
+<tr>
+<td><strong>SceneSerializer</strong></td>
+<td><code>src/caffeine/scene/SceneSerializer.hpp</code></td>
+<td>✅ Serialização <code>.caf</code></td>
+</tr>
+<tr>
+<td><strong>ECS Core</strong></td>
+<td><code>src/caffeine/ecs/World.hpp</code></td>
+<td>✅ Archetypes, queries, systems</td>
+</tr>
+<tr>
+<td><strong>RHI</strong></td>
+<td><code>src/caffeine/rhi/RenderDevice.hpp</code></td>
+<td>✅ SDL_GPU abstraction</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="-por-implementar">❌ Por Implementar<a class="anchor" href="#-por-implementar" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Prioridade</th>
+<th>Depende de</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SceneEditor (orquestrador)</td>
+<td>🔴 Crítico</td>
+<td>ImGuiIntegration, ECS</td>
+</tr>
+<tr>
+<td>HierarchyPanel</td>
+<td>🔴 Crítico</td>
+<td>ECS, Scene</td>
+</tr>
+<tr>
+<td>InspectorPanel</td>
+<td>🔴 Crítico</td>
+<td>ECS (component reflection)</td>
+</tr>
+<tr>
+<td>SceneViewport</td>
+<td>🔴 Crítico</td>
+<td>RHI, BatchRenderer, Camera</td>
+</tr>
+<tr>
+<td>AssetBrowser</td>
+<td>🟡 Alto</td>
+<td>AssetManager</td>
+</tr>
+<tr>
+<td>Transform Gizmos</td>
+<td>🟡 Alto</td>
+<td>SceneViewport</td>
+</tr>
+<tr>
+<td>Project Manager</td>
+<td>🟡 Alto</td>
+<td>Sistema de ficheiros</td>
+</tr>
+<tr>
+<td>LuaVM + ScriptSystem</td>
+<td>🟡 Alto</td>
+<td>ECS, sol2</td>
+</tr>
+<tr>
+<td>Animation Timeline</td>
+<td>🟢 Médio</td>
+<td>Animation ECS</td>
+</tr>
+<tr>
+<td>Tilemap Editor</td>
+<td>🟢 Médio</td>
+<td>SceneEditor</td>
+</tr>
+<tr>
+<td>Material/Shader Editor</td>
+<td>🟢 Médio</td>
+<td>RHI</td>
+</tr>
+<tr>
+<td>Build System</td>
+<td>🟢 Médio</td>
+<td>CMake</td>
+</tr>
+<tr>
+<td>Prefab System</td>
+<td>🔵 Baixo</td>
+<td>ECS, SceneSerializer</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="t0-desacoplamento-coreide-fundação">T0 — Desacoplamento Core↔IDE (Fundação)<a class="anchor" href="#t0-desacoplamento-coreide-fundação" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p><strong>Objetivo:</strong> Separar o monolito atual em dois binários independentes — <strong>Caffeine Engine</strong> (core) e <strong>Doppio</strong> (IDE) — com uma fronteira de API bem definida.</p>
+</blockquote>
+<h3 id="problema-atual">Problema Atual<a class="anchor" href="#problema-atual" aria-label="Link to this section">#</a></h3>
+<p>Neste momento tudo vive na mesma biblioteca <code>Caffeine</code>, incluindo código editor que depende de ImGui. Isto significa que:</p>
+<ul>
+<li>Uma build headless (servidor, CI, testes) paga o custo do ImGui e do editor</li>
+<li>O core não pode ser reutilizado sem arrastar a IDE</li>
+<li>A separação de responsabilidades é inexistente — <code>target_link_libraries(Caffeine PUBLIC ImGui)</code> torna ImGui numa dependência pública mesmo para quem só quer a engine</li>
+</ul>
+<h3 id="arquitetura-alvo">Arquitetura Alvo<a class="anchor" href="#arquitetura-alvo" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">┌─────────────────────────────────────────────────────────────────┐
+│                         DOCCIO (IDE)                            │
+│  SceneEditor | HierarchyPanel | InspectorPanel | SceneViewport  │
+│  AssetBrowser | ProfilerWindow | ConsoleWindow | StatsOverlay   │
+│  Gizmos | Timeline | Tilemap Editor | Material Editor           │
+│  Lua Script Editor | Plugin System | Build System               │
+│                                                                 │
+│  Depende de: Caffeine::Core (engine) + ImGui + SDL3             │
+│  NÃO funciona sem o core                                        │
+└──────────────────────────┬──────────────────────────────────────┘
+                           │ #include &quot;Caffeine/*.hpp&quot;
+                           │ link: Caffeine::Core
+┌──────────────────────────▼──────────────────────────────────────┐
+│                      CAFFEINE ENGINE (CORE)                     │
+│  Core: Types, Memory, Platform, IO, Timer                       │
+│  Math: Vec2/3/4, Mat4, Quat                                     │
+│  Concurrency: JobSystem, ThreadPool, Work-Stealing              │
+│  Input: InputManager, Action/Axis Mapping                       │
+│  ECS: World, Entity, Archetypes, Queries, Systems               │
+│  Scene: SceneManager, SceneSerializer (.caf)                    │
+│  Events: EventBus, pub/sub                                      │
+│  Assets: AssetManager, AssetHandle, Hot-Reload                  │
+│  Rendering: RHI, BatchRenderer, Camera2D/3D, TextureAtlas       │
+│  Audio: AudioSystem, AudioSource, Spatial                       │
+│  Animation: AnimationClip, State Machine                         │
+│  Physics: Physics2D, RigidBody, Collision                       │
+│  UI: UISystem (game HUD, retained mode)                         │
+│  Scripting: LuaVM, ScriptSystem, Bindings                       │
+│  Debug: LogSystem, Profiler, DebugDraw                          │
+│                                                                 │
+│  ZERO dependência de ImGui ou editor code                       │
+│  Funciona standalone (headless ou com rendering SDL3)           │
+└─────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="escopo">Escopo<a class="anchor" href="#escopo" aria-label="Link to this section">#</a></h3>
+<h4 id="01-identificar-a-fronteira-coreide">0.1 Identificar a Fronteira Core↔IDE<a class="anchor" href="#01-identificar-a-fronteira-coreide" aria-label="Link to this section">#</a></h4>
+<p>Listar exaustivamente o que pertence ao core vs. o que é IDE:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Pertence ao Core</th>
+<th>Pertence ao Doppio (IDE)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ECS (World, Entity, queries)</td>
+<td>HierarchyPanel</td>
+</tr>
+<tr>
+<td>SceneManager + SceneSerializer</td>
+<td>InspectorPanel + Component Drawers</td>
+</tr>
+<tr>
+<td>RHI (RenderDevice, CommandBuffer)</td>
+<td>SceneViewport (framebuffer + gizmos)</td>
+</tr>
+<tr>
+<td>BatchRenderer, Camera2D/3D</td>
+<td>AssetBrowser</td>
+</tr>
+<tr>
+<td>AssetManager, AssetPipeline</td>
+<td>SceneEditor (orquestrador)</td>
+</tr>
+<tr>
+<td>InputManager</td>
+<td>ProfilerWindow</td>
+</tr>
+<tr>
+<td>AudioSystem</td>
+<td>ConsoleWindow</td>
+</tr>
+<tr>
+<td>Physics2D</td>
+<td>StatsOverlay</td>
+</tr>
+<tr>
+<td>AnimationSystem</td>
+<td>Timeline Editor</td>
+</tr>
+<tr>
+<td>UI System (game)</td>
+<td>Tilemap Editor</td>
+</tr>
+<tr>
+<td>LuaVM + ScriptSystem</td>
+<td>Material/Shader Editor</td>
+</tr>
+<tr>
+<td>LogSystem, Profiler, DebugDraw</td>
+<td>Entity Debugger</td>
+</tr>
+<tr>
+<td>GameLoop</td>
+<td>Build System Integration</td>
+</tr>
+<tr>
+<td>EventBus</td>
+<td>Plugin System</td>
+</tr>
+<tr>
+<td>JobSystem</td>
+<td>Project Manager</td>
+</tr>
+<tr>
+<td>Core Types, Memory, Math, Containers</td>
+<td>Script Editor Integration</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="02-separar-o-build-em-dois-targets">0.2 Separar o Build em Dois Targets<a class="anchor" href="#02-separar-o-build-em-dois-targets" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-comment"># CMakeLists.txt — Caffeine Engine Core</span>
+<span class="hljs-keyword">add_library</span>(caffeine-core
+    src/core/Timer.cpp
+    src/core/GameLoop.cpp
+    src/ecs/World.cpp
+    src/ecs/CommandBuffer.cpp
+    src/events/EventBus.cpp
+    src/assets/AssetManager.cpp
+    src/rhi/RenderDevice.cpp
+    src/input/InputManager.cpp
+    src/debug/LogSystem.cpp
+    src/debug/Profiler.cpp
+    src/threading/JobSystem.cpp
+    src/script/ScriptEngine.cpp
+    <span class="hljs-comment"># ... resto do core, SEM editor/*</span>
+)
+
+<span class="hljs-comment"># ⚠️ NÃO linkar ImGui — core é puro</span>
+<span class="hljs-keyword">target_link_libraries</span>(caffeine-core PUBLIC SDL3::SDL3)
+<span class="hljs-keyword">target_include_directories</span>(caffeine-core PUBLIC src/)
+</code></pre></div>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-comment"># CMakeLists.txt — Doppio IDE</span>
+<span class="hljs-keyword">add_executable</span>(doppio
+    src/editor/SceneEditor.cpp
+    src/editor/HierarchyPanel.cpp
+    src/editor/InspectorPanel.cpp
+    src/editor/SceneViewport.cpp
+    src/editor/AssetBrowser.cpp
+    src/editor/ProfilerWindow.cpp
+    src/editor/ConsoleWindow.cpp
+    src/editor/StatsOverlay.cpp
+    src/editor/ImGuiIntegration.cpp
+    tools/ide/main.cpp
+)
+
+<span class="hljs-keyword">target_link_libraries</span>(doppio PRIVATE caffeine-core ImGui)
+<span class="hljs-keyword">target_include_directories</span>(doppio PRIVATE src/)
+</code></pre></div>
+<h4 id="03-remover-dependência-de-imgui-do-core">0.3 Remover Dependência de ImGui do Core<a class="anchor" href="#03-remover-dependência-de-imgui-do-core" aria-label="Link to this section">#</a></h4>
+<ul>
+<li><code>editor/</code> incluído atualmente no <code>Caffeine</code> library → mover para <code>doppio</code></li>
+<li><code>ImGuiIntegration</code> deixa de ser linked ao core</li>
+<li><code>CF_HAS_IMGUI</code> define apenas no target <code>doppio</code></li>
+<li>Headers do core que usam ImGui (<code>ImGuiIntegration.hpp</code> nos editor types) são movidos</li>
+<li>Alternativa: se algum core system precisa de debug visualization, expor via interface abstrata (<code>DebugDraw</code>)</li>
+</ul>
+<h4 id="04-definir-pontos-de-extensão-coreide">0.4 Definir Pontos de Extensão Core→IDE<a class="anchor" href="#04-definir-pontos-de-extensão-coreide" aria-label="Link to this section">#</a></h4>
+<p>O core precisa de extension points para a IDE se conectar sem o core saber da IDE:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Caffeine/Core/IDebugHooks.hpp — API de extensão core→IDE</span>
+<span class="hljs-keyword">namespace</span> Caffeine::Core {
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">IDebugHooks</span> {
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">IDebugHooks</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onEntityCreated</span><span class="hljs-params">(ECS::Entity e)</span> </span>= <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onEntityDestroyed</span><span class="hljs-params">(ECS::Entity e)</span> </span>= <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onLogMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* msg, u8 level)</span> </span>= <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onFrameEnd</span><span class="hljs-params">(<span class="hljs-type">const</span> FrameStats&amp; stats)</span> </span>= <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-comment">// Core expõe um registry opcional de hooks</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">DebugHookRegistry</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">registerHooks</span><span class="hljs-params">(IDebugHooks* hooks)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> IDebugHooks* <span class="hljs-title">hooks</span><span class="hljs-params">()</span></span>;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Core</span>
+</code></pre></div>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Doppio implementa os hooks:</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">EditorDebugHooks</span> : Caffeine::Core::IDebugHooks {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onEntityCreated</span><span class="hljs-params">(ECS::Entity e)</span> <span class="hljs-keyword">override</span> </span>{
+        <span class="hljs-comment">// atualiza HierarchyPanel</span>
+    }
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onLogMessage</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* msg, u8 level)</span> <span class="hljs-keyword">override</span> </span>{
+        <span class="hljs-comment">// adiciona ao ConsoleWindow</span>
+    }
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onFrameEnd</span><span class="hljs-params">(<span class="hljs-type">const</span> FrameStats&amp; stats)</span> <span class="hljs-keyword">override</span> </span>{
+        <span class="hljs-comment">// atualiza ProfilerWindow + StatsOverlay</span>
+    }
+};
+</code></pre></div>
+<p><strong>Outros pontos de extensão necessários:</strong></p>
+<ul>
+<li><strong>AssetImportHook</strong> — core faz asset loading, IDE pode interceptar para mostrar progress bar</li>
+<li><strong>SelectionHook</strong> — core não tem conceito de &quot;seleção&quot;, IDE gere</li>
+<li><strong>PlayModeHook</strong> — core tem game loop, IDE pode iniciar/parar play mode</li>
+<li><strong>InputOverride</strong> — IDE pode consumir input antes do core (ex: shortcuts do editor)</li>
+</ul>
+<h4 id="05-headless-mode">0.5 Headless Mode<a class="anchor" href="#05-headless-mode" aria-label="Link to this section">#</a></h4>
+<p>O core deve ser buildável sem SDL3:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-keyword">option</span>(CAFFEINE_BUILD_HEADLESS <span class="hljs-string">&quot;Build core without SDL3/RHI&quot;</span> <span class="hljs-keyword">OFF</span>)
+<span class="hljs-keyword">if</span>(CAFFEINE_BUILD_HEADLESS)
+    <span class="hljs-keyword">target_compile_definitions</span>(caffeine-core PUBLIC CF_HEADLESS=<span class="hljs-number">1</span>)
+    <span class="hljs-comment"># SDL3 não linked, RHI não compilado</span>
+<span class="hljs-keyword">else</span>()
+    <span class="hljs-keyword">target_link_libraries</span>(caffeine-core PUBLIC SDL3::SDL3)
+<span class="hljs-keyword">endif</span>()
+</code></pre></div>
+<p>Isto permite:</p>
+<ul>
+<li>Servidor dedicado sem GPU</li>
+<li>CI tests sem GPU</li>
+<li>Runtime de jogo standalone (sem IDE)</li>
+<li>Compilação mais rápida para development core-only</li>
+</ul>
+<h4 id="06-renomear-caffeine-studio-doppio">0.6 Renomear <code>caffeine-studio</code> → <code>doppio</code><a class="anchor" href="#06-renomear-caffeine-studio-doppio" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Executável <code>caffeine-studio</code> → <code>doppio</code></li>
+<li>Namespace <code>Caffeine::Editor</code> → <code>Doppio::Editor</code> (ou manter <code>Caffeine::Editor</code> como sub-namespace de Doppio)</li>
+<li>Ficheiro <code>tools/ide/main.cpp</code> → <code>apps/doppio/main.cpp</code></li>
+<li>Separar recursos estáticos (ícones, shaders editor) em <code>apps/doppio/assets/</code></li>
+</ul>
+<h4 id="07-atualizar-testes">0.7 Atualizar Testes<a class="anchor" href="#07-atualizar-testes" aria-label="Link to this section">#</a></h4>
+<ul>
+<li><code>CaffeineTest</code> passa a linkar <code>caffeine-core</code> (não a library monolítica)</li>
+<li>Testes de editor (se existirem) passam a <code>DoppioTest</code> que linka <code>doppio</code></li>
+<li>CI ganha dois jobs: <code>build-core</code> (headless) e <code>build-doppio</code> (com SDL3)</li>
+</ul>
+<h3 id="critério-de-aceitação-t0">Critério de Aceitação (T0)<a class="anchor" href="#critério-de-aceitação-t0" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] <code>caffeine-core</code> compila sem ImGui e sem editor code</li>
+<li>[ ] <code>caffeine-core</code> compila em modo headless (sem SDL3)</li>
+<li>[ ] <code>doppio</code> compila e linka <code>caffeine-core</code> + ImGui</li>
+<li>[ ] Testes core-only (<code>CaffeineTest</code>) passam sem SDL3</li>
+<li>[ ] <code>DebugHookRegistry</code> permite IDE ligar-se ao core sem core conhecer IDE</li>
+<li>[ ] <code>doppio</code> substitui <code>caffeine-studio</code> com mesma funcionalidade</li>
+<li>[ ] <code>SceneEditor</code> no doppio usa <code>Caffeine::Core::DebugHookRegistry</code> para console + profiler</li>
+<li>[ ] Core não tem <code>#include &lt;imgui.h&gt;</code> em nenhum header público</li>
+<li>[ ] Build headless não falha por falta de SDL3</li>
+</ul>
+<h3 id="impacto-nos-milestones-seguintes">Impacto nos Milestones Seguintes<a class="anchor" href="#impacto-nos-milestones-seguintes" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:center">Milestone</th>
+<th>Impacto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>M1–M4</strong></td>
+<td>Todo o código editor (painéis, gizmos, viewport) vive em <code>doppio</code>, linka <code>caffeine-core</code>. Nenhum milestone precisa de mudar a fronteira.</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Testes</strong></td>
+<td>Testes de editor precisam de <code>doppio</code> linkado; testes core puros usam <code>caffeine-core</code></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>CI/CD</strong></td>
+<td><code>caffeine-core</code> testado em headless (rápido); <code>doppio</code> testado com SDL3 (lento, opcional)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="m1-scene-editor-foundation">M1 — Scene Editor Foundation<a class="anchor" href="#m1-scene-editor-foundation" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p><strong>Objetivo:</strong> Transformar o overlay de debug num editor de cenas funcional com os 4 painéis principais.</p>
+</blockquote>
+<h3 id="escopo-1">Escopo<a class="anchor" href="#escopo-1" aria-label="Link to this section">#</a></h3>
+<h4 id="11-editorcontext-undoredo">1.1 EditorContext &amp; Undo/Redo<a class="anchor" href="#11-editorcontext-undoredo" aria-label="Link to this section">#</a></h4>
+<p>Estado global de seleção e operações:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">EditorCommand</span> {
+    <span class="hljs-keyword">enum</span> <span class="hljs-title class_">Type</span> { AddEntity, RemoveEntity, AddComponent,
+                RemoveComponent, SetField, MoveEntity };
+    Type type;
+    <span class="hljs-comment">// Serialized before/after state for undo</span>
+    std::vector&lt;u8&gt; beforeState;
+    std::vector&lt;u8&gt; afterState;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">UndoStack</span> {
+    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> u32 MAX_UNDO = <span class="hljs-number">256</span>;
+    EditorCommand m_commands[MAX_UNDO];
+    u32 m_head = <span class="hljs-number">0</span>, m_tail = <span class="hljs-number">0</span>, m_count = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-type">const</span> EditorCommand&amp; cmd)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">undo</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">redo</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>;
+};
+</code></pre></div>
+<h4 id="12-hierarchypanel">1.2 HierarchyPanel<a class="anchor" href="#12-hierarchypanel" aria-label="Link to this section">#</a></h4>
+<p>Árvore de entidades com suporte a:</p>
+<ul>
+<li>Exibição hierárquica (Parent component)</li>
+<li>Renomear (NameComponent)</li>
+<li>Criar entidade vazia</li>
+<li>Deletar (Delete key)</li>
+<li>Drag-and-drop para reparenting</li>
+<li>Context menu (right-click: Create, Duplicate, Delete, Copy/Paste)</li>
+<li>Search/filter bar no topo</li>
+</ul>
+<h4 id="13-inspectorpanel">1.3 InspectorPanel<a class="anchor" href="#13-inspectorpanel" aria-label="Link to this section">#</a></h4>
+<p>Edição de componentes da entidade selecionada:</p>
+<ul>
+<li><strong>Drawers built-in:</strong> Transform, SpriteRenderer, RigidBody2D, Camera2D, AudioSource, NameComponent</li>
+<li><strong>Auto-detection:</strong> se o componente não tem drawer, mostrar raw fields (tipo + valor)</li>
+<li><strong>Add Component dropdown:</strong> lista todos os tipos de componente registados</li>
+<li><strong>Remove Component:</strong> botão X em cada header de componente</li>
+<li><strong>Reset to default:</strong> botão em cada field individual</li>
+<li><strong>Struct nesting:</strong> campos Vec2, Vec3, Color expandidos inline</li>
+</ul>
+<h4 id="14-sceneviewport">1.4 SceneViewport<a class="anchor" href="#14-sceneviewport" aria-label="Link to this section">#</a></h4>
+<p>Viewport com offscreen rendering:</p>
+<ul>
+<li>Framebuffer separado (RHI::TextureHandle)</li>
+<li>Renderização da cena via BatchRenderer</li>
+<li>ImGui::Image para exibir o framebuffer</li>
+<li>Botões de toolbar: grid toggle, gizmo mode (W/E/R), camera snap</li>
+<li>Suporte a zoom (scroll) e pan (middle-click drag)</li>
+<li><strong>Grid 2D</strong> desenhada no framebuffer</li>
+</ul>
+<h4 id="15-assetbrowser-v1">1.5 AssetBrowser (v1)<a class="anchor" href="#15-assetbrowser-v1" aria-label="Link to this section">#</a></h4>
+<p>Navegação básica de ficheiros:</p>
+<ul>
+<li>Listagem de diretórios e ficheiros <code>.caf</code></li>
+<li>Navegação por pastas (double-click)</li>
+<li>Path bar clicável</li>
+<li>Refresh button</li>
+<li>Preview de textura ao selecionar (via AssetManager)</li>
+</ul>
+<h4 id="16-sceneeditor-orchestrator">1.6 SceneEditor Orchestrator<a class="anchor" href="#16-sceneeditor-orchestrator" aria-label="Link to this section">#</a></h4>
+<p>Layout docking usando Dear ImGui Docking:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">┌─────────────────────────────────────────────────────────────┐
+│  Menu: File | Edit | View | Build | Run                    │
+├───────────┬───────────────────────────────┬─────────────────┤
+│Hierarchy  │       Scene Viewport          │   Inspector     │
+│  Panel    │                               │     Panel       │
+│           │                               │                 │
+│    ───    ├───────────────────────────────┴─────────────────┤
+│           │  Asset Browser  |  Console  |  Profiler         │
+├───────────┴─────────────────────────────────────────────────┤
+│  Status Bar: Entity count | FPS | Scene path | Dirty flag   │
+└─────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<ul>
+<li>File &gt; New Scene / Open / Save / Save As</li>
+<li>Edit &gt; Undo / Redo / Preferences</li>
+<li>Integração com ProfilerWindow e ConsoleWindow existentes</li>
+</ul>
+<h4 id="17-saveload-scene">1.7 Save/Load Scene<a class="anchor" href="#17-saveload-scene" aria-label="Link to this section">#</a></h4>
+<ul>
+<li><code>SceneEditor::saveScene(path)</code> → delega no SceneSerializer</li>
+<li><code>SceneEditor::loadScene(path)</code> → limpa world + deserializa</li>
+<li>Indicador de dirty (ficheiro não salvo)</li>
+<li>Prompt &quot;Save changes?&quot; ao fechar cena suja</li>
+</ul>
+<h3 id="critério-de-aceitação-m1">Critério de Aceitação (M1)<a class="anchor" href="#critério-de-aceitação-m1" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] HierarchyPanel mostra todas as entidades em árvore com nomes</li>
+<li>[ ] Clicar numa entidade na Hierarchy seleciona-a e atualiza o Inspector</li>
+<li>[ ] InspectorPanel permite editar Transform (pos, rot, scale) com sliders/input</li>
+<li>[ ] InspectorPanel permite editar SpriteRenderer (texture, color, flip)</li>
+<li>[ ] Add Component dropdown mostra componentes disponíveis</li>
+<li>[ ] SceneViewport renderiza a cena para framebuffer offscreen</li>
+<li>[ ] SceneViewport exibe o framebuffer via ImGui::Image</li>
+<li>[ ] Scroll no viewport faz zoom, middle-click arrasta a câmara</li>
+<li>[ ] AssetBrowser lista diretórios e ficheiros <code>.caf</code></li>
+<li>[ ] File &gt; Save serializa a cena para <code>.caf</code> e limpa dirty flag</li>
+<li>[ ] File &gt; Open deserializa <code>.caf</code> e popula o ECS</li>
+<li>[ ] Undo/Redo funcionam para AddEntity e RemoveEntity</li>
+<li>[ ] Docking layout persiste entre sessões</li>
+<li>[ ] ProfilerWindow e ConsoleWindow continuam a funcionar no novo layout</li>
+</ul>
+<hr>
+<h2 id="m2-visual-editing-assets">M2 — Visual Editing &amp; Assets<a class="anchor" href="#m2-visual-editing-assets" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p><strong>Objetivo:</strong> Tornar o editor visualmente produtivo — gizmos, drag-and-drop, pipeline de assets integrado.</p>
+</blockquote>
+<h3 id="escopo-2">Escopo<a class="anchor" href="#escopo-2" aria-label="Link to this section">#</a></h3>
+<h4 id="21-transform-gizmos">2.1 Transform Gizmos<a class="anchor" href="#21-transform-gizmos" aria-label="Link to this section">#</a></h4>
+<p>Implementação de gizmos 2D (inspirado em ImGuizmo):</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Translate (W):       Rotate (E):          Scale (R):
+     ▲ Y                  ◯                    ■ Y
+     │                 ╱     ╲                 │
+     └────► X          │       │               └────■ X
+   ╱                 ╲       ╱               ╱
+ ╱ Z (3D)              ╲   ╱               ╱ Z (3D)
+</code></pre></div>
+<ul>
+<li>Arrastar eixo: modifica apenas esse eixo</li>
+<li>Arrastar centro: modificação livre (2D) ou plano (3D)</li>
+<li>Snap: Shift+drag usa snapping configurável (16px, 45° rotation)</li>
+<li>Highlight a hover (eixo fica amarelo)</li>
+<li>Gizmo mode switcher na toolbar ou teclas W/E/R/Q</li>
+</ul>
+<h4 id="22-drag-and-drop">2.2 Drag-and-Drop<a class="anchor" href="#22-drag-and-drop" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Arrastar AssetBrowser → SceneViewport cria entidade com SpriteRenderer + Transform</li>
+<li>Arrastar AssetBrowser → Inspector field de textura atribui diretamente</li>
+<li>Arrastar Hierarchy → reorganiza parent/child</li>
+</ul>
+<h4 id="23-asset-pipeline-integration">2.3 Asset Pipeline Integration<a class="anchor" href="#23-asset-pipeline-integration" aria-label="Link to this section">#</a></h4>
+<ul>
+<li><strong>Auto-import:</strong> ao detetar novo ficheiro em <code>assets/raw/</code>, converter automaticamente para <code>.caf</code></li>
+<li><strong>Progress bar</strong> para conversões longas</li>
+<li><strong>Log de conversão</strong> no ConsoleWindow</li>
+<li><strong>Re-import button</strong> no AssetBrowser (context menu)</li>
+<li><strong>Asset manifest</strong> (<code>assets/manifest.caf</code>) com metadados por asset</li>
+</ul>
+<h4 id="24-hot-reload-de-assets">2.4 Hot-Reload de Assets<a class="anchor" href="#24-hot-reload-de-assets" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>AssetManager::pollFileChanges() already exists</li>
+<li>Atualizar textura na GPU sem restart</li>
+<li>Mostrar toast notification: &quot;hero.caf reloaded&quot;</li>
+<li>Suporte a: texturas, shaders HLSL/GLSL</li>
+</ul>
+<h4 id="25-project-manager">2.5 Project Manager<a class="anchor" href="#25-project-manager" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">┌─────────────────────────────────────────────┐
+│       ☕ Caffeine Studio — Project Manager   │
+├─────────────────────────────────────────────┤
+│                                             │
+│  Recent Projects:                           │
+│  ┌─────────────────────────────────────┐    │
+│  │ 📁 MyGame       C:/projects/mygame  │    │
+│  │ 📁 Platformer    .../platformer     │    │
+│  │ 📁 RPG           .../rpg           │    │
+│  └─────────────────────────────────────┘    │
+│                                             │
+│  [  New Project  ]  [  Open Project  ]      │
+│                                             │
+└─────────────────────────────────────────────┘
+</code></pre></div>
+<ul>
+<li>New Project Wizard: nome, path, template (2D/3D/Empty)</li>
+<li>Project structure criada automaticamente: <code>assets/raw/</code>, <code>scripts/</code>, <code>build/</code></li>
+<li><code>project.caffeine</code> ficheiro de configuração do projeto (JSON)</li>
+<li>Lembrar último projeto aberto (auto-open)</li>
+</ul>
+<h4 id="26-assetbrowser-v2">2.6 AssetBrowser (v2)<a class="anchor" href="#26-assetbrowser-v2" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Thumbnails gerados para texturas (miniaturas GPU)</li>
+<li>Preview panel: ao selecionar asset, mostra preview</li>
+<li>Drag preview: thumbnail segue o cursor durante drag</li>
+<li>Search/filter por nome e tipo</li>
+<li>Grid view / list view toggle</li>
+<li>Folder creation (right-click &gt; New Folder)</li>
+</ul>
+<h4 id="27-multiple-scene-tabs">2.7 Multiple Scene Tabs<a class="anchor" href="#27-multiple-scene-tabs" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Abas para cada cena aberta (tab bar no topo do viewport)</li>
+<li>Cada aba tem o seu próprio ECS World</li>
+<li>Arrastar tab para desacoplar em janela flutuante</li>
+</ul>
+<h3 id="critério-de-aceitação-m2">Critério de Aceitação (M2)<a class="anchor" href="#critério-de-aceitação-m2" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Gizmo Translate arrasta entidade no eixo X/Y</li>
+<li>[ ] Gizmo Rotate roda entidade visualmente</li>
+<li>[ ] Gizmo Scale escala entidade no eixo ou uniformemente</li>
+<li>[ ] Snap funciona com Shift+drag</li>
+<li>[ ] Drag de textura do AssetBrowser para o Viewport cria entidade</li>
+<li>[ ] Drag de textura para Inspector field atribui diretamente</li>
+<li>[ ] Asset Pipeline converte PNG/WAV automaticamente em background</li>
+<li>[ ] Hot-reload atualiza textura modificada sem restart</li>
+<li>[ ] Project Manager cria novo projeto com estrutura de pastas</li>
+<li>[ ] AssetBrowser mostra thumbnails de texturas</li>
+<li>[ ] Múltiplas scenes abertas em tabs funcionam independentemente</li>
+<li>[ ] Toast notification aparece em hot-reload e conversões</li>
+</ul>
+<hr>
+<h2 id="m3-scripting-runtime">M3 — Scripting &amp; Runtime<a class="anchor" href="#m3-scripting-runtime" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p><strong>Objetivo:</strong> Permitir scripting Lua com bindings ECS, hot-reload e integração total no editor.</p>
+</blockquote>
+<h3 id="escopo-3">Escopo<a class="anchor" href="#escopo-3" aria-label="Link to this section">#</a></h3>
+<h4 id="31-luavm">3.1 LuaVM<a class="anchor" href="#31-luavm" aria-label="Link to this section">#</a></h4>
+<p>Implementação da máquina virtual Lua com sol2:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">LuaVM</span> {
+    sol::state m_lua;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shutdown</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">loadScript</span><span class="hljs-params">(std::string_view path)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">reloadScript</span><span class="hljs-params">(std::string_view path)</span></span>;
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span>... Args&gt;
+    <span class="hljs-type">bool</span> <span class="hljs-title">call</span><span class="hljs-params">(std::string_view function, Args&amp;&amp;... args)</span></span>;
+    <span class="hljs-function">sol::state&amp; <span class="hljs-title">state</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> m_lua; }
+    
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerCaffeineBindings</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerEntityBindings</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerTransformBindings</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerInputBindings</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerEventBindings</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerDebugBindings</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerMathBindings</span><span class="hljs-params">()</span></span>;
+};
+</code></pre></div>
+<h4 id="32-scriptcomponent-scriptsystem">3.2 ScriptComponent + ScriptSystem<a class="anchor" href="#32-scriptcomponent-scriptsystem" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">ScriptComponent</span> {
+    Assets::AssetHandle&lt;ScriptAsset&gt; script;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ScriptSystem</span> : <span class="hljs-keyword">public</span> ECS::ISystem {
+    LuaVM* m_vm;
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onInit</span><span class="hljs-params">(ECS::World&amp; world)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(ECS::World&amp; world, f32 dt)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onShutdown</span><span class="hljs-params">(ECS::World&amp; world)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">initNewScripts</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+};
+</code></pre></div>
+<p>Ciclo de vida Lua exposto:</p>
+<ul>
+<li><code>onCreate(entity)</code> — chamado uma vez após criação</li>
+<li><code>onUpdate(entity, dt)</code> — chamado todo frame</li>
+<li><code>onDestroy(entity)</code> — chamado antes de destruição</li>
+<li><code>onCollision(entity, other)</code> — chamado ao colidir</li>
+</ul>
+<h4 id="33-bindings-ecs-lua">3.3 Bindings ECS → Lua<a class="anchor" href="#33-bindings-ecs-lua" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> e = caffeine.world.<span class="hljs-built_in">create</span>()
+caffeine.world.addTransform(e, { x=<span class="hljs-number">100</span>, y=<span class="hljs-number">200</span> })
+caffeine.world.addSprite(e, { texture=<span class="hljs-string">&quot;hero.caf&quot;</span> })
+
+<span class="hljs-keyword">local</span> t = caffeine.world.getTransform(e)
+t.x = t.x + <span class="hljs-number">10</span>
+caffeine.world.setTransform(e, t)
+
+<span class="hljs-keyword">if</span> caffeine.<span class="hljs-built_in">input</span>.isKeyDown(<span class="hljs-string">&quot;Space&quot;</span>) <span class="hljs-keyword">then</span>
+    <span class="hljs-comment">-- ...</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">local</span> mx, my = caffeine.<span class="hljs-built_in">input</span>.mousePosition()
+</code></pre></div>
+<h4 id="34-sandboxing">3.4 Sandboxing<a class="anchor" href="#34-sandboxing" aria-label="Link to this section">#</a></h4>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Permitido</th>
+<th>Bloqueado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>caffeine.*</code> APIs</td>
+<td><code>os.*</code>, <code>io.*</code> (excepto editor mode)</td>
+</tr>
+<tr>
+<td><code>math.*</code>, <code>string.*</code>, <code>table.*</code></td>
+<td><code>load</code>, <code>loadstring</code></td>
+</tr>
+<tr>
+<td><code>require</code> (apenas módulos do projeto)</td>
+<td><code>debug.*</code></td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="35-scriptwatcher">3.5 ScriptWatcher<a class="anchor" href="#35-scriptwatcher" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Monitoriza <code>scripts/</code> com file timestamps</li>
+<li>Hot-reload de <code>.lua</code> modificado via LuaVM::reloadScript()</li>
+<li>Log de erros de compilação Lua no ConsoleWindow</li>
+<li>Indicador visual no editor: &quot;Script modified — reloaded&quot;</li>
+</ul>
+<h4 id="36-editor-integration">3.6 Editor Integration<a class="anchor" href="#36-editor-integration" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>InspectorPanel: field para atribuir script a ScriptComponent</li>
+<li>Script editor: botão &quot;Edit Script&quot; abre ficheiro <code>.lua</code> no editor de sistema</li>
+<li>Syntax highlight preview (futuro: editor embutido)</li>
+<li>Error panel: erros Lua mostrados com linha e mensagem</li>
+</ul>
+<h4 id="37-basic-particle-system">3.7 Basic Particle System<a class="anchor" href="#37-basic-particle-system" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>ParticleEmitter component (ECS)</li>
+<li>Lua API para spawn de partículas</li>
+<li>Visual preview no SceneViewport (play mode)</li>
+<li>Suporte a: lifetime, velocity, color over time, size over time</li>
+</ul>
+<h3 id="critério-de-aceitação-m3">Critério de Aceitação (M3)<a class="anchor" href="#critério-de-aceitação-m3" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] LuaVM executa script <code>.lua</code> simples (<code>caffeine.debug.log(&quot;hello&quot;)</code>)</li>
+<li>[ ] ScriptComponent pode ser adicionado via InspectorPanel</li>
+<li>[ ] <code>onUpdate</code> é chamado todo frame para entidades com ScriptComponent</li>
+<li>[ ] Bindings de Transform (get/set pos, rot, scale) funcionam</li>
+<li>[ ] Bindings de Input (isKeyDown, getAxis) funcionam</li>
+<li>[ ] Bindings de Eventos (on, emit) funcionam</li>
+<li>[ ] Erros Lua são logados no ConsoleWindow sem crash</li>
+<li>[ ] Hot-reload: modificar <code>.lua</code> recarrega sem restart</li>
+<li>[ ] Sandbox bloqueia <code>os.execute()</code>, <code>io.open()</code></li>
+<li>[ ] ParticleEmitter cria partículas com parâmetros configuráveis</li>
+<li>[ ] Script pode ser atribuído/removido via Inspector</li>
+</ul>
+<hr>
+<h2 id="m4-advanced-tools-polish">M4 — Advanced Tools &amp; Polish<a class="anchor" href="#m4-advanced-tools-polish" aria-label="Link to this section">#</a></h2>
+<blockquote>
+<p><strong>Objetivo:</strong> Completar o IDE com ferramentas de produção — animação, tilemap, materiais, build, prefabs, extensões.</p>
+</blockquote>
+<h3 id="escopo-4">Escopo<a class="anchor" href="#escopo-4" aria-label="Link to this section">#</a></h3>
+<h4 id="41-animation-timeline-editor">4.1 Animation Timeline Editor<a class="anchor" href="#41-animation-timeline-editor" aria-label="Link to this section">#</a></h4>
+<p>Editor de animação estilo timeline:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">┌─────────────────────────────────────────────────────────────┐
+│  Animation: &quot;hero_idle&quot;    [▶ Play]  [■ Stop]  [⟳ Loop]   │
+│  Duration: 1.2s    FPS: 12                                 │
+├─────────────────────────────────────────────────────────────┤
+│  Timeline:  |──●──●──●──●──●──●──●──●──●──●──●──●──|      │
+│             0s   0.1  0.2  0.3  0.4  0.5  0.6  ...  1.2s   │
+├─────────────────────────────────────────────────────────────┤
+│  Tracks:                                                     │
+│  ▸ Sprite     [hero_1] [hero_2] [hero_3] ...               │
+│  ▸ Position   ●─────────────●──────────────●               │
+│  ▸ Rotation   ───●─────────────────────●────               │
+│  ▸ Events     [play_sfx]        [spawn_particle]            │
+└─────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<ul>
+<li>Keyframe creation and editing</li>
+<li>Sprite track (frame indices)</li>
+<li>Transform tracks (position, rotation, scale)</li>
+<li>Event track (calls Lua functions at specific times)</li>
+<li>Onion skinning (semi-transparent previous/next frame)</li>
+<li>Export to <code>.caf</code> animation asset</li>
+</ul>
+<h4 id="42-tilemap-editor">4.2 Tilemap Editor<a class="anchor" href="#42-tilemap-editor" aria-label="Link to this section">#</a></h4>
+<p>Editor de níveis 2D baseado em tiles:</p>
+<ul>
+<li>Tile palette with drag-and-drop placement</li>
+<li>Multiple layers (background, foreground, collision)</li>
+<li>Auto-tiling (rule-based tile placement)</li>
+<li>Bucket fill, erase, selection tools</li>
+<li>Layer visibility and locking</li>
+<li>Export to <code>.caf</code> tilemap asset</li>
+</ul>
+<h4 id="43-materialshader-editor">4.3 Material/Shader Editor<a class="anchor" href="#43-materialshader-editor" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Visual shader graph (nodes) ou editor de código HLSL/GLSL</li>
+<li>Preview de shader em tempo real no viewport</li>
+<li>Propriedades expostas editáveis (sliders, cores)</li>
+<li>Compilação com feedback de erros</li>
+<li>Biblioteca de shaders pré-definidos (unlit, lit, sprite, post-process)</li>
+</ul>
+<h4 id="44-audio-preview-spatial-placement">4.4 Audio Preview &amp; Spatial Placement<a class="anchor" href="#44-audio-preview-spatial-placement" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Waveform preview no Inspector</li>
+<li>Play/Stop no AssetBrowser</li>
+<li>Spatial audio placement no SceneViewport (AudioSource gizmo)</li>
+<li>Volume slider, pitch slider, falloff distance</li>
+<li>Mixing desk: bus de áudio, volume por category (SFX, Music, Voice)</li>
+</ul>
+<h4 id="45-build-system-integration">4.5 Build System Integration<a class="anchor" href="#45-build-system-integration" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>One-click &quot;Build &amp; Run&quot;</li>
+<li>Build configuration dialog (Debug/Release, platforms)</li>
+<li>Build progress in ConsoleWindow</li>
+<li>Post-build: open output directory</li>
+<li>Build settings stored in <code>project.caffeine</code></li>
+</ul>
+<h4 id="46-prefab-system">4.6 Prefab System<a class="anchor" href="#46-prefab-system" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Create prefab from entity (save as <code>.prefab.caf</code>)</li>
+<li>Prefab instance: linked copy (updates propagate)</li>
+<li>Prefab override: campos podem diferir da instância</li>
+<li>Prefab nesting (prefab dentro de prefab)</li>
+<li>AssetBrowser mostra prefabs com ícone distinto</li>
+<li>Drag prefab do AssetBrowser → Viewport instancia</li>
+</ul>
+<h4 id="47-entity-debugger">4.7 Entity Debugger<a class="anchor" href="#47-entity-debugger" aria-label="Link to this section">#</a></h4>
+<p>Ferramenta de debug visual de entidades:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">┌────────────────────────────────────────────┐
+│  🔬 Entity Debugger                        │
+├────────────────────────────────────────────┤
+│  Entity: 142 (Hero)                        │
+│  Archetype: [Transform, Sprite, RigidBody] │
+│                                            │
+│  Components:                               │
+│  ✅ Transform    size: 28 bytes            │
+│     └ pos: [120.0, 340.0]                 │
+│  ✅ Sprite       size: 16 bytes            │
+│  ✅ RigidBody2D  size: 32 bytes            │
+│                                            │
+│  Memory: 76 bytes total                    │
+│  Queries matching: MovementSystem,         │
+│                    RenderSystem, Physics    │
+└────────────────────────────────────────────┘
+</code></pre></div>
+<ul>
+<li>Entity selector (pick from viewport)</li>
+<li>Component list with memory size</li>
+<li>Archetype info</li>
+<li>Matching systems list</li>
+<li>Component byte viewer (hex dump)</li>
+</ul>
+<h4 id="48-extensionplugin-system">4.8 Extension/Plugin System<a class="anchor" href="#48-extensionplugin-system" aria-label="Link to this section">#</a></h4>
+<ul>
+<li>Plugin loading from <code>plugins/</code> directory</li>
+<li>Plugin API: register panels, menu items, component drawers</li>
+<li>Hot-reload de plugins (shared libraries)</li>
+<li>Plugin marketplace UI (list available, install, update)</li>
+<li>Example plugin: &quot;Caffeine Script Editor&quot; (embutido com syntax highlight)</li>
+</ul>
+<h3 id="critério-de-aceitação-m4">Critério de Aceitação (M4)<a class="anchor" href="#critério-de-aceitação-m4" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Animation Timeline permite criar keyframes e reproduzir</li>
+<li>[ ] Onion skinning mostra frame anterior semi-transparente</li>
+<li>[ ] Tilemap Editor coloca tiles em múltiplas camadas</li>
+<li>[ ] Auto-tiling funciona com regras configuráveis</li>
+<li>[ ] Material Editor permite alterar parâmetros de shader</li>
+<li>[ ] Preview de shader compila e mostra resultado em tempo real</li>
+<li>[ ] Audio preview toca som no AssetBrowser</li>
+<li>[ ] Spatial audio gizmo mostra alcance no viewport</li>
+<li>[ ] Build &amp; Run compila o projeto e inicia o jogo</li>
+<li>[ ] Prefab instancia com linked copy; alterações propagam</li>
+<li>[ ] Entity Debugger mostra archetype e memória por componente</li>
+<li>[ ] Plugin system carrega <code>.dll</code>/<code>.so</code> e regista novo painel</li>
+</ul>
+<hr>
+<h2 id="dependências-entre-milestones">Dependências entre Milestones<a class="anchor" href="#dependências-entre-milestones" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">M1 ─────────────────────────────────────────────►
+  │                                                  │
+  ├── ECS Core (World, Entity, queries)          ✅  │
+  ├── RHI (RenderDevice, CommandBuffer)           ✅  │
+  ├── ImGuiIntegration                            ✅  │
+  ├── BatchRenderer, Camera2D                     ✅  │
+  ├── SceneSerializer                             ✅  │
+  ├── AssetManager                                ✅  │
+  └── ProfilerWindow, ConsoleWindow               ✅  │
+                                                   │
+M2 ─────────────────────────────────────────────►  │
+  │                                                  │
+  ├── M1 + SceneViewport                          🔲  │
+  ├── AssetPipeline encoders                      ✅  │
+  └── FileWatcher (AssetManager::pollFileChanges) ✅  │
+                                                   │
+M3 ─────────────────────────────────────────────►  │
+  │                                                  │
+  ├── M1                                           🔲  │
+  ├── sol2 (Lua binding)                          ⬜  │
+  └── Debug::LogSystem, Debug::DebugDraw          ✅  │
+                                                   │
+M4 ─────────────────────────────────────────────►  │
+  │                                                  │
+  ├── M1, M2, M3                                  🔲  │
+  └── Animation ECS, Physics 2D                    ✅  │
+</code></pre></div>
+<hr>
+<h2 id="riscos-mitigações">Riscos &amp; Mitigações<a class="anchor" href="#riscos-mitigações" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risco</th>
+<th>Impacto</th>
+<th style="text-align:center">Probabilidade</th>
+<th>Mitigação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ImGui Docking não estável</td>
+<td>M1 atrasado</td>
+<td style="text-align:center">Baixa</td>
+<td>Usar fallback manual layout</td>
+</tr>
+<tr>
+<td>sol2 com C++20 complexo</td>
+<td>M3 atrasado</td>
+<td style="text-align:center">Média</td>
+<td>Protótipo isolado antes de integrar</td>
+</tr>
+<tr>
+<td>Gizmos matemáticos complexos</td>
+<td>M2 atrasado</td>
+<td style="text-align:center">Média</td>
+<td>Usar ImGuizmo como base</td>
+</tr>
+<tr>
+<td>Hot-reload de shaders instável</td>
+<td>M2 atrasado</td>
+<td style="text-align:center">Alta</td>
+<td>Implementar fallback com shader default</td>
+</tr>
+<tr>
+<td>Prefab serialização complexa</td>
+<td>M4 atrasado</td>
+<td style="text-align:center">Média</td>
+<td>Começar com prefabs flat (sem nesting)</td>
+</tr>
+<tr>
+<td>Plugin system cross-platform</td>
+<td>M4 atrasado</td>
+<td style="text-align:center">Alta</td>
+<td>Windows-first, Linux/Mac depois</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="estimativa-de-esforço">Estimativa de Esforço<a class="anchor" href="#estimativa-de-esforço" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align:center">Milestone</th>
+<th style="text-align:center">Ficheiros</th>
+<th style="text-align:center">Ficheiros Novos</th>
+<th style="text-align:center">Estimativa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">M1</td>
+<td style="text-align:center">~15</td>
+<td style="text-align:center">8 (.hpp + .cpp)</td>
+<td style="text-align:center">3–4 semanas</td>
+</tr>
+<tr>
+<td style="text-align:center">M2</td>
+<td style="text-align:center">~10</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">2–3 semanas</td>
+</tr>
+<tr>
+<td style="text-align:center">M3</td>
+<td style="text-align:center">~12</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">3–4 semanas</td>
+</tr>
+<tr>
+<td style="text-align:center">M4</td>
+<td style="text-align:center">~20</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">4–6 semanas</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<p><strong>Total estimado:</strong> 12–17 semanas (3–4 meses) para o Caffeine Studio IDE completo.</p>
+</blockquote>
+<hr>
+<h2 id="referências">Referências<a class="anchor" href="#referências" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/editor/scene-editor/"><code>docs/editor/scene-editor.md</code></a> — Documentação atual do Scene Editor</li>
+<li><a href="/en/docs/ui/editor-ui/"><code>docs/ui/editor-ui.md</code></a> — Embedded UI / ImGuiIntegration</li>
+<li><a href="/en/docs/ui/game-ui/"><code>docs/ui/game-ui.md</code></a> — UI System (game HUD)</li>
+<li><a href="/en/docs/scripting/scripting/"><code>docs/scripting/scripting.md</code></a> — Scripting (Lua)</li>
+<li><a href="/en/docs/assets/asset-pipeline/"><code>docs/assets/asset-pipeline.md</code></a> — Asset Pipeline CLI</li>
+<li><a href="/en/docs/ecs/core/"><code>docs/ecs/core.md</code></a> — ECS Core</li>
+<li><a href="/en/docs/ecs/scene/"><code>docs/ecs/scene.md</code></a> — Scene Manager / Serializer</li>
+<li><a href="/en/docs/rendering/rhi/"><code>docs/rendering/rhi.md</code></a> — RHI</li>
+<li><a href="/en/docs/debug/debug-tools/"><code>docs/debug/debug-tools.md</code></a> — LogSystem, Profiler</li>
+<li><a href="/en/docs/architecture_specs/"><code>docs/architecture_specs.md</code></a> — Technical specifications</li>
+<li><a href="https://github.com/ocornut/imgui/wiki/Docking" rel="noopener" class="ext">Dear ImGui Docking</a></li>
+<li><a href="https://github.com/CedricGuillemet/ImGuizmo" rel="noopener" class="ext">ImGuizmo</a> — Gizmo library</li>
+<li><a href="https://github.com/ThePhD/sol2" rel="noopener" class="ext">sol2</a> — Lua/C++ binding</li>
+<li><a href="https://www.lua.org/manual/5.4/" rel="noopener" class="ext">Lua 5.4 Manual</a></li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/milestones/caffeine-studio-ide.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/milestones/"><span>Previous</span><strong>Editor milestones</strong></a><a class="pager-next" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/"><span>Next</span><strong>Capacidades de runtime (RFC) — lacunas genéricas</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#sumário-executivo">Sumário Executivo</a></li><li class="l2"><a href="#estado-atual-pré-m1">Estado Atual (Pré-M1)</a></li><li class="l3"><a href="#-já-implementado">✅ Já Implementado</a></li><li class="l3"><a href="#-por-implementar">❌ Por Implementar</a></li><li class="l2"><a href="#t0-desacoplamento-coreide-fundação">T0 — Desacoplamento Core↔IDE (Fundação)</a></li><li class="l3"><a href="#problema-atual">Problema Atual</a></li><li class="l3"><a href="#arquitetura-alvo">Arquitetura Alvo</a></li><li class="l3"><a href="#escopo">Escopo</a></li><li class="l3"><a href="#critério-de-aceitação-t0">Critério de Aceitação (T0)</a></li><li class="l3"><a href="#impacto-nos-milestones-seguintes">Impacto nos Milestones Seguintes</a></li><li class="l2"><a href="#m1-scene-editor-foundation">M1 — Scene Editor Foundation</a></li><li class="l3"><a href="#escopo-1">Escopo</a></li><li class="l3"><a href="#critério-de-aceitação-m1">Critério de Aceitação (M1)</a></li><li class="l2"><a href="#m2-visual-editing-assets">M2 — Visual Editing &amp; Assets</a></li><li class="l3"><a href="#escopo-2">Escopo</a></li><li class="l3"><a href="#critério-de-aceitação-m2">Critério de Aceitação (M2)</a></li><li class="l2"><a href="#m3-scripting-runtime">M3 — Scripting &amp; Runtime</a></li><li class="l3"><a href="#escopo-3">Escopo</a></li><li class="l3"><a href="#critério-de-aceitação-m3">Critério de Aceitação (M3)</a></li><li class="l2"><a href="#m4-advanced-tools-polish">M4 — Advanced Tools &amp; Polish</a></li><li class="l3"><a href="#escopo-4">Escopo</a></li><li class="l3"><a href="#critério-de-aceitação-m4">Critério de Aceitação (M4)</a></li><li class="l2"><a href="#dependências-entre-milestones">Dependências entre Milestones</a></li><li class="l2"><a href="#riscos-mitigações">Riscos &amp; Mitigações</a></li><li class="l2"><a href="#estimativa-de-esforço">Estimativa de Esforço</a></li><li class="l2"><a href="#referências">Referências</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>
