@@ -838,7 +838,7 @@ Starts over with a fresh app (new fixture, window size and assets).
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `fixture` | `string` | no | `empty`, `entities`, `material`, `texture`, `scene3d` (an engine-backed scene with lights, a camera and meshes; needs libcaffeine-capi) `nature` (the same, filled with generated rocks, trees and plants) `water` (the Water Generator tab in front) or `terrain` (the Terrain Generator tab in front). Default `entities`. |
+| `fixture` | `string` | no | `empty`, `entities`, `material`, `texture`, `scene3d` (an engine-backed scene with lights, a camera and meshes; needs libcaffeine-capi) `nature` (the same, filled with generated rocks, trees and plants) `water` (the Water Generator tab in front) `terrain` (the Terrain Generator tab in front) or `world` (the World Composer tab on a scratch project: a hills terrain, two rock recipes and `World/Valley.generator.world`; needs libcaffeine-capi). Default `entities`. |
 | `size` | `[w, h]` | no | Window size. |
 | `assets` | `[{ name, path, kind, directory? }]` | no | Asset list shown in the Assets panel. |
 | `asset_root` | `string` | no | Folder the asset wizard writes to; `temp` creates a scratch directory. |

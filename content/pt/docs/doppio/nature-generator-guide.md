@@ -535,3 +535,14 @@ PNG com o seu caminho antigo). O nó Leaves é ligado à textura da sua parte de
 e o seu tamanho antigo em metros torna-se uma fração da altura da árvore (medida nessa árvore), com fold e droop
 mantidos. Guardar escreve o novo formato (`NATUREGRAPH2`), que as versões antigas não conseguem abrir. Uma escolha de forma de folha
 de "atlas" numa textura de imagem única não é transportada: a disposição vem agora da textura.
+
+## Usar num mundo
+
+O [World Composer](world-composition.md) coloca receitas de natureza por referência: uma linha `class` indica uma
+receita `*.generator.nature` e o composer faz o bake do seu conjunto de variantes, por isso editar a receita muda
+todas as árvores do mundo. Exponha um parâmetro do grafo e uma composição pode controlá-lo a partir do
+terreno com `adapt param.<name> <mask>`: uma copa que cresce mais perto da água, por exemplo. O texto do grafo
+declara-o com uma linha por parâmetro, `expose <name> <node>.<param> [min max]` (por exemplo
+`expose rough 2.amount 0.1 1.25`); sem intervalo aplica-se o do próprio parâmetro, e um grafo sem nada exposto fica
+igual, por isso as receitas antigas e as suas caches de bake continuam válidas. Uma classe com
+`unique on` é gerada uma vez por instância, para objetos hero.

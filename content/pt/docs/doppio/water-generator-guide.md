@@ -225,3 +225,10 @@ materiais do projeto precisa de uma alteração ao motor e está na lista.
 Um grafo guardado antes de o material ser obrigatório não tem nó Water Material. Recebe o nó por omissão ligado
 ao Output quando carrega, por isso volta a construir-se; aplique ou coloque para o transformar no `.mat` do projeto.
 Os grafos guardados com *Your Water Material* mantêm o caminho do seu `.mat` (guardado com o grafo, espaços escapados).
+
+## Usar num mundo
+
+No [World Composer](world-composition.md) uma linha `water` indica uma receita `*.generator.water` e diz onde está a
+água: `follow flow min 0.8` para um rio ao longo da máscara de escoamento do terreno (com `carve <metros>` para
+escavar o leito) ou `fill basins level 0.18` para um lago nas bacias abaixo de um nível normalizado. O composer
+escreve depois a máscara `water_distance`, para que as classes façam crescer juncos só na margem.
