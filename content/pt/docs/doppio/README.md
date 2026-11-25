@@ -43,6 +43,7 @@ fazem rochas, árvores, água, terreno, texturas e materiais. O repositório do 
 | [`photoreal-world-roadmap.md`](photoreal-world-roadmap.md) | O plano de conteúdo: terreno, natureza, água, scatter e streaming |
 | [`terrain-editing-roadmap.md`](terrain-editing-roadmap.md) | O plano de edição de terreno: pincéis customizados, paleta de materiais, vegetação adaptativa e o formato nativo do terreno |
 | [`terrain-editing-phase-0.md`](terrain-editing-phase-0.md) | A base da edição de terreno como foi construída: modelo de tiles, motor de traço, contêiner nativo, GI regional, cursor do pincel, C ABI 25 a 27 |
+| [`terrain-editing-phase-4.md`](terrain-editing-phase-4.md) | Espécies do terreno a partir de receitas como construídas: variantes geradas com um material por parte, regeneração automática, adaptação por máscara, C ABI 31 |
 | [`terrain-editing-phase-3.md`](terrain-editing-phase-3.md) | A vegetação do terreno como foi construída: espécies, fontes procedural e manual, ids estáveis, ferramentas de pincel, renderização instanciada por chunk, a aba Terrain Vegetation, C ABI 30 |
 | [`terrain-editing-phase-2.md`](terrain-editing-phase-2.md) | A pintura de materiais do terreno como foi construída: uma paleta de até 64 camadas, o mapa de camadas, traços de pintura, auto-camadas, o renderizador com textura array, a aba Terrain Paint, C ABI 29 |
 | [`terrain-editing-phase-1.md`](terrain-editing-phase-1.md) | A escultura de terreno como foi construída: 16 modos de pincel, 58 pincéis, arquivos `.brush`, simetria, proteção, a aba Terrain Brush, C ABI 28 |
