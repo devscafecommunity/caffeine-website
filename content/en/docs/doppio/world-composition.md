@@ -256,8 +256,11 @@ draws every instance of a bake from one entity. Its models file has one line per
 
 The renderer loads the bake and the models file once per change, skips whole chunks outside the frustum or beyond
 `Draw distance`, and turns each visible instance into ordinary mesh draws, which the existing instancing batches (the
-tint is quantised to 1/32 so instances still share batches). Cut-out parts cast no shadow. Rivers are carved into the
-terrain but not drawn as water yet: the engine has no river surface.
+tint is quantised to 1/32 so instances still share batches). Cut-out parts cast no shadow. Every baked part names
+its material in `slots`: the same `.mat` assets the Nature Generator writes when it places the tree (bark, leaf cards,
+rock surfaces, your own material), recorded beside the cached OBJs in `.materials`. Rivers and lakes are water
+entities shaped by the engine's surface grid (`caffeine_world_water_surface` and
+`caffeine_session_set_water_surface`); with a library without it a lake is a flat plane and a river is only carved.
 
 ## 6. The Composer tab
 
@@ -270,10 +273,11 @@ A **World** tab (View > World Composer, or double-click a `*.generator.world` in
   with a *Reseed* button (a derived seed, undoable), and the edit layer: pin and move rows, a region rectangle with
   *Remove in region*, and a **remove brush**. With the brush on, a left drag in the Viewport removes the instances of
   the last build under the ring; the stroke is one undo step and writes `override remove` lines.
-- **Preview**: a coarse build (at most 2000 instances) after each edit, debounced; the terrain bake runs off the UI
-  thread.
+- **Preview**: a coarse build after each edit, debounced, on a worker thread (the terrain bake and the engine build,
+  through a session-free `WorldBuilder`); the latest edit wins and every instance is counted.
 - **Build**: the full build through the bake cache; one undo step; the status line reports instances per class, the
-  time, whether the cache answered and how many models were baked. *Save as prefab* writes `World/<name>.prefab`.
+  time, whether the cache answered and how many models were baked. *Save as prefab* writes `World/<name>.prefab`;
+  *Frame* points the Viewport camera at the last build.
 
 <figure>
   <img src="../images/doppio/world/ui/world-tab.png" alt="The World tab: Library, Composition and Rules beside the Viewport" loading="lazy">
@@ -289,7 +293,8 @@ Project rules apply: every widget has a `UiId` and a `CATALOG` entry, compositio
 build is one scene `App::commit`, and every command is a `Message` and an MCP action: `world_show`, `world_add`,
 `world_add_class`, `world_set_class`, `world_set_rule`, `world_reseed`, `world_preview`, `world_build`,
 `world_remove_in_region`, `world_brush`, `world_remove_in_circle`, `world_undo`, `world_save`, `world_save_prefab`,
-plus the read-only query `world`. The headless flow `doppio/tests/ui-flows/world-composer.json` adds, drags and undoes
+`world_frame`, plus the read-only query `world`. The headless fixture `world_showcase` is a world that looks like one
+(hills round a valley, a river, a lake, trees, rocks, shrubs and grass) for the documentation images. The headless flow `doppio/tests/ui-flows/world-composer.json` adds, drags and undoes
 a class, reseeds, edits a rule, toggles the brush and builds; `doppio/crates/ui/src/windows/main/tests.rs` covers
 large worlds, cache hits, carving and lakes, the brush and the prefab.
 
@@ -338,7 +343,7 @@ Each step is useful alone and testable headless. `[x]` means already true on the
 - [x] `water_distance` mask from water bodies; rivers follow a mask, lakes fill basins under a level.
 - [x] Optional bed carving before the masks are read (documented limit: CPU, bounded heightfield).
 - [x] Water refs checked and wired: lakes are placed as water entities with their recipe's look.
-- [ ] Rivers drawn as water (they are carved, but the engine has no river surface yet).
+- [x] Rivers and lake shores drawn as shaped water surfaces (with the engine's water surface grid).
 
 ### C3 — Ground context and adaptation
 
@@ -355,7 +360,7 @@ Each step is useful alone and testable headless. `[x]` means already true on the
 - [x] Persistent bake cache keyed as in section 7.
 - [ ] Impostors, per-chunk GPU instance buffers and mesh LOD for instances (roadmap phase 4); picking instances; the
       runtime renderer, the CPU shadow map and the Photon bake do not draw `World Instances` yet.
-- [ ] Materials on the placed nature parts of small worlds (the bake gives OBJ files only).
+- [x] Materials on the baked nature parts: entities get them like composite Scatter parts, models files as `slots`.
 
 ### C5 — Editor
 
@@ -363,7 +368,7 @@ Each step is useful alone and testable headless. `[x]` means already true on the
 - [x] `UiId`s, MCP actions, headless flow and fixture, captures through the headless driver
       (`scripts/capture-world-docs.sh`).
 - [x] Painting of overrides: the remove brush in the Viewport and the region rectangle.
-- [ ] The preview's engine build runs on the UI thread (debounced, at most 2000 instances): `Engine` is not `Send`.
+- [x] The preview runs on a worker thread through `WorldBuilder` (no instance cap; stale results are dropped).
 
 ### C6 — Documentation
 

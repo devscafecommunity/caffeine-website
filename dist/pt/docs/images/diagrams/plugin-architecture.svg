@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" font-family="Inter, Segoe UI, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e0a458"/>
+    </marker>
+    <style>
+      .box { fill:#23252b; stroke:#3a3d45; stroke-width:1.5; rx:10; }
+      .accent { fill:#2c2a25; stroke:#e0a458; stroke-width:1.6; }
+      .t { fill:#e8e8ea; font-size:15px; font-weight:600; }
+      .s { fill:#9aa0aa; font-size:12px; }
+      .m { fill:#e0a458; font-size:12px; font-weight:600; letter-spacing:.08em; }
+      .a { stroke:#e0a458; stroke-width:2; fill:none; marker-end:url(#arrow); }
+      .d { stroke:#5b606b; stroke-width:1.5; fill:none; stroke-dasharray:5 5; }
+    </style>
+  </defs>
+  <rect width="960" height="470" fill="#17181c"/>
+
+  <text x="40" y="44" class="m">DOPPIO — PLUGIN ARCHITECTURE</text>
+
+  <!-- Engine core -->
+  <rect x="40" y="70" width="300" height="150" class="accent"/>
+  <text x="60" y="100" class="t">Doppio core (engine)</text>
+  <text x="60" y="126" class="s">Scene editor · viewport · hierarchy</text>
+  <text x="60" y="146" class="s">inspector · asset browser · console</text>
+  <text x="60" y="176" class="s">PluginManager + service registry</text>
+  <text x="60" y="196" class="s">Caffeine::UIKit chrome</text>
+
+  <!-- Host API -->
+  <rect x="380" y="92" width="190" height="106" class="box"/>
+  <text x="400" y="122" class="t">PluginHostApi</text>
+  <text x="400" y="146" class="s">opaque C ABI</text>
+  <text x="400" y="166" class="s">panels · menus · drawers</text>
+  <text x="400" y="184" class="s">services · editor state</text>
+
+  <!-- Plugins -->
+  <rect x="620" y="58" width="300" height="44" class="box"/>
+  <text x="640" y="86" class="t">terrain_plugin</text>
+  <rect x="620" y="116" width="300" height="44" class="box"/>
+  <text x="640" y="144" class="t">procedural_tools_plugin</text>
+  <rect x="620" y="174" width="300" height="44" class="box"/>
+  <text x="640" y="202" class="t">ai_development_plugin</text>
+  <rect x="620" y="232" width="300" height="44" class="box"/>
+  <text x="640" y="260" class="t">git · post-processing · hello</text>
+
+  <path class="a" d="M340 145 H376"/>
+  <path class="a" d="M570 145 H616"/>
+  <path class="a" d="M570 125 L616 82"/>
+  <path class="a" d="M570 160 L616 196"/>
+  <path class="a" d="M570 175 L616 254"/>
+
+  <!-- Build flow -->
+  <rect x="40" y="310" width="360" height="110" class="box"/>
+  <text x="60" y="340" class="t">doppio-plugins (submodule)</text>
+  <text x="60" y="366" class="s">plugins/&lt;name&gt;/src + CMakeLists.txt</text>
+  <text x="60" y="386" class="s">doppio_add_plugin() against the public SDK</text>
+  <text x="60" y="406" class="s">build/plugins/*.so</text>
+
+  <rect x="470" y="310" width="200" height="110" class="box"/>
+  <text x="490" y="340" class="t">plugins/ directory</text>
+  <text x="490" y="366" class="s">project</text>
+  <text x="490" y="386" class="s">build/plugins</text>
+  <text x="490" y="406" class="s">next to the binary</text>
+
+  <rect x="730" y="310" width="190" height="110" class="accent"/>
+  <text x="750" y="340" class="t">Enable list</text>
+  <text x="750" y="366" class="s">plugins.cfg</text>
+  <text x="750" y="386" class="s">one stem per line</text>
+  <text x="750" y="406" class="s">opt-in only</text>
+
+  <path class="a" d="M400 365 H466"/>
+  <path class="a" d="M670 365 H726"/>
+  <path class="d" d="M825 310 V282 H770"/>
+  <text x="700" y="300" class="s">loads enabled</text>
+</svg>

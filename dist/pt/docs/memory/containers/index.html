@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Módulo de Contentores · Caffeine</title>
+<meta name="description" content="Quatro contentores pequenos e amigos da cache usados em todo o runtime: um vetor dinâmico, um mapa associativo linear, uma vista de string sem ownership e uma string de capacidade fixa inline.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Módulo de Contentores · Caffeine">
+<meta property="og:description" content="Quatro contentores pequenos e amigos da cache usados em todo o runtime: um vetor dinâmico, um mapa associativo linear, uma vista de string sem ownership e uma string de capacidade fixa inline.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/memory/containers/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/memory/containers/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/memory/containers/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/memory/containers/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab active" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/memory/containers/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/memory/containers/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Motor"><div class="nav-title">Motor</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Arquitetura</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/architecture/cafpack/">Cafpack — Camada Unificada de Assets</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Núcleo</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/pt/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/pt/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/pt/docs/core/types/">Módulo Core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/ecs/">ECS e cenas</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/pt/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/pt/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Matemática</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/pt/docs/math/vectors/">Módulo de Matemática</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memória</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/memory/memory-model/">🧠 Memory Model — Especificação de Allocators</a></li><li><a class="nav-link active" href="/pt/docs/memory/containers/" aria-current="page">Módulo de Contentores</a></li><li><a class="nav-link" href="/pt/docs/memory/allocators/">Módulo de Memória</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Física</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/pt/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/pt/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Renderização</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/pt/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/pt/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/pt/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/pt/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-phong/">Materiais no passe forward 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/pt/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/pt/docs/rendering/overlay-2d-rhi/">Overlays vectoriais 2D (caminho RHI)</a></li><li><a class="nav-link" href="/pt/docs/rendering/reflections/">Reflexos</a></li><li><a class="nav-link" href="/pt/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/pt/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/pt/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/pt/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terreno</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Áudio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/audio/audio-system/">🎵 Audio System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animação</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/pt/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Entrada</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Interface</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/pt/docs/ui/editor-ui/">Host ImGui (runtime e plugins legados)</a></li><li><a class="nav-link" href="/pt/docs/ui/ui-kit/">UI kit composável</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Depuração</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/pt/docs/debug/testing/">Testes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/performance/">Desempenho</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/performance/editor-viewport-performance/">Performance — Editor Viewport &amp; GPU Scene</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concorrência</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/engine/">Motor</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Módulo de Contentores</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Engine</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/tree/main/src/caffeine/containers"><code>src/caffeine/containers</code></a></span>
+</div>
+<p class="doc-lede">Quatro contentores pequenos e amigos da cache usados em todo
+o runtime: um vetor dinâmico, um mapa associativo linear, uma vista de string
+sem ownership e uma string de capacidade fixa inline.</p>
+<h2 id="visão-geral">Visão Geral<a class="anchor" href="#visão-geral" aria-label="Link to this section">#</a></h2>
+<p>O módulo Containers fornece estruturas de dados otimizadas para
+desenvolvimento de jogos, com localidade de cache e o mínimo de alocações no
+heap.</p>
+<p><strong>Localização:</strong> <code>src/caffeine/containers</code></p>
+<h2 id="ficheiros">Ficheiros<a class="anchor" href="#ficheiros" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ficheiro</th>
+<th>Descrição</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/containers/Vector.hpp" rel="noopener" class="ext"><code>Vector.hpp</code></a></td>
+<td>Array dinâmico com memória contígua amiga da cache</td>
+<td>✅ Completo</td>
+</tr>
+<tr>
+<td><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/containers/HashMap.hpp" rel="noopener" class="ext"><code>HashMap.hpp</code></a></td>
+<td>Mapa com pesquisa linear sobre <code>Vector&lt;Pair&gt;</code></td>
+<td>✅ Completo</td>
+</tr>
+<tr>
+<td><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/containers/StringView.hpp" rel="noopener" class="ext"><code>StringView.hpp</code></a></td>
+<td>String sem ownership (zero-copy)</td>
+<td>✅ Completo</td>
+</tr>
+<tr>
+<td><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/containers/FixedString.hpp" rel="noopener" class="ext"><code>FixedString.hpp</code></a></td>
+<td>String com buffer inline (zero heap)</td>
+<td>✅ Completo</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="vector">Vector<T><a class="anchor" href="#vector" aria-label="Link to this section">#</a></h2>
+<p>Array dinâmico com crescimento automático. Aceita allocators personalizados ou
+usa o <code>operator new</code> global por omissão.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Construção por omissão (usa new/delete global)</span>
+Caffeine::Vector&lt;<span class="hljs-type">int</span>&gt; vec;
+vec.<span class="hljs-built_in">pushBack</span>(<span class="hljs-number">42</span>);
+
+<span class="hljs-comment">// Com allocator personalizado</span>
+<span class="hljs-function">Caffeine::LinearAllocator <span class="hljs-title">alloc</span><span class="hljs-params">(<span class="hljs-number">1024</span>)</span></span>;
+<span class="hljs-function">Caffeine::Vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">vec2</span><span class="hljs-params">(&amp;alloc)</span></span>;
+</code></pre></div>
+<h3 id="métodos-principais">Métodos Principais<a class="anchor" href="#métodos-principais" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Complexidade</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pushBack()</code></td>
+<td>O(1) amortizado</td>
+<td>Adiciona um elemento</td>
+</tr>
+<tr>
+<td><code>operator[]</code></td>
+<td>O(1)</td>
+<td>Acesso por índice</td>
+</tr>
+<tr>
+<td><code>reserve()</code></td>
+<td>O(n)</td>
+<td>Pré-aloca capacidade</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>O(n)</td>
+<td>Destrói todos os elementos</td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>O(1)</td>
+<td>Número de elementos</td>
+</tr>
+<tr>
+<td><code>capacity()</code></td>
+<td>O(1)</td>
+<td>Capacidade alocada</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="hashmapk-v">HashMap&lt;K, V&gt;<a class="anchor" href="#hashmapk-v" aria-label="Link to this section">#</a></h2>
+<p>Contentor associativo pequeno suportado por <code>Vector&lt;Pair&gt;</code> com <strong>pesquisa
+linear</strong> — <code>get</code>/<code>set</code>/<code>contains</code>/<code>remove</code> em O(n). Não há hashing nem open
+addressing; é adequado para tabelas pequenas (dezenas de entradas), não para
+hot paths com milhares de chaves.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">Caffeine::HashMap&lt;<span class="hljs-type">int</span>, <span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt; map;
+map.<span class="hljs-built_in">set</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;one&quot;</span>);
+map.<span class="hljs-built_in">set</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;two&quot;</span>);
+
+<span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-type">const</span>* val = map.<span class="hljs-built_in">get</span>(<span class="hljs-number">1</span>);  <span class="hljs-comment">// pointer; nullptr if missing</span>
+<span class="hljs-type">bool</span> exists = map.<span class="hljs-built_in">contains</span>(<span class="hljs-number">1</span>);
+map.<span class="hljs-built_in">remove</span>(<span class="hljs-number">1</span>);  <span class="hljs-comment">// swap-with-back removal (unordered)</span>
+</code></pre></div>
+<h3 id="métodos-principais-1">Métodos Principais<a class="anchor" href="#métodos-principais-1" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Complexidade</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set()</code> (overloads lvalue + rvalue)</td>
+<td>O(n)</td>
+<td>Insere ou atualiza</td>
+</tr>
+<tr>
+<td><code>get()</code> (const + non-const)</td>
+<td>O(n)</td>
+<td>Ponteiro para o valor, <code>nullptr</code> se não existir</td>
+</tr>
+<tr>
+<td><code>contains()</code></td>
+<td>O(n)</td>
+<td>Verifica se a chave existe</td>
+</tr>
+<tr>
+<td><code>remove()</code></td>
+<td>O(n)</td>
+<td>Remove por troca com o último (ordem não preservada)</td>
+</tr>
+<tr>
+<td><code>clear()</code> / <code>size()</code> / <code>empty()</code></td>
+<td>O(n) / O(1) / O(1)</td>
+<td>Limpa / conta / verifica</td>
+</tr>
+<tr>
+<td><code>begin()</code> / <code>end()</code> (const + non-const)</td>
+<td>O(1)</td>
+<td>Itera os pares</td>
+</tr>
+<tr>
+<td><code>explicit HashMap(usize capacity)</code></td>
+<td>—</td>
+<td>Pré-reserva armazenamento</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="stringview">StringView<a class="anchor" href="#stringview" aria-label="Link to this section">#</a></h2>
+<p>Referência de string zero-copy (ponteiro + comprimento, sem ownership).</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">Caffeine::StringView <span class="hljs-title">sv</span><span class="hljs-params">(<span class="hljs-string">&quot;Hello World&quot;</span>, <span class="hljs-number">5</span>)</span></span>; <span class="hljs-comment">// &quot;Hello&quot;</span>
+<span class="hljs-function">Caffeine::StringView <span class="hljs-title">full</span><span class="hljs-params">(<span class="hljs-string">&quot;Hello&quot;</span>)</span></span>;        <span class="hljs-comment">// comprimento calculado</span>
+</code></pre></div>
+<p>Fornece <code>data()</code> / <code>length()</code> / <code>size()</code> / <code>empty()</code>, <code>operator[]</code> e
+<code>compare()</code> lexicográfico com os operadores <code>==</code>, <code>!=</code>, <code>&lt;</code>.
+Não é terminada por nulo — não passe <code>data()</code> a APIs <code>%s</code> sem respeitar o
+comprimento.</p>
+<h2 id="fixedstring">FixedString<N><a class="anchor" href="#fixedstring" aria-label="Link to this section">#</a></h2>
+<p>String na stack com buffer inline. Um único parâmetro de template:
+<code>FixedString&lt;32&gt;</code>, <strong>não</strong> <code>FixedString&lt;T, N&gt;</code>.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">Caffeine::FixedString&lt;<span class="hljs-number">32</span>&gt; fs;
+fs.<span class="hljs-built_in">append</span>(<span class="hljs-string">&quot;Hello&quot;</span>);
+<span class="hljs-type">const</span> <span class="hljs-type">char</span>* s = fs.<span class="hljs-built_in">cStr</span>();  <span class="hljs-comment">// sempre terminada por nulo</span>
+</code></pre></div>
+<p>Fornece <code>cStr()</code> / <code>data()</code> / <code>length()</code> / <code>size()</code> / <code>capacity()</code> (devolve <code>N</code>),
+<code>empty()</code> / <code>full()</code>, <code>clear()</code>, <code>append(const char*)</code> / <code>append(char)</code>,
+<code>==</code> / <code>!=</code>, <code>operator[]</code>. Os appends <strong>truncam silenciosamente</strong> em <code>N - 1</code>
+caracteres (o buffer reserva sempre espaço para <code>'\0'</code>).</p>
+<h2 id="dod-data-oriented-design">DOD (Data-Oriented Design)<a class="anchor" href="#dod-data-oriented-design" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Vector<T></strong>: memória contígua, sem fragmentação; <code>IAllocator*</code> opcional
+(usa <code>new</code>/<code>delete</code> global quando não é indicado)</li>
+<li><strong>HashMap&lt;K,V&gt;</strong>: pesquisa linear sobre pares contíguos — amigo da cache, mas O(n)</li>
+<li><strong>StringView</strong>: zero-copy, sem alocação</li>
+<li><strong>FixedString<N></strong>: buffer inline, zero heap</li>
+</ul>
+<h2 id="ver-também">Ver Também<a class="anchor" href="#ver-também" aria-label="Link to this section">#</a></h2>
+<h3 id="documentação-relacionada">Documentação Relacionada<a class="anchor" href="#documentação-relacionada" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><a href="/pt/docs/HISTORY/">HISTORY.md</a> - Requisitos e regras de desenvolvimento da Fase 1</li>
+<li><a href="/pt/docs/architecture_specs/">architecture_specs.md</a> - Especificações técnicas</li>
+<li><a href="/pt/docs/api/">API Reference</a> - Documentação completa da API</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/tests/test_containers.cpp" rel="noopener" class="ext">Test Documentation</a> - Testes dos contentores</li>
+</ul>
+<h3 id="módulos-relacionados">Módulos Relacionados<a class="anchor" href="#módulos-relacionados" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><a href="/pt/docs/core/types/">Core Module</a> - Tipos fundamentais</li>
+<li><a href="/pt/docs/memory/allocators/">Memory Module</a> - Allocators usados pelos contentores</li>
+<li><a href="/pt/docs/math/vectors/">Math Module</a> - Tipos matemáticos</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/memory/containers.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/memory/memory-model/"><span>Anterior</span><strong>🧠 Memory Model — Especificação de Allocators</strong></a><a class="pager-next" href="/pt/docs/memory/allocators/"><span>Seguinte</span><strong>Módulo de Memória</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#visão-geral">Visão Geral</a></li><li class="l2"><a href="#ficheiros">Ficheiros</a></li><li class="l2"><a href="#vector">Vector</a></li><li class="l3"><a href="#métodos-principais">Métodos Principais</a></li><li class="l2"><a href="#hashmapk-v">HashMap&lt;K, V&gt;</a></li><li class="l3"><a href="#métodos-principais-1">Métodos Principais</a></li><li class="l2"><a href="#stringview">StringView</a></li><li class="l2"><a href="#fixedstring">FixedString</a></li><li class="l2"><a href="#dod-data-oriented-design">DOD (Data-Oriented Design)</a></li><li class="l2"><a href="#ver-também">Ver Também</a></li><li class="l3"><a href="#documentação-relacionada">Documentação Relacionada</a></li><li class="l3"><a href="#módulos-relacionados">Módulos Relacionados</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

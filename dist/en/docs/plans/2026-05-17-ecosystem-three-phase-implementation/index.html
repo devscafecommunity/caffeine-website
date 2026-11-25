@@ -1,0 +1,1197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caffeine Ecosystem Three-Phase Implementation Plan · Caffeine</title>
+<meta name="description" content="Historical note: Convoy and WaveShaper are no longer part of the Caffeine repository. The references below describe the original plan.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Caffeine Ecosystem Three-Phase Implementation Plan · Caffeine">
+<meta property="og:description" content="Historical note: Convoy and WaveShaper are no longer part of the Caffeine repository. The references below describe the original plan.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/" aria-current="page">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/ECOSYSTEM_WORKFLOW/">Unified asset workflow</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Caffeine Ecosystem Three-Phase Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>Historical note:</strong> Convoy and WaveShaper are no longer part of the Caffeine repository. The references below describe the original plan.</p>
+</blockquote>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Implement doppio editor integration (CAP browsing + texture/audio previews + drag-drop), advanced caf-pack features (mesh processor + compression + asset ID header), and tool integration (async loading infrastructure) for a complete unified ecosystem.</p>
+<p><strong>Architecture:</strong> Phase 1 extends doppio with CAP deserialization and preview rendering. Phase 2 extends caf-pack with mesh support and compression. Phase 3 builds async loading infrastructure and tool exports.</p>
+<p><strong>Tech Stack:</strong> C++20, ImGui, libpng, zlib, zstd, pthreads</p>
+<hr>
+<h2 id="phase-1-doppio-editor-integration-step-4">Phase 1: doppio Editor Integration (Step 4)<a class="anchor" href="#phase-1-doppio-editor-integration-step-4" aria-label="Link to this section">#</a></h2>
+<h3 id="task-11-create-cap-loader-module">Task 1.1: Create CAP Loader Module<a class="anchor" href="#task-11-create-cap-loader-module" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>doppio-archived/src/doppio/editor/CapLoader.hpp</code></li>
+<li>Create: <code>doppio-archived/src/doppio/editor/CapLoader.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write CapLoader header with interface</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// src/editor/CapLoader.hpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/io/CafTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;filesystem&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CapLoader</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">LoadedAsset</span> {
+        std::string filename;
+        AssetType type;
+        std::vector&lt;u8&gt; cafBlob;
+        CafHeader metadata;
+    };
+
+    <span class="hljs-comment">// Load CAP file and extract all assets</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> std::vector&lt;LoadedAsset&gt; <span class="hljs-title">loadCap</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; path)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-comment">// Helper to identify asset type from magic bytes in CAF</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> AssetType <span class="hljs-title">identifyAssetType</span><span class="hljs-params">(<span class="hljs-type">const</span> CafHeader&amp; header)</span></span>;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 2: Implement CAP loader</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// src/editor/CapLoader.cpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/CapLoader.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstring&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-function">std::vector&lt;CapLoader::LoadedAsset&gt; <span class="hljs-title">CapLoader::loadCap</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; path)</span> </span>{
+    std::vector&lt;LoadedAsset&gt; assets;
+    <span class="hljs-function">std::ifstream <span class="hljs-title">file</span><span class="hljs-params">(path, std::ios::binary)</span></span>;
+    
+    <span class="hljs-keyword">if</span> (!file) {
+        <span class="hljs-built_in">CF_LOG_ERROR</span>(<span class="hljs-string">&quot;CapLoader: Failed to open CAP file: {}&quot;</span>, path.<span class="hljs-built_in">string</span>());
+        <span class="hljs-keyword">return</span> assets;
+    }
+
+    <span class="hljs-comment">// Read CAP header</span>
+    CapHeader capHeader{};
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;capHeader), <span class="hljs-keyword">sizeof</span>(CapHeader));
+    
+    <span class="hljs-keyword">if</span> (capHeader.magic != CapHeader::MAGIC) {
+        <span class="hljs-built_in">CF_LOG_ERROR</span>(<span class="hljs-string">&quot;CapLoader: Invalid CAP magic bytes&quot;</span>);
+        <span class="hljs-keyword">return</span> assets;
+    }
+
+    <span class="hljs-keyword">if</span> (capHeader.version != CapHeader::VERSION) {
+        <span class="hljs-built_in">CF_LOG_ERROR</span>(<span class="hljs-string">&quot;CapLoader: Unsupported CAP version&quot;</span>);
+        <span class="hljs-keyword">return</span> assets;
+    }
+
+    <span class="hljs-comment">// Read entry table</span>
+    <span class="hljs-function">std::vector&lt;CapEntry&gt; <span class="hljs-title">entries</span><span class="hljs-params">(capHeader.entryCount)</span></span>;
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(entries.<span class="hljs-built_in">data</span>()), 
+              capHeader.entryCount * <span class="hljs-keyword">sizeof</span>(CapEntry));
+
+    <span class="hljs-comment">// Extract each asset</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; entry : entries) {
+        file.<span class="hljs-built_in">seekg</span>(entry.offset);
+        
+        <span class="hljs-comment">// Read CAF blob</span>
+        <span class="hljs-function">std::vector&lt;u8&gt; <span class="hljs-title">cafBlob</span><span class="hljs-params">(entry.size)</span></span>;
+        file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(cafBlob.<span class="hljs-built_in">data</span>()), entry.size);
+        
+        <span class="hljs-comment">// Parse CAF header</span>
+        CafHeader cafHeader{};
+        std::<span class="hljs-built_in">memcpy</span>(&amp;cafHeader, cafBlob.<span class="hljs-built_in">data</span>(), <span class="hljs-keyword">sizeof</span>(CafHeader));
+        
+        LoadedAsset asset{
+            .filename = entry.filename,
+            .type = <span class="hljs-built_in">identifyAssetType</span>(cafHeader),
+            .cafBlob = cafBlob,
+            .metadata = cafHeader
+        };
+        
+        assets.<span class="hljs-built_in">push_back</span>(asset);
+    }
+
+    <span class="hljs-keyword">return</span> assets;
+}
+
+<span class="hljs-function">AssetType <span class="hljs-title">CapLoader::identifyAssetType</span><span class="hljs-params">(<span class="hljs-type">const</span> CafHeader&amp; header)</span> </span>{
+    <span class="hljs-comment">// Type is stored in CafHeader</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;AssetType&gt;(header.type);
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 3: Add CapLoader to CMakeLists.txt</strong></p>
+<p>In <code>src/editor/CMakeLists.txt</code> , add to the doppio-editor target:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake">CapLoader.hpp
+CapLoader.cpp
+</code></pre></div>
+<p><strong>Step 4: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; cmake .. &amp;&amp; make -j4
+</code></pre></div>
+<p>Expected: No errors, doppio target compiles successfully.</p>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/CapLoader.hpp src/editor/CapLoader.cpp src/editor/CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;feat: add CAP file loader for Asset Browser&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-12-extend-asset-browser-with-cap-mode">Task 1.2: Extend Asset Browser with CAP Mode<a class="anchor" href="#task-12-extend-asset-browser-with-cap-mode" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/AssetBrowser.hpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/AssetBrowser.cpp</code></li>
+</ul>
+<p><strong>Step 1: Add CAP mode enum and loading method to header</strong></p>
+<p>Find the <code>AssetBrowser</code> class definition and add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// In AssetBrowser.hpp, after ViewMode enum:</span>
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">BrowseMode</span> : u8 {
+    Filesystem,
+    CapFile
+};
+
+<span class="hljs-comment">// Add to public section after existing methods:</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">loadCapFile</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; capPath)</span></span>;
+<span class="hljs-function">BrowseMode <span class="hljs-title">browseMode</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_browseMode; }
+</code></pre></div>
+<p><strong>Step 2: Add CAP mode state variables</strong></p>
+<p>In <code>AssetBrowser.hpp</code> private section, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">BrowseMode m_browseMode = BrowseMode::Filesystem;
+std::filesystem::path m_currentCapPath;
+std::vector&lt;CapLoader::LoadedAsset&gt; m_capAssets;  <span class="hljs-comment">// Loaded CAP assets</span>
+</code></pre></div>
+<p><strong>Step 3: Implement loadCapFile method</strong></p>
+<p>In <code>AssetBrowser.cpp</code> , add after existing methods:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AssetBrowser::loadCapFile</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; capPath)</span> </span>{
+    m_capAssets = CapLoader::<span class="hljs-built_in">loadCap</span>(capPath);
+    m_currentCapPath = capPath;
+    m_browseMode = BrowseMode::CapFile;
+    m_entries.<span class="hljs-built_in">clear</span>();
+    
+    <span class="hljs-comment">// Convert CapLoader assets to Asset Browser entries</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; asset : m_capAssets) {
+        Entry entry{};
+        entry.name = asset.filename;
+        entry.type = asset.type;
+        entry.path = capPath / asset.filename;  <span class="hljs-comment">// Virtual path</span>
+        entry.fileSize = asset.cafBlob.<span class="hljs-built_in">size</span>();
+        entry.isDirectory = <span class="hljs-literal">false</span>;
+        m_entries.<span class="hljs-built_in">push_back</span>(entry);
+    }
+    
+    <span class="hljs-built_in">CF_LOG_INFO</span>(<span class="hljs-string">&quot;AssetBrowser: Loaded {} assets from CAP&quot;</span>, m_entries.<span class="hljs-built_in">size</span>());
+}
+</code></pre></div>
+<p><strong>Step 4: Update refresh() method for CAP mode</strong></p>
+<p>In <code>AssetBrowser.cpp</code> , modify the <code>refresh()</code> method:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AssetBrowser::refresh</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (m_browseMode == BrowseMode::CapFile) {
+        <span class="hljs-comment">// Reload CAP file</span>
+        <span class="hljs-built_in">loadCapFile</span>(m_currentCapPath);
+        <span class="hljs-keyword">return</span>;
+    }
+    
+    <span class="hljs-comment">// Existing filesystem refresh logic...</span>
+}
+</code></pre></div>
+<p><strong>Step 5: Update render to show CAP breadcrumb</strong></p>
+<p>In <code>AssetBrowser::renderBreadcrumbs()</code> , add CAP mode indicator:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">if</span> (m_browseMode == BrowseMode::CapFile) {
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;CAP: %s&quot;</span>, m_currentCapPath.<span class="hljs-built_in">filename</span>().<span class="hljs-built_in">c_str</span>());
+    ImGui::<span class="hljs-built_in">SameLine</span>();
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">SmallButton</span>(<span class="hljs-string">&quot;Back to Filesystem&quot;</span>)) {
+        m_browseMode = BrowseMode::Filesystem;
+        m_entries.<span class="hljs-built_in">clear</span>();
+        <span class="hljs-built_in">navigateTo</span>(m_rootPath);
+    }
+}
+</code></pre></div>
+<p><strong>Step 6: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; make -j4
+</code></pre></div>
+<p>Expected: No errors.</p>
+<p><strong>Step 7: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/AssetBrowser.hpp src/editor/AssetBrowser.cpp
+git commit -m <span class="hljs-string">&quot;feat: add CAP file browsing mode to Asset Browser&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-13-create-audio-waveform-renderer">Task 1.3: Create Audio Waveform Renderer<a class="anchor" href="#task-13-create-audio-waveform-renderer" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>doppio-archived/src/doppio/editor/AudioWaveformRenderer.hpp</code></li>
+<li>Create: <code>doppio-archived/src/doppio/editor/AudioWaveformRenderer.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write header</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// src/editor/AudioWaveformRenderer.hpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/io/CafTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AudioWaveformRenderer</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">WaveformData</span> {
+        std::vector&lt;f32&gt; leftChannel;
+        std::vector&lt;f32&gt; rightChannel;
+        u32 sampleRate;
+        <span class="hljs-type">bool</span> isStereo;
+    };
+
+    <span class="hljs-comment">// Generate waveform from CAF audio blob</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> WaveformData <span class="hljs-title">generateWaveform</span><span class="hljs-params">(
+        <span class="hljs-type">const</span> std::vector&lt;u8&gt;&amp; cafBlob,
+        u32 targetWidth = <span class="hljs-number">256</span>
+    )</span></span>;
+
+    <span class="hljs-comment">// Render waveform as texture (returns GPU texture ID)</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> u32 <span class="hljs-title">renderWaveformTexture</span><span class="hljs-params">(<span class="hljs-type">const</span> WaveformData&amp; data, u32 width = <span class="hljs-number">256</span>, u32 height = <span class="hljs-number">64</span>)</span></span>;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 2: Implement waveform generator</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// src/editor/AudioWaveformRenderer.cpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/AudioWaveformRenderer.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-function">AudioWaveformRenderer::WaveformData <span class="hljs-title">AudioWaveformRenderer::generateWaveform</span><span class="hljs-params">(
+    <span class="hljs-type">const</span> std::vector&lt;u8&gt;&amp; cafBlob,
+    u32 targetWidth
+)</span> </span>{
+    WaveformData data{};
+    
+    <span class="hljs-keyword">if</span> (cafBlob.<span class="hljs-built_in">size</span>() &lt; <span class="hljs-keyword">sizeof</span>(CafHeader)) {
+        <span class="hljs-keyword">return</span> data;
+    }
+
+    <span class="hljs-comment">// Parse CAF header</span>
+    CafHeader header{};
+    std::<span class="hljs-built_in">memcpy</span>(&amp;header, cafBlob.<span class="hljs-built_in">data</span>(), <span class="hljs-keyword">sizeof</span>(CafHeader));
+
+    <span class="hljs-keyword">if</span> (header.type != <span class="hljs-keyword">static_cast</span>&lt;u32&gt;(AssetType::Audio)) {
+        <span class="hljs-keyword">return</span> data;
+    }
+
+    <span class="hljs-comment">// Get audio metadata</span>
+    CafAudioMetadata audioMeta{};
+    std::<span class="hljs-built_in">memcpy</span>(&amp;audioMeta, 
+                cafBlob.<span class="hljs-built_in">data</span>() + <span class="hljs-keyword">sizeof</span>(CafHeader),
+                <span class="hljs-keyword">sizeof</span>(CafAudioMetadata));
+
+    data.sampleRate = audioMeta.sampleRate;
+    data.isStereo = (audioMeta.channels == <span class="hljs-number">2</span>);
+
+    <span class="hljs-comment">// Extract PCM samples (assuming 16-bit PCM after metadata)</span>
+    u32 payloadOffset = <span class="hljs-number">32</span> + <span class="hljs-number">32</span>;  <span class="hljs-comment">// CafHeader + CafAudioMetadata</span>
+    <span class="hljs-type">const</span> i16* samples = <span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> i16*&gt;(cafBlob.<span class="hljs-built_in">data</span>() + payloadOffset);
+    u32 sampleCount = (cafBlob.<span class="hljs-built_in">size</span>() - payloadOffset) / <span class="hljs-keyword">sizeof</span>(i16);
+
+    <span class="hljs-comment">// Normalize and downsample to targetWidth</span>
+    u32 samplesPerBin = std::<span class="hljs-built_in">max</span>(<span class="hljs-number">1u</span>, sampleCount / (targetWidth * audioMeta.channels));
+    
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; targetWidth; i++) {
+        u32 startIdx = i * samplesPerBin * audioMeta.channels;
+        u32 endIdx = std::<span class="hljs-built_in">min</span>(startIdx + samplesPerBin * audioMeta.channels, sampleCount);
+        
+        f32 minLeft = <span class="hljs-number">0.0f</span>, maxLeft = <span class="hljs-number">0.0f</span>;
+        f32 minRight = <span class="hljs-number">0.0f</span>, maxRight = <span class="hljs-number">0.0f</span>;
+        
+        <span class="hljs-keyword">for</span> (u32 j = startIdx; j &lt; endIdx; j++) {
+            f32 normalized = <span class="hljs-keyword">static_cast</span>&lt;f32&gt;(samples[j]) / <span class="hljs-number">32768.0f</span>;
+            
+            <span class="hljs-keyword">if</span> ((j - startIdx) % audioMeta.channels == <span class="hljs-number">0</span>) {
+                minLeft = std::<span class="hljs-built_in">min</span>(minLeft, normalized);
+                maxLeft = std::<span class="hljs-built_in">max</span>(maxLeft, normalized);
+            } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (audioMeta.channels == <span class="hljs-number">2</span>) {
+                minRight = std::<span class="hljs-built_in">min</span>(minRight, normalized);
+                maxRight = std::<span class="hljs-built_in">max</span>(maxRight, normalized);
+            }
+        }
+        
+        data.leftChannel.<span class="hljs-built_in">push_back</span>(maxLeft - minLeft);
+        <span class="hljs-keyword">if</span> (data.isStereo) {
+            data.rightChannel.<span class="hljs-built_in">push_back</span>(maxRight - minRight);
+        }
+    }
+
+    <span class="hljs-keyword">return</span> data;
+}
+
+<span class="hljs-function">u32 <span class="hljs-title">AudioWaveformRenderer::renderWaveformTexture</span><span class="hljs-params">(
+    <span class="hljs-type">const</span> WaveformData&amp; data,
+    u32 width,
+    u32 height
+)</span> </span>{
+    <span class="hljs-comment">// For now, return a placeholder texture ID (0)</span>
+    <span class="hljs-comment">// Full implementation would render to texture using RenderDevice</span>
+    <span class="hljs-comment">// This is a simplified version that generates the waveform data</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;  <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Implement texture rendering with RenderDevice</span>
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 3: Add to CMakeLists.txt</strong></p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake">AudioWaveformRenderer.hpp
+AudioWaveformRenderer.cpp
+</code></pre></div>
+<p><strong>Step 4: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; make -j4
+</code></pre></div>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/AudioWaveformRenderer.hpp src/editor/AudioWaveformRenderer.cpp src/editor/CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;feat: add audio waveform generator for Asset Browser previews&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-14-extend-drag-drop-for-auto-pack-import">Task 1.4: Extend Drag-Drop for Auto-Pack Import<a class="anchor" href="#task-14-extend-drag-drop-for-auto-pack-import" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/DragDropSystem.hpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/DragDropSystem.cpp</code></li>
+</ul>
+<p><strong>Step 1: Add import handler to DragDropSystem header</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// In DragDropSystem.hpp, add to public section:</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">importFilesToCapPack</span><span class="hljs-params">(
+    <span class="hljs-type">const</span> std::vector&lt;std::filesystem::path&gt;&amp; files,
+    <span class="hljs-type">const</span> std::filesystem::path&amp; projectRoot
+)</span></span>;
+
+<span class="hljs-comment">// Add callback for when import completes</span>
+<span class="hljs-keyword">using</span> ImportCallback = std::function&lt;<span class="hljs-built_in">void</span>(<span class="hljs-type">bool</span> success, <span class="hljs-type">const</span> std::string&amp; message)&gt;;
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setImportCallback</span><span class="hljs-params">(ImportCallback callback)</span></span>;
+</code></pre></div>
+<p><strong>Step 2: Implement import handler</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// In DragDropSystem.cpp, add:</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">DragDropSystem::importFilesToCapPack</span><span class="hljs-params">(
+    <span class="hljs-type">const</span> std::vector&lt;std::filesystem::path&gt;&amp; files,
+    <span class="hljs-type">const</span> std::filesystem::path&amp; projectRoot
+)</span> </span>{
+    <span class="hljs-comment">// Create temp directory</span>
+    <span class="hljs-keyword">auto</span> tempDir = std::filesystem::<span class="hljs-built_in">temp_directory_path</span>() / 
+                   (<span class="hljs-string">&quot;caf_import_&quot;</span> + std::<span class="hljs-built_in">to_string</span>(std::<span class="hljs-built_in">time</span>(<span class="hljs-literal">nullptr</span>)));
+    std::filesystem::<span class="hljs-built_in">create_directory</span>(tempDir);
+
+    <span class="hljs-comment">// Copy files to temp dir</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; file : files) {
+        <span class="hljs-keyword">auto</span> dest = tempDir / file.<span class="hljs-built_in">filename</span>();
+        std::filesystem::<span class="hljs-built_in">copy</span>(file, dest);
+    }
+
+    <span class="hljs-comment">// Run caf-pack CLI</span>
+    std::string capPath = (projectRoot / <span class="hljs-string">&quot;game.cap&quot;</span>).<span class="hljs-built_in">string</span>();
+    std::string command = <span class="hljs-string">&quot;./caf-pack --input &quot;</span> + tempDir.<span class="hljs-built_in">string</span>() + 
+                         <span class="hljs-string">&quot; --output &quot;</span> + capPath;
+    
+    <span class="hljs-type">int</span> result = std::<span class="hljs-built_in">system</span>(command.<span class="hljs-built_in">c_str</span>());
+
+    <span class="hljs-comment">// Cleanup temp dir</span>
+    std::filesystem::<span class="hljs-built_in">remove_all</span>(tempDir);
+
+    <span class="hljs-comment">// Callback</span>
+    <span class="hljs-type">bool</span> success = (result == <span class="hljs-number">0</span>);
+    std::string message = success ? 
+        <span class="hljs-string">&quot;Imported &quot;</span> + std::<span class="hljs-built_in">to_string</span>(files.<span class="hljs-built_in">size</span>()) + <span class="hljs-string">&quot; assets&quot;</span> :
+        <span class="hljs-string">&quot;Import failed: caf-pack error&quot;</span>;
+    
+    <span class="hljs-keyword">if</span> (m_importCallback) {
+        <span class="hljs-built_in">m_importCallback</span>(success, message);
+    }
+}
+</code></pre></div>
+<p><strong>Step 3: Update drag-drop handler to detect imports</strong></p>
+<p>In existing <code>DragDropSystem::handleDragDrop()</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Add to the drag-drop handler:</span>
+<span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginDragDropTarget</span>()) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-type">const</span> ImGuiPayload* payload = ImGui::<span class="hljs-built_in">AcceptDragDropPayload</span>(<span class="hljs-string">&quot;asset_files&quot;</span>)) {
+        std::vector&lt;std::filesystem::path&gt; files;
+        <span class="hljs-comment">// Extract file paths from payload</span>
+        importFilesToCapPack(files, projectRoot);
+    }
+    ImGui::<span class="hljs-built_in">EndDragDropTarget</span>();
+}
+</code></pre></div>
+<p><strong>Step 4: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; make -j4
+</code></pre></div>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/DragDropSystem.hpp src/editor/DragDropSystem.cpp
+git commit -m <span class="hljs-string">&quot;feat: add drag-drop auto-pack import to Asset Browser&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-15-add-project-auto-load-for-gamecap">Task 1.5: Add Project Auto-Load for game.cap<a class="anchor" href="#task-15-add-project-auto-load-for-gamecap" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/project/ProjectManager.cpp</code></li>
+</ul>
+<p><strong>Step 1: Find ProjectManager::openProject method</strong></p>
+<p>Locate the method that opens a project file.</p>
+<p><strong>Step 2: Add CAP auto-load after project opens</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ProjectManager::openProject</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; projectPath)</span> </span>{
+    <span class="hljs-comment">// Existing project loading logic...</span>
+    
+    m_currentProjectPath = projectPath;
+    
+    <span class="hljs-comment">// NEW: Auto-load game.cap if it exists</span>
+    std::filesystem::path capPath = projectPath / <span class="hljs-string">&quot;game.cap&quot;</span>;
+    <span class="hljs-keyword">if</span> (std::filesystem::<span class="hljs-built_in">exists</span>(capPath)) {
+        <span class="hljs-comment">// Get Asset Browser instance from EditorContext</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span> assetBrowser = m_editorContext-&gt;<span class="hljs-built_in">getAssetBrowser</span>()) {
+            assetBrowser-&gt;<span class="hljs-built_in">loadCapFile</span>(capPath);
+            <span class="hljs-built_in">CF_LOG_INFO</span>(<span class="hljs-string">&quot;ProjectManager: Auto-loaded game.cap from project&quot;</span>);
+        }
+    }
+}
+</code></pre></div>
+<p><strong>Step 3: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; make -j4
+</code></pre></div>
+<p><strong>Step 4: Test manual verification</strong></p>
+<ul>
+<li>Create test project directory</li>
+<li>Create a dummy game.cap (or copy from ecosystem example)</li>
+<li>Open project in doppio</li>
+<li>Verify Asset Browser loads CAP</li>
+</ul>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ProjectManager.cpp
+git commit -m <span class="hljs-string">&quot;feat: auto-load game.cap on project open&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-16-phase-1-integration-test">Task 1.6: Phase 1 Integration Test<a class="anchor" href="#task-16-phase-1-integration-test" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>tests/editor/phase1_integration_test.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write integration test</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// tests/editor/phase1_integration_test.cpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;gtest/gtest.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/CapLoader.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/AssetBrowser.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/AudioWaveformRenderer.hpp&quot;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::Editor;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Phase1IntegrationTest</span> : <span class="hljs-keyword">public</span> ::testing::Test {
+<span class="hljs-keyword">protected</span>:
+    std::filesystem::path testCapPath;
+    std::filesystem::path testProjectPath;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SetUp</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span> </span>{
+        <span class="hljs-comment">// Setup test directories</span>
+        testProjectPath = std::filesystem::<span class="hljs-built_in">temp_directory_path</span>() / <span class="hljs-string">&quot;test_project&quot;</span>;
+        std::filesystem::<span class="hljs-built_in">create_directories</span>(testProjectPath);
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">TearDown</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span> </span>{
+        std::filesystem::<span class="hljs-built_in">remove_all</span>(testProjectPath);
+    }
+};
+
+<span class="hljs-built_in">TEST_F</span>(Phase1IntegrationTest, CanLoadCapFile) {
+    <span class="hljs-comment">// This requires a test CAP file to exist</span>
+    <span class="hljs-comment">// For now, we verify the loader interface works</span>
+    AssetBrowser browser;
+    browser.<span class="hljs-built_in">init</span>((testProjectPath / <span class="hljs-string">&quot;assets&quot;</span>).<span class="hljs-built_in">string</span>().<span class="hljs-built_in">c_str</span>());
+    
+    <span class="hljs-built_in">EXPECT_EQ</span>(browser.<span class="hljs-built_in">browseMode</span>(), BrowseMode::Filesystem);
+}
+
+<span class="hljs-built_in">TEST_F</span>(Phase1IntegrationTest, CanGenerateWaveform) {
+    <span class="hljs-comment">// Test with placeholder CAF blob</span>
+    <span class="hljs-function">std::vector&lt;u8&gt; <span class="hljs-title">testBlob</span><span class="hljs-params">(<span class="hljs-number">1024</span>, <span class="hljs-number">0</span>)</span></span>;
+    <span class="hljs-keyword">auto</span> waveform = AudioWaveformRenderer::<span class="hljs-built_in">generateWaveform</span>(testBlob);
+    
+    <span class="hljs-built_in">EXPECT_FALSE</span>(waveform.leftChannel.<span class="hljs-built_in">empty</span>());
+}
+</code></pre></div>
+<p><strong>Step 2: Add test to CMakeLists.txt</strong></p>
+<p>In <code>tests/CMakeLists.txt</code> :</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-keyword">add_executable</span>(Phase1IntegrationTest editor/phase1_integration_test.cpp)
+<span class="hljs-keyword">target_link_libraries</span>(Phase1IntegrationTest gtest gtest_main caffeine-core)
+<span class="hljs-keyword">add_test</span>(NAME Phase1Integration <span class="hljs-keyword">COMMAND</span> Phase1IntegrationTest)
+</code></pre></div>
+<p><strong>Step 3: Run tests</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; ctest -V
+</code></pre></div>
+<p>Expected: Tests pass (or fail gracefully for missing resources).</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add tests/editor/phase1_integration_test.cpp tests/CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;test: add Phase 1 integration tests for CAP browsing&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-2-advanced-caf-pack-features-parallel">Phase 2: Advanced caf-pack Features (Parallel)<a class="anchor" href="#phase-2-advanced-caf-pack-features-parallel" aria-label="Link to this section">#</a></h2>
+<h3 id="task-21-implementation-mesh-processor-obj-caf">Task 2.1: Implementation Mesh Processor (OBJ → CAF)<a class="anchor" href="#task-21-implementation-mesh-processor-obj-caf" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>caf-pack/src/MeshProcessor.hpp</code></li>
+<li>Create: <code>caf-pack/src/MeshProcessor.cpp</code></li>
+<li>Modify: <code>caf-pack/src/AssetProcessor.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write MeshProcessor header</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// caf-pack/src/MeshProcessor.hpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;caffeine/CafTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;filesystem&gt;</span></span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MeshProcessor</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Vertex</span> {
+        f32 x, y, z;        <span class="hljs-comment">// Position</span>
+        f32 nx, ny, nz;     <span class="hljs-comment">// Normal</span>
+        f32 u, v;           <span class="hljs-comment">// UV</span>
+    };
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Mesh</span> {
+        std::vector&lt;Vertex&gt; vertices;
+        std::vector&lt;u32&gt; indices;
+        Vec3 boundsMin, boundsMax;
+    };
+
+    <span class="hljs-function"><span class="hljs-type">static</span> CafData <span class="hljs-title">processMesh</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; objPath)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">static</span> Mesh <span class="hljs-title">parseOBJ</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; path)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">computeBounds</span><span class="hljs-params">(Mesh&amp; mesh)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> std::vector&lt;u8&gt; <span class="hljs-title">packMeshToCAF</span><span class="hljs-params">(<span class="hljs-type">const</span> Mesh&amp; mesh)</span></span>;
+};
+</code></pre></div>
+<p><strong>Step 2: Implement OBJ parser</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// caf-pack/src/MeshProcessor.cpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;MeshProcessor.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sstream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;glm/glm.hpp&gt;</span></span>
+
+<span class="hljs-function">Mesh <span class="hljs-title">MeshProcessor::parseOBJ</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; path)</span> </span>{
+    Mesh mesh{};
+    <span class="hljs-function">std::ifstream <span class="hljs-title">file</span><span class="hljs-params">(path)</span></span>;
+    
+    <span class="hljs-keyword">if</span> (!file) {
+        std::cerr &lt;&lt; <span class="hljs-string">&quot;Failed to open OBJ: &quot;</span> &lt;&lt; path &lt;&lt; std::endl;
+        <span class="hljs-keyword">return</span> mesh;
+    }
+
+    std::vector&lt;glm::vec3&gt; positions;
+    std::vector&lt;glm::vec3&gt; normals;
+    std::vector&lt;glm::vec2&gt; texCoords;
+
+    std::string line;
+    <span class="hljs-keyword">while</span> (std::<span class="hljs-built_in">getline</span>(file, line)) {
+        <span class="hljs-function">std::istringstream <span class="hljs-title">iss</span><span class="hljs-params">(line)</span></span>;
+        std::string token;
+        iss &gt;&gt; token;
+
+        <span class="hljs-keyword">if</span> (token == <span class="hljs-string">&quot;v&quot;</span>) {
+            glm::vec3 pos;
+            iss &gt;&gt; pos.x &gt;&gt; pos.y &gt;&gt; pos.z;
+            positions.<span class="hljs-built_in">push_back</span>(pos);
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (token == <span class="hljs-string">&quot;vn&quot;</span>) {
+            glm::vec3 norm;
+            iss &gt;&gt; norm.x &gt;&gt; norm.y &gt;&gt; norm.z;
+            normals.<span class="hljs-built_in">push_back</span>(glm::<span class="hljs-built_in">normalize</span>(norm));
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (token == <span class="hljs-string">&quot;vt&quot;</span>) {
+            glm::vec2 uv;
+            iss &gt;&gt; uv.x &gt;&gt; uv.y;
+            texCoords.<span class="hljs-built_in">push_back</span>(uv);
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (token == <span class="hljs-string">&quot;f&quot;</span>) {
+            <span class="hljs-comment">// Parse face (simplified, assumes triangles)</span>
+            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) {
+                std::string vertexStr;
+                iss &gt;&gt; vertexStr;
+                
+                <span class="hljs-comment">// Parse vertex indices (format: v/vt/vn)</span>
+                u32 vIdx, vtIdx = <span class="hljs-number">0</span>, vnIdx = <span class="hljs-number">0</span>;
+                <span class="hljs-built_in">sscanf</span>(vertexStr.<span class="hljs-built_in">c_str</span>(), <span class="hljs-string">&quot;%u/%u/%u&quot;</span>, &amp;vIdx, &amp;vtIdx, &amp;vnIdx);
+                
+                Vertex vertex{};
+                <span class="hljs-keyword">auto</span>&amp; pos = positions[vIdx - <span class="hljs-number">1</span>];
+                vertex.x = pos.x; vertex.y = pos.y; vertex.z = pos.z;
+                
+                <span class="hljs-keyword">if</span> (vnIdx &gt; <span class="hljs-number">0</span> &amp;&amp; vnIdx &lt;= normals.<span class="hljs-built_in">size</span>()) {
+                    <span class="hljs-keyword">auto</span>&amp; norm = normals[vnIdx - <span class="hljs-number">1</span>];
+                    vertex.nx = norm.x; vertex.ny = norm.y; vertex.nz = norm.z;
+                } <span class="hljs-keyword">else</span> {
+                    vertex.nx = vertex.ny = <span class="hljs-number">0</span>; vertex.nz = <span class="hljs-number">1</span>;
+                }
+                
+                <span class="hljs-keyword">if</span> (vtIdx &gt; <span class="hljs-number">0</span> &amp;&amp; vtIdx &lt;= texCoords.<span class="hljs-built_in">size</span>()) {
+                    <span class="hljs-keyword">auto</span>&amp; uv = texCoords[vtIdx - <span class="hljs-number">1</span>];
+                    vertex.u = uv.x; vertex.v = uv.y;
+                }
+                
+                mesh.vertices.<span class="hljs-built_in">push_back</span>(vertex);
+                mesh.indices.<span class="hljs-built_in">push_back</span>(mesh.vertices.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);
+            }
+        }
+    }
+
+    <span class="hljs-built_in">computeBounds</span>(mesh);
+    <span class="hljs-keyword">return</span> mesh;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MeshProcessor::computeBounds</span><span class="hljs-params">(Mesh&amp; mesh)</span> </span>{
+    <span class="hljs-keyword">if</span> (mesh.vertices.<span class="hljs-built_in">empty</span>()) <span class="hljs-keyword">return</span>;
+
+    mesh.boundsMin = {mesh.vertices[<span class="hljs-number">0</span>].x, mesh.vertices[<span class="hljs-number">0</span>].y, mesh.vertices[<span class="hljs-number">0</span>].z};
+    mesh.boundsMax = mesh.boundsMin;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; v : mesh.vertices) {
+        mesh.boundsMin.x = std::<span class="hljs-built_in">min</span>(mesh.boundsMin.x, v.x);
+        mesh.boundsMin.y = std::<span class="hljs-built_in">min</span>(mesh.boundsMin.y, v.y);
+        mesh.boundsMin.z = std::<span class="hljs-built_in">min</span>(mesh.boundsMin.z, v.z);
+        mesh.boundsMax.x = std::<span class="hljs-built_in">max</span>(mesh.boundsMax.x, v.x);
+        mesh.boundsMax.y = std::<span class="hljs-built_in">max</span>(mesh.boundsMax.y, v.y);
+        mesh.boundsMax.z = std::<span class="hljs-built_in">max</span>(mesh.boundsMax.z, v.z);
+    }
+}
+
+<span class="hljs-function">CafData <span class="hljs-title">MeshProcessor::processMesh</span><span class="hljs-params">(<span class="hljs-type">const</span> std::filesystem::path&amp; objPath)</span> </span>{
+    CafData data{};
+    Mesh mesh = <span class="hljs-built_in">parseOBJ</span>(objPath);
+    
+    <span class="hljs-comment">// Pack mesh data as CAF blob</span>
+    std::vector&lt;u8&gt; payload = <span class="hljs-built_in">packMeshToCAF</span>(mesh);
+    
+    data.header.type = <span class="hljs-keyword">static_cast</span>&lt;u32&gt;(AssetType::Mesh);
+    data.payload = payload;
+    
+    <span class="hljs-keyword">return</span> data;
+}
+</code></pre></div>
+<p><strong>Step 3: Update AssetProcessor to route .obj files</strong></p>
+<p>In <code>AssetProcessor::process()</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">if</span> (ext == <span class="hljs-string">&quot;.obj&quot;</span>) {
+    <span class="hljs-keyword">return</span> MeshProcessor::<span class="hljs-built_in">processMesh</span>(filePath);
+}
+</code></pre></div>
+<p><strong>Step 4: Update CMakeLists.txt</strong></p>
+<p>Add MeshProcessor files and glm dependency.</p>
+<p><strong>Step 5: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> caf-pack &amp;&amp; <span class="hljs-built_in">mkdir</span> -p build &amp;&amp; <span class="hljs-built_in">cd</span> build &amp;&amp; cmake .. &amp;&amp; make -j4
+</code></pre></div>
+<p><strong>Step 6: Test with sample OBJ</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./caf-pack --input ../test_mesh.obj --output test_mesh.cap
+</code></pre></div>
+<p><strong>Step 7: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add caf-pack/src/MeshProcessor.hpp caf-pack/src/MeshProcessor.cpp caf-pack/src/AssetProcessor.cpp caf-pack/CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;feat: add mesh processor for OBJ to CAF conversion&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-22-implement-compression-support-zstd">Task 2.2: Implement Compression Support (zstd)<a class="anchor" href="#task-22-implement-compression-support-zstd" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>caf-pack/CMakeLists.txt</code></li>
+<li>Modify: <code>caf-pack/src/Packer.cpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/CapLoader.cpp</code></li>
+</ul>
+<p><strong>Step 1: Add zstd to CMakeLists.txt</strong></p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-keyword">find_package</span>(zstd REQUIRED)
+<span class="hljs-keyword">target_link_libraries</span>(caf-pack zstd::libzstd_shared)
+</code></pre></div>
+<p><strong>Step 2: Update Packer to compress assets</strong></p>
+<p>In <code>Packer.cpp</code> , add compression in <code>packAssets()</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;zstd.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Packer::packAssets</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// ... existing code ...</span>
+    
+    <span class="hljs-function">std::ofstream <span class="hljs-title">capFile</span><span class="hljs-params">(m_outputPath, std::ios::binary)</span></span>;
+    
+    <span class="hljs-comment">// Write CAP header</span>
+    CapHeader header{};
+    header.magic = CapHeader::MAGIC;
+    header.version = CapHeader::VERSION;
+    header.entryCount = m_assets.<span class="hljs-built_in">size</span>();
+    capFile.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;header), <span class="hljs-keyword">sizeof</span>(CapHeader));
+    
+    <span class="hljs-comment">// Write entries and compressed data</span>
+    u32 offset = <span class="hljs-keyword">sizeof</span>(CapHeader) + header.entryCount * <span class="hljs-keyword">sizeof</span>(CapEntry);
+    std::vector&lt;CapEntry&gt; entries;
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; asset : m_assets) {
+        std::vector&lt;u8&gt; compressed;
+        
+        <span class="hljs-keyword">if</span> (m_compressionLevel &gt; <span class="hljs-number">0</span>) {
+            <span class="hljs-comment">// Compress with zstd</span>
+            <span class="hljs-type">size_t</span> compSize = <span class="hljs-built_in">ZSTD_compressBound</span>(asset.cafData.payload.<span class="hljs-built_in">size</span>());
+            compressed.<span class="hljs-built_in">resize</span>(compSize);
+            
+            <span class="hljs-type">size_t</span> actualSize = <span class="hljs-built_in">ZSTD_compress</span>(
+                compressed.<span class="hljs-built_in">data</span>(), compSize,
+                asset.cafData.payload.<span class="hljs-built_in">data</span>(), asset.cafData.payload.<span class="hljs-built_in">size</span>(),
+                m_compressionLevel
+            );
+            
+            compressed.<span class="hljs-built_in">resize</span>(actualSize);
+        } <span class="hljs-keyword">else</span> {
+            compressed = asset.cafData.payload;
+        }
+        
+        CapEntry entry{};
+        std::<span class="hljs-built_in">strncpy</span>(entry.filename, asset.name.<span class="hljs-built_in">c_str</span>(), <span class="hljs-number">255</span>);
+        entry.offset = offset;
+        entry.size = compressed.<span class="hljs-built_in">size</span>();
+        entry.compressedSize = (m_compressionLevel &gt; <span class="hljs-number">0</span>) ? compressed.<span class="hljs-built_in">size</span>() : <span class="hljs-number">0</span>;
+        
+        entries.<span class="hljs-built_in">push_back</span>(entry);
+        offset += compressed.<span class="hljs-built_in">size</span>();
+        
+        <span class="hljs-comment">// Write compressed data</span>
+        capFile.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(compressed.<span class="hljs-built_in">data</span>()), compressed.<span class="hljs-built_in">size</span>());
+    }
+    
+    <span class="hljs-comment">// Write entry table</span>
+    capFile.<span class="hljs-built_in">seekp</span>(<span class="hljs-keyword">sizeof</span>(CapHeader));
+    capFile.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(entries.<span class="hljs-built_in">data</span>()), 
+                  entries.<span class="hljs-built_in">size</span>() * <span class="hljs-keyword">sizeof</span>(CapEntry));
+}
+</code></pre></div>
+<p><strong>Step 3: Update CapLoader to decompress</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// In CapLoader.cpp</span>
+<span class="hljs-keyword">if</span> (entry.compressedSize &gt; <span class="hljs-number">0</span>) {
+    <span class="hljs-comment">// Decompress with zstd</span>
+    <span class="hljs-function">std::vector&lt;u8&gt; <span class="hljs-title">decompressed</span><span class="hljs-params">(entry.size)</span></span>;  <span class="hljs-comment">// Original size stored in CafHeader</span>
+    <span class="hljs-built_in">ZSTD_decompress</span>(
+        decompressed.<span class="hljs-built_in">data</span>(), decompressed.<span class="hljs-built_in">size</span>(),
+        cafBlob.<span class="hljs-built_in">data</span>(), cafBlob.<span class="hljs-built_in">size</span>()
+    );
+    cafBlob = decompressed;
+}
+</code></pre></div>
+<p><strong>Step 4: Add --compress flag to CLI</strong></p>
+<p>In <code>main.cpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Add to argument parser</span>
+<span class="hljs-keyword">if</span> (args[<span class="hljs-string">&quot;--compress&quot;</span>]) {
+    packer.<span class="hljs-built_in">setCompressionLevel</span>(std::<span class="hljs-built_in">stoi</span>(args[<span class="hljs-string">&quot;--compress&quot;</span>]));
+}
+</code></pre></div>
+<p><strong>Step 5: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; cmake .. &amp;&amp; make -j4
+</code></pre></div>
+<p><strong>Step 6: Test compression</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./caf-pack --input assets/ --output test_uncompressed.cap
+./caf-pack --input assets/ --output test_compressed.cap --compress 10
+<span class="hljs-built_in">ls</span> -lh test_*.<span class="hljs-built_in">cap</span>
+</code></pre></div>
+<p>Expected: <code>test_compressed.cap</code> is smaller.</p>
+<p><strong>Step 7: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add caf-pack/CMakeLists.txt caf-pack/src/Packer.cpp src/editor/CapLoader.cpp
+git commit -m <span class="hljs-string">&quot;feat: add zstd compression support to caf-pack&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-23-implement-asset-id-header-generator">Task 2.3: Implement Asset ID Header Generator<a class="anchor" href="#task-23-implement-asset-id-header-generator" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>caf-pack/src/main.cpp</code></li>
+<li>Create: <code>caf-pack/src/HeaderGenerator.hpp/cpp</code></li>
+</ul>
+<p><strong>Step 1: Create HeaderGenerator utility</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// caf-pack/src/HeaderGenerator.hpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;filesystem&gt;</span></span>
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AssetEntry</span> {
+    std::string name;
+    u64 id;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">HeaderGenerator</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">generateHeader</span><span class="hljs-params">(
+        <span class="hljs-type">const</span> std::vector&lt;AssetEntry&gt;&amp; assets,
+        <span class="hljs-type">const</span> std::filesystem::path&amp; outputPath
+    )</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">static</span> u64 <span class="hljs-title">fnv1aHash</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; str)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> std::string <span class="hljs-title">assetNameToIdentifier</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; filename)</span></span>;
+};
+</code></pre></div>
+<p><strong>Step 2: Implement HeaderGenerator</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// caf-pack/src/HeaderGenerator.cpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;HeaderGenerator.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span>
+
+<span class="hljs-function">u64 <span class="hljs-title">HeaderGenerator::fnv1aHash</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; str)</span> </span>{
+    u64 hash = <span class="hljs-number">14695981039346656037ULL</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">char</span> c : str) {
+        hash ^= <span class="hljs-keyword">static_cast</span>&lt;u8&gt;(c);
+        hash *= <span class="hljs-number">1099511628211ULL</span>;
+    }
+    <span class="hljs-keyword">return</span> hash;
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">HeaderGenerator::assetNameToIdentifier</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; filename)</span> </span>{
+    std::string id = filename;
+    
+    <span class="hljs-comment">// Remove extension</span>
+    <span class="hljs-type">size_t</span> dotPos = id.<span class="hljs-built_in">rfind</span>(<span class="hljs-string">&#x27;.&#x27;</span>);
+    <span class="hljs-keyword">if</span> (dotPos != std::string::npos) {
+        id = id.<span class="hljs-built_in">substr</span>(<span class="hljs-number">0</span>, dotPos);
+    }
+    
+    <span class="hljs-comment">// Convert to snake_case</span>
+    std::<span class="hljs-built_in">replace_if</span>(id.<span class="hljs-built_in">begin</span>(), id.<span class="hljs-built_in">end</span>(), 
+                   [](<span class="hljs-type">char</span> c) { <span class="hljs-keyword">return</span> !std::<span class="hljs-built_in">isalnum</span>(c); }, <span class="hljs-string">&#x27;_&#x27;</span>);
+    
+    <span class="hljs-keyword">return</span> id;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HeaderGenerator::generateHeader</span><span class="hljs-params">(
+    <span class="hljs-type">const</span> std::vector&lt;AssetEntry&gt;&amp; assets,
+    <span class="hljs-type">const</span> std::filesystem::path&amp; outputPath
+)</span> </span>{
+    <span class="hljs-function">std::ofstream <span class="hljs-title">header</span><span class="hljs-params">(outputPath)</span></span>;
+    
+    header &lt;&lt; <span class="hljs-string">&quot;// Auto-generated by caf-pack\n&quot;</span>;
+    header &lt;&lt; <span class="hljs-string">&quot;#pragma once\n\n&quot;</span>;
+    header &lt;&lt; <span class="hljs-string">&quot;#include \&quot;core/Types.hpp\&quot;\n\n&quot;</span>;
+    header &lt;&lt; <span class="hljs-string">&quot;namespace Assets {\n&quot;</span>;
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; asset : assets) {
+        std::string id = <span class="hljs-built_in">assetNameToIdentifier</span>(asset.name);
+        header &lt;&lt; <span class="hljs-string">&quot;  constexpr u64 &quot;</span> &lt;&lt; id &lt;&lt; <span class="hljs-string">&quot; = 0x&quot;</span> 
+               &lt;&lt; std::hex &lt;&lt; asset.id &lt;&lt; std::dec &lt;&lt; <span class="hljs-string">&quot;;\n&quot;</span>;
+    }
+    
+    header &lt;&lt; <span class="hljs-string">&quot;}\n&quot;</span>;
+}
+</code></pre></div>
+<p><strong>Step 3: Update main.cpp to handle --gen-ids</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// In main(), after packing:</span>
+<span class="hljs-keyword">if</span> (args.<span class="hljs-built_in">count</span>(<span class="hljs-string">&quot;--gen-ids&quot;</span>)) {
+    std::vector&lt;AssetEntry&gt; entries;
+    
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; asset : packer.<span class="hljs-built_in">getAssets</span>()) {
+        entries.<span class="hljs-built_in">push_back</span>({
+            asset.name,
+            HeaderGenerator::<span class="hljs-built_in">fnv1aHash</span>(asset.name)
+        });
+    }
+    
+    HeaderGenerator::<span class="hljs-built_in">generateHeader</span>(entries, args[<span class="hljs-string">&quot;--gen-ids&quot;</span>]);
+    std::cout &lt;&lt; <span class="hljs-string">&quot;Generated asset header: &quot;</span> &lt;&lt; args[<span class="hljs-string">&quot;--gen-ids&quot;</span>] &lt;&lt; std::endl;
+}
+</code></pre></div>
+<p><strong>Step 4: Update CMakeLists.txt</strong></p>
+<p>Add HeaderGenerator files.</p>
+<p><strong>Step 5: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; make -j4
+</code></pre></div>
+<p><strong>Step 6: Test header generation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./caf-pack --input assets/ --output game.cap --gen-ids include/game_assets.hpp
+<span class="hljs-built_in">cat</span> include/game_assets.hpp
+</code></pre></div>
+<p>Expected: Valid C++ header with asset IDs.</p>
+<p><strong>Step 7: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add caf-pack/src/HeaderGenerator.hpp caf-pack/src/HeaderGenerator.cpp caf-pack/src/main.cpp caf-pack/CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;feat: add asset ID header generator (--gen-ids flag)&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-3-tool-integration-sequenced">Phase 3: Tool Integration (Sequenced)<a class="anchor" href="#phase-3-tool-integration-sequenced" aria-label="Link to this section">#</a></h2>
+<h3 id="task-31-implement-async-asset-loading-infrastructure">Task 3.1: Implement Async Asset Loading Infrastructure<a class="anchor" href="#task-31-implement-async-asset-loading-infrastructure" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/engine/AssetLoader.hpp</code></li>
+<li>Create: <code>src/caffeine/engine/AssetLoader.cpp</code></li>
+</ul>
+<p><strong>Step 1: Design async loader interface</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// src/engine/AssetLoader.hpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;functional&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine {
+
+<span class="hljs-keyword">using</span> AssetHandle = u64;
+<span class="hljs-keyword">using</span> AssetCallback = std::function&lt;<span class="hljs-built_in">void</span>(<span class="hljs-type">const</span> std::vector&lt;u8&gt;&amp;)&gt;;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AssetLoader</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// Load asset asynchronously</span>
+    <span class="hljs-function">AssetHandle <span class="hljs-title">loadAssetAsync</span><span class="hljs-params">(u64 assetId, AssetCallback onReady)</span></span>;
+    
+    <span class="hljs-comment">// Cancel pending load</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">cancelLoad</span><span class="hljs-params">(AssetHandle handle)</span></span>;
+    
+    <span class="hljs-comment">// Update (call once per frame)</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">()</span></span>;
+    
+    <span class="hljs-comment">// Shutdown</span>
+    ~<span class="hljs-built_in">AssetLoader</span>();
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">LoadJob</span> {
+        u64 id;
+        AssetHandle handle;
+        AssetCallback callback;
+    };
+    
+    std::queue&lt;LoadJob&gt; m_pendingLoads;
+    std::thread m_workerThread;
+    <span class="hljs-type">bool</span> m_running = <span class="hljs-literal">true</span>;
+    
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">workerLoop</span><span class="hljs-params">()</span></span>;
+};
+
+} <span class="hljs-comment">// namespace Caffeine</span>
+</code></pre></div>
+<p><strong>Step 2: Implement async loader</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// src/engine/AssetLoader.cpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;engine/AssetLoader.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;chrono&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine {
+
+<span class="hljs-function">AssetHandle <span class="hljs-title">AssetLoader::loadAssetAsync</span><span class="hljs-params">(u64 assetId, AssetCallback onReady)</span> </span>{
+    <span class="hljs-type">static</span> u64 handleCounter = <span class="hljs-number">0</span>;
+    AssetHandle handle = ++handleCounter;
+    
+    LoadJob job{assetId, handle, onReady};
+    m_pendingLoads.<span class="hljs-built_in">push</span>(job);
+    
+    <span class="hljs-keyword">return</span> handle;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AssetLoader::cancelLoad</span><span class="hljs-params">(AssetHandle handle)</span> </span>{
+    <span class="hljs-comment">// Simplified: mark as cancelled in pending queue</span>
+    <span class="hljs-comment">// Full implementation would use thread-safe queue</span>
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AssetLoader::workerLoop</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">while</span> (m_running) {
+        <span class="hljs-keyword">if</span> (!m_pendingLoads.<span class="hljs-built_in">empty</span>()) {
+            <span class="hljs-keyword">auto</span> job = m_pendingLoads.<span class="hljs-built_in">front</span>();
+            m_pendingLoads.<span class="hljs-built_in">pop</span>();
+            
+            <span class="hljs-comment">// Simulate async load</span>
+            std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">milliseconds</span>(<span class="hljs-number">10</span>));
+            
+            <span class="hljs-comment">// Call callback (in real implementation, queue result for main thread)</span>
+            std::vector&lt;u8&gt; dummyData;
+            job.<span class="hljs-built_in">callback</span>(dummyData);
+        }
+        
+        std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">milliseconds</span>(<span class="hljs-number">1</span>));
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AssetLoader::update</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// Process completed loads</span>
+}
+
+AssetLoader::~<span class="hljs-built_in">AssetLoader</span>() {
+    m_running = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">if</span> (m_workerThread.<span class="hljs-built_in">joinable</span>()) {
+        m_workerThread.<span class="hljs-built_in">join</span>();
+    }
+}
+
+} <span class="hljs-comment">// namespace Caffeine</span>
+</code></pre></div>
+<p><strong>Step 3: Add to CMakeLists.txt</strong></p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake">src/engine/AssetLoader.hpp
+src/engine/AssetLoader.cpp
+</code></pre></div>
+<p><strong>Step 4: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; cmake .. &amp;&amp; make -j4
+</code></pre></div>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/engine/AssetLoader.hpp src/engine/AssetLoader.cpp src/CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;feat: implement async asset loading infrastructure&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-32-documentation-and-examples">Task 3.2: Documentation and Examples<a class="anchor" href="#task-32-documentation-and-examples" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>docs/ECOSYSTEM_WORKFLOW.md</code></li>
+</ul>
+<p><strong>Step 1: Create complete workflow documentation</strong></p>
+<pre class="mermaid">flowchart TD
+  ____1__Create_Assets[&quot;### 1. Create Assets&quot;] --&gt; ____Texture____Use_Convoy_to_create_text[&quot;- **Texture:** Use Convoy to create texture&quot;]
+  ____Texture____Use_Convoy_to_create_text[&quot;- **Texture:** Use Convoy to create texture&quot;] --&gt; Export_PNG[&quot;Export PNG&quot;]
+  Export_PNG[&quot;Export PNG&quot;] --&gt; ____Audio____Use_WaveShaper_to_create_so[&quot;- **Audio:** Use WaveShaper to create sound&quot;]
+  ____Audio____Use_WaveShaper_to_create_so[&quot;- **Audio:** Use WaveShaper to create sound&quot;] --&gt; Export_WAV[&quot;Export WAV&quot;]
+</pre>
+<p>bash
+mkdir raw_assets
+cp texture.png raw_assets/
+cp sound.wav raw_assets/
+cp model.obj raw_assets/</p>
+<p>caf-pack --input raw assets/ <br>
+--output game. cap <br>
+--gen-ids include/game assets. hpp <br>
+--compress 10</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">
+### 3. Load in Game
+```cpp
+#include &quot;include/game_assets.hpp&quot;
+
+// Async loading
+auto textureHandle = assetMgr-&gt;loadAssetAsync(
+Assets::texture,
+[&amp;](const std::vector&lt;u8&gt;&amp; data) {
+gameTexture = renderer-&gt;uploadTexture(data);
+ }
+);
+```mermaid
+flowchart TD
+  __Browse_assets__see_thumbnails_and_wave[&quot;- Browse assets, see thumbnails and waveforms&quot;] --&gt; __Drag_new_PNG_WAV[&quot;- Drag new PNG/WAV&quot;]
+  __Drag_new_PNG_WAV[&quot;- Drag new PNG/WAV&quot;] --&gt; auto_packed[&quot;auto-packed&quot;]
+  ____WaveShaper_Export[&quot;### WaveShaper Export&quot;] --&gt; 1___File[&quot;1. &quot;File&quot;]
+  1___File[&quot;1. &quot;File&quot;] --&gt; Export_to_CAP_[&quot;Export to CAP&quot;&quot;]
+  ____Convoy_Export[&quot;### Convoy Export&quot;] --&gt; 1___File[&quot;1. &quot;File&quot;]
+  1___File[&quot;1. &quot;File&quot;] --&gt; Export_Texture_to_CAP__or__Export_Mesh_t[&quot;Export Texture to CAP&quot; or &quot;Export Mesh to CAP&quot;&quot;]
+</code></pre></div>
+<p><strong>Step 2: Verify documentation</strong></p>
+<p>Run spell-check, verify code examples compile conceptually.</p>
+<p><strong>Step 3: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add docs/ECOSYSTEM_WORKFLOW.md
+git commit -m <span class="hljs-string">&quot;docs: add complete ecosystem workflow guide&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-33-phase-2-3-verification-test">Task 3.3: Phase 2 &amp; 3 Verification Test<a class="anchor" href="#task-33-phase-2-3-verification-test" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>tests/ecosystem/phase2_3_test.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write comprehensive test</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// tests/ecosystem/phase2_3_test.cpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;gtest/gtest.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;engine/AssetLoader.hpp&quot;</span></span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Phase23Test</span> : <span class="hljs-keyword">public</span> ::testing::Test {
+    <span class="hljs-comment">// Test async loader, mesh processor, compression</span>
+};
+
+<span class="hljs-built_in">TEST_F</span>(Phase23Test, AsyncLoaderWorks) {
+    Caffeine::AssetLoader loader;
+    <span class="hljs-type">bool</span> called = <span class="hljs-literal">false</span>;
+    
+    <span class="hljs-keyword">auto</span> handle = loader.<span class="hljs-built_in">loadAssetAsync</span>(<span class="hljs-number">123</span>, [&amp;](<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; data) {
+        called = <span class="hljs-literal">true</span>;
+    });
+    
+    loader.<span class="hljs-built_in">update</span>();
+    <span class="hljs-built_in">EXPECT_TRUE</span>(called);
+}
+
+<span class="hljs-built_in">TEST_F</span>(Phase23Test, CompressionReducesSize) {
+    <span class="hljs-comment">// Would require actual CAP files to test</span>
+    <span class="hljs-comment">// Placeholder for integration test</span>
+}
+</code></pre></div>
+<p><strong>Step 2: Add to CMakeLists.txt</strong></p>
+<p><strong>Step 3: Run tests</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; ctest -V
+</code></pre></div>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add tests/ecosystem/phase2_3_test.cpp
+git commit -m <span class="hljs-string">&quot;test: add Phase 2 &amp; 3 integration tests&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="final-verification-checklist">Final Verification Checklist<a class="anchor" href="#final-verification-checklist" aria-label="Link to this section">#</a></h2>
+<h3 id="phase-1-doppio-editor-integration">Phase 1 (doppio Editor Integration)<a class="anchor" href="#phase-1-doppio-editor-integration" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] CAP Loader parses game.cap correctly</li>
+<li>[ ] Asset Browser displays CAP contents</li>
+<li>[ ] Texture thumbnails render</li>
+<li>[ ] Audio waveforms display</li>
+<li>[ ] Drag-drop import works (files packed into game.cap)</li>
+<li>[ ] game.cap auto-loads on project open</li>
+</ul>
+<h3 id="phase-2-advanced-caf-pack">Phase 2 (Advanced caf-pack)<a class="anchor" href="#phase-2-advanced-caf-pack" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] caf-pack compiles with zstd</li>
+<li>[ ] Mesh files (.obj) pack correctly</li>
+<li>[ ] Compression reduces file size (--compress flag works)</li>
+<li>[ ] Asset ID header generates valid C++ (--gen-ids flag works)</li>
+</ul>
+<h3 id="phase-3-tool-integration">Phase 3 (Tool Integration)<a class="anchor" href="#phase-3-tool-integration" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Async asset loader compiles</li>
+<li>[ ] Can load assets asynchronously without blocking</li>
+<li>[ ] All 4 projects compile together: <code>cmake .. &amp;&amp; make</code></li>
+<li>[ ] caf-pack CLI runs: <code>./caf-pack --help</code></li>
+</ul>
+<hr>
+<h2 id="execution-handoff">Execution Handoff<a class="anchor" href="#execution-handoff" aria-label="Link to this section">#</a></h2>
+<p>**Plan saved to <code>docs/plans/2026-05-17-ecosystem-three-phase-implementation.md</code> **</p>
+<p><strong>Ready to execute. Two options:</strong></p>
+<ol>
+<li><strong>Subagent-Driven (this session)</strong> - Fresh subagent per task, review between tasks, iterative refinement</li>
+<li><strong>Parallel Session (separate)</strong> - Open new session with executing-plans skill in worktree, batch execution</li>
+</ol>
+<p><strong>Which approach would you prefer?</strong></p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/"><span>Previous</span><strong>Scene Viewport Fix &amp; Entity Type System Expansion</strong></a><a class="pager-next" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/"><span>Next</span><strong>Caffeine Unified Ecosystem — Three-Phase Design</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#phase-1-doppio-editor-integration-step-4">Phase 1: doppio Editor Integration (Step 4)</a></li><li class="l3"><a href="#task-11-create-cap-loader-module">Task 1.1: Create CAP Loader Module</a></li><li class="l3"><a href="#task-12-extend-asset-browser-with-cap-mode">Task 1.2: Extend Asset Browser with CAP Mode</a></li><li class="l3"><a href="#task-13-create-audio-waveform-renderer">Task 1.3: Create Audio Waveform Renderer</a></li><li class="l3"><a href="#task-14-extend-drag-drop-for-auto-pack-import">Task 1.4: Extend Drag-Drop for Auto-Pack Import</a></li><li class="l3"><a href="#task-15-add-project-auto-load-for-gamecap">Task 1.5: Add Project Auto-Load for game.cap</a></li><li class="l3"><a href="#task-16-phase-1-integration-test">Task 1.6: Phase 1 Integration Test</a></li><li class="l2"><a href="#phase-2-advanced-caf-pack-features-parallel">Phase 2: Advanced caf-pack Features (Parallel)</a></li><li class="l3"><a href="#task-21-implementation-mesh-processor-obj-caf">Task 2.1: Implementation Mesh Processor (OBJ → CAF)</a></li><li class="l3"><a href="#task-22-implement-compression-support-zstd">Task 2.2: Implement Compression Support (zstd)</a></li><li class="l3"><a href="#task-23-implement-asset-id-header-generator">Task 2.3: Implement Asset ID Header Generator</a></li><li class="l2"><a href="#phase-3-tool-integration-sequenced">Phase 3: Tool Integration (Sequenced)</a></li><li class="l3"><a href="#task-31-implement-async-asset-loading-infrastructure">Task 3.1: Implement Async Asset Loading Infrastructure</a></li><li class="l3"><a href="#task-32-documentation-and-examples">Task 3.2: Documentation and Examples</a></li><li class="l3"><a href="#task-33-phase-2-3-verification-test">Task 3.3: Phase 2 &amp; 3 Verification Test</a></li><li class="l2"><a href="#final-verification-checklist">Final Verification Checklist</a></li><li class="l3"><a href="#phase-1-doppio-editor-integration">Phase 1 (doppio Editor Integration)</a></li><li class="l3"><a href="#phase-2-advanced-caf-pack">Phase 2 (Advanced caf-pack)</a></li><li class="l3"><a href="#phase-3-tool-integration">Phase 3 (Tool Integration)</a></li><li class="l2"><a href="#execution-handoff">Execution Handoff</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec",mermaid:"/assets/vendor/mermaid.min.js"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

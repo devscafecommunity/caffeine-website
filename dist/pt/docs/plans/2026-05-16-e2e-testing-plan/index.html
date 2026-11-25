@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E2E Testing Infrastructure Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="E2E Testing Infrastructure Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/plans/2026-05-16-e2e-testing-plan/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/plans/2026-05-16-e2e-testing-plan/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-e2e-testing-plan/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/plans/2026-05-16-e2e-testing-plan/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab active" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/plans/2026-05-16-e2e-testing-plan/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/plans/2026-05-16-e2e-testing-plan/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Projeto"><div class="nav-title">Projeto</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Versões</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/pt/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/pt/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Planos</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/2026-10-19-dryad-node-scripts/">Dryad e scripts por nodes</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-forward-pbr-post-session/">Sessão 2026-10-02 — Forward PBR, reflexos, pós-processamento GPU</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-editor-backlog-phase-b/">Editor backlog — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-viewport-rendering-quality-session/">Sessão 2026-09-22 — Viewport 3D, Qualidade Visual e Performance</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-phong-gpu-handles-session/">Sessão 2026-09-22 — Phong GPU, Handles e Sombras</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap de Sistemas Fundamentais</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — 3D de Alto Volume</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - ANÁLISE COMPLETA &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP⁻¹ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link active" href="/pt/docs/plans/2026-05-16-e2e-testing-plan/" aria-current="page">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-hot-reload-design/">Hot-Reload de Assets — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/">Marcos</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/archive/">Arquivo</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Análise</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/pt/docs/HISTORY/">História do desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/ECOSYSTEM_WORKFLOW/">Fluxo unificado de assets</a></li><li><a class="nav-link" href="/pt/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/pt/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/pt/docs/MASTER/">Índice master</a></li><li><a class="nav-link" href="/pt/docs/books/">Livros e PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/project/">Projeto</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">E2E Testing Infrastructure Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Implement automated E2E testing for the Caffeine editor (ImGui panels) and runtime (ECS, physics, audio).</p>
+<p><strong>Architecture:</strong> Two test targets: <code>DoppioTest</code> (new) uses <code>imgui_test_engine</code> for widget-level editor UI tests driven by widget labels/IDs; <code>CaffeineTest</code> (existing, extended) covers runtime integration tests. Both run headlessly in CI via <code>SDL_VIDEO_DRIVER=offscreen</code>.</p>
+<p><strong>Tech Stack:</strong> imgui_test_engine (ocornut), ImGui 1.91.9+ (docking branch), SDL3, Catch2, CMake FetchContent</p>
+<p><strong>Design doc:</strong> <code>docs/plans/2026-05-16-e2e-testing-design.md</code></p>
+<hr>
+<h2 id="pre-flight-verify-current-state">Pre-flight: Verify Current State<a class="anchor" href="#pre-flight-verify-current-state" aria-label="Link to this section">#</a></h2>
+<p><strong>Step 0.1: Check build works</strong></p>
+<p>Run: <code>cmake --build build --target CaffeineTest -j$(nproc)</code>
+Expected: builds clean, 714 tests pass</p>
+<p>Run: <code>cmake --build build --target doppio -j$(nproc)</code>
+Expected: builds clean</p>
+<p>Run: <code>git status</code>
+Expected: clean working directory (start from known state)</p>
+<hr>
+<h3 id="task-1-fetch-integrate-imgui_test_engine">Task 1: Fetch &amp; Integrate imgui_test_engine<a class="anchor" href="#task-1-fetch-integrate-imgui_test_engine" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>CMakeLists.txt</code> — add FetchContent for imgui_test_engine, define target mapping</li>
+<li>Modify: <code>tests/CMakeLists.txt</code> — add DoppioTest target</li>
+</ul>
+<p><strong>Step 1: Add imgui_test_engine fetch to root CMakeLists.txt</strong></p>
+<p>Add after ImNodes FetchContent block (around line 262):</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-comment"># ── imgui_test_engine (optional, for editor UI tests) ──────────</span>
+FetchContent_Declare(
+    imgui_test_engine
+    GIT_REPOSITORY https://github.com/ocornut/imgui_test_engine.git
+    GIT_TAG        v1.<span class="hljs-number">0</span>
+    GIT_SHALLOW    <span class="hljs-keyword">TRUE</span>
+)
+<span class="hljs-keyword">set</span>(FETCHCONTENT_QUIET <span class="hljs-keyword">OFF</span>)
+FetchContent_MakeAvailable(imgui_test_engine)
+
+<span class="hljs-comment"># Map imgui_test_engine target to our ImGui for linking</span>
+<span class="hljs-keyword">target_link_libraries</span>(imgui_test_engine PUBLIC ImGui)
+<span class="hljs-keyword">target_include_directories</span>(imgui_test_engine PUBLIC
+    <span class="hljs-variable">${imgui_test_engine_SOURCE_DIR}</span>)
+</code></pre></div>
+<p>Note: Must be inside the <code>if(SDL3_FOUND AND NOT CAFFEINE_BUILD_HEADLESS)</code> block.</p>
+<p><strong>Step 2: Add DoppioTest target to tests/CMakeLists.txt</strong></p>
+<p>Append after current <code>CaffeineTest</code> setup:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-comment"># ── DoppioTest — Editor UI tests (ImGui-dependent) ──────────────</span>
+<span class="hljs-keyword">if</span>(SDL3_FOUND <span class="hljs-keyword">AND</span> <span class="hljs-keyword">NOT</span> CAFFEINE_BUILD_HEADLESS)
+    <span class="hljs-keyword">add_executable</span>(DoppioTest
+        test_editor_ui_main.cpp
+        test_editor_ui/test_inspector.cpp
+        test_editor_ui/test_hierarchy.cpp
+        test_editor_ui/test_viewport.cpp
+        test_editor_ui/test_assetbrowser.cpp
+        test_editor_ui/test_audioview.cpp
+        test_editor_ui/test_materialeditor.cpp
+
+        <span class="hljs-comment"># Editor sources (same subset as doppio, minus SceneSerializer which is</span>
+        <span class="hljs-comment"># already compiled by CaffeineTest&#x27;s source list — CMake handles duplicates)</span>
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/InspectorPanel.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/SceneViewport.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/HierarchyPanel.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/AssetBrowser.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/SceneEditor.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/SceneSerializer.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/DragDropSystem.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/SceneTabManager.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/AnimationTimeline.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/TilemapEditor.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/ConsoleWindow.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/ProfilerWindow.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/CommandPalette.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/EditorContext.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/ProjectManager.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/AudioPreviewPanel.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/MaterialEditorPanel.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/ShaderGraph.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/ShaderNode.cpp
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src/editor/PreviewRenderer.cpp
+    )
+
+    <span class="hljs-keyword">target_link_libraries</span>(DoppioTest PRIVATE
+        caffeine-core ImGui ImNodes imgui_test_engine
+    )
+    <span class="hljs-keyword">target_include_directories</span>(DoppioTest PRIVATE
+        <span class="hljs-variable">${CMAKE_SOURCE_DIR}</span>/src
+    )
+    <span class="hljs-keyword">target_compile_definitions</span>(DoppioTest PRIVATE CF_HAS_IMGUI=<span class="hljs-number">1</span>)
+    <span class="hljs-keyword">target_compile_features</span>(DoppioTest PRIVATE cxx_std_20)
+
+    <span class="hljs-keyword">add_test</span>(NAME DoppioTest <span class="hljs-keyword">COMMAND</span> DoppioTest)
+<span class="hljs-keyword">endif</span>()
+</code></pre></div>
+<p><strong>Step 3: Create test directories</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">mkdir</span> -p tests/test_editor_ui
+</code></pre></div>
+<p><strong>Step 4: Build to verify fetch + compilation</strong></p>
+<p>Run: <code>cmake -B build &amp;&amp; cmake --build build --target DoppioTest -j$(nproc)</code>
+Expected: builds clean (test files are stubs, will link)</p>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add CMakeLists.txt tests/CMakeLists.txt tests/test_editor_ui/
+git commit -m <span class="hljs-string">&quot;build: add imgui_test_engine and DoppioTest target&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-2-create-doppiotest-test-harness">Task 2: Create DoppioTest Test Harness<a class="anchor" href="#task-2-create-doppiotest-test-harness" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>tests/test_editor_ui_main.cpp</code> — SDL + ImGui + SceneEditor initialization, imgui_test_engine registration, test runner</li>
+</ul>
+<p><strong>Step 1: Write test harness</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// tests/test_editor_ui_main.cpp</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;SDL3/SDL.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui_impl_sdl3.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui_test_engine/imgui_te_engine.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui_test_engine/imgui_te_context.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui_test_engine/imgui_te_ui.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/SceneEditor.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;rhi/RenderDevice.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/AssetManager.hpp&quot;</span></span>
+
+<span class="hljs-comment">// Global test state</span>
+<span class="hljs-type">static</span> <span class="hljs-keyword">struct</span> {
+    SDL_Window* window = <span class="hljs-literal">nullptr</span>;
+    Caffeine::RHI::RenderDevice* device = <span class="hljs-literal">nullptr</span>;
+    Caffeine::Assets::AssetManager* assetManager = <span class="hljs-literal">nullptr</span>;
+    Caffeine::Editor::SceneEditor* editor = <span class="hljs-literal">nullptr</span>;
+    ImGuiTestEngine* engine = <span class="hljs-literal">nullptr</span>;
+} s_state;
+
+<span class="hljs-comment">// Called once before all tests</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">DoppioTestFixture</span> {
+    <span class="hljs-built_in">DoppioTestFixture</span>() {
+        <span class="hljs-keyword">if</span> (s_state.window) <span class="hljs-keyword">return</span>; <span class="hljs-comment">// already initialized</span>
+
+        <span class="hljs-built_in">SDL_SetAppMetadata</span>(<span class="hljs-string">&quot;DoppioTest&quot;</span>, <span class="hljs-string">&quot;0.1.0&quot;</span>, <span class="hljs-string">&quot;com.devscafe.doppio.test&quot;</span>);
+        <span class="hljs-built_in">SDL_Init</span>(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
+        s_state.window = <span class="hljs-built_in">SDL_CreateWindow</span>(
+            <span class="hljs-string">&quot;DoppioTest&quot;</span>, <span class="hljs-number">1280</span>, <span class="hljs-number">720</span>,
+            SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE);
+
+        <span class="hljs-comment">// Minimal RenderDevice init (enough for ImGui context)</span>
+        s_state.device = <span class="hljs-keyword">new</span> Caffeine::RHI::<span class="hljs-built_in">RenderDevice</span>();
+        Caffeine::RHI::RenderConfig cfg;
+        cfg.width = <span class="hljs-number">1280</span>;
+        cfg.height = <span class="hljs-number">720</span>;
+        cfg.vsync = <span class="hljs-literal">false</span>;
+        s_state.device-&gt;<span class="hljs-built_in">init</span>(s_state.window, cfg);
+
+        <span class="hljs-comment">// ImGui init</span>
+        ImGui::<span class="hljs-built_in">CreateContext</span>();
+        <span class="hljs-keyword">auto</span>&amp; io = ImGui::<span class="hljs-built_in">GetIO</span>();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        <span class="hljs-built_in">ImGui_ImplSDL3_InitForSDLGPU</span>(s_state.window);
+
+        ImGui_ImplSDLGPU3_InitInfo initInfo{};
+        initInfo.Device = s_state.device-&gt;<span class="hljs-built_in">nativeDevice</span>();
+        initInfo.ColorTargetFormat = <span class="hljs-built_in">SDL_GetGPUSwapchainTextureFormat</span>(
+            s_state.device-&gt;<span class="hljs-built_in">nativeDevice</span>(), s_state.window);
+        <span class="hljs-built_in">ImGui_ImplSDLGPU3_Init</span>(&amp;initInfo);
+
+        <span class="hljs-comment">// SceneEditor</span>
+        s_state.assetManager = <span class="hljs-keyword">new</span> Caffeine::Assets::<span class="hljs-built_in">AssetManager</span>(<span class="hljs-literal">nullptr</span>, <span class="hljs-string">&quot;assets&quot;</span>);
+        s_state.editor = <span class="hljs-keyword">new</span> Caffeine::Editor::<span class="hljs-built_in">SceneEditor</span>();
+        s_state.editor-&gt;<span class="hljs-built_in">init</span>(s_state.device, s_state.assetManager);
+    }
+
+    ~<span class="hljs-built_in">DoppioTestFixture</span>() {
+        <span class="hljs-comment">// Teardown happens in main after all tests</span>
+    }
+};
+
+<span class="hljs-comment">// Per-test frame pump — runs one ImGui frame so panels render</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">PumpFrame</span><span class="hljs-params">()</span> </span>{
+    SDL_Event event;
+    <span class="hljs-keyword">while</span> (<span class="hljs-built_in">SDL_PollEvent</span>(&amp;event)) {
+        <span class="hljs-built_in">ImGui_ImplSDL3_ProcessEvent</span>(&amp;event);
+    }
+
+    <span class="hljs-built_in">ImGui_ImplSDLGPU3_NewFrame</span>();
+    <span class="hljs-built_in">ImGui_ImplSDL3_NewFrame</span>();
+    ImGui::<span class="hljs-built_in">NewFrame</span>();
+
+    Caffeine::Render::Camera2D camera;
+    s_state.editor-&gt;<span class="hljs-built_in">render</span>(camera);
+
+    ImGui::<span class="hljs-built_in">Render</span>();
+    <span class="hljs-built_in">ImGui_ImplSDLGPU3_PrepareDrawData</span>(ImGui::<span class="hljs-built_in">GetDrawData</span>(), <span class="hljs-literal">nullptr</span>);
+
+    <span class="hljs-comment">// Skip actual GPU presentation — we only need widget state</span>
+}
+</code></pre></div>
+<p><strong>Step 2: Complete harness with Catch2 main</strong></p>
+<p>Add Catch2 main function that initializes global state, registers imgui_test_engine tests, and runs:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">define</span> CATCH_CONFIG_RUNNER</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;catch.hpp&quot;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span> </span>{
+    DoppioTestFixture fixture;
+
+    <span class="hljs-comment">// Register with imgui_test_engine</span>
+    s_state.engine = ImGuiTestEngine::<span class="hljs-built_in">CreateContext</span>(ImGui::<span class="hljs-built_in">GetCurrentContext</span>());
+
+    <span class="hljs-comment">// Register all test windows (one per editor panel)</span>
+    <span class="hljs-built_in">ImGuiTestEngine_RegisterWindow</span>(<span class="hljs-string">&quot;DoppioTest&quot;</span>, <span class="hljs-string">&quot;Hierarchy&quot;</span>);
+    <span class="hljs-built_in">ImGuiTestEngine_RegisterWindow</span>(<span class="hljs-string">&quot;DoppioTest&quot;</span>, <span class="hljs-string">&quot;Inspector&quot;</span>);
+    <span class="hljs-built_in">ImGuiTestEngine_RegisterWindow</span>(<span class="hljs-string">&quot;DoppioTest&quot;</span>, <span class="hljs-string">&quot;Scene&quot;</span>);
+    <span class="hljs-built_in">ImGuiTestEngine_RegisterWindow</span>(<span class="hljs-string">&quot;DoppioTest&quot;</span>, <span class="hljs-string">&quot;Assets&quot;</span>);
+    <span class="hljs-built_in">ImGuiTestEngine_RegisterWindow</span>(<span class="hljs-string">&quot;DoppioTest&quot;</span>, <span class="hljs-string">&quot;Console&quot;</span>);
+
+    <span class="hljs-built_in">ImGuiTestEngine_Start</span>(s_state.engine);
+
+    <span class="hljs-type">int</span> result = Catch::<span class="hljs-built_in">Session</span>().<span class="hljs-built_in">run</span>(argc, argv);
+
+    <span class="hljs-built_in">ImGuiTestEngine_Stop</span>(s_state.engine);
+    ImGuiTestEngine::<span class="hljs-built_in">DestroyContext</span>(s_state.engine);
+
+    <span class="hljs-comment">// Cleanup</span>
+    s_state.editor-&gt;<span class="hljs-built_in">shutdown</span>();
+    <span class="hljs-keyword">delete</span> s_state.editor;
+    <span class="hljs-keyword">delete</span> s_state.assetManager;
+    <span class="hljs-built_in">ImGui_ImplSDLGPU3_Shutdown</span>();
+    <span class="hljs-built_in">ImGui_ImplSDL3_Shutdown</span>();
+    ImGui::<span class="hljs-built_in">DestroyContext</span>();
+    s_state.device-&gt;<span class="hljs-built_in">shutdown</span>();
+    <span class="hljs-keyword">delete</span> s_state.device;
+    <span class="hljs-built_in">SDL_DestroyWindow</span>(s_state.window);
+    <span class="hljs-built_in">SDL_Quit</span>();
+
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre></div>
+<p><strong>Step 3: Create empty test stub</strong></p>
+<p>Create <code>tests/test_editor_ui/test_inspector.cpp</code> with a dummy test to verify the harness compiles:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;catch.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui.h&gt;</span></span>
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;DoppioTest harness works&quot;</span>, <span class="hljs-string">&quot;[editor][ui][harness]&quot;</span>) {
+    <span class="hljs-built_in">REQUIRE</span>(ImGui::<span class="hljs-built_in">GetCurrentContext</span>() != <span class="hljs-literal">nullptr</span>);
+    <span class="hljs-built_in">REQUIRE</span>(ImGui::<span class="hljs-built_in">GetIO</span>().BackendPlatformName != <span class="hljs-literal">nullptr</span>);
+}
+</code></pre></div>
+<p><strong>Step 4: Build and run</strong></p>
+<p>Run: <code>cmake -B build &amp;&amp; cmake --build build --target DoppioTest -j$(nproc)</code>
+Expected: builds clean</p>
+<p>Run: <code>SDL_VIDEO_DRIVER=offscreen ./build/tests/DoppioTest</code>
+Expected: harness test passes</p>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add tests/test_editor_ui_main.cpp tests/test_editor_ui/
+git commit -m <span class="hljs-string">&quot;test: add DoppioTest harness with imgui_test_engine&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-3-inspectorpanel-tests">Task 3: InspectorPanel Tests<a class="anchor" href="#task-3-inspectorpanel-tests" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>tests/test_editor_ui/test_inspector.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write tests for InspectorPanel</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;catch.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../src/editor/InspectorPanel.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../src/editor/EditorContext.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../src/ecs/World.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../src/ecs/Entity.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../src/audio/AudioComponents.hpp&quot;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::Editor;
+
+<span class="hljs-comment">// Declared in test harness</span>
+<span class="hljs-function"><span class="hljs-keyword">extern</span> <span class="hljs-type">void</span> <span class="hljs-title">PumpFrame</span><span class="hljs-params">()</span></span>;
+<span class="hljs-keyword">extern</span> ImGuiTestEngine* s_state;
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Inspector - displays entity name&quot;</span>, <span class="hljs-string">&quot;[editor][ui][inspector]&quot;</span>) {
+    ECS::World world;
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>();
+    <span class="hljs-built_in">setEntityName</span>(world, e, <span class="hljs-string">&quot;TestEntity&quot;</span>);
+
+    EditorContext ctx;
+    ctx.selectedEntity = e;
+
+    InspectorPanel panel;
+    panel.<span class="hljs-built_in">setEntity</span>(e);
+
+    <span class="hljs-built_in">PumpFrame</span>();
+    panel.<span class="hljs-built_in">render</span>(ctx);
+
+    <span class="hljs-comment">// Verify the name is displayed in the Name field</span>
+    <span class="hljs-comment">// (imgui_test_engine can query by widget ID)</span>
+    ImGuiTestContext* gctx = <span class="hljs-built_in">ImGuiTestEngine_CreateContext</span>(s_state, <span class="hljs-string">&quot;TestGroup&quot;</span>);
+    gctx-&gt;<span class="hljs-built_in">UiBeginGroup</span>(<span class="hljs-string">&quot;Inspector&quot;</span>);
+
+    <span class="hljs-comment">// Check the name input contains &quot;TestEntity&quot;</span>
+    <span class="hljs-comment">// The label might be &quot;##Name&quot; or &quot;Name&quot; depending on implementation</span>
+    gctx-&gt;<span class="hljs-built_in">Check</span>(<span class="hljs-string">&quot;##Name&quot;</span>);
+
+    <span class="hljs-built_in">ImGuiTestEngine_DestroyContext</span>(gctx);
+}
+</code></pre></div>
+<p><strong>Step 2: Build and run</strong></p>
+<p>Run: <code>cmake --build build --target DoppioTest -j$(nproc) &amp;&amp; SDL_VIDEO_DRIVER=offscreen ./build/tests/DoppioTest</code>
+Expected: tests compile and pass</p>
+<p><strong>Step 3: Add real Inspector tests</strong></p>
+<p>After verifying the harness works, add substantive tests:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Inspector - AudioEmitter volume slider modifies component&quot;</span>,
+          <span class="hljs-string">&quot;[editor][ui][inspector][audio]&quot;</span>) {
+    ECS::World world;
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>();
+    <span class="hljs-built_in">setEntityName</span>(world, e, <span class="hljs-string">&quot;AudioSource&quot;</span>);
+    <span class="hljs-keyword">auto</span>* emitter = world.<span class="hljs-built_in">add</span>&lt;Audio::AudioEmitter&gt;(e);
+    emitter-&gt;volume = <span class="hljs-number">0.5f</span>;
+    emitter-&gt;clipPath = <span class="hljs-string">&quot;test.wav&quot;</span>;
+
+    EditorContext ctx;
+    ctx.selectedEntity = e;
+
+    InspectorPanel panel;
+    panel.<span class="hljs-built_in">setEntity</span>(e);
+
+    <span class="hljs-comment">// Render a frame</span>
+    <span class="hljs-built_in">PumpFrame</span>();
+    panel.<span class="hljs-built_in">render</span>(ctx);
+
+    <span class="hljs-comment">// Use imgui_test_engine to set volume slider value</span>
+    ImGuiTestContext* gctx = <span class="hljs-built_in">ImGuiTestEngine_CreateContext</span>(s_state, <span class="hljs-string">&quot;InspectorVolume&quot;</span>);
+    gctx-&gt;<span class="hljs-built_in">SetValue</span>(<span class="hljs-string">&quot;##Volume&quot;</span>, <span class="hljs-number">0.75f</span>);
+
+    <span class="hljs-comment">// Verify the component was updated</span>
+    <span class="hljs-built_in">REQUIRE</span>(emitter-&gt;volume == <span class="hljs-number">0.75f</span>);
+
+    <span class="hljs-built_in">ImGuiTestEngine_DestroyContext</span>(gctx);
+}
+</code></pre></div>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add tests/test_editor_ui/test_inspector.cpp
+git commit -m <span class="hljs-string">&quot;test: add InspectorPanel E2E tests&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-4-remaining-editor-panel-tests">Task 4: Remaining Editor Panel Tests<a class="anchor" href="#task-4-remaining-editor-panel-tests" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>tests/test_editor_ui/test_hierarchy.cpp</code></li>
+<li>Create: <code>tests/test_editor_ui/test_viewport.cpp</code></li>
+<li>Create: <code>tests/test_editor_ui/test_assetbrowser.cpp</code></li>
+<li>Create: <code>tests/test_editor_ui/test_audioview.cpp</code></li>
+<li>Create: <code>tests/test_editor_ui/test_materialeditor.cpp</code></li>
+</ul>
+<p>Follow the same pattern as Task 3 for each panel:</p>
+<p><strong>test_hierarchy.cpp:</strong> Click entity → verify <code>EditorContext.selectedEntity</code> updates; right-click context menu creates/deletes entities.</p>
+<p><strong>test_viewport.cpp:</strong> Drop audio asset → verify entity with AudioEmitter created; gizmo mode buttons toggle <code>EditorContext.gizmoMode</code>.</p>
+<p><strong>test_assetbrowser.cpp:</strong> Navigate directories → verify entry list updates; search filter → verify filtered results; view mode toggle.</p>
+<p><strong>test_audioview.cpp:</strong> Play/stop buttons → verify playback state; volume/pitch sliders → verify internal state.</p>
+<p><strong>test_materialeditor.cpp:</strong> Add node → verify node in ShaderGraph; connect pins → verify connection; toggle editor mode.</p>
+<p>Commit after each:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add tests/test_editor_ui/test_hierarchy.cpp
+git commit -m <span class="hljs-string">&quot;test: add HierarchyPanel E2E tests&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-5-ci-integration">Task 5: CI Integration<a class="anchor" href="#task-5-ci-integration" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>.github/workflows/test.yml</code></li>
+</ul>
+<p><strong>Step 1: Add DoppioTest to CI workflow</strong></p>
+<p>Add after the existing CaffeineTest step:</p>
+<div class="code-block" data-lang="yaml"><div class="code-head"><span class="code-lang">yaml</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-yaml">    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">DoppioTest</span>
+      <span class="hljs-attr">run:</span> <span class="hljs-string">cd</span> <span class="hljs-string">build</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">cmake</span> <span class="hljs-string">--build</span> <span class="hljs-string">.</span> <span class="hljs-string">--target</span> <span class="hljs-string">DoppioTest</span> <span class="hljs-string">-j$(nproc)</span>
+
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">Editor</span> <span class="hljs-string">UI</span> <span class="hljs-string">Tests</span>
+      <span class="hljs-attr">env:</span>
+        <span class="hljs-attr">SDL_VIDEO_DRIVER:</span> <span class="hljs-string">offscreen</span>
+      <span class="hljs-attr">run:</span> <span class="hljs-string">cd</span> <span class="hljs-string">build</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">timeout</span> <span class="hljs-number">60</span> <span class="hljs-string">./tests/DoppioTest</span> <span class="hljs-string">||</span> <span class="hljs-string">echo</span> <span class="hljs-string">&quot;DoppioTest exited (may need GPU)&quot;</span>
+</code></pre></div>
+<p>Note: On Ubuntu CI runners, SDL_GPU may not init properly even with offscreen driver.
+Add a fallback that skips if the test binary can't init:</p>
+<div class="code-block" data-lang="yaml"><div class="code-head"><span class="code-lang">yaml</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-yaml">    <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Run</span> <span class="hljs-string">Editor</span> <span class="hljs-string">UI</span> <span class="hljs-string">Tests</span>
+      <span class="hljs-attr">env:</span>
+        <span class="hljs-attr">SDL_VIDEO_DRIVER:</span> <span class="hljs-string">offscreen</span>
+        <span class="hljs-attr">SDL_RENDER_DRIVER:</span> <span class="hljs-string">software</span>
+      <span class="hljs-attr">run:</span> <span class="hljs-string">|
+        cd build
+        ./tests/DoppioTest 2&gt;&amp;1 || echo &quot;DoppioTest skipped (headless GPU not available)&quot;
+</span></code></pre></div>
+<p><strong>Step 2: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add .github/workflows/test.yml
+git commit -m <span class="hljs-string">&quot;ci: add DoppioTest to CI pipeline&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-6-runtime-integration-tests-extend-caffeinetest">Task 6: Runtime Integration Tests (Extend CaffeineTest)<a class="anchor" href="#task-6-runtime-integration-tests-extend-caffeinetest" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>tests/test_audio.cpp</code> — add spatial audio tests</li>
+<li>Modify: <code>tests/test_editor.cpp</code> — add audio emitter serialization tests</li>
+<li>Modify: <code>tests/test_scenemanager.cpp</code> — add ECS system integration tests</li>
+</ul>
+<p><strong>Step 1: Add AudioEmitter serialization roundtrip test</strong></p>
+<p>In <code>tests/test_editor.cpp</code>, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;SceneSerializer - AudioEmitter component roundtrip&quot;</span>,
+          <span class="hljs-string">&quot;[editor][serializer][audio]&quot;</span>) {
+    ECS::World world;
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>();
+    <span class="hljs-built_in">setEntityName</span>(world, e, <span class="hljs-string">&quot;Speaker&quot;</span>);
+    <span class="hljs-keyword">auto</span>* emitter = world.<span class="hljs-built_in">add</span>&lt;Audio::AudioEmitter&gt;(e);
+    emitter-&gt;clipPath = <span class="hljs-string">&quot;sfx/explosion.wav&quot;</span>;
+    emitter-&gt;volume = <span class="hljs-number">0.8f</span>;
+    emitter-&gt;maxDistance = <span class="hljs-number">500.0f</span>;
+    emitter-&gt;loop = <span class="hljs-literal">true</span>;
+    emitter-&gt;playOnSpawn = <span class="hljs-literal">false</span>;
+    emitter-&gt;spatial = <span class="hljs-literal">true</span>;
+
+    <span class="hljs-function">Editor::SceneSerializer <span class="hljs-title">serializer</span><span class="hljs-params">(world)</span></span>;
+    <span class="hljs-built_in">REQUIRE</span>(serializer.<span class="hljs-built_in">serialize</span>(<span class="hljs-string">&quot;_test_audio.caf&quot;</span>) == <span class="hljs-literal">true</span>);
+
+    ECS::World loaded;
+    <span class="hljs-function">Editor::SceneSerializer <span class="hljs-title">loader</span><span class="hljs-params">(loaded)</span></span>;
+    <span class="hljs-built_in">REQUIRE</span>(loader.<span class="hljs-built_in">deserialize</span>(<span class="hljs-string">&quot;_test_audio.caf&quot;</span>) == <span class="hljs-literal">true</span>);
+
+    ECS::ComponentQuery q;
+    q.<span class="hljs-built_in">with</span>&lt;Audio::AudioEmitter&gt;();
+    <span class="hljs-type">bool</span> found = <span class="hljs-literal">false</span>;
+    loaded.forEach&lt;Audio::AudioEmitter&gt;(q, [&amp;](ECS::Entity ent, Audio::AudioEmitter&amp; ae) {
+        found = <span class="hljs-literal">true</span>;
+        <span class="hljs-built_in">REQUIRE</span>(ae.clipPath == <span class="hljs-string">&quot;sfx/explosion.wav&quot;</span>);
+        <span class="hljs-built_in">REQUIRE</span>(ae.volume == <span class="hljs-number">0.8f</span>);
+        <span class="hljs-built_in">REQUIRE</span>(ae.maxDistance == <span class="hljs-number">500.0f</span>);
+        <span class="hljs-built_in">REQUIRE</span>(ae.loop == <span class="hljs-literal">true</span>);
+        <span class="hljs-built_in">REQUIRE</span>(ae.playOnSpawn == <span class="hljs-literal">false</span>);
+        <span class="hljs-built_in">REQUIRE</span>(ae.spatial == <span class="hljs-literal">true</span>);
+    });
+    <span class="hljs-built_in">REQUIRE</span>(found == <span class="hljs-literal">true</span>);
+
+    std::<span class="hljs-built_in">remove</span>(<span class="hljs-string">&quot;_test_audio.caf&quot;</span>);
+}
+</code></pre></div>
+<p><strong>Step 2: Add spatial audio math tests</strong></p>
+<p>In <code>tests/test_audio.cpp</code>, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;AudioSystem - spatial volume calculation&quot;</span>, <span class="hljs-string">&quot;[audio][spatial]&quot;</span>) {
+    <span class="hljs-comment">// Test the audio math for distance-based volume</span>
+    <span class="hljs-comment">// (depends on AudioSystem API — adjust based on actual interface)</span>
+}
+</code></pre></div>
+<p><strong>Step 3: Build and run</strong></p>
+<p>Run: <code>cmake --build build --target CaffeineTest -j$(nproc) &amp;&amp; ./build/tests/CaffeineTest</code>
+Expected: 715+ tests pass</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add tests/test_editor.cpp tests/test_audio.cpp
+git commit -m <span class="hljs-string">&quot;test: add AudioEmitter serialization and spatial audio tests&quot;</span>
+</code></pre></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/plans/2026-05-16-e2e-testing-plan.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/plans/2026-05-16-material-shader-editor-design/"><span>Anterior</span><strong>Material &amp; Shader Editor - Design Document</strong></a><a class="pager-next" href="/pt/docs/plans/2026-05-16-e2e-testing-design/"><span>Seguinte</span><strong>E2E Testing Infrastructure Design</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#pre-flight-verify-current-state">Pre-flight: Verify Current State</a></li><li class="l3"><a href="#task-1-fetch-integrate-imgui_test_engine">Task 1: Fetch &amp; Integrate imgui_test_engine</a></li><li class="l3"><a href="#task-2-create-doppiotest-test-harness">Task 2: Create DoppioTest Test Harness</a></li><li class="l3"><a href="#task-3-inspectorpanel-tests">Task 3: InspectorPanel Tests</a></li><li class="l3"><a href="#task-4-remaining-editor-panel-tests">Task 4: Remaining Editor Panel Tests</a></li><li class="l3"><a href="#task-5-ci-integration">Task 5: CI Integration</a></li><li class="l3"><a href="#task-6-runtime-integration-tests-extend-caffeinetest">Task 6: Runtime Integration Tests (Extend CaffeineTest)</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

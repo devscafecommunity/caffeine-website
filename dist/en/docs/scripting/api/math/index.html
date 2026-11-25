@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Math · Caffeine</title>
+<meta name="description" content="Vector tables ({x, y[, z]}), scalar helpers and angle conversion. Also defines the constants caffeine.math.pi and caffeine.math.epsilon (1e-5).">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Math · Caffeine">
+<meta property="og:description" content="Vector tables ({x, y[, z]}), scalar helpers and angle conversion. Also defines the constants caffeine.math.pi and caffeine.math.epsilon (1e-5).">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/scripting/api/math/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/scripting/api/math/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/scripting/api/math/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab active" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/scripting/api/math/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Scripting"><div class="nav-title">Scripting</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Scripting</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/scripting/runtime-apis/">Lua runtime APIs (core)</a></li><li><a class="nav-link" href="/en/docs/scripting/native-modules/">Runtime native modules</a></li><li><a class="nav-link" href="/en/docs/scripting/scripting/">Scripting</a></li><li><a class="nav-link" href="/en/docs/scripting/api-roadmap/">Scripting API: parity and roadmap</a></li><li class="nav-dir open"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/scripting/api/">API reference</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/scripting/api/animation/">Animation</a></li><li><a class="nav-link" href="/en/docs/scripting/api/assets/">Assets</a></li><li><a class="nav-link" href="/en/docs/scripting/api/audio/">Audio</a></li><li><a class="nav-link" href="/en/docs/scripting/api/component/">Component</a></li><li><a class="nav-link" href="/en/docs/scripting/api/core/">Core</a></li><li><a class="nav-link" href="/en/docs/scripting/api/debug/">Debug</a></li><li><a class="nav-link" href="/en/docs/scripting/api/draw2d/">Draw 2D</a></li><li><a class="nav-link" href="/en/docs/scripting/api/effects/">Effects</a></li><li><a class="nav-link" href="/en/docs/scripting/api/entity/">Entity</a></li><li><a class="nav-link" href="/en/docs/scripting/api/events/">Events</a></li><li><a class="nav-link" href="/en/docs/scripting/api/forwardrender/">Forward render</a></li><li><a class="nav-link" href="/en/docs/scripting/api/gameState/">Game state</a></li><li><a class="nav-link" href="/en/docs/scripting/api/hierarchy/">Hierarchy</a></li><li><a class="nav-link" href="/en/docs/scripting/api/input/">Input</a></li><li><a class="nav-link" href="/en/docs/scripting/api/map/">Map</a></li><li><a class="nav-link active" href="/en/docs/scripting/api/math/" aria-current="page">Math</a></li><li><a class="nav-link" href="/en/docs/scripting/api/native/">Native modules</a></li><li><a class="nav-link" href="/en/docs/scripting/api/navigation/">Navigation</a></li><li><a class="nav-link" href="/en/docs/scripting/api/particles/">Particles</a></li><li><a class="nav-link" href="/en/docs/scripting/api/physics3d/">Physics 3D</a></li><li><a class="nav-link" href="/en/docs/scripting/api/pick/">Pick</a></li><li><a class="nav-link" href="/en/docs/scripting/api/postprocess/">Post-process</a></li><li><a class="nav-link" href="/en/docs/scripting/api/procedural/">Procedural</a></li><li><a class="nav-link" href="/en/docs/scripting/api/random/">Random</a></li><li><a class="nav-link" href="/en/docs/scripting/api/scene/">Scene</a></li><li><a class="nav-link" href="/en/docs/scripting/api/session/">Session</a></li><li><a class="nav-link" href="/en/docs/scripting/api/time/">Time</a></li><li><a class="nav-link" href="/en/docs/scripting/api/ui/">UI</a></li><li><a class="nav-link" href="/en/docs/scripting/api/world/">World</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/api/">Engine API</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/api/headless-engine-api/">Headless Engine API: build scenes and render images without the editor</a></li><li><a class="nav-link" href="/en/docs/api/scripting-components/">Scripting: generic component access</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/scripting/">Scripting</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Math</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Core</span>
+  <span>Last updated: <time datetime="2026-11-19">2026-11-19</time></span>
+  <span>Lua 23 · Dryad 0</span>
+</div>
+<p class="doc-lede">Vector tables ({x, y[, z]}), scalar helpers and angle conversion. Also defines the constants caffeine.math.pi and caffeine.math.epsilon (1e-5).</p>
+<p><a href="/en/docs/scripting/api/">All namespaces</a></p>
+<p>Namespace: <code>caffeine.math</code></p>
+<h2 id="vec2">vec2<a class="anchor" href="#vec2" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.vec2</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">vec2(x, y) -&gt; table
+</code></pre></div>
+<p>Creates a 2D vector table.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>x</code></td><td>number</td><td>X.</td></tr>
+<tr><td><code>y</code></td><td>number</td><td>Y.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. {x, y}</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> v = caffeine.<span class="hljs-built_in">math</span>.vec2(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+</code></pre></div>
+<h2 id="vec3">vec3<a class="anchor" href="#vec3" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.vec3</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">vec3(x, y, z) -&gt; table
+</code></pre></div>
+<p>Creates a 3D vector table.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>x</code></td><td>number</td><td>X.</td></tr>
+<tr><td><code>y</code></td><td>number</td><td>Y.</td></tr>
+<tr><td><code>z</code></td><td>number</td><td>Z.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. {x, y, z}</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> v = caffeine.<span class="hljs-built_in">math</span>.vec3(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>)
+</code></pre></div>
+<h2 id="add">add<a class="anchor" href="#add" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.add</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">add(a, b) -&gt; table
+</code></pre></div>
+<p>Component-wise sum of two vectors.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>b</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. Vector table; has z only when an operand has z.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> p = caffeine.<span class="hljs-built_in">math</span>.add(a, b)
+</code></pre></div>
+<h2 id="sub">sub<a class="anchor" href="#sub" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.sub</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">sub(a, b) -&gt; table
+</code></pre></div>
+<p>Component-wise difference a - b.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>b</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. Vector table; has z only when an operand has z.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> d = caffeine.<span class="hljs-built_in">math</span>.<span class="hljs-built_in">sub</span>(a, b)
+</code></pre></div>
+<h2 id="mul">mul<a class="anchor" href="#mul" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.mul</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">mul(a, b) -&gt; table
+</code></pre></div>
+<p>Component-wise product of two vectors (not a dot product).</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>b</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. Vector table; has z only when an operand has z.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> m = caffeine.<span class="hljs-built_in">math</span>.mul(a, b)
+</code></pre></div>
+<h2 id="scale">scale<a class="anchor" href="#scale" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.scale</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">scale(v, s) -&gt; table
+</code></pre></div>
+<p>Multiplies a vector by a scalar.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>v</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>s</code></td><td>number</td><td>Scalar factor.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. Scaled vector.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> v2 = caffeine.<span class="hljs-built_in">math</span>.scale(v, <span class="hljs-number">2</span>)
+</code></pre></div>
+<h2 id="dot">dot<a class="anchor" href="#dot" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.dot</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">dot(a, b) -&gt; number
+</code></pre></div>
+<p>Dot product of two vectors; a missing z counts as 0.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>b</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Dot product.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> d = caffeine.<span class="hljs-built_in">math</span>.dot(a, b)
+</code></pre></div>
+<h2 id="cross">cross<a class="anchor" href="#cross" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.cross</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">cross(a, b) -&gt; table
+</code></pre></div>
+<p>Cross product; the result is always 3D.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>b</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. {x, y, z} vector.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> n = caffeine.<span class="hljs-built_in">math</span>.cross(a, b)
+</code></pre></div>
+<h2 id="length">length<a class="anchor" href="#length" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.length</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">length(v) -&gt; number
+</code></pre></div>
+<p>Length of a vector.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>v</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Vector length.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> l = caffeine.<span class="hljs-built_in">math</span>.length(v)
+</code></pre></div>
+<h2 id="lengthsquared">lengthSquared<a class="anchor" href="#lengthsquared" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.lengthSquared</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">lengthSquared(v) -&gt; number
+</code></pre></div>
+<p>Squared length of a vector, without the square root.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>v</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Squared length.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> l2 = caffeine.<span class="hljs-built_in">math</span>.lengthSquared(v)
+</code></pre></div>
+<h2 id="distance">distance<a class="anchor" href="#distance" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.distance</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">distance(a, b) -&gt; number
+</code></pre></div>
+<p>Distance between two points.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>b</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Distance between the points.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> d = caffeine.<span class="hljs-built_in">math</span>.distance(a, b)
+</code></pre></div>
+<h2 id="normalize">normalize<a class="anchor" href="#normalize" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.normalize</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">normalize(v) -&gt; table
+</code></pre></div>
+<p>Returns the vector scaled to length 1.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>v</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. Unit vector, or zeros when the length is at most 0.0001.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> dir = caffeine.<span class="hljs-built_in">math</span>.normalize(caffeine.<span class="hljs-built_in">math</span>.<span class="hljs-built_in">sub</span>(b, a))
+</code></pre></div>
+<h2 id="lerpvec">lerpVec<a class="anchor" href="#lerpvec" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.lerpVec</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">lerpVec(a, b, t) -&gt; table
+</code></pre></div>
+<p>Linear interpolation between two vectors.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>b</code></td><td>table</td><td>Vector table {x, y[, z]}.</td></tr>
+<tr><td><code>t</code></td><td>number</td><td>Blend factor; not clamped.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. Vector table; has z only when an operand has z.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> mid = caffeine.<span class="hljs-built_in">math</span>.lerpVec(a, b, <span class="hljs-number">0.5</span>)
+</code></pre></div>
+<h2 id="clamp">clamp<a class="anchor" href="#clamp" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.clamp</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">clamp(v, lo, hi) -&gt; number
+</code></pre></div>
+<p>Limits a value to a range; swapped bounds are accepted.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>v</code></td><td>number</td><td>Value.</td></tr>
+<tr><td><code>lo</code></td><td>number</td><td>Lower bound.</td></tr>
+<tr><td><code>hi</code></td><td>number</td><td>Upper bound.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Clamped value.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> hp = caffeine.<span class="hljs-built_in">math</span>.clamp(hp, <span class="hljs-number">0</span>, <span class="hljs-number">100</span>)
+</code></pre></div>
+<h2 id="clamp01">clamp01<a class="anchor" href="#clamp01" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.clamp01</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">clamp01(v) -&gt; number
+</code></pre></div>
+<p>Limits a value to 0..1.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>v</code></td><td>number</td><td>Value.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Value limited to 0..1.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> t = caffeine.<span class="hljs-built_in">math</span>.clamp01(t)
+</code></pre></div>
+<h2 id="lerp">lerp<a class="anchor" href="#lerp" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.lerp</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">lerp(a, b, t) -&gt; number
+</code></pre></div>
+<p>Linear interpolation between two numbers.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>number</td><td>Start.</td></tr>
+<tr><td><code>b</code></td><td>number</td><td>End.</td></tr>
+<tr><td><code>t</code></td><td>number</td><td>Blend factor; not clamped.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. a + (b - a) * t</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> x = caffeine.<span class="hljs-built_in">math</span>.lerp(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>, <span class="hljs-number">0.25</span>)
+</code></pre></div>
+<h2 id="inverselerp">inverseLerp<a class="anchor" href="#inverselerp" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.inverseLerp</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">inverseLerp(a, b, v) -&gt; number
+</code></pre></div>
+<p>The inverse of lerp; the result is not clamped.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>number</td><td>Start.</td></tr>
+<tr><td><code>b</code></td><td>number</td><td>End.</td></tr>
+<tr><td><code>v</code></td><td>number</td><td>Value.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Position of v between a and b; 0 when a and b are equal.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> t = caffeine.<span class="hljs-built_in">math</span>.inverseLerp(<span class="hljs-number">0</span>, <span class="hljs-number">10</span>, <span class="hljs-number">5</span>)
+</code></pre></div>
+<h2 id="remap">remap<a class="anchor" href="#remap" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.remap</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">remap(v, inLo, inHi, outLo, outHi) -&gt; number
+</code></pre></div>
+<p>Maps a value from one range to another.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>v</code></td><td>number</td><td>Value.</td></tr>
+<tr><td><code>inLo</code></td><td>number</td><td>Input range start.</td></tr>
+<tr><td><code>inHi</code></td><td>number</td><td>Input range end.</td></tr>
+<tr><td><code>outLo</code></td><td>number</td><td>Output range start.</td></tr>
+<tr><td><code>outHi</code></td><td>number</td><td>Output range end.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Remapped value (not clamped).</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> pct = caffeine.<span class="hljs-built_in">math</span>.remap(hp, <span class="hljs-number">0</span>, <span class="hljs-number">100</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
+</code></pre></div>
+<h2 id="smoothstep">smoothstep<a class="anchor" href="#smoothstep" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.smoothstep</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">smoothstep(e0, e1, v) -&gt; number
+</code></pre></div>
+<p>Smooth Hermite interpolation between two edges.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>e0</code></td><td>number</td><td>Lower edge.</td></tr>
+<tr><td><code>e1</code></td><td>number</td><td>Upper edge.</td></tr>
+<tr><td><code>v</code></td><td>number</td><td>Value.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Smooth value in 0..1.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> s = caffeine.<span class="hljs-built_in">math</span>.smoothstep(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, t)
+</code></pre></div>
+<h2 id="approach">approach<a class="anchor" href="#approach" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.approach</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">approach(cur, target, step) -&gt; number
+</code></pre></div>
+<p>Moves a value toward a target by at most step.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>cur</code></td><td>number</td><td>Current value.</td></tr>
+<tr><td><code>target</code></td><td>number</td><td>Target value.</td></tr>
+<tr><td><code>step</code></td><td>number</td><td>Maximum change; its absolute value is used.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. New value, never past the target.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">speed = caffeine.<span class="hljs-built_in">math</span>.approach(speed, <span class="hljs-number">0</span>, <span class="hljs-number">20</span> * caffeine.<span class="hljs-built_in">time</span>.delta())
+</code></pre></div>
+<h2 id="sign">sign<a class="anchor" href="#sign" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.sign</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">sign(v) -&gt; number
+</code></pre></div>
+<p>Sign of a number.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>v</code></td><td>number</td><td>Value.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. -1, 0 or 1.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> s = caffeine.<span class="hljs-built_in">math</span>.sign(<span class="hljs-number">-3</span>)
+</code></pre></div>
+<h2 id="radians">radians<a class="anchor" href="#radians" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.radians</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">radians(deg) -&gt; number
+</code></pre></div>
+<p>Converts degrees to radians.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>deg</code></td><td>number</td><td>Degrees.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Radians.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> r = caffeine.<span class="hljs-built_in">math</span>.radians(<span class="hljs-number">90</span>)
+</code></pre></div>
+<h2 id="degrees">degrees<a class="anchor" href="#degrees" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.math.degrees</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">degrees(rad) -&gt; number
+</code></pre></div>
+<p>Converts radians to degrees.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>rad</code></td><td>number</td><td>Radians.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Degrees.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> d = caffeine.<span class="hljs-built_in">math</span>.degrees(caffeine.<span class="hljs-built_in">math</span>.<span class="hljs-built_in">pi</span>)
+</code></pre></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/scripting/api/math.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/scripting/api/map/"><span>Previous</span><strong>Map</strong></a><a class="pager-next" href="/en/docs/scripting/api/native/"><span>Next</span><strong>Native modules</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#vec2">vec2</a></li><li class="l2"><a href="#vec3">vec3</a></li><li class="l2"><a href="#add">add</a></li><li class="l2"><a href="#sub">sub</a></li><li class="l2"><a href="#mul">mul</a></li><li class="l2"><a href="#scale">scale</a></li><li class="l2"><a href="#dot">dot</a></li><li class="l2"><a href="#cross">cross</a></li><li class="l2"><a href="#length">length</a></li><li class="l2"><a href="#lengthsquared">lengthSquared</a></li><li class="l2"><a href="#distance">distance</a></li><li class="l2"><a href="#normalize">normalize</a></li><li class="l2"><a href="#lerpvec">lerpVec</a></li><li class="l2"><a href="#clamp">clamp</a></li><li class="l2"><a href="#clamp01">clamp01</a></li><li class="l2"><a href="#lerp">lerp</a></li><li class="l2"><a href="#inverselerp">inverseLerp</a></li><li class="l2"><a href="#remap">remap</a></li><li class="l2"><a href="#smoothstep">smoothstep</a></li><li class="l2"><a href="#approach">approach</a></li><li class="l2"><a href="#sign">sign</a></li><li class="l2"><a href="#radians">radians</a></li><li class="l2"><a href="#degrees">degrees</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

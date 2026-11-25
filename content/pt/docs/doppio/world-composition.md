@@ -262,8 +262,11 @@ desenha todas as instâncias de um bake a partir de uma entidade. O seu ficheiro
 O renderer carrega o bake e o ficheiro de modelos uma vez por alteração, salta chunks inteiros fora do frustum ou para
 lá de `Draw distance`, e transforma cada instância visível em desenhos de malha normais, que o instancing existente
 agrupa em lotes (a tonalidade é quantizada a 1/32 para que as instâncias continuem a partilhar lotes). As partes com
-recorte não projetam sombra. Os rios são escavados no terreno mas ainda não são desenhados como água: o motor não tem
-superfície de rio.
+recorte não projetam sombra. Cada parte cozida indica o seu material em `slots`: os mesmos assets `.mat` que o Nature
+Generator escreve ao colocar a árvore (casca, cartões de folhas, superfícies de rocha, o seu próprio material),
+registados ao lado dos OBJ em cache em `.materials`. Rios e lagos são entidades de água moldadas pela grelha de
+superfície do motor (`caffeine_world_water_surface` e `caffeine_session_set_water_surface`); com uma biblioteca sem ela
+um lago é um plano e um rio é só escavado.
 
 ## 6. O separador Composer
 
@@ -277,10 +280,11 @@ Um separador **World** (View > World Composer, ou duplo clique num `*.generator.
   um retângulo de região com *Remove in region*, e um **pincel de remoção**. Com o pincel ativo, arrastar com o botão
   esquerdo no Viewport remove as instâncias da última construção sob o anel; o traço é um passo de undo e escreve
   linhas `override remove`.
-- **Preview**: uma construção grosseira (no máximo 2000 instâncias) após cada edição, com debounce; o bake do terreno
-  corre fora da thread da UI.
+- **Preview**: uma construção grosseira após cada edição, com debounce, numa thread de trabalho (o bake do terreno e
+  a construção no motor, através de um `WorldBuilder` sem sessão); ganha a última edição e todas as instâncias contam.
 - **Build**: a construção completa através da cache de bakes; um passo de undo; a linha de estado reporta instâncias
-  por classe, o tempo, se a cache respondeu e quantos modelos foram baked. *Save as prefab* escreve `World/<name>.prefab`.
+  por classe, o tempo, se a cache respondeu e quantos modelos foram baked. *Save as prefab* escreve `World/<name>.prefab`;
+  *Frame* aponta a câmara do Viewport para a última construção.
 
 <figure>
   <img src="../images/doppio/world/ui/world-tab.png" alt="O separador World: Library, Composition e Rules ao lado do Viewport" loading="lazy">
@@ -296,7 +300,9 @@ Aplicam-se as regras do projeto: cada widget tem um `UiId` e uma entrada no `CAT
 pilha de undo do separador e uma construção é um único `App::commit` da cena, e cada comando é uma `Message` e uma ação
 MCP: `world_show`, `world_add`, `world_add_class`, `world_set_class`, `world_set_rule`, `world_reseed`, `world_preview`,
 `world_build`, `world_remove_in_region`, `world_brush`, `world_remove_in_circle`, `world_undo`, `world_save`,
-`world_save_prefab`, mais a consulta só de leitura `world`. O fluxo headless `doppio/tests/ui-flows/world-composer.json`
+`world_save_prefab`, `world_frame`, mais a consulta só de leitura `world`. O fixture headless `world_showcase` é um
+mundo com ar de mundo (colinas à volta de um vale, um rio, um lago, árvores, rochas, arbustos e erva) para as imagens da
+documentação. O fluxo headless `doppio/tests/ui-flows/world-composer.json`
 adiciona, arrasta e desfaz uma classe, faz reseed, edita uma regra, ativa o pincel e constrói;
 `doppio/crates/ui/src/windows/main/tests.rs` cobre mundos grandes, acertos na cache, escavação e lagos, o pincel e o prefab.
 
@@ -344,7 +350,7 @@ Cada passo é útil sozinho e testável em headless. `[x]` significa que já é 
 - [x] Máscara `water_distance` a partir dos corpos de água; os rios seguem uma máscara, os lagos enchem bacias abaixo de um nível.
 - [x] Escavação opcional do leito antes de as máscaras serem lidas (limite documentado: CPU, heightfield limitado).
 - [x] Refs de água verificadas e ligadas: os lagos são colocados como entidades de água com o aspeto da sua receita.
-- [ ] Rios desenhados como água (são escavados, mas o motor ainda não tem superfície de rio).
+- [x] Rios e margens de lagos desenhados como superfícies de água moldadas (com a grelha de superfície do motor).
 
 ### C3 — Contexto do solo e adaptação
 
@@ -361,7 +367,7 @@ Cada passo é útil sozinho e testável em headless. `[x]` significa que já é 
 - [x] Cache de bakes persistente, indexada como na secção 7.
 - [ ] Impostores, buffers de instâncias na GPU por chunk e LOD de malha para instâncias (fase 4 do roadmap); picking de
       instâncias; o renderer de runtime, o shadow map de CPU e o bake Photon ainda não desenham `World Instances`.
-- [ ] Materiais nas partes de natureza colocadas em mundos pequenos (o bake só dá ficheiros OBJ).
+- [x] Materiais nas partes de natureza cozidas: as entidades recebem-nos como as partes compostas do Scatter, os ficheiros de modelos como `slots`.
 
 ### C5 — Editor
 
@@ -369,7 +375,7 @@ Cada passo é útil sozinho e testável em headless. `[x]` significa que já é 
 - [x] `UiId`s, ações MCP, fluxo e fixture headless, capturas através do driver headless
       (`scripts/capture-world-docs.sh`).
 - [x] Pintura de overrides: o pincel de remoção no Viewport e o retângulo de região.
-- [ ] A construção de pré-visualização no motor corre na thread da UI (com debounce, no máximo 2000 instâncias): `Engine` não é `Send`.
+- [x] A pré-visualização corre numa thread de trabalho através de `WorldBuilder` (sem limite de instâncias; resultados obsoletos são descartados).
 
 ### C6 — Documentação
 

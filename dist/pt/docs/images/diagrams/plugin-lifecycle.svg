@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="360" viewBox="0 0 960 360" font-family="Inter, Segoe UI, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#e0a458"/>
+    </marker>
+    <style>
+      .box { fill:#23252b; stroke:#3a3d45; stroke-width:1.6; rx:12; }
+      .accent { fill:#2c2a25; stroke:#e0a458; stroke-width:1.8; rx:12; }
+      .t { fill:#e8e8ea; font-size:16px; font-weight:600; }
+      .s { fill:#9aa0aa; font-size:12px; }
+      .e { stroke:#e0a458; stroke-width:2; fill:none; marker-end:url(#a); }
+      .m { fill:#e0a458; font-size:12px; font-weight:600; letter-spacing:.08em; }
+    </style>
+  </defs>
+  <rect width="960" height="360" fill="#17181c"/>
+  <text x="40" y="42" class="m">PLUGIN LIFECYCLE — OPT-IN</text>
+
+  <rect x="40" y="110" width="190" height="92" class="box"/>
+  <text x="60" y="142" class="t">Discovered</text>
+  <text x="60" y="166" class="s">.so / .dll in a</text>
+  <text x="60" y="184" class="s">plugins/ directory</text>
+
+  <rect x="300" y="110" width="190" height="92" class="accent"/>
+  <text x="320" y="142" class="t">Enabled</text>
+  <text x="320" y="166" class="s">dlopen + OnLoad</text>
+  <text x="320" y="184" class="s">contributions live</text>
+
+  <rect x="560" y="110" width="190" height="92" class="box"/>
+  <text x="580" y="142" class="t">Failed</text>
+  <text x="580" y="166" class="s">dlopen / OnLoad</text>
+  <text x="580" y="184" class="s">error is shown</text>
+
+  <rect x="790" y="110" width="130" height="92" class="box"/>
+  <text x="808" y="142" class="t">plugins.cfg</text>
+  <text x="808" y="166" class="s">persisted</text>
+  <text x="808" y="184" class="s">per user</text>
+
+  <path class="e" d="M230 156 H296"/>
+  <text x="240" y="144" class="s">enable</text>
+
+  <path class="e" d="M490 156 H556"/>
+  <text x="500" y="144" class="s">error</text>
+
+  <path class="e" d="M750 156 H786"/>
+  <text x="760" y="144" class="s">save</text>
+
+  <!-- unload loop -->
+  <path class="e" d="M395 202 V282 H135 V206"/>
+  <text x="220" y="276" class="s">disable / unload → removes panels, menus, drawers, services</text>
+
+  <text x="40" y="330" class="s">Startup loads only entries already present in the user enable list. New libraries remain Disabled.</text>
+</svg>

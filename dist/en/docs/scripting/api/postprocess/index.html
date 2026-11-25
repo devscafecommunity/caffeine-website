@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Post-process · Caffeine</title>
+<meta name="description" content="Per-entity post-process effects such as bloom, vignette, colour grading and fog, with presets and path-based field access.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Post-process · Caffeine">
+<meta property="og:description" content="Per-entity post-process effects such as bloom, vignette, colour grading and fog, with presets and path-based field access.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/scripting/api/postprocess/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/scripting/api/postprocess/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/scripting/api/postprocess/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab active" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/scripting/api/postprocess/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Scripting"><div class="nav-title">Scripting</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Scripting</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/scripting/runtime-apis/">Lua runtime APIs (core)</a></li><li><a class="nav-link" href="/en/docs/scripting/native-modules/">Runtime native modules</a></li><li><a class="nav-link" href="/en/docs/scripting/scripting/">Scripting</a></li><li><a class="nav-link" href="/en/docs/scripting/api-roadmap/">Scripting API: parity and roadmap</a></li><li class="nav-dir open"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/scripting/api/">API reference</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/scripting/api/animation/">Animation</a></li><li><a class="nav-link" href="/en/docs/scripting/api/assets/">Assets</a></li><li><a class="nav-link" href="/en/docs/scripting/api/audio/">Audio</a></li><li><a class="nav-link" href="/en/docs/scripting/api/component/">Component</a></li><li><a class="nav-link" href="/en/docs/scripting/api/core/">Core</a></li><li><a class="nav-link" href="/en/docs/scripting/api/debug/">Debug</a></li><li><a class="nav-link" href="/en/docs/scripting/api/draw2d/">Draw 2D</a></li><li><a class="nav-link" href="/en/docs/scripting/api/effects/">Effects</a></li><li><a class="nav-link" href="/en/docs/scripting/api/entity/">Entity</a></li><li><a class="nav-link" href="/en/docs/scripting/api/events/">Events</a></li><li><a class="nav-link" href="/en/docs/scripting/api/forwardrender/">Forward render</a></li><li><a class="nav-link" href="/en/docs/scripting/api/gameState/">Game state</a></li><li><a class="nav-link" href="/en/docs/scripting/api/hierarchy/">Hierarchy</a></li><li><a class="nav-link" href="/en/docs/scripting/api/input/">Input</a></li><li><a class="nav-link" href="/en/docs/scripting/api/map/">Map</a></li><li><a class="nav-link" href="/en/docs/scripting/api/math/">Math</a></li><li><a class="nav-link" href="/en/docs/scripting/api/native/">Native modules</a></li><li><a class="nav-link" href="/en/docs/scripting/api/navigation/">Navigation</a></li><li><a class="nav-link" href="/en/docs/scripting/api/particles/">Particles</a></li><li><a class="nav-link" href="/en/docs/scripting/api/physics3d/">Physics 3D</a></li><li><a class="nav-link" href="/en/docs/scripting/api/pick/">Pick</a></li><li><a class="nav-link active" href="/en/docs/scripting/api/postprocess/" aria-current="page">Post-process</a></li><li><a class="nav-link" href="/en/docs/scripting/api/procedural/">Procedural</a></li><li><a class="nav-link" href="/en/docs/scripting/api/random/">Random</a></li><li><a class="nav-link" href="/en/docs/scripting/api/scene/">Scene</a></li><li><a class="nav-link" href="/en/docs/scripting/api/session/">Session</a></li><li><a class="nav-link" href="/en/docs/scripting/api/time/">Time</a></li><li><a class="nav-link" href="/en/docs/scripting/api/ui/">UI</a></li><li><a class="nav-link" href="/en/docs/scripting/api/world/">World</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/api/">Engine API</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/api/headless-engine-api/">Headless Engine API: build scenes and render images without the editor</a></li><li><a class="nav-link" href="/en/docs/api/scripting-components/">Scripting: generic component access</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/scripting/">Scripting</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Post-process</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Rendering</span>
+  <span>Last updated: <time datetime="2026-11-19">2026-11-19</time></span>
+  <span>Lua 29 · Dryad 0</span>
+</div>
+<p class="doc-lede">Per-entity post-process effects such as bloom, vignette, colour grading and fog, with presets and path-based field access.</p>
+<p><a href="/en/docs/scripting/api/">All namespaces</a></p>
+<p>Namespace: <code>caffeine.postprocess</code></p>
+<h2 id="has">has<a class="anchor" href="#has" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.has</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">has(entity) -&gt; boolean
+</code></pre></div>
+<p>Checks whether the entity has a post-process component.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. true if the entity has a post-process component.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">if</span> caffeine.postprocess.has(cam) <span class="hljs-keyword">then</span> <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;ok&#x27;</span>) <span class="hljs-keyword">end</span>
+</code></pre></div>
+<h2 id="add">add<a class="anchor" href="#add" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.add</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">add(entity) -&gt; boolean
+</code></pre></div>
+<p>Adds a post-process component to the entity if it does not have one.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. false if the entity is not alive.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.add(cam)
+</code></pre></div>
+<h2 id="remove">remove<a class="anchor" href="#remove" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.remove</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">remove(entity)
+</code></pre></div>
+<p>Removes the post-process component from the entity, if present.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.<span class="hljs-built_in">remove</span>(cam)
+</code></pre></div>
+<h2 id="get">get<a class="anchor" href="#get" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.get</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">get(entity) -&gt; table
+</code></pre></div>
+<p>Returns a snapshot of the whole post-process state as a table.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. A table of effect groups (for example <code>bloom</code>, <code>vignette</code>) with their fields, plus <code>enabled</code>, <code>customEffectScript</code> and the flat aliases <code>exposure</code>, <code>vignetteIntensity</code>, <code>bloomIntensity</code>. Empty if the entity has no component.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> s = caffeine.postprocess.get(cam)
+<span class="hljs-built_in">print</span>(s.bloom.intensity)
+</code></pre></div>
+<h2 id="set">set<a class="anchor" href="#set" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.set</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">set(entity, values) -&gt; boolean
+</code></pre></div>
+<p>Merges a table of values into the post-process state.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>values</code></td><td>table</td><td>Table shaped like the result of `get`; only the keys present are applied.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. false if the entity has no component.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.set(cam, { bloom = { intensity = <span class="hljs-number">0.8</span> } })
+</code></pre></div>
+<h2 id="getvalue">getValue<a class="anchor" href="#getvalue" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.getValue</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">getValue(entity, path) -&gt; number|boolean|nil
+</code></pre></div>
+<p>Reads one field by path.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>path</code></td><td>string</td><td>Field path such as "bloom.intensity".</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number|boolean|nil</code>. The field value, or nil if the entity or field is unknown.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-built_in">print</span>(caffeine.postprocess.getValue(cam, <span class="hljs-string">&#x27;bloom.intensity&#x27;</span>))
+</code></pre></div>
+<h2 id="setvalue">setValue<a class="anchor" href="#setvalue" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setValue</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setValue(entity, path, value) -&gt; boolean
+</code></pre></div>
+<p>Writes one field by path.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>path</code></td><td>string</td><td>Field path such as "bloom.intensity".</td></tr>
+<tr><td><code>value</code></td><td>number|boolean</td><td>New value.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. true if the field was set.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setValue(cam, <span class="hljs-string">&#x27;bloom.threshold&#x27;</span>, <span class="hljs-number">1.0</span>)
+</code></pre></div>
+<h2 id="effects">effects<a class="anchor" href="#effects" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.effects</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">effects() -&gt; table
+</code></pre></div>
+<p>Lists the names of the available post-process effects.</p>
+<p><strong>Returns:</strong> <code>table</code>. List of effect names.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">for</span> _, name <span class="hljs-keyword">in</span> <span class="hljs-built_in">ipairs</span>(caffeine.postprocess.effects()) <span class="hljs-keyword">do</span> <span class="hljs-built_in">print</span>(name) <span class="hljs-keyword">end</span>
+</code></pre></div>
+<h2 id="fields">fields<a class="anchor" href="#fields" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.fields</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">fields(effect) -&gt; table
+</code></pre></div>
+<p>Lists the fields of one effect with their ranges and types.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>effect</code></td><td>string</td><td>Effect name such as "bloom".</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. List of tables with <code>name</code>, <code>min</code>, <code>max</code> and <code>type</code> (&quot;bool&quot;, &quot;int&quot; or &quot;number&quot;).</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">for</span> _, f <span class="hljs-keyword">in</span> <span class="hljs-built_in">ipairs</span>(caffeine.postprocess.fields(<span class="hljs-string">&#x27;bloom&#x27;</span>)) <span class="hljs-keyword">do</span> <span class="hljs-built_in">print</span>(f.name, f.<span class="hljs-built_in">min</span>, f.<span class="hljs-built_in">max</span>) <span class="hljs-keyword">end</span>
+</code></pre></div>
+<h2 id="setenabled">setEnabled<a class="anchor" href="#setenabled" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setEnabled</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setEnabled(entity, enabled)
+</code></pre></div>
+<p>Turns the whole post-process component on or off.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>enabled</code></td><td>boolean</td><td>Master switch.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setEnabled(cam, <span class="hljs-literal">false</span>)
+</code></pre></div>
+<h2 id="enableeffect">enableEffect<a class="anchor" href="#enableeffect" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.enableEffect</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">enableEffect(entity, effect, enabled) -&gt; boolean
+</code></pre></div>
+<p>Turns a single effect on or off.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>effect</code></td><td>string</td><td>Effect name such as "bloom".</td></tr>
+<tr><td><code>enabled</code></td><td>boolean</td><td>Whether the effect is on.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. true if the effect exists.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.enableEffect(cam, <span class="hljs-string">&#x27;bloom&#x27;</span>, <span class="hljs-literal">true</span>)
+</code></pre></div>
+<h2 id="iseffectenabled">isEffectEnabled<a class="anchor" href="#iseffectenabled" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.isEffectEnabled</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">isEffectEnabled(entity, effect) -&gt; boolean
+</code></pre></div>
+<p>Checks whether an effect is enabled.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>effect</code></td><td>string</td><td>Effect name such as "bloom".</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. true if the effect is on; false if off or unknown.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-built_in">print</span>(caffeine.postprocess.isEffectEnabled(cam, <span class="hljs-string">&#x27;bloom&#x27;</span>))
+</code></pre></div>
+<h2 id="applypreset">applyPreset<a class="anchor" href="#applypreset" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.applyPreset</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">applyPreset(entity, name) -&gt; boolean
+</code></pre></div>
+<p>Applies a built-in post-process preset.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>name</code></td><td>string</td><td>One of "cinematic", "horror", "arcade", "reset" (or "default").</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. false for an unknown preset or missing component.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.applyPreset(cam, <span class="hljs-string">&#x27;cinematic&#x27;</span>)
+</code></pre></div>
+<h2 id="blend">blend<a class="anchor" href="#blend" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.blend</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">blend(entity, from, to, t) -&gt; boolean
+</code></pre></div>
+<p>Interpolates between two tables of values (each applied on top of the current state) and stores the result.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>from</code></td><td>table</td><td>Table of values for the start state.</td></tr>
+<tr><td><code>to</code></td><td>table</td><td>Table of values for the end state.</td></tr>
+<tr><td><code>t</code></td><td>number</td><td>Blend factor, clamped to 0..1.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. false if the entity has no component.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.blend(cam, { bloom = { intensity = <span class="hljs-number">0</span> } }, { bloom = { intensity = <span class="hljs-number">1</span> } }, <span class="hljs-number">0.5</span>)
+</code></pre></div>
+<h2 id="setexposure">setExposure<a class="anchor" href="#setexposure" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setExposure</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setExposure(entity, exposure)
+</code></pre></div>
+<p>Sets colour-grading exposure and enables colour grading.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>exposure</code></td><td>number</td><td>Exposure value.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setExposure(cam, <span class="hljs-number">1.2</span>)
+</code></pre></div>
+<h2 id="setcolorgrading">setColorGrading<a class="anchor" href="#setcolorgrading" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setColorGrading</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setColorGrading(entity, contrast, saturation, temperature, tint)
+</code></pre></div>
+<p>Sets colour-grading values and enables colour grading.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>contrast</code></td><td>number</td><td>Contrast.</td></tr>
+<tr><td><code>saturation</code></td><td>number</td><td>Saturation.</td></tr>
+<tr><td><code>temperature</code></td><td>number</td><td>Colour temperature. Optional.</td></tr>
+<tr><td><code>tint</code></td><td>number</td><td>Tint. Optional.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setColorGrading(cam, <span class="hljs-number">1.1</span>, <span class="hljs-number">0.9</span>)
+</code></pre></div>
+<h2 id="setbloom">setBloom<a class="anchor" href="#setbloom" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setBloom</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setBloom(entity, intensity, threshold)
+</code></pre></div>
+<p>Sets bloom intensity and optionally the threshold.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>intensity</code></td><td>number</td><td>Bloom intensity; the effect is enabled when above 0.001.</td></tr>
+<tr><td><code>threshold</code></td><td>number</td><td>Brightness threshold. Optional.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setBloom(cam, <span class="hljs-number">0.6</span>, <span class="hljs-number">1.0</span>)
+</code></pre></div>
+<h2 id="setvignette">setVignette<a class="anchor" href="#setvignette" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setVignette</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setVignette(entity, intensity)
+</code></pre></div>
+<p>Sets vignette intensity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>intensity</code></td><td>number</td><td>Intensity; enabled when above 0.001.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setVignette(cam, <span class="hljs-number">0.4</span>)
+</code></pre></div>
+<h2 id="setchromaticaberration">setChromaticAberration<a class="anchor" href="#setchromaticaberration" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setChromaticAberration</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setChromaticAberration(entity, intensity)
+</code></pre></div>
+<p>Sets chromatic aberration intensity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>intensity</code></td><td>number</td><td>Intensity; enabled when above 0.001.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setChromaticAberration(cam, <span class="hljs-number">0.2</span>)
+</code></pre></div>
+<h2 id="setgrain">setGrain<a class="anchor" href="#setgrain" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setGrain</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setGrain(entity, intensity)
+</code></pre></div>
+<p>Sets film grain intensity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>intensity</code></td><td>number</td><td>Intensity; enabled when above 0.001.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setGrain(cam, <span class="hljs-number">0.1</span>)
+</code></pre></div>
+<h2 id="setlensdistortion">setLensDistortion<a class="anchor" href="#setlensdistortion" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setLensDistortion</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setLensDistortion(entity, intensity)
+</code></pre></div>
+<p>Sets lens distortion intensity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>intensity</code></td><td>number</td><td>Intensity; enabled when its absolute value is above 0.001.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setLensDistortion(cam, <span class="hljs-number">-0.1</span>)
+</code></pre></div>
+<h2 id="setmotionblur">setMotionBlur<a class="anchor" href="#setmotionblur" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setMotionBlur</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setMotionBlur(entity, intensity)
+</code></pre></div>
+<p>Sets motion blur intensity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>intensity</code></td><td>number</td><td>Intensity; enabled when above 0.001.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setMotionBlur(cam, <span class="hljs-number">0.5</span>)
+</code></pre></div>
+<h2 id="setdepthoffield">setDepthOfField<a class="anchor" href="#setdepthoffield" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setDepthOfField</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setDepthOfField(entity, focusDistance, aperture)
+</code></pre></div>
+<p>Sets depth-of-field focus and aperture and enables the effect.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>focusDistance</code></td><td>number</td><td>Focus distance.</td></tr>
+<tr><td><code>aperture</code></td><td>number</td><td>Aperture.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setDepthOfField(cam, <span class="hljs-number">10</span>, <span class="hljs-number">2.8</span>)
+</code></pre></div>
+<h2 id="setfog">setFog<a class="anchor" href="#setfog" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setFog</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setFog(entity, density, r, g, b)
+</code></pre></div>
+<p>Sets the deferred fog density and optionally its colour.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>density</code></td><td>number</td><td>Fog density; enabled when above 0.001.</td></tr>
+<tr><td><code>r</code></td><td>number</td><td>Red; the colour is applied only if r, g and b are all given. Optional.</td></tr>
+<tr><td><code>g</code></td><td>number</td><td>Green. Optional.</td></tr>
+<tr><td><code>b</code></td><td>number</td><td>Blue. Optional.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setFog(cam, <span class="hljs-number">0.02</span>, <span class="hljs-number">0.6</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">0.8</span>)
+</code></pre></div>
+<h2 id="setambientocclusion">setAmbientOcclusion<a class="anchor" href="#setambientocclusion" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setAmbientOcclusion</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setAmbientOcclusion(entity, intensity, radius)
+</code></pre></div>
+<p>Sets ambient occlusion intensity and optionally the radius.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>intensity</code></td><td>number</td><td>Intensity; enabled when above 0.001.</td></tr>
+<tr><td><code>radius</code></td><td>number</td><td>Sampling radius. Optional.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setAmbientOcclusion(cam, <span class="hljs-number">1.0</span>, <span class="hljs-number">0.5</span>)
+</code></pre></div>
+<h2 id="setantialiasing">setAntiAliasing<a class="anchor" href="#setantialiasing" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setAntiAliasing</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setAntiAliasing(entity, mode)
+</code></pre></div>
+<p>Selects the anti-aliasing mode; &quot;off&quot; and &quot;none&quot; disable it.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>mode</code></td><td>string</td><td>"fxaa", "off" or "none"; any other value selects the non-FXAA mode.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setAntiAliasing(cam, <span class="hljs-string">&#x27;fxaa&#x27;</span>)
+</code></pre></div>
+<h2 id="setautoexposure">setAutoExposure<a class="anchor" href="#setautoexposure" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setAutoExposure</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setAutoExposure(entity, enabled, compensation)
+</code></pre></div>
+<p>Toggles auto exposure and optionally sets its compensation.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>enabled</code></td><td>boolean</td><td>Turns auto exposure on or off.</td></tr>
+<tr><td><code>compensation</code></td><td>number</td><td>Exposure compensation. Optional.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setAutoExposure(cam, <span class="hljs-literal">true</span>, <span class="hljs-number">0.5</span>)
+</code></pre></div>
+<h2 id="setcustomscript">setCustomScript<a class="anchor" href="#setcustomscript" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.setCustomScript</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setCustomScript(entity, path)
+</code></pre></div>
+<p>Sets the custom effect script of the entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+<tr><td><code>path</code></td><td>string</td><td>Path of the custom effect script.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.postprocess.setCustomScript(cam, <span class="hljs-string">&#x27;scripts/fx.lua&#x27;</span>)
+</code></pre></div>
+<h2 id="handle">handle<a class="anchor" href="#handle" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.postprocess.handle</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">handle(entity) -&gt; table
+</code></pre></div>
+<p>Returns a per-entity handle, the same kind passed to <code>onPostProcess</code>, so calls need no entity id.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>number</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. Table with <code>entity</code>, <code>get</code>, <code>set</code>, <code>enable</code>, <code>isEnabled</code>, <code>snapshot</code>, <code>apply</code> and <code>preset</code>, all bound to the entity.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> h = caffeine.postprocess.handle(cam)
+h.set(<span class="hljs-string">&#x27;bloom.intensity&#x27;</span>, <span class="hljs-number">0.5</span>)
+</code></pre></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/scripting/api/postprocess.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/scripting/api/pick/"><span>Previous</span><strong>Pick</strong></a><a class="pager-next" href="/en/docs/scripting/api/procedural/"><span>Next</span><strong>Procedural</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#has">has</a></li><li class="l2"><a href="#add">add</a></li><li class="l2"><a href="#remove">remove</a></li><li class="l2"><a href="#get">get</a></li><li class="l2"><a href="#set">set</a></li><li class="l2"><a href="#getvalue">getValue</a></li><li class="l2"><a href="#setvalue">setValue</a></li><li class="l2"><a href="#effects">effects</a></li><li class="l2"><a href="#fields">fields</a></li><li class="l2"><a href="#setenabled">setEnabled</a></li><li class="l2"><a href="#enableeffect">enableEffect</a></li><li class="l2"><a href="#iseffectenabled">isEffectEnabled</a></li><li class="l2"><a href="#applypreset">applyPreset</a></li><li class="l2"><a href="#blend">blend</a></li><li class="l2"><a href="#setexposure">setExposure</a></li><li class="l2"><a href="#setcolorgrading">setColorGrading</a></li><li class="l2"><a href="#setbloom">setBloom</a></li><li class="l2"><a href="#setvignette">setVignette</a></li><li class="l2"><a href="#setchromaticaberration">setChromaticAberration</a></li><li class="l2"><a href="#setgrain">setGrain</a></li><li class="l2"><a href="#setlensdistortion">setLensDistortion</a></li><li class="l2"><a href="#setmotionblur">setMotionBlur</a></li><li class="l2"><a href="#setdepthoffield">setDepthOfField</a></li><li class="l2"><a href="#setfog">setFog</a></li><li class="l2"><a href="#setambientocclusion">setAmbientOcclusion</a></li><li class="l2"><a href="#setantialiasing">setAntiAliasing</a></li><li class="l2"><a href="#setautoexposure">setAutoExposure</a></li><li class="l2"><a href="#setcustomscript">setCustomScript</a></li><li class="l2"><a href="#handle">handle</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

@@ -42,6 +42,37 @@
     {
       "action": "screenshot",
       "name": "world-built"
+    },
+    {
+      "action": "reset",
+      "fixture": "world_showcase",
+      "size": [
+        1600,
+        900
+      ],
+      "label": "the showcase world: hills round a valley, a river, a lake, trees, rocks, shrubs and grass"
+    },
+    {
+      "action": "click",
+      "target": "id:world.toolbar.build",
+      "label": "build it (a few thousand instances: the instance bake path)"
+    },
+    {
+      "action": "click",
+      "target": "id:world.toolbar.frame",
+      "label": "frame the built world in the Viewport"
+    },
+    {
+      "action": "wait",
+      "ms": 2500,
+      "real_time": true,
+      "label": "let the viewport settle"
+    },
+    {
+      "action": "screenshot",
+      "name": "world-showcase",
+      "target": "id:viewport.canvas.surface",
+      "padding": 0
     }
   ]
 }

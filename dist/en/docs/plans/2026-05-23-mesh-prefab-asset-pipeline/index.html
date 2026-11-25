@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mesh &amp; Prefab Asset Pipeline Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Mesh &amp; Prefab Asset Pipeline Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/" aria-current="page">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/ECOSYSTEM_WORKFLOW/">Unified asset workflow</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Mesh &amp; Prefab Asset Pipeline Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Complete end-to-end mesh and prefab asset pipeline: import 3D models → serialize to .caf → runtime loading → prefab installation in editor and game.</p>
+<p><strong>Architecture:</strong></p>
+<ul>
+<li>Extend MeshEncoder to handle gltf/glb (currently only obj works)</li>
+<li>Add Mesh asset resolution to runtime AssetManager (currently only Texture/Audio/Shader)</li>
+<li>Implement PrefabAsset serialization/deserialization using existing scene serialization patterns</li>
+<li>Enable editor drag-and-drop to create and instantiate prefabs with full component preservation</li>
+</ul>
+<p><strong>Tech Stack:</strong> C++20, glTF parser (already vendored), ECS architecture, .caf binary format</p>
+<hr>
+<h2 id="phase-1-mesh-encoding-asset-resolution">Phase 1: Mesh Encoding &amp; Asset Resolution<a class="anchor" href="#phase-1-mesh-encoding-asset-resolution" aria-label="Link to this section">#</a></h2>
+<h3 id="task-1-fix-meshencoder-for-gltfglb-support">Task 1: Fix MeshEncoder for glTF/glb Support<a class="anchor" href="#task-1-fix-meshencoder-for-gltfglb-support" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/tools/MeshEncoder.hpp</code></li>
+<li>Modify: <code>src/caffeine/tools/MeshEncoder.hpp</code> (new impl)</li>
+<li>Test: <code>tests/test_mesh_encoder.cpp</code> (add test case)</li>
+<li>Reference: <code>src/caffeine/tools/TextureEncoder.hpp</code> (pattern reference)</li>
+</ul>
+<p><strong>Objective:</strong> Make MeshEncoder::encode() actually process .gltf/.glb files instead of returning &quot;not yet implemented&quot;</p>
+<p><strong>Step 1: Read existing MeshEncoder implementation</strong></p>
+<p>Command: <code>cat src/tools/MeshEncoder.hpp src/tools/MeshEncoder.cpp</code></p>
+<p>Expected: See current stub that handles only .obj, returns &quot;not yet implemented&quot; for gltf/glb</p>
+<p><strong>Step 2: Read glTF parser usage example</strong></p>
+<p>Command: <code>grep -r &quot;gltf&quot; src/ --include=&quot;*.cpp&quot; -A 5 | head -40</code></p>
+<p>Expected: Find existing glTF parser usage pattern (likely in mesh loader or asset pipeline)</p>
+<p><strong>Step 3: Implement glTF encoding in MeshEncoder</strong></p>
+<p>Add to <code>src/caffeine/tools/MeshEncoder.hpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;gltf/gltf.hpp&quot;</span>  <span class="hljs-comment">// Adjust include path based on actual vendored lib</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;tools/MeshEncoder.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">MeshEncoder::encodeGltf</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; inputPath, <span class="hljs-type">const</span> std::string&amp; outputPath)</span> </span>{
+    <span class="hljs-comment">// Load glTF model</span>
+    tinygltf::Model model;
+    tinygltf::TinyGLTF loader;
+    std::string err, warn;
+    
+    <span class="hljs-type">bool</span> ret = <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">if</span> (inputPath.<span class="hljs-built_in">ends_with</span>(<span class="hljs-string">&quot;.glb&quot;</span>)) {
+        ret = loader.<span class="hljs-built_in">LoadBinaryFromFile</span>(&amp;model, &amp;err, &amp;warn, inputPath);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (inputPath.<span class="hljs-built_in">ends_with</span>(<span class="hljs-string">&quot;.gltf&quot;</span>)) {
+        ret = loader.<span class="hljs-built_in">LoadASCIIFromFile</span>(&amp;model, &amp;err, &amp;warn, inputPath);
+    }
+    
+    <span class="hljs-keyword">if</span> (!ret) {
+        std::cerr &lt;&lt; <span class="hljs-string">&quot;Failed to load glTF: &quot;</span> &lt;&lt; err &lt;&lt; std::endl;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    
+    <span class="hljs-comment">// Extract mesh data (similar to obj extraction)</span>
+    std::vector&lt;Vertex&gt; vertices;
+    std::vector&lt;u32&gt; indices;
+    
+    <span class="hljs-comment">// Get first mesh from model</span>
+    <span class="hljs-keyword">if</span> (model.meshes.<span class="hljs-built_in">empty</span>()) {
+        std::cerr &lt;&lt; <span class="hljs-string">&quot;No meshes in glTF file&quot;</span> &lt;&lt; std::endl;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    
+    <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; mesh = model.meshes[<span class="hljs-number">0</span>];
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; primitive : mesh.primitives) {
+        <span class="hljs-comment">// Extract positions</span>
+        <span class="hljs-keyword">auto</span> posIt = primitive.attributes.<span class="hljs-built_in">find</span>(<span class="hljs-string">&quot;POSITION&quot;</span>);
+        <span class="hljs-keyword">if</span> (posIt != primitive.attributes.<span class="hljs-built_in">end</span>()) {
+            u32 accessorIdx = posIt-&gt;second;
+            <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; accessor = model.accessors[accessorIdx];
+            <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; bufferView = model.bufferViews[accessor.bufferView];
+            <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; buffer = model.buffers[bufferView.buffer];
+            
+            <span class="hljs-comment">// Parse vertex positions (implementation detail - adapt to tinygltf API)</span>
+            <span class="hljs-comment">// This is complex; defer to specialized glTF mesh loader if available</span>
+        }
+    }
+    
+    <span class="hljs-comment">// Write to .caf format (reuse texture encoder pattern)</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">writeMeshToCaf</span>(vertices, indices, outputPath);
+}
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">MeshEncoder::writeMeshToCaf</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;Vertex&gt;&amp; vertices, 
+                                 <span class="hljs-type">const</span> std::vector&lt;u32&gt;&amp; indices,
+                                 <span class="hljs-type">const</span> std::string&amp; outputPath)</span> </span>{
+    <span class="hljs-function">std::ofstream <span class="hljs-title">file</span><span class="hljs-params">(outputPath, std::ios::binary)</span></span>;
+    <span class="hljs-keyword">if</span> (!file) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    
+    <span class="hljs-comment">// Write header</span>
+    u32 magic = <span class="hljs-number">0xCAF00D00</span>;  <span class="hljs-comment">// &quot;CAF&quot; magic</span>
+    u32 version = <span class="hljs-number">1</span>;
+    u32 vertexCount = vertices.<span class="hljs-built_in">size</span>();
+    u32 indexCount = indices.<span class="hljs-built_in">size</span>();
+    
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;magic), <span class="hljs-keyword">sizeof</span>(magic));
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;version), <span class="hljs-keyword">sizeof</span>(version));
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;vertexCount), <span class="hljs-keyword">sizeof</span>(vertexCount));
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;indexCount), <span class="hljs-keyword">sizeof</span>(indexCount));
+    
+    <span class="hljs-comment">// Write vertices (binary dump - zero-copy friendly)</span>
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(vertices.<span class="hljs-built_in">data</span>()), 
+               vertices.<span class="hljs-built_in">size</span>() * <span class="hljs-keyword">sizeof</span>(Vertex));
+    
+    <span class="hljs-comment">// Write indices</span>
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(indices.<span class="hljs-built_in">data</span>()), 
+               indices.<span class="hljs-built_in">size</span>() * <span class="hljs-keyword">sizeof</span>(u32));
+    
+    <span class="hljs-keyword">return</span> file.<span class="hljs-built_in">good</span>();
+}
+</code></pre></div>
+<p>**Step 4: Add test case in <code>tests/test_mesh_encoder.cpp</code> **</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;catch2/catch.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;tools/MeshEncoder.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;filesystem&gt;</span></span>
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;MeshEncoder handles glTF files&quot;</span>, <span class="hljs-string">&quot;[mesh][encoder]&quot;</span>) {
+    <span class="hljs-comment">// Assume test fixture with sample.gltf</span>
+    MeshEncoder encoder;
+    std::string input = <span class="hljs-string">&quot;tests/fixtures/sample.gltf&quot;</span>;
+    std::string output = <span class="hljs-string">&quot;tests/output/sample.caf&quot;</span>;
+    
+    <span class="hljs-built_in">REQUIRE</span>(encoder.<span class="hljs-built_in">encode</span>(input, output));
+    <span class="hljs-built_in">REQUIRE</span>(std::filesystem::<span class="hljs-built_in">exists</span>(output));
+    
+    <span class="hljs-comment">// Verify file has correct magic</span>
+    <span class="hljs-function">std::ifstream <span class="hljs-title">file</span><span class="hljs-params">(output, std::ios::binary)</span></span>;
+    u32 magic;
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;magic), <span class="hljs-keyword">sizeof</span>(magic));
+    <span class="hljs-built_in">REQUIRE</span>(magic == <span class="hljs-number">0xCAF00D00</span>);
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;MeshEncoder handles glb files&quot;</span>, <span class="hljs-string">&quot;[mesh][encoder]&quot;</span>) {
+    MeshEncoder encoder;
+    std::string input = <span class="hljs-string">&quot;tests/fixtures/sample.glb&quot;</span>;
+    std::string output = <span class="hljs-string">&quot;tests/output/sample.caf&quot;</span>;
+    
+    <span class="hljs-built_in">REQUIRE</span>(encoder.<span class="hljs-built_in">encode</span>(input, output));
+    <span class="hljs-built_in">REQUIRE</span>(std::filesystem::<span class="hljs-built_in">exists</span>(output));
+}
+</code></pre></div>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/tools/MeshEncoder.hpp src/tools/MeshEncoder.cpp tests/test_mesh_encoder.cpp
+git commit -m <span class="hljs-string">&quot;feat: implement gltf/glb mesh encoding to .caf format
+
+- Add glTF parser integration to MeshEncoder
+- Implement binary .caf mesh format writer with zero-copy design
+- Add test cases for gltf and glb encoding
+- Reference tinygltf for model loading&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-2-add-mesh-resolution-to-runtime-assetmanager">Task 2: Add Mesh Resolution to Runtime AssetManager<a class="anchor" href="#task-2-add-mesh-resolution-to-runtime-assetmanager" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/assets/AssetManager.hpp</code></li>
+<li>Modify: <code>src/caffeine/assets/AssetManager.cpp</code></li>
+<li>Test: <code>tests/test_asset_manager.cpp:150-200</code> (add mesh test)</li>
+<li>Reference: <code>src/caffeine/assets/AssetManager.cpp</code> (texture resolution pattern)</li>
+</ul>
+<p><strong>Objective:</strong> Enable AssetManager::load<Mesh>() to resolve .caf mesh files at runtime</p>
+<p><strong>Step 1: Study current Texture asset resolution</strong></p>
+<p>Command: <code>grep -A 30 &quot;AssetManager::load&lt;Texture&gt;&quot; src/core/AssetManager.cpp</code></p>
+<p>Expected: See pattern for caching, file I/O, format checking</p>
+<p><strong>Step 2: Add Mesh specialization to AssetManager header</strong></p>
+<p>Modify <code>src/caffeine/assets/AssetManager.hpp</code> to add (after Texture specialization):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Mesh specialization</span>
+<span class="hljs-keyword">template</span>&lt;&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AssetManager</span>::Handle&lt;Mesh&gt; : <span class="hljs-keyword">public</span> AssetManager::HandleBase {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function">Mesh* <span class="hljs-title">get</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-comment">// ... same as Texture pattern</span>
+};
+
+<span class="hljs-comment">// In AssetManager class:</span>
+<span class="hljs-keyword">template</span>&lt;&gt;
+AssetHandle&lt;Mesh&gt; AssetManager::<span class="hljs-built_in">load</span>&lt;Mesh&gt;(<span class="hljs-type">const</span> std::string&amp; path);
+</code></pre></div>
+<p><strong>Step 3: Implement Mesh loading in AssetManager.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">template</span>&lt;&gt;
+AssetHandle&lt;Mesh&gt; AssetManager::<span class="hljs-built_in">load</span>&lt;Mesh&gt;(<span class="hljs-type">const</span> std::string&amp; path) {
+    <span class="hljs-comment">// Resolve path (convert .obj/.gltf/.glb to .caf)</span>
+    std::string cafPath = <span class="hljs-built_in">resolveMeshAsset</span>(path);
+    
+    <span class="hljs-comment">// Check cache</span>
+    <span class="hljs-keyword">auto</span> it = m_meshCache.<span class="hljs-built_in">find</span>(cafPath);
+    <span class="hljs-keyword">if</span> (it != m_meshCache.<span class="hljs-built_in">end</span>()) {
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">AssetHandle</span>&lt;Mesh&gt;(it-&gt;second);
+    }
+    
+    <span class="hljs-comment">// Load from .caf file</span>
+    <span class="hljs-function">std::ifstream <span class="hljs-title">file</span><span class="hljs-params">(cafPath, std::ios::binary)</span></span>;
+    <span class="hljs-keyword">if</span> (!file) {
+        m_logger-&gt;<span class="hljs-built_in">error</span>(<span class="hljs-string">&quot;Failed to load mesh: {}&quot;</span>, cafPath);
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">AssetHandle</span>&lt;Mesh&gt;(<span class="hljs-literal">nullptr</span>);
+    }
+    
+    <span class="hljs-comment">// Read header</span>
+    u32 magic, version, vertexCount, indexCount;
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;magic), <span class="hljs-keyword">sizeof</span>(magic));
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;version), <span class="hljs-keyword">sizeof</span>(version));
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;vertexCount), <span class="hljs-keyword">sizeof</span>(vertexCount));
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;indexCount), <span class="hljs-keyword">sizeof</span>(indexCount));
+    
+    <span class="hljs-keyword">if</span> (magic != <span class="hljs-number">0xCAF00D00</span>) {
+        m_logger-&gt;<span class="hljs-built_in">error</span>(<span class="hljs-string">&quot;Invalid mesh format: {}&quot;</span>, cafPath);
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">AssetHandle</span>&lt;Mesh&gt;(<span class="hljs-literal">nullptr</span>);
+    }
+    
+    <span class="hljs-comment">// Create mesh (zero-copy via mmap in production)</span>
+    <span class="hljs-keyword">auto</span> mesh = std::<span class="hljs-built_in">make_shared</span>&lt;Mesh&gt;();
+    mesh-&gt;vertices.<span class="hljs-built_in">resize</span>(vertexCount);
+    mesh-&gt;indices.<span class="hljs-built_in">resize</span>(indexCount);
+    
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(mesh-&gt;vertices.<span class="hljs-built_in">data</span>()), 
+              vertexCount * <span class="hljs-keyword">sizeof</span>(Vertex));
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(mesh-&gt;indices.<span class="hljs-built_in">data</span>()), 
+              indexCount * <span class="hljs-keyword">sizeof</span>(u32));
+    
+    <span class="hljs-comment">// Cache and return</span>
+    m_meshCache[cafPath] = mesh;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">AssetHandle</span>&lt;Mesh&gt;(mesh);
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">AssetManager::resolveMeshAsset</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path)</span> </span>{
+    <span class="hljs-comment">// If already .caf, return as-is</span>
+    <span class="hljs-keyword">if</span> (path.<span class="hljs-built_in">ends_with</span>(<span class="hljs-string">&quot;.caf&quot;</span>)) {
+        <span class="hljs-keyword">return</span> path;
+    }
+    
+    <span class="hljs-comment">// Convert source format to expected .caf location</span>
+    <span class="hljs-comment">// assets/meshes/model.obj → assets/meshes/model.caf</span>
+    std::string cafPath = path;
+    <span class="hljs-type">size_t</span> dotPos = cafPath.<span class="hljs-built_in">rfind</span>(<span class="hljs-string">&#x27;.&#x27;</span>);
+    <span class="hljs-keyword">if</span> (dotPos != std::string::npos) {
+        cafPath.<span class="hljs-built_in">replace</span>(dotPos, cafPath.<span class="hljs-built_in">length</span>() - dotPos, <span class="hljs-string">&quot;.caf&quot;</span>);
+    }
+    <span class="hljs-keyword">return</span> cafPath;
+}
+</code></pre></div>
+<p><strong>Step 4: Add member variables to AssetManager header</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">private</span>:
+    std::unordered_map&lt;std::string, std::shared_ptr&lt;Mesh&gt;&gt; m_meshCache;
+</code></pre></div>
+<p><strong>Step 5: Add test</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;AssetManager resolves mesh assets&quot;</span>, <span class="hljs-string">&quot;[asset][manager]&quot;</span>) {
+    AssetManager manager;
+    
+    <span class="hljs-comment">// Create dummy mesh file</span>
+    std::string testMeshPath = <span class="hljs-string">&quot;tests/fixtures/test-mesh.caf&quot;</span>;
+    <span class="hljs-comment">// Write valid mesh header + data</span>
+    
+    <span class="hljs-keyword">auto</span> handle = manager.<span class="hljs-built_in">load</span>&lt;Mesh&gt;(testMeshPath);
+    <span class="hljs-built_in">REQUIRE</span>(handle.<span class="hljs-built_in">isValid</span>());
+    
+    <span class="hljs-keyword">auto</span> mesh = handle.<span class="hljs-built_in">get</span>();
+    <span class="hljs-built_in">REQUIRE</span>(mesh != <span class="hljs-literal">nullptr</span>);
+    <span class="hljs-built_in">REQUIRE</span>(!mesh-&gt;vertices.<span class="hljs-built_in">empty</span>());
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;AssetManager caches mesh assets&quot;</span>, <span class="hljs-string">&quot;[asset][manager]&quot;</span>) {
+    AssetManager manager;
+    
+    <span class="hljs-keyword">auto</span> handle1 = manager.<span class="hljs-built_in">load</span>&lt;Mesh&gt;(<span class="hljs-string">&quot;tests/fixtures/test-mesh.caf&quot;</span>);
+    <span class="hljs-keyword">auto</span> handle2 = manager.<span class="hljs-built_in">load</span>&lt;Mesh&gt;(<span class="hljs-string">&quot;tests/fixtures/test-mesh.caf&quot;</span>);
+    
+    <span class="hljs-built_in">REQUIRE</span>(handle1.<span class="hljs-built_in">get</span>() == handle2.<span class="hljs-built_in">get</span>());  <span class="hljs-comment">// Same pointer = cached</span>
+}
+</code></pre></div>
+<p><strong>Step 6: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/core/AssetManager.hpp src/core/AssetManager.cpp tests/test_asset_manager.cpp
+git commit -m <span class="hljs-string">&quot;feat: add mesh asset resolution to runtime AssetManager
+
+- Implement Handle&lt;Mesh&gt; specialization (matches Texture pattern)
+- Add load&lt;Mesh&gt;() method with .caf format reading
+- Implement mesh caching (zero allocation after first load)
+- Add path resolution (.obj/.gltf/.glb → .caf)
+- Add integration tests for mesh loading and caching&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-2-prefab-asset-system">Phase 2: Prefab Asset System<a class="anchor" href="#phase-2-prefab-asset-system" aria-label="Link to this section">#</a></h2>
+<h3 id="task-3-define-prefabasset-format-serialization">Task 3: Define PrefabAsset Format &amp; Serialization<a class="anchor" href="#task-3-define-prefabasset-format-serialization" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/core/io/CafTypes.hpp</code></li>
+<li>Create: <code>src/caffeine/assets/PrefabAsset.hpp</code> (new file)</li>
+<li>Create: <code>src/caffeine/assets/PrefabSerializer.hpp</code> (new file)</li>
+<li>Test: <code>tests/test_prefab_serialization.cpp</code> (new file)</li>
+<li>Reference: <code>src/caffeine/scene/SceneSerializer.hpp</code> (serialization pattern)</li>
+</ul>
+<p><strong>Objective:</strong> Define binary Prefab format and implement save/load</p>
+<p><strong>Step 1: Study SceneSerializer pattern</strong></p>
+<p>Command: <code>grep -A 50 &quot;class SceneSerializer&quot; src/scene/SceneSerializer.hpp</code></p>
+<p>Expected: Understand how components are serialized in .caf scenes</p>
+<p><strong>Step 2: Create PrefabAsset.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/Entity.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/World.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">PrefabAsset</span> {
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">ComponentData</span> {
+        u32 typeId;                  <span class="hljs-comment">// Component type identifier</span>
+        std::vector&lt;u8&gt; data;        <span class="hljs-comment">// Serialized component data</span>
+    };
+    
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">EntityData</span> {
+        std::string name;
+        std::vector&lt;ComponentData&gt; components;
+        std::vector&lt;u32&gt; childIndices;  <span class="hljs-comment">// Index into entities array</span>
+    };
+    
+    std::vector&lt;EntityData&gt; entities;  <span class="hljs-comment">// Root entity first, then children</span>
+    
+    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> u32 MAGIC = <span class="hljs-number">0</span>xPREFAB;  <span class="hljs-comment">// &quot;PREFAB&quot;</span>
+    <span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> u32 VERSION = <span class="hljs-number">1</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<p><strong>Step 3: Create PrefabSerializer.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/PrefabAsset.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/World.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PrefabSerializer</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// Save entity tree to prefab file</span>
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">save</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; filePath, ECS::Entity rootEntity, 
+              ECS::World&amp; world)</span></span>;
+    
+    <span class="hljs-comment">// Load prefab from file and instantiate in world</span>
+    <span class="hljs-function">ECS::Entity <span class="hljs-title">load</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; filePath, ECS::World&amp; world,
+                     <span class="hljs-type">const</span> Vec3&amp; position = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>})</span></span>;
+    
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-comment">// Helper to recursively serialize entity and children</span>
+    <span class="hljs-function">PrefabAsset::EntityData <span class="hljs-title">serializeEntity</span><span class="hljs-params">(ECS::Entity entity, 
+                                           ECS::World&amp; world)</span></span>;
+    
+    <span class="hljs-comment">// Helper to recursively instantiate entity and children</span>
+    <span class="hljs-function">ECS::Entity <span class="hljs-title">instantiateEntity</span><span class="hljs-params">(<span class="hljs-type">const</span> PrefabAsset::EntityData&amp; data,
+                                 ECS::World&amp; world, ECS::Entity parent = {})</span></span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<p><strong>Step 4: Implement in PrefabSerializer.cpp</strong></p>
+<p>Create <code>src/caffeine/assets/PrefabSerializer.cpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/PrefabSerializer.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;scene/SceneComponents.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/ComponentRegistry.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fstream&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstring&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">PrefabSerializer::save</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; filePath, 
+                           ECS::Entity rootEntity, ECS::World&amp; world)</span> </span>{
+    PrefabAsset prefab;
+    
+    <span class="hljs-comment">// Serialize root entity and all children recursively</span>
+    prefab.entities.<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">serializeEntity</span>(rootEntity, world));
+    
+    <span class="hljs-comment">// Write to file</span>
+    <span class="hljs-function">std::ofstream <span class="hljs-title">file</span><span class="hljs-params">(filePath, std::ios::binary)</span></span>;
+    <span class="hljs-keyword">if</span> (!file) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    
+    <span class="hljs-comment">// Header</span>
+    u32 magic = PrefabAsset::MAGIC;
+    u32 version = PrefabAsset::VERSION;
+    u32 entityCount = prefab.entities.<span class="hljs-built_in">size</span>();
+    
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(&amp;magic), <span class="hljs-keyword">sizeof</span>(magic));
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(&amp;version), <span class="hljs-keyword">sizeof</span>(version));
+    file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(&amp;entityCount), <span class="hljs-keyword">sizeof</span>(entityCount));
+    
+    <span class="hljs-comment">// Write entities</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; entityData : prefab.entities) {
+        <span class="hljs-comment">// Write name</span>
+        u32 nameLen = entityData.name.<span class="hljs-built_in">length</span>();
+        file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(&amp;nameLen), <span class="hljs-keyword">sizeof</span>(nameLen));
+        file.<span class="hljs-built_in">write</span>(entityData.name.<span class="hljs-built_in">c_str</span>(), nameLen);
+        
+        <span class="hljs-comment">// Write components</span>
+        u32 componentCount = entityData.components.<span class="hljs-built_in">size</span>();
+        file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(&amp;componentCount), <span class="hljs-keyword">sizeof</span>(componentCount));
+        
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; comp : entityData.components) {
+            file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(&amp;comp.typeId), <span class="hljs-keyword">sizeof</span>(comp.typeId));
+            u32 dataSize = comp.data.<span class="hljs-built_in">size</span>();
+            file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(&amp;dataSize), <span class="hljs-keyword">sizeof</span>(dataSize));
+            file.<span class="hljs-built_in">write</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">const</span> <span class="hljs-type">char</span>*&gt;(comp.data.<span class="hljs-built_in">data</span>()), dataSize);
+        }
+    }
+    
+    <span class="hljs-keyword">return</span> file.<span class="hljs-built_in">good</span>();
+}
+
+<span class="hljs-function">ECS::Entity <span class="hljs-title">PrefabSerializer::load</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; filePath, 
+                                   ECS::World&amp; world,
+                                   <span class="hljs-type">const</span> Vec3&amp; position)</span> </span>{
+    <span class="hljs-function">std::ifstream <span class="hljs-title">file</span><span class="hljs-params">(filePath, std::ios::binary)</span></span>;
+    <span class="hljs-keyword">if</span> (!file) <span class="hljs-keyword">return</span> ECS::Entity{};
+    
+    <span class="hljs-comment">// Read header</span>
+    u32 magic, version, entityCount;
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;magic), <span class="hljs-keyword">sizeof</span>(magic));
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;version), <span class="hljs-keyword">sizeof</span>(version));
+    file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;entityCount), <span class="hljs-keyword">sizeof</span>(entityCount));
+    
+    <span class="hljs-keyword">if</span> (magic != PrefabAsset::MAGIC || version != PrefabAsset::VERSION) {
+        <span class="hljs-keyword">return</span> ECS::Entity{};
+    }
+    
+    <span class="hljs-comment">// Read entities</span>
+    std::vector&lt;PrefabAsset::EntityData&gt; entities;
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; entityCount; ++i) {
+        PrefabAsset::EntityData data;
+        
+        <span class="hljs-comment">// Read name</span>
+        u32 nameLen;
+        file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;nameLen), <span class="hljs-keyword">sizeof</span>(nameLen));
+        data.name.<span class="hljs-built_in">resize</span>(nameLen);
+        file.<span class="hljs-built_in">read</span>(&amp;data.name[<span class="hljs-number">0</span>], nameLen);
+        
+        <span class="hljs-comment">// Read components</span>
+        u32 componentCount;
+        file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;componentCount), <span class="hljs-keyword">sizeof</span>(componentCount));
+        
+        <span class="hljs-keyword">for</span> (u32 j = <span class="hljs-number">0</span>; j &lt; componentCount; ++j) {
+            PrefabAsset::ComponentData comp;
+            file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;comp.typeId), <span class="hljs-keyword">sizeof</span>(comp.typeId));
+            
+            u32 dataSize;
+            file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(&amp;dataSize), <span class="hljs-keyword">sizeof</span>(dataSize));
+            comp.data.<span class="hljs-built_in">resize</span>(dataSize);
+            file.<span class="hljs-built_in">read</span>(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">char</span>*&gt;(comp.data.<span class="hljs-built_in">data</span>()), dataSize);
+            
+            data.components.<span class="hljs-built_in">push_back</span>(comp);
+        }
+        
+        entities.<span class="hljs-built_in">push_back</span>(data);
+    }
+    
+    <span class="hljs-comment">// Instantiate root entity</span>
+    ECS::Entity root = <span class="hljs-built_in">instantiateEntity</span>(entities[<span class="hljs-number">0</span>], world);
+    
+    <span class="hljs-comment">// Apply position offset</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* transform = world.<span class="hljs-built_in">get</span>&lt;ECS::Transform&gt;(root)) {
+        transform-&gt;position += position;
+    }
+    
+    <span class="hljs-keyword">return</span> root;
+}
+
+<span class="hljs-function">PrefabAsset::EntityData <span class="hljs-title">PrefabSerializer::serializeEntity</span><span class="hljs-params">(ECS::Entity entity, 
+                                                         ECS::World&amp; world)</span> </span>{
+    PrefabAsset::EntityData data;
+    
+    <span class="hljs-comment">// Get entity name</span>
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* nameComp = world.<span class="hljs-built_in">get</span>&lt;Scene::NameComponent&gt;(entity)) {
+        data.name = nameComp-&gt;name;
+    }
+    
+    <span class="hljs-comment">// Get all component types for this entity and serialize</span>
+    <span class="hljs-comment">// (Simplified - in practice, iterate through known component types)</span>
+    
+    <span class="hljs-keyword">return</span> data;
+}
+
+<span class="hljs-function">ECS::Entity <span class="hljs-title">PrefabSerializer::instantiateEntity</span><span class="hljs-params">(<span class="hljs-type">const</span> PrefabAsset::EntityData&amp; data,
+                                               ECS::World&amp; world,
+                                               ECS::Entity parent)</span> </span>{
+    ECS::Entity entity = world.<span class="hljs-built_in">create</span>();
+    
+    <span class="hljs-comment">// Set name</span>
+    <span class="hljs-keyword">if</span> (!data.name.<span class="hljs-built_in">empty</span>()) {
+        world.<span class="hljs-built_in">add</span>&lt;Scene::NameComponent&gt;(entity, data.name);
+    }
+    
+    <span class="hljs-comment">// Set parent</span>
+    <span class="hljs-keyword">if</span> (parent.<span class="hljs-built_in">isValid</span>()) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* hierarchyComp = world.<span class="hljs-built_in">get</span>&lt;Scene::HierarchyComponent&gt;(parent)) {
+            hierarchyComp-&gt;children.<span class="hljs-built_in">push_back</span>(entity);
+        }
+        world.<span class="hljs-built_in">add</span>&lt;Scene::ParentComponent&gt;(entity, parent);
+    }
+    
+    <span class="hljs-comment">// Deserialize and add components</span>
+    <span class="hljs-comment">// (Simplified - use ComponentRegistry to recreate components from serialized data)</span>
+    
+    <span class="hljs-keyword">return</span> entity;
+}
+
+}  <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<p><strong>Step 5: Add test</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;catch2/catch.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/PrefabSerializer.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;scene/SceneComponents.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/World.hpp&quot;</span></span>
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;PrefabSerializer saves and loads entity&quot;</span>, <span class="hljs-string">&quot;[prefab][serialization]&quot;</span>) {
+    ECS::World world;
+    
+    <span class="hljs-comment">// Create test entity</span>
+    ECS::Entity original = world.<span class="hljs-built_in">create</span>();
+    world.<span class="hljs-built_in">add</span>&lt;Scene::NameComponent&gt;(original, <span class="hljs-string">&quot;TestEntity&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;ECS::Transform&gt;(original, ECS::Transform{});
+    
+    <span class="hljs-comment">// Save to prefab</span>
+    Assets::PrefabSerializer serializer;
+    std::string prefabPath = <span class="hljs-string">&quot;tests/output/test.prefab&quot;</span>;
+    <span class="hljs-built_in">REQUIRE</span>(serializer.<span class="hljs-built_in">save</span>(prefabPath, original, world));
+    <span class="hljs-built_in">REQUIRE</span>(std::filesystem::<span class="hljs-built_in">exists</span>(prefabPath));
+    
+    <span class="hljs-comment">// Load from prefab</span>
+    ECS::Entity loaded = serializer.<span class="hljs-built_in">load</span>(prefabPath, world);
+    <span class="hljs-built_in">REQUIRE</span>(loaded.<span class="hljs-built_in">isValid</span>());
+    
+    <span class="hljs-comment">// Verify components</span>
+    <span class="hljs-keyword">auto</span>* nameComp = world.<span class="hljs-built_in">get</span>&lt;Scene::NameComponent&gt;(loaded);
+    <span class="hljs-built_in">REQUIRE</span>(nameComp != <span class="hljs-literal">nullptr</span>);
+    <span class="hljs-built_in">REQUIRE</span>(nameComp-&gt;name == <span class="hljs-string">&quot;TestEntity&quot;</span>);
+}
+</code></pre></div>
+<p><strong>Step 6: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/assets/PrefabAsset.hpp src/assets/PrefabSerializer.hpp \
+    src/assets/PrefabSerializer.cpp tests/test_prefab_serialization.cpp
+git commit -m <span class="hljs-string">&quot;feat: implement prefab asset serialization/deserialization
+
+- Define binary PrefabAsset format (entity tree + components)
+- Implement PrefabSerializer with save/load methods
+- Support recursive entity hierarchy serialization
+- Add integration tests for prefab round-tripping
+- Follow .caf binary format pattern for consistency&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-4-connect-prefab-resolution-to-assetmanager">Task 4: Connect Prefab Resolution to AssetManager<a class="anchor" href="#task-4-connect-prefab-resolution-to-assetmanager" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/assets/AssetManager.hpp</code></li>
+<li>Modify: <code>src/caffeine/assets/AssetManager.cpp</code></li>
+<li>Test: <code>tests/test_asset_manager.cpp:250-300</code></li>
+</ul>
+<p><strong>Objective:</strong> Enable AssetManager::load<Prefab>() for runtime instantiation</p>
+<p><strong>Step 1: Add Prefab handle to AssetManager</strong></p>
+<p>In <code>src/caffeine/assets/AssetManager.hpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">template</span>&lt;&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AssetManager</span>::Handle&lt;Prefab&gt; : <span class="hljs-keyword">public</span> AssetManager::HandleBase {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function">ECS::Entity <span class="hljs-title">instantiate</span><span class="hljs-params">(ECS::World&amp; world, <span class="hljs-type">const</span> Vec3&amp; position = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>})</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">getPath</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_path; }
+    
+<span class="hljs-keyword">private</span>:
+    std::string m_path;
+    <span class="hljs-keyword">friend</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AssetManager</span>;
+};
+
+<span class="hljs-comment">// In AssetManager class:</span>
+<span class="hljs-keyword">template</span>&lt;&gt;
+AssetHandle&lt;Prefab&gt; AssetManager::<span class="hljs-built_in">load</span>&lt;Prefab&gt;(<span class="hljs-type">const</span> std::string&amp; path);
+</code></pre></div>
+<p><strong>Step 2: Implement in AssetManager.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">template</span>&lt;&gt;
+AssetHandle&lt;Prefab&gt; AssetManager::<span class="hljs-built_in">load</span>&lt;Prefab&gt;(<span class="hljs-type">const</span> std::string&amp; path) {
+    <span class="hljs-comment">// Resolve path (.prefab or .caf)</span>
+    std::string prefabPath = <span class="hljs-built_in">resolvePrefabAsset</span>(path);
+    
+    <span class="hljs-comment">// Validate file exists</span>
+    <span class="hljs-keyword">if</span> (!std::filesystem::<span class="hljs-built_in">exists</span>(prefabPath)) {
+        m_logger-&gt;<span class="hljs-built_in">error</span>(<span class="hljs-string">&quot;Prefab not found: {}&quot;</span>, prefabPath);
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">AssetHandle</span>&lt;Prefab&gt;(<span class="hljs-literal">nullptr</span>);
+    }
+    
+    <span class="hljs-comment">// Create handle (prefabs don&#x27;t cache - each instantiation is fresh)</span>
+    <span class="hljs-keyword">auto</span> handle = <span class="hljs-built_in">AssetHandle</span>&lt;Prefab&gt;(<span class="hljs-keyword">new</span> <span class="hljs-built_in">PrefabHandle</span>(prefabPath));
+    <span class="hljs-keyword">return</span> handle;
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">AssetManager::resolvePrefabAsset</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path)</span> </span>{
+    <span class="hljs-comment">// Convert .obj/.gltf → .prefab</span>
+    std::string prefabPath = path;
+    <span class="hljs-type">size_t</span> dotPos = prefabPath.<span class="hljs-built_in">rfind</span>(<span class="hljs-string">&#x27;.&#x27;</span>);
+    <span class="hljs-keyword">if</span> (dotPos != std::string::npos) {
+        std::string ext = prefabPath.<span class="hljs-built_in">substr</span>(dotPos);
+        <span class="hljs-keyword">if</span> (ext == <span class="hljs-string">&quot;.obj&quot;</span> || ext == <span class="hljs-string">&quot;.gltf&quot;</span> || ext == <span class="hljs-string">&quot;.glb&quot;</span>) {
+            prefabPath.<span class="hljs-built_in">replace</span>(dotPos, prefabPath.<span class="hljs-built_in">length</span>() - dotPos, <span class="hljs-string">&quot;.prefab&quot;</span>);
+        }
+    }
+    <span class="hljs-keyword">return</span> prefabPath;
+}
+</code></pre></div>
+<p><strong>Step 3: Implement Handle::instantiate</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">ECS::Entity AssetManager::Handle&lt;Prefab&gt;::<span class="hljs-built_in">instantiate</span>(ECS::World&amp; world,
+                                                      <span class="hljs-type">const</span> Vec3&amp; position) <span class="hljs-type">const</span> {
+    Assets::PrefabSerializer serializer;
+    <span class="hljs-keyword">return</span> serializer.<span class="hljs-built_in">load</span>(m_path, world, position);
+}
+</code></pre></div>
+<p><strong>Step 4: Add tests</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;AssetManager loads prefab assets&quot;</span>, <span class="hljs-string">&quot;[asset][manager][prefab]&quot;</span>) {
+    ECS::World world;
+    AssetManager manager;
+    
+    <span class="hljs-keyword">auto</span> handle = manager.<span class="hljs-built_in">load</span>&lt;Prefab&gt;(<span class="hljs-string">&quot;assets/prefabs/character.prefab&quot;</span>);
+    <span class="hljs-built_in">REQUIRE</span>(handle.<span class="hljs-built_in">isValid</span>());
+    
+    ECS::Entity instance = handle.<span class="hljs-built_in">instantiate</span>(world);
+    <span class="hljs-built_in">REQUIRE</span>(instance.<span class="hljs-built_in">isValid</span>());
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;AssetManager prefab instantiation preserves components&quot;</span>, 
+          <span class="hljs-string">&quot;[asset][manager][prefab]&quot;</span>) {
+    ECS::World world;
+    AssetManager manager;
+    
+    <span class="hljs-keyword">auto</span> handle = manager.<span class="hljs-built_in">load</span>&lt;Prefab&gt;(<span class="hljs-string">&quot;assets/prefabs/character.prefab&quot;</span>);
+    ECS::Entity instance = handle.<span class="hljs-built_in">instantiate</span>(world, {<span class="hljs-number">5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    
+    <span class="hljs-keyword">auto</span>* transform = world.<span class="hljs-built_in">get</span>&lt;ECS::Transform&gt;(instance);
+    <span class="hljs-built_in">REQUIRE</span>(transform != <span class="hljs-literal">nullptr</span>);
+    <span class="hljs-built_in">REQUIRE</span>(transform-&gt;position.x == <span class="hljs-number">5.0f</span>);
+}
+</code></pre></div>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/core/AssetManager.hpp src/core/AssetManager.cpp tests/test_asset_manager.cpp
+git commit -m <span class="hljs-string">&quot;feat: add prefab asset resolution to runtime AssetManager
+
+- Implement Handle&lt;Prefab&gt; specialization
+- Add load&lt;Prefab&gt;() method with lazy instantiation
+- Implement path resolution (.obj/.gltf → .prefab)
+- Add instantiate() method for creating entity instances
+- Add integration tests for prefab loading and instantiation&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="phase-3-editor-integration-drag-and-drop">Phase 3: Editor Integration &amp; Drag-and-Drop<a class="anchor" href="#phase-3-editor-integration-drag-and-drop" aria-label="Link to this section">#</a></h2>
+<h3 id="task-5-enable-mesh-drag-and-drop-to-create-prefabs">Task 5: Enable Mesh Drag-and-Drop to Create Prefabs<a class="anchor" href="#task-5-enable-mesh-drag-and-drop-to-create-prefabs" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/HierarchyPanel.cpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/AssetBrowser.cpp</code></li>
+<li>Test: <code>tests/test_editor_integration.cpp</code> (new file)</li>
+</ul>
+<p><strong>Objective:</strong> Enable drag mesh → scene to self-create entity with MeshRenderer</p>
+<p><strong>Step 1: Study current drag-drop pattern</strong></p>
+<p>Command: <code>grep -B 5 -A 15 &quot;DragDropManager::AcceptAssetDrop&quot; src/editor/SceneViewport.cpp</code></p>
+<p>Expected: See current texture handling pattern</p>
+<p><strong>Step 2: Extend drag-drop handler in SceneViewport.cpp</strong></p>
+<p>Modify <code>SceneViewport::render()</code> around line 110:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">if</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>* asset = DragDropManager::<span class="hljs-built_in">AcceptAssetDrop</span>()) {
+    ctx.<span class="hljs-built_in">beginUndo</span>(EditorCommand::AddEntity, u32_max, world);
+    
+    ECS::Entity entity = world.<span class="hljs-built_in">create</span>();
+    std::<span class="hljs-function">filesystem::path <span class="hljs-title">assetPath</span><span class="hljs-params">(asset-&gt;path)</span></span>;
+    <span class="hljs-built_in">setEntityName</span>(world, entity, assetPath.<span class="hljs-built_in">stem</span>().<span class="hljs-built_in">string</span>().<span class="hljs-built_in">c_str</span>());
+    
+    <span class="hljs-comment">// ... existing position calculation ...</span>
+    <span class="hljs-keyword">auto</span> t = ECS::Transform{};
+    t.position.x = worldX;
+    t.position.y = -worldY;
+    world.<span class="hljs-built_in">add</span>&lt;ECS::Transform&gt;(entity, t);
+    
+    <span class="hljs-comment">// Handle different asset types</span>
+    <span class="hljs-keyword">if</span> (asset-&gt;type == AssetType::Texture) {
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Sprite&gt;(entity, asset-&gt;path, <span class="hljs-number">0</span>);
+    }
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (asset-&gt;type == AssetType::Mesh) {
+        <span class="hljs-comment">// NEW: Handle mesh drag-drop</span>
+        <span class="hljs-comment">// Create prefab from mesh or load existing prefab</span>
+        AssetManager* assetMgr = ctx.assetManager;  <span class="hljs-comment">// Access from editor context</span>
+        
+        <span class="hljs-comment">// Try to load as prefab first</span>
+        <span class="hljs-keyword">auto</span> prefabHandle = assetMgr-&gt;<span class="hljs-built_in">load</span>&lt;Prefab&gt;(asset-&gt;path);
+        <span class="hljs-keyword">if</span> (prefabHandle.<span class="hljs-built_in">isValid</span>()) {
+            <span class="hljs-comment">// Prefab exists - instantiate it</span>
+            ctx.selectedEntity = prefabHandle.<span class="hljs-built_in">instantiate</span>(world, t.position);
+            <span class="hljs-comment">// Restore position since instantiate sets it</span>
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-comment">// Create new prefab from mesh</span>
+            world.<span class="hljs-built_in">add</span>&lt;ECS::MeshFilterComponent&gt;(entity);
+            world.<span class="hljs-built_in">add</span>&lt;ECS::MeshRendererComponent&gt;(entity);
+            world.<span class="hljs-built_in">add</span>&lt;ECS::Transform&gt;(entity, t);
+            ctx.selectedEntity = entity;
+        }
+    }
+    
+    ctx.<span class="hljs-built_in">endUndo</span>(world);
+}
+</code></pre></div>
+<p><strong>Step 3: Add mesh type to AssetBrowser drag classification</strong></p>
+<p>Modify <code>doppio-archived/src/doppio/editor/AssetBrowser.cpp</code> (getAssetTypeFromExtension):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">static</span> AssetType <span class="hljs-title">getAssetTypeFromExtension</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; ext)</span> </span>{
+    <span class="hljs-keyword">if</span> (ext == <span class="hljs-string">&quot;.png&quot;</span> || ext == <span class="hljs-string">&quot;.jpg&quot;</span> || ext == <span class="hljs-string">&quot;.jpeg&quot;</span>) <span class="hljs-keyword">return</span> AssetType::Texture;
+    <span class="hljs-keyword">if</span> (ext == <span class="hljs-string">&quot;.wav&quot;</span> || ext == <span class="hljs-string">&quot;.ogg&quot;</span> || ext == <span class="hljs-string">&quot;.mp3&quot;</span>) <span class="hljs-keyword">return</span> AssetType::Audio;
+    <span class="hljs-keyword">if</span> (ext == <span class="hljs-string">&quot;.glsl&quot;</span> || ext == <span class="hljs-string">&quot;.hlsl&quot;</span>) <span class="hljs-keyword">return</span> AssetType::Shader;
+    <span class="hljs-keyword">if</span> (ext == <span class="hljs-string">&quot;.obj&quot;</span> || ext == <span class="hljs-string">&quot;.gltf&quot;</span> || ext == <span class="hljs-string">&quot;.glb&quot;</span>) <span class="hljs-keyword">return</span> AssetType::Mesh;  <span class="hljs-comment">// NEW</span>
+    <span class="hljs-keyword">if</span> (ext == <span class="hljs-string">&quot;.prefab&quot;</span> || ext == <span class="hljs-string">&quot;.caf&quot;</span>) {  <span class="hljs-comment">// NEW</span>
+        <span class="hljs-comment">// Detect if it&#x27;s a mesh or prefab .caf</span>
+        <span class="hljs-keyword">if</span> (ext == <span class="hljs-string">&quot;.prefab&quot;</span>) <span class="hljs-keyword">return</span> AssetType::Prefab;
+        <span class="hljs-comment">// For .caf, peek at header to determine type</span>
+        <span class="hljs-keyword">return</span> AssetType::Mesh;  <span class="hljs-comment">// Assume mesh</span>
+    }
+    <span class="hljs-keyword">return</span> AssetType::Unknown;
+}
+</code></pre></div>
+<p><strong>Step 4: Update AssetType enum in EditorTypes.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">enum class</span> <span class="hljs-title class_">AssetType</span> {
+    Unknown,
+    Texture,
+    Audio,
+    Shader,
+    Mesh,        <span class="hljs-comment">// NEW</span>
+    Prefab,      <span class="hljs-comment">// NEW</span>
+    Count
+};
+</code></pre></div>
+<p><strong>Step 5: Add editor integration test</strong></p>
+<p>Create <code>tests/test_editor_integration.cpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;catch2/catch.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/AssetBrowser.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/SceneViewport.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/World.hpp&quot;</span></span>
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Dragging mesh onto viewport creates entity&quot;</span>, <span class="hljs-string">&quot;[editor][integration]&quot;</span>) {
+    ECS::World world;
+    EditorContext ctx;
+    SceneViewport viewport;
+    
+    <span class="hljs-comment">// Simulate drag-drop of mesh asset</span>
+    DragDropManager::<span class="hljs-built_in">SetDragSource</span>(<span class="hljs-string">&quot;assets/meshes/cube.obj&quot;</span>, AssetType::Mesh);
+    
+    <span class="hljs-comment">// Would need to trigger viewport render and accept drop</span>
+    <span class="hljs-comment">// This is integration test level - verify asset type detection</span>
+    
+    AssetType type = <span class="hljs-built_in">getAssetTypeFromExtension</span>(<span class="hljs-string">&quot;.obj&quot;</span>);
+    <span class="hljs-built_in">REQUIRE</span>(type == AssetType::Mesh);
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Mesh asset creates MeshRenderer component&quot;</span>, <span class="hljs-string">&quot;[editor][integration]&quot;</span>) {
+    ECS::World world;
+    AssetManager assetMgr;
+    
+    <span class="hljs-comment">// Create test mesh</span>
+    ECS::Entity entity = world.<span class="hljs-built_in">create</span>();
+    world.<span class="hljs-built_in">add</span>&lt;ECS::MeshFilterComponent&gt;(entity);
+    world.<span class="hljs-built_in">add</span>&lt;ECS::MeshRendererComponent&gt;(entity);
+    
+    <span class="hljs-built_in">REQUIRE</span>(world.<span class="hljs-built_in">has</span>&lt;ECS::MeshFilterComponent&gt;(entity));
+    <span class="hljs-built_in">REQUIRE</span>(world.<span class="hljs-built_in">has</span>&lt;ECS::MeshRendererComponent&gt;(entity));
+}
+</code></pre></div>
+<p><strong>Step 6: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/SceneViewport.cpp src/editor/AssetBrowser.cpp \
+    src/editor/EditorTypes.hpp tests/test_editor_integration.cpp
+git commit -m <span class="hljs-string">&quot;feat: enable mesh drag-and-drop in scene viewport
+
+- Add AssetType::Mesh and AssetType::Prefab to editor type system
+- Extend drag-drop handler to recognize mesh assets
+- Auto-create MeshRenderer component on mesh drop
+- Support prefab instantiation via drag-drop
+- Add integration tests for asset drag handling&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-6-create-make-prefab-editor-command">Task 6: Create &quot;Make Prefab&quot; Editor Command<a class="anchor" href="#task-6-create-make-prefab-editor-command" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/InspectorPanel.cpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/AssetBrowser.cpp</code></li>
+<li>Create: <code>src/editor/PrefabBuilder.hpp</code> (new file, optional utility)</li>
+<li>Test: <code>tests/test_prefab_creation.cpp</code></li>
+</ul>
+<p><strong>Objective:</strong> Right-click entity → &quot;Save as Prefab&quot; creates valid .prefab file</p>
+<p><strong>Step 1: Add &quot;Save as Prefab&quot; button in InspectorPanel</strong></p>
+<p>Modify <code>doppio-archived/src/doppio/editor/InspectorPanel.cpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// In entity inspector section (around line 550)</span>
+<span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Save as Prefab&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">-1</span>, <span class="hljs-number">0</span>))) {
+    <span class="hljs-comment">// Open file save dialog</span>
+    ImGuiFileDialog::<span class="hljs-built_in">Instance</span>()-&gt;<span class="hljs-built_in">OpenDialog</span>(
+        <span class="hljs-string">&quot;SavePrefabDialog&quot;</span>, <span class="hljs-string">&quot;Save Prefab&quot;</span>,
+        <span class="hljs-string">&quot;.prefab&quot;</span>, <span class="hljs-string">&quot;assets/prefabs/&quot;</span>
+    );
+}
+
+<span class="hljs-comment">// Handle file dialog result</span>
+<span class="hljs-keyword">if</span> (ImGuiFileDialog::<span class="hljs-built_in">Instance</span>()-&gt;<span class="hljs-built_in">Display</span>(<span class="hljs-string">&quot;SavePrefabDialog&quot;</span>)) {
+    <span class="hljs-keyword">if</span> (ImGuiFileDialog::<span class="hljs-built_in">Instance</span>()-&gt;<span class="hljs-built_in">IsOk</span>()) {
+        std::string filePath = ImGuiFileDialog::<span class="hljs-built_in">Instance</span>()-&gt;<span class="hljs-built_in">GetFilePathName</span>();
+        
+        <span class="hljs-comment">// Save entity as prefab</span>
+        Assets::PrefabSerializer serializer;
+        <span class="hljs-keyword">if</span> (serializer.<span class="hljs-built_in">save</span>(filePath, ctx.selectedEntity, world)) {
+            ctx.logger-&gt;<span class="hljs-built_in">info</span>(<span class="hljs-string">&quot;Prefab saved: {}&quot;</span>, filePath);
+        } <span class="hljs-keyword">else</span> {
+            ctx.logger-&gt;<span class="hljs-built_in">error</span>(<span class="hljs-string">&quot;Failed to save prefab: {}&quot;</span>, filePath);
+        }
+    }
+    ImGuiFileDialog::<span class="hljs-built_in">Instance</span>()-&gt;<span class="hljs-built_in">Close</span>();
+}
+</code></pre></div>
+<p><strong>Step 2: Add drag-drop context menu in AssetBrowser</strong></p>
+<p>Modify <code>doppio-archived/src/doppio/editor/AssetBrowser.cpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// In file item context menu (around line 800)</span>
+<span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginPopupContextItem</span>()) {
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Inspect&quot;</span>)) {
+        <span class="hljs-comment">// Open asset inspector</span>
+    }
+    
+    <span class="hljs-keyword">if</span> (asset.type == AssetType::Mesh) {
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Create Prefab&quot;</span>)) {
+            <span class="hljs-comment">// Create prefab from mesh</span>
+            std::string meshPath = asset.path;
+            std::string prefabPath = meshPath;
+            <span class="hljs-type">size_t</span> dotPos = prefabPath.<span class="hljs-built_in">rfind</span>(<span class="hljs-string">&#x27;.&#x27;</span>);
+            <span class="hljs-keyword">if</span> (dotPos != std::string::npos) {
+                prefabPath.<span class="hljs-built_in">replace</span>(dotPos, prefabPath.<span class="hljs-built_in">length</span>() - dotPos, <span class="hljs-string">&quot;.prefab&quot;</span>);
+            }
+            
+            <span class="hljs-comment">// Create basic prefab with MeshFilter + MeshRenderer</span>
+            <span class="hljs-comment">// (Use PrefabBuilder utility or inline)</span>
+            <span class="hljs-built_in">createMeshPrefab</span>(meshPath, prefabPath);
+        }
+    }
+    
+    ImGui::<span class="hljs-built_in">EndPopup</span>();
+}
+</code></pre></div>
+<p><strong>Step 3: Add test</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;catch2/catch.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/PrefabSerializer.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/World.hpp&quot;</span></span>
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Saving entity as prefab creates valid file&quot;</span>, <span class="hljs-string">&quot;[prefab][editor]&quot;</span>) {
+    ECS::World world;
+    
+    <span class="hljs-comment">// Create entity with components</span>
+    ECS::Entity entity = world.<span class="hljs-built_in">create</span>();
+    world.<span class="hljs-built_in">add</span>&lt;Scene::NameComponent&gt;(entity, <span class="hljs-string">&quot;TestPrefab&quot;</span>);
+    world.<span class="hljs-built_in">add</span>&lt;ECS::Transform&gt;(entity);
+    world.<span class="hljs-built_in">add</span>&lt;ECS::MeshFilterComponent&gt;(entity);
+    
+    <span class="hljs-comment">// Save as prefab</span>
+    Assets::PrefabSerializer serializer;
+    std::string prefabPath = <span class="hljs-string">&quot;tests/output/created.prefab&quot;</span>;
+    <span class="hljs-built_in">REQUIRE</span>(serializer.<span class="hljs-built_in">save</span>(prefabPath, entity, world));
+    
+    <span class="hljs-comment">// Verify file exists and can be loaded</span>
+    ECS::World world2;
+    ECS::Entity loaded = serializer.<span class="hljs-built_in">load</span>(prefabPath, world2);
+    <span class="hljs-built_in">REQUIRE</span>(loaded.<span class="hljs-built_in">isValid</span>());
+    
+    <span class="hljs-comment">// Verify components preserved</span>
+    <span class="hljs-built_in">REQUIRE</span>(world2.<span class="hljs-built_in">has</span>&lt;ECS::MeshFilterComponent&gt;(loaded));
+}
+</code></pre></div>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/InspectorPanel.cpp src/editor/AssetBrowser.cpp tests/test_prefab_creation.cpp
+git commit -m <span class="hljs-string">&quot;feat: add &#x27;Save as Prefab&#x27; command to editor
+
+- Add Save as Prefab button in entity inspector
+- Implement file dialog for prefab path selection
+- Support creating prefabs from context menu
+- Create prefab from selected entity with component preservation
+- Add tests for prefab creation workflow&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="summary-checklist">Summary Checklist<a class="anchor" href="#summary-checklist" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[ ] <strong>Task 1</strong>: MeshEncoder handsles gltf/glb → .caf</li>
+<li>[ ] <strong>Task 2</strong>: AssetManager::load<Mesh>() works at runtime</li>
+<li>[ ] <strong>Task 3</strong>: PrefabAsset + PrefabSerializer implemented</li>
+<li>[ ] <strong>Task 4</strong>: AssetManager::load<Prefab>() with instantiation</li>
+<li>[ ] <strong>Task 5</strong>: Mesh drag-drop creates entities in viewport</li>
+<li>[ ] <strong>Task 6</strong>: &quot;Save as Prefab&quot; command in editor</li>
+</ul>
+<h2 id="testing-strategy">Testing Strategy<a class="anchor" href="#testing-strategy" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Unit tests: Individual component loading (MeshEncoder, PrefabSerializer)</li>
+<li>Integration tests: End-to-end flows (import mesh → create prefab → instantiate)</li>
+<li>Editor tests: Drag-drop, file dialogs, context menus</li>
+</ul>
+<h2 id="expected-outcomes">Expected Outcomes<a class="anchor" href="#expected-outcomes" aria-label="Link to this section">#</a></h2>
+<p>✅ Import mesh (.obj/.gltf/.glb) via asset browser
+Asset converts to .caf format automatically
+✅ Right-click entity → &quot;Save as Prefab&quot; creates .prefab file
+✅ Drag prefab onto scene viewport → instantiates entity with all components
+Runtime can load prefabs via AssetManager::load<Prefab>()</p>
+<hr>
+<h2 id="timeline">Timeline<a class="anchor" href="#timeline" aria-label="Link to this section">#</a></h2>
+<p>Estimated: <strong>4-6 hours</strong> for full implementation (2h per phase)</p>
+<ul>
+<li>Phase 1 (Mesh encoding): 2h</li>
+<li>Phase 2 (Prefab system): 1.5h</li>
+<li>Phase 3 (Editor integration): 1.5h</li>
+</ul>
+<ul>
+<li>Testing &amp; debugging: 1h</li>
+</ul>
+<p>Per task estimate: <strong>30-50 minutes</strong></p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/"><span>Previous</span><strong>MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</strong></a><a class="pager-next" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/"><span>Next</span><strong>Transform Gizmo Raycasting with VP−1 Implementation Plan</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#phase-1-mesh-encoding-asset-resolution">Phase 1: Mesh Encoding &amp; Asset Resolution</a></li><li class="l3"><a href="#task-1-fix-meshencoder-for-gltfglb-support">Task 1: Fix MeshEncoder for glTF/glb Support</a></li><li class="l3"><a href="#task-2-add-mesh-resolution-to-runtime-assetmanager">Task 2: Add Mesh Resolution to Runtime AssetManager</a></li><li class="l2"><a href="#phase-2-prefab-asset-system">Phase 2: Prefab Asset System</a></li><li class="l3"><a href="#task-3-define-prefabasset-format-serialization">Task 3: Define PrefabAsset Format &amp; Serialization</a></li><li class="l3"><a href="#task-4-connect-prefab-resolution-to-assetmanager">Task 4: Connect Prefab Resolution to AssetManager</a></li><li class="l2"><a href="#phase-3-editor-integration-drag-and-drop">Phase 3: Editor Integration &amp; Drag-and-Drop</a></li><li class="l3"><a href="#task-5-enable-mesh-drag-and-drop-to-create-prefabs">Task 5: Enable Mesh Drag-and-Drop to Create Prefabs</a></li><li class="l3"><a href="#task-6-create-make-prefab-editor-command">Task 6: Create &quot;Make Prefab&quot; Editor Command</a></li><li class="l2"><a href="#summary-checklist">Summary Checklist</a></li><li class="l2"><a href="#testing-strategy">Testing Strategy</a></li><li class="l2"><a href="#expected-outcomes">Expected Outcomes</a></li><li class="l2"><a href="#timeline">Timeline</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

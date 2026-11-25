@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick start · Caffeine</title>
+<meta name="description" content="Crie um projeto, adicione uma entidade, grave uma cena e aprenda os gestos do viewport em poucos minutos.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Quick start · Caffeine">
+<meta property="og:description" content="Crie um projeto, adicione uma entidade, grave uma cena e aprenda os gestos do viewport em poucos minutos.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/getting-started/quick-start/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/getting-started/quick-start/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/getting-started/quick-start/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/getting-started/quick-start/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab active" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Editor Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/getting-started/quick-start/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/getting-started/quick-start/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Primeiros passos"><div class="nav-title">Primeiros passos</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/getting-started/">Primeiros passos</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/getting-started/building/">Compilar</a></li><li><a class="nav-link" href="/pt/docs/getting-started/contributing/">Contribuir</a></li><li><a class="nav-link" href="/pt/docs/getting-started/build-guide/">Guia de build</a></li><li><a class="nav-link active" href="/pt/docs/getting-started/quick-start/" aria-current="page">Quick start</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/start/">Primeiros passos</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Quick start</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Verificado em: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p class="doc-lede">Crie um projeto, adicione uma entidade, grave uma cena e aprenda
+os gestos do viewport em poucos minutos.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/editor/project-manager.png" alt="Gestor de projetos do Doppio antes de abrir um projeto" loading="lazy">
+  <figcaption>O Doppio arranca no gestor de projetos. Crie um projeto, abra um recente ou procure numa pasta de projetos.</figcaption>
+</figure>
+<h2 id="1-criar-um-projeto">1. Criar um projeto<a class="anchor" href="#1-criar-um-projeto" aria-label="Link to this section">#</a></h2>
+<p>Execute o Doppio sem argumentos:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> doppio
+cargo run -p doppio-ui
+</code></pre></div>
+<p>No gestor de projetos:</p>
+<ol>
+<li>Abra <strong>Create New</strong>.</li>
+<li>Introduza o nome e o local do projeto.</li>
+<li>Escolha <strong>Empty</strong>, <strong>2D</strong> ou <strong>3D</strong>.</li>
+<li>Prima <strong>Create &amp; Open</strong>.</li>
+</ol>
+<p>O Doppio escreve <code>project.caffeine</code> e cria <code>assets/raw</code>, <code>assets/processed</code>,
+<code>scripts</code>, <code>scenes</code>, <code>materials</code>, <code>texture_sets</code> e <code>build</code>. O template 3D também
+prepara as pastas de modelos, texturas, materiais, animações, áudio, prefabs e céu
+em <code>assets/raw</code>.</p>
+<h2 id="2-conhecer-o-workspace">2. Conhecer o workspace<a class="anchor" href="#2-conhecer-o-workspace" aria-label="Link to this section">#</a></h2>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/editor/workspace-scene.png" alt="Workspace padrão do Doppio com hierarchy, viewport, inspector e os painéis de assets e console em baixo" loading="lazy">
+  <figcaption>O layout padrão: Hierarchy à esquerda, Viewport e separadores de geradores ao centro, Inspector e materiais à direita, e Assets ao lado da Console na doca inferior.</figcaption>
+</figure>
+<table class="doc-table">
+  <thead>
+    <tr><th>Painel</th><th>Separadores</th><th>Função</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Hierarchy</strong></td>
+      <td>Hierarchy</td>
+      <td>Árvore da cena, pesquisa, adicionar/eliminar entidades e arrastar para reparentar.</td>
+    </tr>
+    <tr>
+      <td rowspan="2"><strong>Centro</strong></td>
+      <td>Viewport</td>
+      <td>Render do motor, seleção, gizmos, marcadores de cena e voo da câmara.</td>
+    </tr>
+    <tr>
+      <td>Material Generator · Texture Generator · Texture Set · Script · Dryad Nodes</td>
+      <td>Ferramentas de conteúdo que partilham o painel central; arraste os separadores para outro painel.</td>
+    </tr>
+    <tr>
+      <td rowspan="2"><strong>Direita</strong></td>
+      <td>Inspector</td>
+      <td>Nome da entidade, transform, cartões de componentes e <em>Add Behaviour</em>.</td>
+    </tr>
+    <tr>
+      <td>Material · Nature · Water · Terrain</td>
+      <td>Geradores de assets e procedurais com pré-visualização ao vivo.</td>
+    </tr>
+    <tr>
+      <td><strong>Inferior</strong></td>
+      <td>Assets · Console</td>
+      <td>Navegador do projeto com import/pack, mais registos tipados e filtráveis.</td>
+    </tr>
+  </tbody>
+</table>
+<p>Arraste um separador para fora do cabeçalho para o encaixar noutro painel. O guia de
+docking mostra o centro e as arestas; os botões do painel maximizam ou restauram.
+Os presets estão em <strong>View → Default Layout</strong> (<code>Ctrl+1</code>) e <strong>View → Viewport
+Layout</strong> (<code>Ctrl+2</code>).</p>
+<h2 id="3-adicionar-uma-entidade">3. Adicionar uma entidade<a class="anchor" href="#3-adicionar-uma-entidade" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Prima <code>Ctrl+N</code>, use <strong>Scene → Add Entity</strong> ou o <strong>+</strong> na Hierarchy.</li>
+<li>Selecione a nova linha; o Inspector mostra o cartão <strong>Transform</strong>.</li>
+<li>Abra <strong>Scene → Create Entity…</strong> (<code>Ctrl+Shift+N</code>) para a paleta de prefabs: mesh,
+luzes, câmara, física, terreno, água e duplicação da seleção.</li>
+<li>Edite <strong>Position</strong>, <strong>Rotation</strong> e <strong>Scale</strong>, ou arraste o gizmo no viewport.</li>
+</ol>
+<p>Os grupos pai compõem a transformação nos filhos; o gizmo projeta a posição
+mundial resolvida.</p>
+<h2 id="4-navegar-no-viewport">4. Navegar no viewport<a class="anchor" href="#4-navegar-no-viewport" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Entrada</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Arrastar no viewport</td>
+<td>Orbitar a câmara</td>
+</tr>
+<tr>
+<td>Arrastar com o botão direito ou do meio</td>
+<td>Fazer pan da câmara</td>
+</tr>
+<tr>
+<td>Roda do rato</td>
+<td>Zoom</td>
+</tr>
+<tr>
+<td><code>W</code> <code>A</code> <code>S</code> <code>D</code></td>
+<td>Voar na horizontal</td>
+</tr>
+<tr>
+<td><code>Q</code> / <code>E</code></td>
+<td>Descer / subir</td>
+</tr>
+<tr>
+<td><code>Shift</code></td>
+<td>Boost de voo</td>
+</tr>
+<tr>
+<td><code>1</code> / <code>2</code> / <code>3</code></td>
+<td>Gizmo Move / Rotate / Scale</td>
+</tr>
+<tr>
+<td><code>G</code></td>
+<td>Alternar a grelha</td>
+</tr>
+<tr>
+<td><code>F</code></td>
+<td>Enquadrar a seleção (focus)</td>
+</tr>
+<tr>
+<td><code>Ctrl+0</code></td>
+<td>Repor a câmara</td>
+</tr>
+</tbody>
+</table></div>
+<p>O HUD do viewport mostra resolução, estado da grelha, modo do gizmo, modelo de vista,
+FPS e overlay de iluminação. O render é offscreen e assíncrono, por isso a UI
+continua responsiva enquanto o motor desenha.</p>
+<h2 id="5-gravar-a-cena">5. Gravar a cena<a class="anchor" href="#5-gravar-a-cena" aria-label="Link to this section">#</a></h2>
+<p>Prima <code>Ctrl+S</code> ou use <strong>Scene → Save Scene</strong>. As cenas são ficheiros <code>.caf</code>; a barra
+de título mostra o nome da cena e o selo <strong>Saved</strong>. As edições no inspector e na
+hierarchy têm undo com <code>Ctrl+Z</code> e <code>Ctrl+Shift+Z</code>.</p>
+<h2 id="próximos-passos">Próximos passos<a class="anchor" href="#próximos-passos" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/pt/docs/editor/ui-gallery/">Galeria de UI do editor</a> para uma visita visual a cada painel.</li>
+<li><a href="/pt/docs/editor/scene-viewport/">Scene viewport</a> para render e câmara.</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md" rel="noopener" class="ext">Headless testing</a>
+para automatizar os mesmos passos sem janela.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/getting-started/quick-start.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/getting-started/build-guide/"><span>Anterior</span><strong>Guia de build</strong></a><span></span></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-criar-um-projeto">1. Criar um projeto</a></li><li class="l2"><a href="#2-conhecer-o-workspace">2. Conhecer o workspace</a></li><li class="l2"><a href="#3-adicionar-uma-entidade">3. Adicionar uma entidade</a></li><li class="l2"><a href="#4-navegar-no-viewport">4. Navegar no viewport</a></li><li class="l2"><a href="#5-gravar-a-cena">5. Gravar a cena</a></li><li class="l2"><a href="#próximos-passos">Próximos passos</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

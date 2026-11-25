@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🦴 Skeletal Animation · Caffeine</title>
+<meta name="description" content="Imported glTF skins become an ImportedSkin plus a SkinnedPose component; the engine samples clips, blends them and skins vertices on the CPU.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="🦴 Skeletal Animation · Caffeine">
+<meta property="og:description" content="Imported glTF skins become an ImportedSkin plus a SkinnedPose component; the engine samples clips, blends them and skins vertices on the CPU.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/animation/skeletal-animation/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/animation/skeletal-animation/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/animation/skeletal-animation/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio editor</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/animation/skeletal-animation/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link active" href="/en/docs/animation/skeletal-animation/" aria-current="page">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">UI</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">🦴 Skeletal Animation</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Engine</span>
+  <span><strong>Namespace:</strong> <code>Caffeine::Animation</code></span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/animation/SkinLibrary.hpp"><code>animation/SkinLibrary.hpp</code></a></span>
+</div>
+<p class="doc-lede">Imported glTF skins become an <code>ImportedSkin</code> plus a
+<code>SkinnedPose</code> component; the engine samples clips, blends them and skins
+vertices on the CPU.</p>
+<hr>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>There are two related layers:</p>
+<ul>
+<li><strong>Runtime and editor path</strong> — <code>assets/MeshLoader.cpp</code> imports a glTF skin into
+<code>ImportedSkin</code> (skeleton, bones and clips). An entity with a skinned mesh gets a
+<code>SkinnedPose</code>, and <code>tickSkinnedPoses</code> resolves the pose each frame. This is the path
+used by Doppio's timeline, the Animator panel and the runtime.</li>
+<li><strong>Standalone primitives</strong> — <code>SkeletalAnimation.hpp</code> provides <code>Bone</code>, <code>Skeleton</code>,
+<code>SkeletalClip</code>, <code>SkeletalAnimator</code> and <code>SkeletalAnimationSystem</code> for direct sampling
+and tests. It is compiled and tested, but the renderer does not consume
+<code>SkeletalAnimator</code>; use <code>SkinnedPose</code> for scene characters.</li>
+</ul>
+<p>Both share the same <code>Bone</code> / <code>Skeleton</code> / <code>SkeletalClip</code> types.</p>
+<hr>
+<h2 id="api">API<a class="anchor" href="#api" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Animation {
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Bone</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt; name;
+    i32             parentIndex = <span class="hljs-number">-1</span>;   <span class="hljs-comment">// -1 = root</span>
+    Mat4            bindPoseInverse;
+    Mat4            localTransform;     <span class="hljs-comment">// bind-pose local TRS</span>
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Skeleton</span> {
+    std::vector&lt;Bone&gt; bones;
+    Mat4              skinSpace;        <span class="hljs-comment">// inverse of the skinned mesh node</span>
+    <span class="hljs-function">u32  <span class="hljs-title">boneCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">i32  <span class="hljs-title">findBone</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">SkeletalKeyframe</span> {
+    f32  time = <span class="hljs-number">0.0f</span>;
+    Vec3 position {<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>};
+    Quat rotation {Quat::<span class="hljs-built_in">identity</span>()};
+    Vec3 scale    {<span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>};
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">SkeletalClip</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt; name;
+    f32             duration = <span class="hljs-number">0.0f</span>;
+    f32             fps      = <span class="hljs-number">30.0f</span>;
+    <span class="hljs-type">bool</span>            loop     = <span class="hljs-literal">true</span>;
+    HashMap&lt;u32, std::vector&lt;SkeletalKeyframe&gt;&gt; channels;  <span class="hljs-comment">// bone -&gt; keys</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">sampleAt</span><span class="hljs-params">(f32 time, <span class="hljs-type">const</span> Skeleton&amp; skeleton,
+                  std::vector&lt;Mat4&gt;&amp; boneTransforms,
+                  std::vector&lt;Vec3&gt;* jointPositions = <span class="hljs-literal">nullptr</span>)</span> <span class="hljs-type">const</span></span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">BlendNode</span> {
+    <span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Type</span> : u8 { Clip, Blend1D, Blend2D };
+    Type type = Type::Clip;
+    <span class="hljs-type">const</span> SkeletalClip* clip = <span class="hljs-literal">nullptr</span>;
+    std::vector&lt;std::pair&lt;f32, BlendNode*&gt;&gt; children;
+    f32 parameter = <span class="hljs-number">0.0f</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">SkeletalAnimationState</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                  name;
+    <span class="hljs-type">const</span> SkeletalClip*              clip  = <span class="hljs-literal">nullptr</span>;
+    f32                              speed = <span class="hljs-number">1.0f</span>;
+    std::vector&lt;AnimationTransition&gt; transitions;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">SkeletalAnimator</span> {
+    <span class="hljs-type">const</span> Skeleton*         skeleton = <span class="hljs-literal">nullptr</span>;
+    std::vector&lt;Mat4&gt;       boneMatrices;
+    HashMap&lt;FixedString&lt;<span class="hljs-number">32</span>&gt;, SkeletalAnimationState&gt; states;
+    FixedString&lt;<span class="hljs-number">32</span>&gt;         currentState;
+    f32                     timeInState = <span class="hljs-number">0.0f</span>;
+    f32                     blendWeight = <span class="hljs-number">1.0f</span>;
+    <span class="hljs-type">bool</span>                    paused      = <span class="hljs-literal">false</span>;
+    BlendNode*              blendTree   = <span class="hljs-literal">nullptr</span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SkeletalAnimationSystem</span> : <span class="hljs-keyword">public</span> ECS::ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(ECS::World&amp; world, f32 dt)</span> <span class="hljs-keyword">override</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">play</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* stateName)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pause</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resume</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setSpeed</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, f32 speed)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isPlaying</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* stateName)</span> <span class="hljs-type">const</span></span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Animation</span>
+</code></pre></div>
+<h3 id="import-and-pose-path">Import and pose path<a class="anchor" href="#import-and-pose-path" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Animation {
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">ImportedSkin</span> {
+    Skeleton                 skeleton;
+    std::vector&lt;std::string&gt; boneNames;
+    std::vector&lt;SkeletalClip&gt; clips;
+    std::vector&lt;std::string&gt; clipNames;
+    <span class="hljs-type">const</span> Assets::Mesh3D*    mesh = <span class="hljs-literal">nullptr</span>;
+    <span class="hljs-type">bool</span>                     synthesized = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerImportedSkin</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, ImportedSkin skin)</span></span>;
+<span class="hljs-function"><span class="hljs-type">const</span> ImportedSkin* <span class="hljs-title">findImportedSkin</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path)</span></span>;
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">synthesizeHumanoidSkin</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path, Assets::Mesh3D&amp; mesh,
+                            <span class="hljs-type">bool</span> replace = <span class="hljs-literal">false</span>)</span></span>;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">SkinnedPose</span> {
+    <span class="hljs-type">char</span>  meshPath[<span class="hljs-number">260</span>] = {};
+    i32   clipIndex = <span class="hljs-number">0</span>;
+    f32   time = <span class="hljs-number">0.0f</span>;
+    f32   speed = <span class="hljs-number">1.0f</span>;
+    <span class="hljs-type">bool</span>  playing = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span>  editorHeld = <span class="hljs-literal">false</span>;   <span class="hljs-comment">// clears on load; Play starts the clip</span>
+    <span class="hljs-type">bool</span>  loop = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span>  loaded = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span>  sampleKeys = <span class="hljs-literal">false</span>;   <span class="hljs-comment">// timeline keys replace the sampled pose</span>
+    HumanoidRig humanoid;
+    std::vector&lt;BonePose&gt;     offsets;
+    std::vector&lt;BoneKeyframe&gt; keys;
+    std::vector&lt;ObjectKeyframe&gt; objectKeys;
+    std::vector&lt;i32&gt;          removedBones;
+    std::vector&lt;ClipStrip&gt;    strips;
+    std::vector&lt;PoseLayerMix&gt; overrideMix;
+    u64  overrideFrame = <span class="hljs-number">0</span>;
+    <span class="hljs-type">bool</span> timelineHold = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-function">SkinnedPose* <span class="hljs-title">ensurePoseForMesh</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity entity,
+                               <span class="hljs-type">const</span> std::string&amp; projectRoot)</span></span>;
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tickSkinnedPoses</span><span class="hljs-params">(ECS::World&amp; world, f32 dt)</span></span>;
+
+}  <span class="hljs-comment">// namespace Caffeine::Animation</span>
+</code></pre></div>
+<div class="doc-callout doc-callout--note">
+  <p><strong>Note.</strong> In the low-level <code>SkeletalAnimationSystem</code>,
+  <code>setSpeed()</code> currently writes <code>SkeletalAnimator::blendWeight</code>, not a
+  clip playback rate. Use <code>SkeletalClip::sampleAt</code> directly when you need a
+  specific time.</p>
+</div>
+<p><code>tickSkinnedPoses</code> chooses the pose source in this order: the timeline's
+<code>overrideMix</code>, then the entity's <code>Animator</code> layers, then the inspector's single
+<code>clipIndex</code>. It then skins the bind mesh into the entity's posed vertices and writes
+joint positions for the viewport overlay.</p>
+<hr>
+<h2 id="vertex-skinning">Vertex Skinning<a class="anchor" href="#vertex-skinning" aria-label="Link to this section">#</a></h2>
+<p>Skinning is CPU-side and runs in parallel chunks:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">VertexSkin (per vertex, imported):
+    u16 joints[4]
+    f32 weights[4]
+
+skinVertices(bindMesh, boneMatrices, outVertices):
+    for each vertex:
+        p = Σ weights[i] * boneMatrices[joints[i]] * bindPosition
+        n = Σ weights[i] * boneMatrices[joints[i]] * bindNormal
+</code></pre></div>
+<p><code>skinVertices</code> copies the texture coordinates and tangent through and writes position
+and normal. There is no GPU skinning shader in the current renderer; the posed vertex
+buffer is uploaded like any other mesh.</p>
+<p><code>SkeletalClip::sampleAt</code>:</p>
+<ul>
+<li>Loops or clamps <code>time</code> based on <code>loop</code> and <code>duration</code>.</li>
+<li>Interpolates position and scale linearly and rotation with <code>Quat::slerp</code>.</li>
+<li>Resolves bones even when a parent appears after its child in the joint list.</li>
+<li>Computes <code>skinSpace * world * bindPoseInverse</code> for each bone.</li>
+</ul>
+<hr>
+<h2 id="exemplos-de-uso">Exemplos de Uso<a class="anchor" href="#exemplos-de-uso" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// ── Inspect an imported clip ──────────────────────────────────</span>
+<span class="hljs-type">const</span> ImportedSkin* skin = Caffeine::Animation::<span class="hljs-built_in">findImportedSkin</span>(<span class="hljs-string">&quot;characters/hero.gltf&quot;</span>);
+<span class="hljs-keyword">if</span> (skin &amp;&amp; !skin-&gt;clips.<span class="hljs-built_in">empty</span>()) {
+    <span class="hljs-function">std::vector&lt;Mat4&gt; <span class="hljs-title">bones</span><span class="hljs-params">(skin-&gt;skeleton.boneCount())</span></span>;
+    skin-&gt;clips[<span class="hljs-number">0</span>].<span class="hljs-built_in">sampleAt</span>(<span class="hljs-number">0.5f</span>, skin-&gt;skeleton, bones);
+}
+
+<span class="hljs-comment">// ── Attach a pose to an entity ────────────────────────────────</span>
+SkinnedPose* pose = Caffeine::Animation::<span class="hljs-built_in">ensurePoseForMesh</span>(world, hero,
+                                                           projectRoot);
+<span class="hljs-keyword">if</span> (pose) {
+    pose-&gt;clipIndex = <span class="hljs-number">1</span>;
+    pose-&gt;loop = <span class="hljs-literal">true</span>;
+    pose-&gt;editorHeld = <span class="hljs-literal">false</span>;   <span class="hljs-comment">// allow playback</span>
+}
+
+<span class="hljs-comment">// ── Drive the state graph through the Animator ────────────────</span>
+Animator&amp; animator = world.<span class="hljs-built_in">add</span>&lt;Animator&gt;(hero);
+animator.defaultState = <span class="hljs-string">&quot;Idle&quot;</span>;
+<span class="hljs-comment">// states, transitions and parameters are shared with the 2D path.</span>
+
+<span class="hljs-comment">// ── Tick poses once per frame before rendering ────────────────</span>
+Caffeine::Animation::<span class="hljs-built_in">tickSkinnedPoses</span>(world, dt);
+</code></pre></div>
+<p><code>matchHumanoid</code> maps common Mixamo/Unity bone names into <code>HumanoidBone</code> slots and is
+used automatically for imported skins unless <code>HumanoidRig::manual</code> is set.</p>
+<hr>
+<h2 id="acceptance-criteria">Acceptance Criteria<a class="anchor" href="#acceptance-criteria" aria-label="Link to this section">#</a></h2>
+<p><code>tests/test_skeletal_animation.cpp</code> covers:</p>
+<ul>
+<li>[x] Default skeleton, keyframe and blend-node state</li>
+<li>[x] <code>findBone</code> lookup</li>
+<li>[x] <code>sampleAt</code> on an empty clip and between keyframes</li>
+<li>[x] Looping wraps time and non-looping clamps at the end</li>
+<li>[x] Parent transforms propagate to children</li>
+<li>[x] Rotation interpolation uses slerp</li>
+<li>[x] Mixamo bone names map to humanoid slots</li>
+<li>[x] CPU skinning moves a weighted vertex</li>
+<li>[x] A static glTF does not get an automatic humanoid skin</li>
+<li>[x] Explicit <code>synthesizeHumanoidSkin</code> still works</li>
+</ul>
+<p>No frame-rate target is asserted by the suite.</p>
+<hr>
+<h2 id="dependencies">Dependencies<a class="anchor" href="#dependencies" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Upstream:</strong> <a href="/en/docs/animation/animation-2d/">Animation System</a>, <a href="/en/docs/math/vectors/">3D Math</a>, <a href="/en/docs/assets/mesh-loading/">Mesh Loading</a></li>
+<li><strong>Downstream:</strong> Doppio timeline, viewport joint overlay, runtime characters</li>
+</ul>
+<hr>
+<h2 id="static-meshes-and-fitted-humanoid-rigs">Static meshes and fitted humanoid rigs<a class="anchor" href="#static-meshes-and-fitted-humanoid-rigs" aria-label="Link to this section">#</a></h2>
+<p>A glTF without <code>skins</code> is a static mesh. Caffeine does <strong>not</strong> synthesize a humanoid rig
+automatically when the Animator or Inspector binds it. <code>synthesizeHumanoidSkin</code> builds a
+T-pose humanoid from the mesh bounds only when a tool calls it explicitly; models with
+authored glTF skins import their bones and clips directly.</p>
+<h2 id="-related-topics">🔗 Related Topics<a class="anchor" href="#-related-topics" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/en/docs/animation/animation-2d/">Animation System</a></td>
+<td>Sprite clips and the shared <code>Animator</code> graph</td>
+</tr>
+<tr>
+<td><a href="/en/docs/assets/mesh-loading/">Mesh Loading</a></td>
+<td>glTF import and the mesh cache</td>
+</tr>
+<tr>
+<td><a href="/en/docs/ecs/core/">ECS Core</a></td>
+<td>Components and queries</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="references">References<a class="anchor" href="#references" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/animation/SkeletalAnimation.hpp" rel="noopener" class="ext"><code>src/caffeine/animation/SkeletalAnimation.hpp</code></a> — bones, clips and the low-level system</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/animation/SkinLibrary.hpp" rel="noopener" class="ext"><code>src/caffeine/animation/SkinLibrary.hpp</code></a> — imported skins, humanoid rigs and <code>SkinnedPose</code></li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/assets/MeshLoader.cpp" rel="noopener" class="ext"><code>src/caffeine/assets/MeshLoader.cpp</code></a> — glTF skin import</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/tests/test_skeletal_animation.cpp" rel="noopener" class="ext"><code>tests/test_skeletal_animation.cpp</code></a> — behaviour suite</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/animation/skeletal-animation.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/animation/animation-2d/"><span>Previous</span><strong>🎬 Animation System</strong></a><a class="pager-next" href="/en/docs/input/input-system/"><span>Next</span><strong>⌨️ Input System</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#overview">Overview</a></li><li class="l2"><a href="#api">API</a></li><li class="l3"><a href="#import-and-pose-path">Import and pose path</a></li><li class="l2"><a href="#vertex-skinning">Vertex Skinning</a></li><li class="l2"><a href="#exemplos-de-uso">Exemplos de Uso</a></li><li class="l2"><a href="#acceptance-criteria">Acceptance Criteria</a></li><li class="l2"><a href="#dependencies">Dependencies</a></li><li class="l2"><a href="#static-meshes-and-fitted-humanoid-rigs">Static meshes and fitted humanoid rigs</a></li><li class="l2"><a href="#-related-topics">🔗 Related Topics</a></li><li class="l2"><a href="#references">References</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

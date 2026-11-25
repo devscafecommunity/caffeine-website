@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="Inter, Segoe UI, sans-serif">
+  <defs>
+    <style>
+      .frame { fill:#17181c; stroke:#3a3d45; stroke-width:1.5; rx:10; }
+      .panel { fill:#23252b; stroke:#3a3d45; stroke-width:1.5; rx:8; }
+      .active { fill:#2c2a25; stroke:#e0a458; stroke-width:1.6; }
+      .t { fill:#e8e8ea; font-size:15px; font-weight:600; }
+      .s { fill:#9aa0aa; font-size:12px; }
+      .m { fill:#e0a458; font-size:12px; font-weight:600; letter-spacing:.08em; }
+      .tab { fill:#e0a458; }
+    </style>
+  </defs>
+  <rect width="960" height="560" fill="#17181c"/>
+
+  <text x="40" y="42" class="m">DOPPIO — DEFAULT WORKSPACE</text>
+
+  <!-- Window -->
+  <rect x="40" y="64" width="880" height="456" class="frame"/>
+
+  <!-- Menu bar -->
+  <rect x="40" y="64" width="880" height="30" fill="#1d1f24" rx="10"/>
+  <text x="60" y="84" class="s">File   Edit   Plugins   View</text>
+  <text x="700" y="84" class="s">Scene: sample    Saved    120 FPS</text>
+
+  <!-- Tabs row -->
+  <rect x="52" y="104" width="150" height="26" class="active"/>
+  <text x="66" y="122" class="t">Scene</text>
+  <rect x="210" y="104" width="150" height="26" class="panel"/>
+  <text x="224" y="122" class="s">Toolbox</text>
+
+  <!-- Left column -->
+  <rect x="52" y="140" width="250" height="250" class="panel"/>
+  <text x="68" y="166" class="t">Hierarchy</text>
+  <text x="68" y="192" class="s">▾ Environment</text>
+  <text x="84" y="214" class="s">Camera</text>
+  <text x="68" y="238" class="s">Terrain</text>
+  <text x="68" y="262" class="s">Player</text>
+  <rect x="52" y="400" width="250" height="108" class="panel"/>
+  <text x="68" y="426" class="t">Toolbox</text>
+  <text x="68" y="450" class="s">Geometry · Viewport · Terrain</text>
+
+  <!-- Center -->
+  <rect x="316" y="140" width="430" height="250" class="active"/>
+  <text x="332" y="166" class="t">Scene Viewport</text>
+  <text x="332" y="192" class="s">⤢  ⟳  ⊕  ▣  ⌁  ⊞        Persp   Iso</text>
+  <path d="M500 360 L760 220" stroke="#4a4e57" stroke-width="1.5"/>
+  <path d="M500 360 L520 200" stroke="#4a4e57" stroke-width="1.5"/>
+  <path d="M500 360 L700 380" stroke="#4a4e57" stroke-width="1.5"/>
+  <circle cx="500" cy="360" r="5" fill="#e0a458"/>
+  <text x="690" y="214" class="s">gizmo axes</text>
+
+  <!-- Right -->
+  <rect x="760" y="140" width="156" height="250" class="panel"/>
+  <text x="776" y="166" class="t">Inspector</text>
+  <text x="776" y="192" class="s">Transform</text>
+  <text x="776" y="216" class="s">Mesh Renderer</text>
+  <text x="776" y="240" class="s">Camera</text>
+  <text x="776" y="264" class="s">Light</text>
+
+  <!-- Bottom -->
+  <rect x="316" y="400" width="600" height="108" class="panel"/>
+  <text x="332" y="426" class="t">Asset Browser</text>
+  <rect x="332" y="440" width="80" height="24" class="active"/>
+  <text x="340" y="457" class="s">Raw</text>
+  <rect x="418" y="440" width="96" height="24" class="panel"/>
+  <text x="426" y="457" class="s">Processed</text>
+  <text x="540" y="457" class="s">Search assets…</text>
+  <text x="332" y="492" class="s">Assets / Models / Player.fbx</text>
+
+  <text x="40" y="548" class="s">Left: Hierarchy + Toolbox · Center: Scene Viewport · Right: Inspector · Bottom: Asset Browser + Console</text>
+</svg>
