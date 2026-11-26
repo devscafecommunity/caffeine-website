@@ -43,3 +43,4 @@ make rocks, trees, water, terrain, textures and materials. The engine repository
 | [`photoreal-world-roadmap.md`](photoreal-world-roadmap.md) | The content plan: terrain, nature, water, scatter and streaming |
 | [`terrain-editing-roadmap.md`](terrain-editing-roadmap.md) | The terrain editing plan: custom brushes, a material palette, adaptive vegetation and the native terrain format |
 | [`terrain-editing-phase-0.md`](terrain-editing-phase-0.md) | The terrain editing foundation as built: tile model, stroke engine, native container, regional GI, brush cursor, C ABI 25 to 27 |
+| [`terrain-editing-phase-1.md`](terrain-editing-phase-1.md) | Terrain sculpting as built: 16 brush modes, 58 brushes, `.brush` files, symmetry, protection, the Terrain Brush tab, C ABI 28 |
