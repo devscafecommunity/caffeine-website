@@ -410,7 +410,7 @@ body[data-page="home"] main { display: block; }
   .toc { display: none; }
 }
 @media (max-width: 960px) {
-  .hero-inner, .tour { grid-template-columns: 1fr; }
+  .hero-inner, .tour { grid-template-columns: minmax(0, 1fr); }
   .hero-inner { padding: 44px 20px; }
   .menu-btn { display: inline-grid; }
   .tabs { display: none; }
