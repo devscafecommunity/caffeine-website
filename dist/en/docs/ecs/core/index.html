@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ECS core · Caffeine</title>
+<meta name="description" content="Caffeine uses an archetype-based ECS: entities with the same component set live in contiguous storage, and queries iterate matching archetypes instead of scanning every entity.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="ECS core · Caffeine">
+<meta property="og:description" content="Caffeine uses an archetype-based ECS: entities with the same component set live in contiguous storage, and queries iterate matching archetypes instead of scanning every entity.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/ecs/core/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/ecs/core/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/ecs/core/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/ecs/core/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link active" href="/en/docs/ecs/core/" aria-current="page">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/en/docs/audio/volumetric-audio/">Volumetric audio</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Runtime UI (ImGui &amp; in-game HUD)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Asset system</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">ECS core</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Engine</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/ecs/World.hpp"><code>ecs/World.hpp</code></a></span>
+</div>
+<p class="doc-lede">Caffeine uses an archetype-based ECS: entities with the same
+component set live in contiguous storage, and queries iterate matching archetypes
+instead of scanning every entity.</p>
+<h2 id="concepts">Concepts<a class="anchor" href="#concepts" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entity</strong></td>
+<td>A <code>u32</code> id plus a <code>World*</code>. No data, no logic, no virtuals.</td>
+</tr>
+<tr>
+<td><strong>Component</strong></td>
+<td>A plain struct registered by type; no methods, no base class.</td>
+</tr>
+<tr>
+<td><strong>Archetype</strong></td>
+<td>The set of entities with an identical <code>ComponentSet</code>; component arrays are contiguous by type.</td>
+</tr>
+<tr>
+<td><strong>Query</strong></td>
+<td>A <code>ComponentQuery</code> describing required, excluded and any-of components.</td>
+</tr>
+<tr>
+<td><strong>World</strong></td>
+<td>Owns entities, archetypes and the component storage.</td>
+</tr>
+<tr>
+<td><strong>System</strong></td>
+<td>An object with <code>onUpdate(World&amp;, f32)</code>; the engine or game calls it.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="entity">Entity<a class="anchor" href="#entity" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">Caffeine::ECS::Entity entity = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Player&quot;</span>);
+
+entity.<span class="hljs-built_in">id</span>();        <span class="hljs-comment">// u32</span>
+entity.<span class="hljs-built_in">isValid</span>();   <span class="hljs-comment">// id != u32_max</span>
+entity.<span class="hljs-built_in">add</span>&lt;Position3D&gt;({<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>});
+entity.<span class="hljs-built_in">has</span>&lt;Position3D&gt;();
+entity.<span class="hljs-built_in">get</span>&lt;Position3D&gt;();
+entity.<span class="hljs-built_in">getOrAdd</span>&lt;Health&gt;(<span class="hljs-number">100</span>);
+entity.<span class="hljs-built_in">remove</span>&lt;Health&gt;();
+entity.<span class="hljs-built_in">destroy</span>();
+</code></pre></div>
+<p><code>Entity::INVALID</code> is the default-constructed value. A destroyed entity id may be
+reused; stale handles are not generation-checked, so treat handles as short-lived
+and re-query after structural changes.</p>
+<h2 id="world">World<a class="anchor" href="#world" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">Caffeine::ECS::World world;
+
+Entity e = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Cube&quot;</span>);
+world.<span class="hljs-built_in">add</span>&lt;Transform&gt;(e, Transform{});
+world.<span class="hljs-built_in">destroy</span>(e);
+world.<span class="hljs-built_in">destroyAll</span>();
+
+world.<span class="hljs-built_in">entityCount</span>();
+world.<span class="hljs-built_in">archetypeCount</span>();
+
+<span class="hljs-keyword">auto</span> location = world.<span class="hljs-built_in">getEntityLocation</span>(e);
+<span class="hljs-type">bool</span> alive = world.<span class="hljs-built_in">isEntityAlive</span>(e);
+</code></pre></div>
+<h3 id="queries">Queries<a class="anchor" href="#queries" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">Caffeine::ECS::ComponentQuery query;
+query.<span class="hljs-built_in">with</span>&lt;Position3D, Velocity3D&gt;().<span class="hljs-built_in">without</span>&lt;Disabled&gt;();
+
+world.forEach(query, [](Entity entity, Position3D&amp; position, <span class="hljs-type">const</span> Velocity3D&amp; velocity) {
+    position.value += velocity.value;
+});
+</code></pre></div>
+<p><code>ComponentQuery</code> supports:</p>
+<ul>
+<li><code>with&lt;T...&gt;()</code> — the archetype must contain every listed component.</li>
+<li><code>without&lt;T...&gt;()</code> — the archetype must contain none of them.</li>
+<li><code>any&lt;T...&gt;()</code> — at least one of the listed components must be present.</li>
+<li><code>matches(const Archetype*)</code> — used by <code>World::forEach</code>.</li>
+</ul>
+<p>The callback receives the components requested by the query plus the entity id. The
+order of arguments follows the query; check the overloads in <code>World.hpp</code> for the exact
+form.</p>
+<h3 id="parallel-iteration">Parallel iteration<a class="anchor" href="#parallel-iteration" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">world.forEachParallel(query, jobSystem,
+    [](Entity entity, Position3D&amp; position, <span class="hljs-type">const</span> Velocity3D&amp; velocity) {
+        position.value += velocity.value;
+    });
+</code></pre></div>
+<p><code>forEachParallel</code> splits archetype ranges across the job system. The callback must be
+safe to run concurrently and must not mutate the world structurally.</p>
+<h2 id="structural-changes">Structural changes<a class="anchor" href="#structural-changes" aria-label="Link to this section">#</a></h2>
+<p><code>add</code>, <code>remove</code>, <code>destroy</code> and <code>create</code> move entities between archetypes. Do <strong>not</strong>
+call them inside <code>forEach</code> / <code>forEachParallel</code>; collect the entities first and apply
+the changes after iteration. Use <code>CommandBuffer</code> for deferred create/destroy when a
+system needs to queue structural work.</p>
+<h2 id="systems">Systems<a class="anchor" href="#systems" aria-label="Link to this section">#</a></h2>
+<p><code>ISystem</code> is intentionally small:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ISystem</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">ISystem</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> </span>= <span class="hljs-number">0</span>;
+};
+</code></pre></div>
+<p>The engine owns the system list (renderer, physics, animation, scripting, game code).
+There is no hidden global registry; a system is an object the host creates and calls
+in order. <code>ScriptSystem</code> is one example (<code>src/caffeine/script/ScriptSystem.hpp</code>).</p>
+<h2 id="storage-and-iteration">Storage and iteration<a class="anchor" href="#storage-and-iteration" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Entities are stored in <code>Vector&lt;EntityData&gt;</code>; each entry records the archetype index
+and the index inside that archetype.</li>
+<li>Removing an entity swaps the last element into the freed slot; the moved entity's
+location is patched.</li>
+<li>Adding/removing a component copies the entity's components into a new archetype,
+then removes it from the old one.</li>
+<li>Queries iterate archetypes, so empty archetypes cost almost nothing.</li>
+</ul>
+<h2 id="example-a-tiny-movement-system">Example: a tiny movement system<a class="anchor" href="#example-a-tiny-movement-system" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Position3D</span> { Vec3 value; };
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Velocity3D</span> { Vec3 value; };
+
+World world;
+Entity mover = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Mover&quot;</span>);
+world.<span class="hljs-built_in">add</span>&lt;Position3D&gt;(mover, Position3D{{<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>}});
+world.<span class="hljs-built_in">add</span>&lt;Velocity3D&gt;(mover, Velocity3D{{<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>}});
+
+ComponentQuery moving;
+moving.<span class="hljs-built_in">with</span>&lt;Position3D, Velocity3D&gt;();
+
+world.forEach(moving, [dt](Position3D&amp; position, <span class="hljs-type">const</span> Velocity3D&amp; velocity) {
+    position.value += velocity.value * dt;
+});
+</code></pre></div>
+<h2 id="tests">Tests<a class="anchor" href="#tests" aria-label="Link to this section">#</a></h2>
+<p>The ECS suite lives in <code>tests/test_phase2_3.cpp</code> and related files. It covers entity
+creation/destruction, component add/remove, archetype migration, query matching,
+parallel iteration and the scene manager integration.</p>
+<h2 id="related-pages">Related pages<a class="anchor" href="#related-pages" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/ecs/scene/">Scene manager</a> — parent/child hierarchy and scene serialization.</li>
+<li><a href="/en/docs/ecs/examples/">ECS examples</a></li>
+<li><a href="/en/docs/api/scripting-components/">Component reflection</a></li>
+<li><a href="/en/docs/concurrency/job-system/">Job system</a></li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/ecs/core.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/ecs/examples/"><span>Previous</span><strong>Caffeine ECS Examples</strong></a><a class="pager-next" href="/en/docs/math/quaternions/"><span>Next</span><strong>📐 3D Math Extension</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#concepts">Concepts</a></li><li class="l2"><a href="#entity">Entity</a></li><li class="l2"><a href="#world">World</a></li><li class="l3"><a href="#queries">Queries</a></li><li class="l3"><a href="#parallel-iteration">Parallel iteration</a></li><li class="l2"><a href="#structural-changes">Structural changes</a></li><li class="l2"><a href="#systems">Systems</a></li><li class="l2"><a href="#storage-and-iteration">Storage and iteration</a></li><li class="l2"><a href="#example-a-tiny-movement-system">Example: a tiny movement system</a></li><li class="l2"><a href="#tests">Tests</a></li><li class="l2"><a href="#related-pages">Related pages</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

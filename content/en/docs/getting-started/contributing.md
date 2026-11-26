@@ -67,7 +67,7 @@ archived C++ editor is reference only. See
   same paths under `content/pt/docs/`.
 - Every page starts with a title, a `doc-meta` strip and a short lede.
 - Screenshots come from the headless driver, never from a desktop screenshot.
-- Update the capture flow in `doppio/docs/flows/` when the UI changes.
+- Update the capture flow in `captures/flows/` when the UI changes.
 - Run the two audits:
 
 ```bash

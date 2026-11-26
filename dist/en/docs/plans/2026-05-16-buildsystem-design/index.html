@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BuildSystem Integration Design Document · Caffeine</title>
+<meta name="description" content="Date: May 16, 2026 ** Status:** Approved **Milestone:**M4 — Advanced Tools &amp; Polish Issue: #123 Namespace: Caffeine::Editor">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="BuildSystem Integration Design Document · Caffeine">
+<meta property="og:description" content="Date: May 16, 2026 ** Status:** Approved **Milestone:**M4 — Advanced Tools &amp; Polish Issue: #123 Namespace: Caffeine::Editor">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-buildsystem-design/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-buildsystem-design/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-buildsystem-design/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-16-buildsystem-design/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-16-buildsystem-design/" aria-current="page">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">BuildSystem Integration Design Document</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p><strong>Date:</strong> May 16, 2026
+** Status:** Approved
+**Milestone:**M4 — Advanced Tools &amp; Polish
+<strong>Issue:</strong> #123
+<strong>Namespace:</strong> <code>Caffeine::Editor</code></p>
+<hr>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>The <strong>BuildSystem Integration</strong> transforms Caffeine Studio into a complete game development environment, enabling creators to go from design to execution with one click. This system coordinates the entire compilation pipeline: asset cooking, script validation, runtime linking, and game execution.</p>
+<p><strong>Key Capabilities:</strong></p>
+<ul>
+<li>Full-featured build pipeline (Windows_x64 and Linux_x64)</li>
+<li>Incremental builds with asset caching</li>
+<li>Real-time progress tracking and logging</li>
+<li>Automatic game execution with process waiting</li>
+<li>Comprehensive error handling and cleanup</li>
+</ul>
+<hr>
+<h2 id="architecture">Architecture<a class="anchor" href="#architecture" aria-label="Link to this section">#</a></h2>
+<h3 id="core-types">Core Types<a class="anchor" href="#core-types" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">BuildPlatform</span> : u8 {
+    Windows_x64 = <span class="hljs-number">0</span>,
+    Linux_x64   = <span class="hljs-number">1</span>
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">BuildStatus</span> : u8 {
+    Idle,
+    Validating,
+    PreparingOutput,
+    CompilingScripts,
+    CookingAssets,
+    LinkingExecutable,
+    GeneratingProject,
+    Success,
+    Failed,
+    Cancelled
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">BuildSettings</span> {
+    std::string projectName;
+    std::string outputDir;
+    BuildPlatform platform;
+    <span class="hljs-type">bool</span> isDebug = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span> incrementalBuild = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span> runAfterBuild = <span class="hljs-literal">false</span>;
+    std::vector&lt;std::string&gt; scenesToInclude;
+    std::string executableName;
+    std::string icon;
+    std::string version;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">BuildProgress</span> {
+    std::atomic&lt;f32&gt; progress = <span class="hljs-number">0.0f</span>;              <span class="hljs-comment">// 0.0 - 1.0</span>
+    std::atomic&lt;BuildStatus&gt; status = BuildStatus::Idle;
+    std::atomic&lt;<span class="hljs-type">bool</span>&gt; shouldCancel = <span class="hljs-literal">false</span>;
+    std::string currentTask;
+};
+
+}
+</code></pre></div>
+<h3 id="buildsystem-class">BuildSystem Class<a class="anchor" href="#buildsystem-class" aria-label="Link to this section">#</a></h3>
+<p><strong>Responsibility:</strong> Coordinate pipeline execution in background thread
+<strong>Key Methods:</strong></p>
+<ul>
+<li><code>ExecuteBuild()</code> - Main entry point (runs in JobSystem thread)</li>
+<li><code>RunGameAndWait()</code> - Launch and wait for game process</li>
+<li><code>ValidateSettings()</code> , <code>PrepareOutputDirectory()</code> , <code>CompileScripts()</code> , etc. - Pipeline stages</li>
+</ul>
+<p><strong>Design Pattern:</strong> Static coordinator with atomic progress tracking for thread-safe UI updates</p>
+<h3 id="builddialog-class">BuildDialog Class<a class="anchor" href="#builddialog-class" aria-label="Link to this section">#</a></h3>
+<p><strong>Responsibility:</strong> ImGui configuration panel and progress display
+<strong>Key Methods:</strong></p>
+<ul>
+<li><code>render()</code> - Draw UI sections (config, progress, logs, buttons)</li>
+<li><code>renderConfigSection()</code> - Platform, paths, scene selection</li>
+<li><code>renderAdvancedSection()</code> - Icon, version, executable name</li>
+<li><code>renderProgressSection()</code> - Progress bar, status, current task</li>
+<li><code>renderLogSection()</code> - Scrollable build log</li>
+</ul>
+<p><strong>Design Pattern:</strong> Inherits editor panel patterns; polls atomic progress variables for thread-safe updates</p>
+<hr>
+<h2 id="pipeline-execution-flow">Pipeline Execution Flow<a class="anchor" href="#pipeline-execution-flow" aria-label="Link to this section">#</a></h2>
+<h3 id="stage-by-stage-breakdown">Stage-by-Stage Breakdown<a class="anchor" href="#stage-by-stage-breakdown" aria-label="Link to this section">#</a></h3>
+<ol>
+<li>
+<p><strong>VALIDATE</strong> (0%)</p>
+<ul>
+<li>Check output path exists/writable</li>
+<li>Verify project.caffeine readable</li>
+<li>Validate platform is supported</li>
+</ul>
+</li>
+<li>
+<p><strong>PREPARE OUTPUT</strong> (5%)</p>
+<ul>
+<li>Create output directory structure</li>
+<li>Clear any existing build artifacts</li>
+</ul>
+</li>
+<li>
+<p><strong>COMPILE SCRIPTS</strong> (10%)</p>
+<ul>
+<li>Use LuaValidator to check syntax</li>
+<li>Report errors to console</li>
+<li>Abort if validation fails</li>
+</ul>
+</li>
+<li>
+<p><strong>COOK ASSETS</strong> (20% → 65%)</p>
+<ul>
+<li>Load build cache from <code>output_dir/.build_cache/</code></li>
+<li>For each texture: check mtime+hash, skip if cached, otherwise cook PNG/TGA → DDS</li>
+<li>For each shadow: check mtime+hash, skip if cached, otherwise compile GLSL → SPIR-V</li>
+<li>Save updated cache with new mtime/hash/size</li>
+</ul>
+</li>
+<li>
+<p>** LINK EXECUTABLE** (65% → 85%)</p>
+<ul>
+<li>Copy CaffeineRuntime binary to output_dir</li>
+<li>Copy assets/ and scripts/ to output_dir/data/</li>
+<li>Set executable permissions on Linux</li>
+</ul>
+</li>
+<li>
+<ul>
+<li><em>GENERATE PROJECT</em>* (85% → 95%)</li>
+</ul>
+<ul>
+<li>Create <code>project.caffeine</code> JSON file</li>
+<li>Include startup scenes, version, executable name</li>
+<li>Write to output_dir root</li>
+</ul>
+</li>
+<li>
+<p><strong>SUCCESS</strong> (100%)</p>
+<ul>
+<li>If <code>runAfterBuild == true</code> :
+<ul>
+<li>Launch game executable</li>
+<li>Block and wait for process to close</li>
+</ul>
+</li>
+<li>Log &quot;Build complete&quot; to console</li>
+</ul>
+</li>
+</ol>
+<h3 id="failure-handling">Failure Handling<a class="anchor" href="#failure-handling" aria-label="Link to this section">#</a></h3>
+<p><strong>On any stage error:</strong></p>
+<ul>
+<li>Log detailed error to console</li>
+<li>Call <code>CleanupOnFailure()</code> → Remove entry output dir</li>
+<li>Set <code>status = BuildStatus::Failed</code></li>
+<li>Allow user to fix issues and retry</li>
+</ul>
+<hr>
+<h2 id="incremental-build-system">Incremental Build System<a class="anchor" href="#incremental-build-system" aria-label="Link to this section">#</a></h2>
+<h3 id="cache-file-format">Cache File Format<a class="anchor" href="#cache-file-format" aria-label="Link to this section">#</a></h3>
+<p>Location: <code>output_dir/.build_cache/build_cache.json</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;buildDate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2026-05-16T14:30:00Z&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;platform&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Windows_x64&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;caffeineVersion&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;0.2.0&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;assets&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;textures/skybox_night.png&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;modifiedTime&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1715867405</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;contentHash&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;a3f5d8e2c1b4&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;cookedSize&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2097152</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;cooked&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h3 id="cache-checking-logic">Cache Checking Logic<a class="anchor" href="#cache-checking-logic" aria-label="Link to this section">#</a></h3>
+<p>Before cooking each asset:</p>
+<ol>
+<li>Load cache from <code>output_dir/.build_cache/</code></li>
+<li>Get current file mtime</li>
+<li>If cache entry exists:
+<ul>
+<li>Compare mtime: if same, compute content hash</li>
+<li>Compare hash: if same, skip cooking</li>
+<li>If different: re-cook and update cache</li>
+</ul>
+</li>
+<li>If no cache entry: cook and add to cache</li>
+<li>After all assets cooked: save updated cache</li>
+</ol>
+<hr>
+<h2 id="asset-cooking-implementations">Asset Cooking Implementations<a class="anchor" href="#asset-cooking-implementations" aria-label="Link to this section">#</a></h2>
+<h3 id="texture-cooking">Texture Cooking<a class="anchor" href="#texture-cooking" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Input:</strong> PNG, TGA, JPG</li>
+<li><strong>Output:</strong> DDS (BC1/BC3 compression based on alpha)</li>
+<li><strong>Uses:</strong> Existing <code>Assets::TextureCompiler</code> API</li>
+</ul>
+<h3 id="shader-cooking">Shader Cooking<a class="anchor" href="#shader-cooking" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Input:</strong> GLSL source (.vert, .frag, .comp)</li>
+<li><strong>Output:</strong> SPIR-V binary format</li>
+<li><strong>Uses:</strong> New <code>ShaderCompiler</code> class (integrate with existing RHI)</li>
+</ul>
+<h3 id="script-validation">Script Validation<a class="anchor" href="#script-validation" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Input:</strong> Lua source files</li>
+<li><strong>Output:</strong> Validation pass/fail + error messages</li>
+<li><strong>Uses:</strong> Existing <code>Script::LuaValidator</code> or similar</li>
+</ul>
+<hr>
+<h2 id="threading-ui-integration">Threading &amp; UI Integration<a class="anchor" href="#threading-ui-integration" aria-label="Link to this section">#</a></h2>
+<h3 id="execution-model">Execution Model<a class="anchor" href="#execution-model" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Main Thread:</strong> User clicks &quot;Build &amp; Run&quot;, schedules job</li>
+<li><strong>Job Thread:</strong> Executes pipeline, updates atomic progress</li>
+<li><strong>UI Thread (Main):</strong> Polls progress every frame, renders UI</li>
+</ul>
+<h3 id="progress-updates-thread-safe">Progress Updates (Thread-Safe)<a class="anchor" href="#progress-updates-thread-safe" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">BuildProgress progress;
+progress.progress = <span class="hljs-number">0.2f</span>;           <span class="hljs-comment">// Atomic update</span>
+progress.status = BuildStatus::CompilingScripts;
+progress.currentTask = <span class="hljs-string">&quot;Validating player.lua&quot;</span>;
+</code></pre></div>
+<p><strong>Dialog polls each frame:</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-type">float</span> pct = m_progress.progress * <span class="hljs-number">100.0f</span>;
+ImGui::<span class="hljs-built_in">ProgressBar</span>(m_progress.progress);
+ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Status: %s&quot;</span>, <span class="hljs-built_in">StatusToString</span>(m_progress.status));
+ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Task: %s&quot;</span>, m_progress.currentTask.<span class="hljs-built_in">c_str</span>());
+</code></pre></div>
+<h3 id="cancellation">Cancellation<a class="anchor" href="#cancellation" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>User clicks &quot;Cancel&quot; button</li>
+<li>Sets <code>progress.shouldCancel = true</code></li>
+<li>Job checks flag between stages</li>
+<li>On cancel: cleanup and exit gracefully</li>
+</ul>
+<hr>
+<h2 id="game-execution-process-management">Game Execution &amp; Process Management<a class="anchor" href="#game-execution-process-management" aria-label="Link to this section">#</a></h2>
+<h3 id="execution-flow-runafterbuild-true">Execution Flow (runAfterBuild = true)<a class="anchor" href="#execution-flow-runafterbuild-true" aria-label="Link to this section">#</a></h3>
+<ol>
+<li>After successful build, launch game:</li>
+</ol>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">std::string exePath = settings.outputDir + <span class="hljs-string">&quot;/&quot;</span> + settings.executableName;
+<span class="hljs-keyword">return</span> <span class="hljs-built_in">RunGameAndWait</span>(exePath);
+</code></pre></div>
+<ol start="2">
+<li>
+<p>Platform-specific process launching:</p>
+<ul>
+<li><strong>Windows:</strong> <code>CreateProcess()</code> + <code>WaitForSingleObject()</code></li>
+<li><strong>Linux:</strong> <code>fork()</code> + <code>waitpid()</code> or <code>std::system()</code></li>
+</ul>
+</li>
+<li>
+<p>UI shows &quot;Game running...&quot; during wait</p>
+</li>
+<li>
+<p>When game closes, return to build dialog</p>
+</li>
+</ol>
+<hr>
+<h2 id="platform-specific-implementation">Platform-Specific Implementation<a class="anchor" href="#platform-specific-implementation" aria-label="Link to this section">#</a></h2>
+<h3 id="windows_x64">Windows_x64<a class="anchor" href="#windows_x64" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Runtime:</strong> <code>bin/CaffeineRuntime.exe</code></li>
+<li><strong>Output:</strong> <code>.exe</code> + data folder</li>
+<li><strong>Asset Format:</strong> DDS, SPIR-V</li>
+<li><strong>Process launch:</strong> <code>CreateProcess()</code> from <code>&lt;windows.h&gt;</code></li>
+<li><strong>Binary detection:</strong> Check for <code>.exe</code> extension</li>
+</ul>
+<h3 id="linux_x64">Linux_x64<a class="anchor" href="#linux_x64" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Runtime:</strong> <code>bin/CaffeineRuntime</code> (no extension)</li>
+<li><strong>Output:</strong> ELF binary + data folder</li>
+<li><strong>Asset Format:</strong> DDS, SPIR-V (same as Windows)</li>
+<li><strong>Process launch:</strong> <code>fork()</code> + <code>execv()</code> from <code>&lt;unistd.h&gt;</code></li>
+<li><strong>Permissions:</strong> <code>chmod +x</code> on output binary</li>
+</ul>
+<hr>
+<h2 id="error-handling-strategy">Error Handling Strategy<a class="anchor" href="#error-handling-strategy" aria-label="Link to this section">#</a></h2>
+<h3 id="validation-errors">Validation Errors<a class="anchor" href="#validation-errors" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Missing/invalid paths</li>
+<li>Unsupported platform</li>
+<li><strong>Action:</strong> Fail immediately in dialog, highlight field</li>
+</ul>
+<h3 id="script-compilation-errors">Script Compilation Errors<a class="anchor" href="#script-compilation-errors" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Lua syntax errors</li>
+<li><strong>Action:</strong> List all errors in console, don't proceed to asset cooking</li>
+<li><strong>Recovery:</strong> User fixes script, clicks &quot;Build &amp; Run&quot; again</li>
+</ul>
+<h3 id="asset-cooking-errors">Asset Cooking Errors<a class="anchor" href="#asset-cooking-errors" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Texture not found</li>
+<li>Shader compilation failed</li>
+<li><strong>Action:</strong> Log error, skip asset, continue build (allow partial builds)</li>
+<li><strong>Recovery:</strong> Fix asset, rebuild</li>
+</ul>
+<h3 id="linkpackage-errors">Link/Package Errors<a class="anchor" href="#linkpackage-errors" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Runtime not found</li>
+<li>Permission denied</li>
+<li><strong>Action:</strong> Fail, cleanup output_dir completely</li>
+</ul>
+<h3 id="cleanup-on-failure">Cleanup on Failure<a class="anchor" href="#cleanup-on-failure" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">bool</span> <span class="hljs-title">CleanupOnFailure</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; outputDir)</span> </span>{
+    std::filesystem::<span class="hljs-built_in">remove_all</span>(outputDir);
+    <span class="hljs-comment">// Ensures no partial builds remain</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+</code></pre></div>
+<hr>
+<h2 id="acceptance-criteria">Acceptance Criteria<a class="anchor" href="#acceptance-criteria" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>✅ Dialog allows configurable build settings (platform, debug/release, output path)</li>
+<li>✅ &quot;Build &amp; Run&quot; executes full pipeline and auto-launches game</li>
+<li>Console displays real-time built progress with detailed logs</li>
+<li>Incremental builds skip unchanged assets</li>
+<li>✅ Build failure always cleans up output_dir</li>
+<li>Game process waits for close before returning to editor</li>
+<li>✅ project.caffeine generated with startup scenes</li>
+<li>Supports Windows x64 and Linux x64 platforms</li>
+</ul>
+<hr>
+<h2 id="files-to-create">Files to Create<a class="anchor" href="#files-to-create" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><code>doppio-archived/src/doppio/editor/BuildSystem.hpp</code> - Core coordinator class</li>
+<li><code>doppio-archived/src/doppio/editor/BuildSystem.cpp</code> - Pipeline implementation</li>
+<li><code>doppio-archived/src/doppio/editor/BuildDialog.hpp</code> - ImGui panel</li>
+<li><code>doppio-archived/src/doppio/editor/BuildDialog.cpp</code> - Panel rendering</li>
+<li><code>doppio-archived/src/doppio/editor/AssetCooker.hpp</code> - Texture/shader cooking</li>
+<li><code>doppio-archived/src/doppio/editor/AssetCooker.cpp</code> - Asset processing</li>
+</ol>
+<hr>
+<h2 id="dependencies">Dependencies<a class="anchor" href="#dependencies" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Upstream:</strong> <code>src/caffeine/project/ProjectManager.hpp</code> (project config)</li>
+<li><strong>Upstream:</strong> <code>src/caffeine/assets/TextureCompiler.hpp</code> (texture cooking)</li>
+<li><strong>Upstream:</strong> <code>src/caffeine/threading/JobSystem.hpp</code> (background execution)</li>
+<li><strong>Upstream:</strong> <code>doppio-archived/src/doppio/editor/ConsoleWindow.hpp</code> (log display)</li>
+<li><strong>New:</strong> <code>src/caffeine/render/ShaderCompiler.hpp</code> (shader cooking)</li>
+<li><strong>New:</strong> <code>src/script/LuaValidator.hpp</code> (script validation)</li>
+</ul>
+<hr>
+<p><strong>Design approved by:</strong> User
+<strong>Approval date:</strong> May 16, 2026</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-16-buildsystem-design.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-16-buildsystem-implementation/"><span>Previous</span><strong>BuildSystem Implementation Plan</strong></a><a class="pager-next" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/"><span>Next</span><strong>Audio Preview &amp; Spatial Placement Implementation Plan</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#overview">Overview</a></li><li class="l2"><a href="#architecture">Architecture</a></li><li class="l3"><a href="#core-types">Core Types</a></li><li class="l3"><a href="#buildsystem-class">BuildSystem Class</a></li><li class="l3"><a href="#builddialog-class">BuildDialog Class</a></li><li class="l2"><a href="#pipeline-execution-flow">Pipeline Execution Flow</a></li><li class="l3"><a href="#stage-by-stage-breakdown">Stage-by-Stage Breakdown</a></li><li class="l3"><a href="#failure-handling">Failure Handling</a></li><li class="l2"><a href="#incremental-build-system">Incremental Build System</a></li><li class="l3"><a href="#cache-file-format">Cache File Format</a></li><li class="l3"><a href="#cache-checking-logic">Cache Checking Logic</a></li><li class="l2"><a href="#asset-cooking-implementations">Asset Cooking Implementations</a></li><li class="l3"><a href="#texture-cooking">Texture Cooking</a></li><li class="l3"><a href="#shader-cooking">Shader Cooking</a></li><li class="l3"><a href="#script-validation">Script Validation</a></li><li class="l2"><a href="#threading-ui-integration">Threading &amp; UI Integration</a></li><li class="l3"><a href="#execution-model">Execution Model</a></li><li class="l3"><a href="#progress-updates-thread-safe">Progress Updates (Thread-Safe)</a></li><li class="l3"><a href="#cancellation">Cancellation</a></li><li class="l2"><a href="#game-execution-process-management">Game Execution &amp; Process Management</a></li><li class="l3"><a href="#execution-flow-runafterbuild-true">Execution Flow (runAfterBuild = true)</a></li><li class="l2"><a href="#platform-specific-implementation">Platform-Specific Implementation</a></li><li class="l3"><a href="#windows_x64">Windows_x64</a></li><li class="l3"><a href="#linux_x64">Linux_x64</a></li><li class="l2"><a href="#error-handling-strategy">Error Handling Strategy</a></li><li class="l3"><a href="#validation-errors">Validation Errors</a></li><li class="l3"><a href="#script-compilation-errors">Script Compilation Errors</a></li><li class="l3"><a href="#asset-cooking-errors">Asset Cooking Errors</a></li><li class="l3"><a href="#linkpackage-errors">Link/Package Errors</a></li><li class="l3"><a href="#cleanup-on-failure">Cleanup on Failure</a></li><li class="l2"><a href="#acceptance-criteria">Acceptance Criteria</a></li><li class="l2"><a href="#files-to-create">Files to Create</a></li><li class="l2"><a href="#dependencies">Dependencies</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

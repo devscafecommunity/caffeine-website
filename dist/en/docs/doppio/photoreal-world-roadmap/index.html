@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photoreal procedural world — validation and roadmap · Caffeine</title>
+<meta name="description" content="One seed, rule files ( .nature , .mat , terrain and water graphs) and deterministic chunk streaming, so a whole photoreal world is generated on demand, always identical, and mostly baked. This page checks the idea agains">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Photoreal procedural world — validation and roadmap · Caffeine">
+<meta property="og:description" content="One seed, rule files ( .nature , .mat , terrain and water graphs) and deterministic chunk streaming, so a whole photoreal world is generated on demand, always identical, and mostly baked. This page checks the idea agains">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/photoreal-world-roadmap/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/photoreal-world-roadmap/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/photoreal-world-roadmap/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/photoreal-world-roadmap/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link active" href="/en/docs/doppio/photoreal-world-roadmap/" aria-current="page">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Photoreal procedural world — validation and roadmap</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last updated: <time datetime="2026-11-21">2026-11-21</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/photoreal-world-roadmap.md"><code>photoreal-world-roadmap.md</code></a></span>
+</div>
+<p class="doc-lede">One seed, rule files (<code>.nature</code>, <code>.mat</code>, terrain and water graphs) and
+deterministic chunk streaming, so a whole photoreal world is generated on demand, always identical, and
+mostly baked. This page checks the idea against the code and lists what to build, in order.</p>
+<h2 id="1-verdict">1. Verdict<a class="anchor" href="#1-verdict" aria-label="Link to this section">#</a></h2>
+<p><strong>Implementable, with the current stack (Rust/Iced editor, C++ engine on SDL3 GPU, C ABI).</strong> Nothing in the idea
+needs a new renderer. The hard parts are not graphics: they are <em>determinism</em>, <em>chunk borders</em> and
+<em>connecting the generators</em>. Most of the rendering features a &quot;photoreal&quot; pass asks for already exist; the
+missing piece is the <strong>world layer</strong> that connects terrain, nature, materials and water.</p>
+<p>The idea has four parts. Their status in the repository:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Idea</th>
+<th>Status</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Procedural materials, multi-frequency, anti-tiling</td>
+<td><strong>Done</strong>, tune with recipes</td>
+<td>~123 procedural ops, 78 presets, Variation class (<code>material-pipeline.md</code>)</td>
+</tr>
+<tr>
+<td>Depth: parallax, micro-shadows, AO, IBL</td>
+<td><strong>Done</strong></td>
+<td>POM with self-shadow, geometric displacement, height-derived AO, env map + probe IBL (<code>scene_lit.frag</code>)</td>
+</tr>
+<tr>
+<td>Rules as files (<code>.nature</code>, <code>.mat</code>, terrain/water graphs)</td>
+<td><strong>Done per tool</strong>, not linked</td>
+<td>each generator saves its own graph and places assets</td>
+</tr>
+<tr>
+<td>Seed → deterministic world, streamed by chunk</td>
+<td><strong>Partial</strong></td>
+<td><code>ProceduralStreamer</code> + <code>hash01(cx, cz, seed)</code> exist, but use a built-in fbm terrain and props, not the generators</td>
+</tr>
+<tr>
+<td>Vegetation/rocks adapted to terrain, scattered by masks</td>
+<td><strong>Partial</strong></td>
+<td>scatter core + biome table + <strong>Scene &gt; Scatter on Terrain</strong> (C ABI v16) place plans by slope, wetness and height (<code>terrain-generator-guide.md</code>); streaming by chunk and the generators' output as scatter content are still open</td>
+</tr>
+<tr>
+<td>Instancing, LOD, impostors for mass vegetation</td>
+<td><strong>Partial</strong></td>
+<td>instanced draws (also with painted vertex colour), wind, translucency and alpha-tested shadows exist; <strong>Micromesh cluster LOD</strong> now draws dense opaque parts (rocks, trunks) through the scene renderer (<code>micromeshes.md</code>); foliage cards still have no LOD chain or impostors</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="2-review-of-the-claims-in-the-original-discussion">2. Review of the claims in the original discussion<a class="anchor" href="#2-review-of-the-claims-in-the-original-discussion" aria-label="Link to this section">#</a></h2>
+<p>Kept as true, with caveats that matter for the design.</p>
+<ul>
+<li><strong>&quot;Stable by derived seeds.&quot;</strong> True, and already how the streamer works (<code>hash01(cx, cz, seed, salt)</code>).
+Caveats: (1) use an <strong>integer hash</strong> (xxHash or SplitMix) per cell, never floating-point sums;
+(2) never let a parallel reduction decide the order of results, sort by cell id; (3) pin the noise and
+<code>libm</code> calls (or avoid <code>sin</code>/<code>pow</code> in anything that decides <em>placement</em>), otherwise two platforms place
+a tree a metre apart; (4) version the algorithm: a change to a <code>.nature</code> op changes every tree, so each rule
+file carries a <code>generator_version</code> and old worlds keep the old behaviour or are re-baked on purpose.</li>
+<li><strong>&quot;Save only rule + position + sub-seed.&quot;</strong> True for <em>generated</em> content. Anything the user <em>edits</em> (sculpted
+terrain, a moved tree, a deleted rock) must be stored as a sparse <strong>delta layer</strong> over the generated
+world, or editing breaks determinism. Add this from the start.</li>
+<li><strong>&quot;Generate once per chunk, freeze the result.&quot;</strong> Right, and it fixes the performance worry. Cache by
+<code>(world_seed, chunk, rule hashes, generator_version)</code>, on disk as well as in RAM (this is the &quot;pre-compiled&quot;
+part of the idea).</li>
+<li><strong>Chunk borders are the real trap.</strong> A tree whose crown crosses a chunk edge must not be duplicated or
+cut. Use <strong>cell ownership</strong>: placement runs on a global jittered grid (or blue-noise/Poisson cells); a cell
+belongs to exactly one chunk, and a chunk generates its own cells <em>plus a margin read-only</em> to resolve
+collisions with neighbours' cells, using the same deterministic order.</li>
+<li><strong>&quot;Trees do not cross rocks or each other.&quot;</strong> Solve it at <em>placement</em>, not at mesh time: priority classes
+(rocks, then trees, then bushes, then grass), exclusion radius per class, and a density mask. This is cheap
+and deterministic. Per-vertex raycasts are only for the trunk base.</li>
+<li><strong>Ground conforming.</strong> Sample <code>terrain_height(x, z)</code> (exists in the C ABI) and the terrain normal. Trees
+take a <em>blend</em> of up and the normal (small factor), rocks sink by the lowest height under their footprint,
+grass follows the normal. Root flare and rock skirts need a deformed base mesh and vertex colour (not done,
+see phase 3).</li>
+<li><strong>Contact blending.</strong> Correct: vertex colour on the base plus a ground blend in the shader. Needs the
+<strong>vertex colour</strong> channel that the Nature Generator does not have yet.</li>
+<li><strong>The pasted Height-to-AO code</strong> (Rust, 8 directions): the idea is right, and we already ship an AO from
+height. If it is reused: the parallel version has a typo, the direction <code>(0, 2)</code> should be <code>(0, -1)</code>, and
+the slope term <code>height_diff / distance</code> ignores the world scale of the texel, so AO strength changes with
+resolution. Compare with ours before replacing anything.</li>
+<li><strong>&quot;Photorealism is only the graph.&quot;</strong> Partly. Photoreal also depends on <strong>scale and variety</strong>:
+one bark texture on every trunk looks fake at any quality. Per-instance tint, wetness, wind and
+seasonal variation matter as much as extra noise octaves.</li>
+</ul>
+<p>Corrections specific to this project:</p>
+<ul>
+<li>The original text speaks of <code>SDL_CreateTexture</code>, a 2D API. The engine uses <strong>SDL3 GPU</strong>; mips are already
+generated (<code>createMippedTexture</code>, box filter). Better filtering (Kaiser) and an explicit anisotropic
+sampler setting are optional improvements, not a gap.</li>
+<li>Normal blending (whiteout) already exists as a graph node; the preview material path does not need a
+new blend function.</li>
+<li>Specular IBL here uses an equirectangular sky and a probe; a <strong>prefiltered cubemap with a BRDF LUT</strong> is
+the proper split-sum form and a possible quality upgrade, not a missing feature.</li>
+</ul>
+<h2 id="3-target-architecture">3. Target architecture<a class="anchor" href="#3-target-architecture" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">world.cworld  (seed, generator_version, layer list, edit deltas)
+   ├─ terrain graph  → height + masks (slope, wetness, flow, biome)   [exists: terrain generator]
+   ├─ biome rules    → density per class from the masks               [new]
+   ├─ scatter rules  → .nature / .rock / grass refs + placement rules [new]
+   ├─ water graph    → water bodies from flow and sea level           [partial]
+   └─ material layers→ splat/blend from the same masks                [partial]
+
+per chunk (worker thread, deterministic):
+   masks → placement (cells, priority, exclusion) → instances (transform + sub-seed + variant)
+        → bake cache (RAM + disk) → GPU instance buffers per LOD → draw
+</code></pre></div>
+<p>Principles: (1) a chunk is a <strong>pure function</strong> of the world file and its coordinates; (2) generators produce
+<strong>data</strong> (fields, instance lists, meshes), the renderer never runs a graph; (3) only commands via
+<code>Message</code>s and MCP actions, as in the rest of Doppio; (4) <code>libcaffeine-capi</code> stays the only boundary.</p>
+<h2 id="4-roadmap">4. Roadmap<a class="anchor" href="#4-roadmap" aria-label="Link to this section">#</a></h2>
+<p>Each phase ends with something visible and testable headless. Do them in order; phases 1 and 2 are
+independent of renderer work.</p>
+<h3 id="phase-0-determinism-foundation">Phase 0 — Determinism foundation<a class="anchor" href="#phase-0-determinism-foundation" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] <code>core/Hash.hpp</code>: SplitMix64 <code>deriveSeed(parent, salt, x, z)</code>, <code>toUnit</code>, <code>GENERATOR_VERSION</code>; golden test
+<code>tests/test_hash.cpp</code> pins outputs, <code>recipe_ref.rs</code> pins the same numbers in Rust.</li>
+<li>[x] The streamer's placement decisions go through <code>placementHash(version, ...)</code>: version 1 is the legacy <code>hash01</code>, version 2 the
+SplitMix64 of <code>core/Hash.hpp</code>. <code>ProceduralWorldComponent::generatorVersion</code> stores the choice and <strong>defaults to 1</strong>, so
+existing worlds do not move; new worlds should set <code>Core::GENERATOR_VERSION</code>. Tested in <code>tests/test_scatter.cpp</code>.</li>
+<li>[x] <code>generator_version</code> field in every <code>generator.*</code> recipe (nature, material, texture, terrain, water).</li>
+<li>[ ] The same field in bare <code>.mat</code> files and in the world file (there is no world file yet).</li>
+<li>[x] Test: derived seeds for a block of cells are identical on 1 and on 7 threads (<code>tests/test_hash.cpp</code>).</li>
+<li>[x] The same test for whole generated scatter chunks: 1 and 7 threads give identical results, and cutting the world into
+32 m, 48 m or 96 m chunks gives the same instances (<code>tests/test_scatter.cpp</code>). Whole streamer chunks (cubes) still to do.</li>
+</ul>
+<h3 id="phase-1-terrain-masks-exported-to-the-engine">Phase 1 — Terrain masks exported to the engine<a class="anchor" href="#phase-1-terrain-masks-exported-to-the-engine" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] The terrain exposes named <strong>masks</strong> as engine-readable fields: <code>height</code>, <code>slope</code> and <code>curvature</code> derived by the engine from the
+heightfield (exact, nothing stored), and <code>flow</code> (D8 drainage), <code>wetness</code>, <code>wear</code> and <code>deposit</code> (erosion) sent by the generator as 8-bit
+masks, saved with the terrain file (version 3). The Output node gained optional Wear and Deposit inputs (the presets with erosion wire
+them). 8 bits is the one precision; 16-bit masks were dropped as unneeded for weights. Picture in <code>terrain-generator-guide.md</code>.</li>
+<li>[x] C ABI v15: <code>set_terrain_mask</code>, <code>terrain_mask_count/at</code>, <code>terrain_mask</code> at a point, <code>terrain_mask_rect</code> over a rectangle,
+<code>terrain_normal</code> at a point (POD info struct); the Rust crate wraps them. Tested on both sides: <code>tests/test_terrain_masks.cpp</code>,
+<code>tests/test_capi.cpp</code>, and an engine-backed Doppio test that places the Alpine Range and checks every mask against the heights.</li>
+<li>[x] <strong>Biome table</strong> (<code>terrain/TerrainBiome</code>): per scatter class, <code>base x</code> a product of trapezoid terms over masks, as plain text, plugged into
+the scatter module's density callback; an unknown mask places nothing and is listed by <code>missingMasks</code>. Tested with the scatter module
+(trees never on steep or wet ground, rocks only on the ridge). Not yet read or written by the editor: that is the World tab (phase 6).</li>
+<li>[ ] Masks still to make: height <em>bands</em> as named masks (<code>height</code> covers the raw value; a band is a biome term today), a <code>wear</code> mask for
+terrains that did not use hydraulic erosion, and masks painted in the editor.</li>
+</ul>
+<h3 id="phase-2-scatter-engine-core-no-ui">Phase 2 — Scatter engine (core, no UI)<a class="anchor" href="#phase-2-scatter-engine-core-no-ui" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] <code>scatter</code> module (<code>src/caffeine/scatter/Scatter.hpp</code>): jittered grid per class, density from a callback (the biome maps will
+plug in there), exclusion radii, priority order, ownership by position and a margin for chunk borders. Conflicts use a
+<strong>non-recursive rule</strong> (a point yields to any closer point with a higher key, whether or not that one survives), so a chunk
+needs only a margin of two radii and never depends on its neighbours or on load order.</li>
+<li>[x] Output: instance list <code>(position, up, yaw, scale, variant, sub-seed, tint)</code>; conformed to height and normal with per-class
+rules (<code>tiltToNormal</code>, <code>sink</code> per scale, tint jitter, scale range). Rock sink by footprint minimum is still a single
+sample at the centre.</li>
+<li>[x] Tests: no overlap inside and across chunk borders (all pairs over 3 x 3 chunks); same result for any chunking and load order;
+density follows the mask; priority classes are unaffected by lower ones.</li>
+<li>[x] <strong>C ABI v16 and the Doppio <em>Scatter</em> action</strong>: <code>scatterTerrain</code> (region, chunk-size independent) behind <code>caffeine_session_scatter_terrain</code> and
+<code>caffeine_biome_check</code>; <em>Scene &gt; Scatter on Terrain</em> and the agent action <code>scatter_on_terrain</code> place a text plan (<code>Scatter/*.scatter</code>) as entities in
+one undo step, with the biome table as density. Tested in <code>tests/test_scatter.cpp</code>, <code>tests/test_capi.cpp</code> and engine-backed in Doppio
+(<code>terrain-generator-guide.md</code>).</li>
+</ul>
+<h3 id="phase-3-nature-assets-that-can-be-scattered">Phase 3 — Nature assets that can be scattered<a class="anchor" href="#phase-3-nature-assets-that-can-be-scattered" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] <strong>Vertex colour</strong> and a <strong>painted flutter weight</strong> in the Nature mesh output: OBJ <code>v x y z r g b a</code>, read by the engine into a
+second vertex stream (no ABI change); wind sway, flutter and translucency are material fields (C ABI v9).</li>
+<li>[x] <strong>Material slots per submesh</strong>: OBJ <code>usemtl</code> groups load as sub-meshes, the Mesh Filter's <code>Material slots</code> (<code>a.mat;b.mat</code>) give each its own
+authored material (one draw per slot, so shadows, alpha and Micromesh follow the slot), no ABI change; the Nature generator's <em>Merge parts</em>
+places a model as a solid and a cut-out entity with a slot per part. Tested in <code>tests/test_material_slots.cpp</code> and engine-backed in Doppio.</li>
+<li>[ ] Base deformation: root flare and rock skirt from a ground height callback at bake time.</li>
+<li>[x] Variants: N seeds per nature recipe baked into a cached variant set (<code>recipe_ref::nature_variants</code>, <code>doppio-material variants</code>).</li>
+<li>[x] Per-instance tint and scale range (<code>ScatterClass::tintJitter</code>, <code>minScale</code>/<code>maxScale</code>). Applying the tint through the Mesh Renderer
+modifier (C ABI v10) is the missing last step of the scatter integration.</li>
+<li>[ ] Ground-contact blend in the shader (rock/trunk to ground colour using vertex colour).</li>
+</ul>
+<h3 id="phase-4-rendering-at-scale">Phase 4 — Rendering at scale<a class="anchor" href="#phase-4-rendering-at-scale" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] GPU-instanced vegetation with per-chunk instance buffers. The instanced path now also covers meshes with a painted
+colour stream (nature scatter parts are placed as batched copies); the 256-per-batch limit and per-chunk buffers remain.</li>
+<li>[x] <strong>Cluster LOD for opaque parts</strong> (rocks, trunks, boulders): Mesh Renderer -&gt; Micromesh draws a mesh as a GPU-selected cluster cut,
+crack-free, with shadow cascades, vertex colours and sub-meshes, and optional occlusion. Measured on 81 dense rocks and a 300-tree
+forest: 6.1x and 3.3x fewer triangles (<code>micromeshes.md</code>, <code>./scripts/benchmark-micromesh.sh</code>).</li>
+<li>[ ] LOD chain from the same graph for what Micromesh does not take (alpha-tested foliage cards, wind-animated parts): simplified
+cards and a <strong>billboard impostor atlas</strong> baked per variant, distance and screen-size switching with dithered cross-fade. Also open:
+the Nature generator now switches Micromesh on for solid parts of 3 000 triangles or more (the Nature <em>Micromesh</em> option); terrain and water do not.</li>
+<li>[ ] Culling by chunk, then by instance, on the CPU first; GPU culling only if profiling asks for it. (Per-instance frustum culling
+exists and is counted in the frame stats; there are no chunks yet; Micromesh culls clusters on the GPU, with occlusion against last
+frame's depth, for the meshes that opt in.)</li>
+<li>[x] Wind (vertex stage, also in the shadow pass), leaf translucency, a normal map on leaf cards and alpha-tested shadows for
+cut-out cards.</li>
+</ul>
+<h3 id="phase-5-streaming-and-caching">Phase 5 — Streaming and caching<a class="anchor" href="#phase-5-streaming-and-caching" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Chunk jobs on the engine thread pool with a priority queue and a per-frame time budget; never block the
+viewport (same rule as the generator bakes).</li>
+<li>[ ] Persistent bake cache keyed by <code>(seed, chunk, rule hashes, generator_version)</code>; invalidation when a
+rule file changes.</li>
+<li>[ ] Edit layer: sparse deltas for sculpt, moved or removed instances; applied after generation.</li>
+<li>[x] Engine side of bigger heightfields: the C ABI accepts terrains up to 4097 x 4097 and the chunked LOD draws them; a 1025 x 1025 terrain
+(2.1 M triangles) submits about 0.84 M in about 410 draws (benchmark set). Measured, not just allowed.</li>
+<li>[ ] The terrain generator still outputs 129, 257 or 513 only, and there is no tiling or streaming of a terrain larger than one heightfield
+(the terrain guide still says 513 and lists a tiled or GPU path; its limit text predates the 1025 measurement).</li>
+</ul>
+<h3 id="phase-6-editor-integration">Phase 6 — Editor integration<a class="anchor" href="#phase-6-editor-integration" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] A <strong>World</strong> tab: seed, layer list, biome table, rule files per class, region painting of overrides.</li>
+<li>[ ] Place and preview a chunk grid in the viewport; show cache hits and chunk build time in the HUD.</li>
+<li>[ ] <code>UiId</code> entries, undoable edits (<code>App::commit</code>), MCP actions and a headless flow for each step.</li>
+<li>[ ] Docs: update the Nature, Terrain and Water guides and the website pages; regenerate captures through
+the headless driver.</li>
+</ul>
+<h3 id="phase-7-visual-quality-pass-parallel-track">Phase 7 — Visual quality pass (parallel track)<a class="anchor" href="#phase-7-visual-quality-pass-parallel-track" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Prefiltered environment cubemap + BRDF LUT (split-sum); keep the current path as fallback. (Today: the equirectangular sky with mips,
+per-object probes and an analytic split-sum approximation of the BRDF term in <code>scene_lit.frag</code>.)</li>
+<li>[x] Run-time modifiers (C ABI v10): tint, wetness, snow, age on the Mesh Renderer and the material; scripts can drive them per
+entity. Driving them from terrain masks is open.</li>
+<li>[x] Water on the GPU: Gerstner waves in the vertex shader (no per-frame mesh rebuild), ripple detail, depth colour and foam.</li>
+<li>[x] Generated bark sets (oak, pine, birch) with parallax relief; grass and soil surfaces from the Rock Surface bake are still open.</li>
+<li>[ ] Reference scenes with fixed seeds, rendered headless, used as visual regression baselines. (The benchmark set already
+generates its content by hashes, byte-identically, and its triangle and draw counts reproduce exactly, but nothing compares
+pictures against a stored baseline yet; the water-dark-patch and Micromesh scene tests compare two renders of one run.)</li>
+</ul>
+<h3 id="where-it-stands-2026-11-20">Where it stands (2026-11-20)<a class="anchor" href="#where-it-stands-2026-11-20" aria-label="Link to this section">#</a></h3>
+<p>22 items done, 17 open. The finished work is the <strong>foundation and the rendering side</strong>; what is missing is the <strong>world layer</strong> that
+connects the generators, which this page called the missing piece from the start.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Done</th>
+<th>Open</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 Determinism</td>
+<td>5</td>
+<td>1</td>
+<td>complete for what exists (hash, versions, thread-count tests); the world file does not exist yet</td>
+</tr>
+<tr>
+<td>1 Terrain masks</td>
+<td>3</td>
+<td>1</td>
+<td><strong>done</strong> (7 masks, C ABI v15, biome table); painted masks and bands open</td>
+</tr>
+<tr>
+<td>2 Scatter engine</td>
+<td>4</td>
+<td>0</td>
+<td><strong>done</strong>: core, C ABI v16 and the Scatter action place plans by the terrain's masks</td>
+</tr>
+<tr>
+<td>3 Scatterable nature</td>
+<td>4</td>
+<td>2</td>
+<td>vertex colour, variants, tint/scale and <strong>material slots</strong> done; root flare and ground blend open</td>
+</tr>
+<tr>
+<td>4 Rendering at scale</td>
+<td>2</td>
+<td>3</td>
+<td>wind/translucency/shadows and <strong>Micromesh cluster LOD</strong> done; foliage LOD and impostors, chunk instance buffers open</td>
+</tr>
+<tr>
+<td>5 Streaming and caching</td>
+<td>1</td>
+<td>4</td>
+<td>engine accepts big terrains; no chunk jobs, no bake cache, no edit layer</td>
+</tr>
+<tr>
+<td>6 Editor integration</td>
+<td>0</td>
+<td>4</td>
+<td><strong>not started</strong> (no World tab)</td>
+</tr>
+<tr>
+<td>7 Visual quality</td>
+<td>3</td>
+<td>2</td>
+<td>modifiers, GPU water, bark done; prefiltered cubemap and image baselines open</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>What is left, in the order that unblocks the most</strong> (each item ships alone):</p>
+<ol>
+<li><s>Phase 1, masks to the engine</s> <strong>done</strong>: the scatter module's density callback, the run-time modifiers and the splat/material blend can
+now read masks.</li>
+<li><s>Phase 2, the Scatter action</s> <strong>done</strong>: the finished scatter core, the biome table, the variants, the tint and the Micromesh/instanced draw paths
+now show up in a scene (<em>Scene &gt; Scatter on Terrain</em>). Its limit is scale: every instance is an entity, which is what phase 4's per-chunk buffers fix.</li>
+<li><s>Phase 3, material slots per submesh</s> <strong>done</strong>, with the Nature generator switching <strong>Micromesh</strong> on for dense solid parts. What is left of
+phase 3 is the base deformation (root flare, rock skirt) and the ground-contact blend in the shader; both want the terrain height at bake
+time, which the scatter action now has.</li>
+<li><strong>Phase 4, foliage</strong>: simplified cards and a billboard impostor atlas, then per-chunk instance buffers and chunk culling.</li>
+<li><strong>Phase 5</strong>: chunk jobs with a time budget, the bake cache, then the edit layer (design the delta format before the editor exists).</li>
+<li><strong>Phase 6</strong>: the World tab, once 1 to 5 give it something to drive. Phase 7's image baselines can start now: a scatter scene exists to render
+(<code>scripts/render-scatter-docs.sh</code>).</li>
+</ol>
+<p>The one decision that is not engineering: <strong>the world file</strong> (<code>world.cworld</code>) has no owner yet. Phases 0, 5 and 6 each need it; define its
+layers and delta format before phase 5.</p>
+<h2 id="5-risks">5. Risks<a class="anchor" href="#5-risks" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Float differences change placement across machines</td>
+<td>integer hash, versioned algorithm, golden tests (phase 0)</td>
+</tr>
+<tr>
+<td>Chunk-border duplicates or gaps</td>
+<td>cell ownership and read-only margin (phase 2)</td>
+</tr>
+<tr>
+<td>Generation hitches while moving</td>
+<td>time-budgeted jobs, cache, prefetch ring (phase 5)</td>
+</tr>
+<tr>
+<td>Many materials per tree break batching</td>
+<td>slots per submesh (done: one entity, one draw per slot, instanced batches keep working per slot), atlas variants, impostors (phases 3, 4)</td>
+</tr>
+<tr>
+<td>User edits break determinism</td>
+<td>sparse delta layer from day one (phase 5)</td>
+</tr>
+<tr>
+<td>Scope: seven generators in one world</td>
+<td>each phase ships alone and is useful without the next</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="6-related">6. Related<a class="anchor" href="#6-related" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/doppio/world-composition/"><code>world-composition.md</code></a>: the World Composer design (one file that composes terrain, nature, water and materials, with position-hashed adaptation). It supersedes section 3 and phase 6 here.</li>
+<li><a href="/en/docs/doppio/material-pipeline/"><code>material-pipeline.md</code></a>: materials, depth, variation.</li>
+<li><a href="/en/docs/doppio/nature-generator-guide/"><code>nature-generator-guide.md</code></a>: recipes, LOD and instancing gaps.</li>
+<li><a href="/en/docs/doppio/terrain-generator-guide/"><code>terrain-generator-guide.md</code></a>: masks, splat layers, limits.</li>
+<li><a href="/en/docs/doppio/water-generator-guide/"><code>water-generator-guide.md</code></a>: water surface and <code>water_height</code>.</li>
+<li><a href="/en/docs/doppio/graphics-roadmap/"><code>graphics-roadmap.md</code></a>: the renderer side (Micromeshes, Photon).</li>
+<li><a href="/en/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>: the cluster hierarchy and GPU cut that dense trunks and rocks use now, with the benchmark set.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/photoreal-world-roadmap.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/photon-guide/"><span>Previous</span><strong>Photon: global illumination in Doppio</strong></a><a class="pager-next" href="/en/docs/doppio/profiler-guide/"><span>Next</span><strong>Profiler: where a frame's time goes</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-verdict">1. Verdict</a></li><li class="l2"><a href="#2-review-of-the-claims-in-the-original-discussion">2. Review of the claims in the original discussion</a></li><li class="l2"><a href="#3-target-architecture">3. Target architecture</a></li><li class="l2"><a href="#4-roadmap">4. Roadmap</a></li><li class="l3"><a href="#phase-0-determinism-foundation">Phase 0 — Determinism foundation</a></li><li class="l3"><a href="#phase-1-terrain-masks-exported-to-the-engine">Phase 1 — Terrain masks exported to the engine</a></li><li class="l3"><a href="#phase-2-scatter-engine-core-no-ui">Phase 2 — Scatter engine (core, no UI)</a></li><li class="l3"><a href="#phase-3-nature-assets-that-can-be-scattered">Phase 3 — Nature assets that can be scattered</a></li><li class="l3"><a href="#phase-4-rendering-at-scale">Phase 4 — Rendering at scale</a></li><li class="l3"><a href="#phase-5-streaming-and-caching">Phase 5 — Streaming and caching</a></li><li class="l3"><a href="#phase-6-editor-integration">Phase 6 — Editor integration</a></li><li class="l3"><a href="#phase-7-visual-quality-pass-parallel-track">Phase 7 — Visual quality pass (parallel track)</a></li><li class="l3"><a href="#where-it-stands-2026-11-20">Where it stands (2026-11-20)</a></li><li class="l2"><a href="#5-risks">5. Risks</a></li><li class="l2"><a href="#6-related">6. Related</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

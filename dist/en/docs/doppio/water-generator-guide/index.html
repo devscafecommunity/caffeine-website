@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Water Generator: water bodies built with nodes · Caffeine</title>
+<meta name="description" content="Assemble lakes, rivers, seas and storms from a node graph and place them as an animated engine water surface.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Water Generator: water bodies built with nodes · Caffeine">
+<meta property="og:description" content="Assemble lakes, rivers, seas and storms from a node graph and place them as an animated engine water surface.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/water-generator-guide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/water-generator-guide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/water-generator-guide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/water-generator-guide/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link active" href="/en/docs/doppio/water-generator-guide/" aria-current="page">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Water Generator: water bodies built with nodes</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last updated: <time datetime="2026-11-20">2026-11-20</time></span>
+</div>
+<p class="doc-lede">Assemble lakes, rivers, seas and storms from a node graph and place them as an animated engine water surface.</p>
+<p>The <strong>Water</strong> tab (View menu, next to Nature) builds lakes, rivers, seas and storms from a <strong>node graph</strong>
+and places them in the scene as an animated engine water surface. It replaces the old fixed wind-wave
+block: waves are now <em>data</em> you assemble, and the same waves drive the editor preview, the engine mesh and
+gameplay queries (<code>water_height</code>, for floating objects).</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/water/ui/water-storm.png" alt="The Water tab with the Storm graph" loading="lazy">
+  <figcaption>The Water tab with the Storm graph</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/water/water-presets.png" alt="The eight presets, rendered by the engine" loading="lazy">
+  <figcaption>The eight presets, rendered by the engine</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/water/water-storm.gif" alt="The Storm preset in motion: tall steep waves moving across the surface" loading="lazy">
+  <figcaption>The Storm preset in motion. The waves are displaced on the GPU (<code>water.vert</code>) from the wave list, so the
+  surface is one flat grid and the frame rate does not depend on how many waves the graph has (up to 16). Rendered by
+  <code>./scripts/render-world-docs.sh</code>.</figcaption>
+</figure>
+<h2 id="1-how-a-graph-works">1. How a graph works<a class="anchor" href="#1-how-a-graph-works" aria-label="Link to this section">#</a></h2>
+<p>Two typed ports (two colours); a link only connects ports of the same type and never closes a cycle:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Carries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Waves</strong></td>
+<td>a list of Gerstner waves (direction, wavelength, amplitude, steepness, phase)</td>
+</tr>
+<tr>
+<td><strong>Look</strong></td>
+<td>the <strong>Water Material</strong>: colour, opacity (low = clear), roughness and foam threshold</td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Waves</td>
+<td><strong>Gerstner Wave</strong> (one explicit wave), <strong>Wind Sea</strong> (a spectrum from wind speed, direction, spread and choppiness), <strong>Swell</strong> (long regular trains from afar), <strong>Ripples</strong> (short waves from many directions)</td>
+</tr>
+<tr>
+<td>Modifiers</td>
+<td><strong>Merge Waves</strong> (up to four sources; keeps the strongest 16), <strong>Scale Waves</strong> (amplitude, wavelength, choppiness, rotation)</td>
+</tr>
+<tr>
+<td>Look</td>
+<td><strong>Water Material</strong></td>
+</tr>
+<tr>
+<td>Output</td>
+<td><strong>Output</strong>: size X/Z, water level, depth, mesh resolution, time scale, seed</td>
+</tr>
+</tbody>
+</table></div>
+<p>Interaction is the same as the other generators: palette on the left, canvas in the middle, parameters and
+the animated <strong>Surface preview</strong> on the right. Undo/redo cover every edit, <em>Export</em> writes
+<code>Water/&lt;name&gt;.generator.water</code> (a recipe wrapping the <code>CAFWATER1</code> / <code>WATERGRAPH1</code> text), <strong>Place in scene</strong> creates
+the entity. The preview is a top-down render of the same Gerstner sum the engine animates (sun-lit slopes, a
+Fresnel sky reflection, foam where crests compress); it is a shape preview, not the final shading.</p>
+<h2 id="1b-the-water-always-has-its-material">1b. The water always has its material<a class="anchor" href="#1b-the-water-always-has-its-material" aria-label="Link to this section">#</a></h2>
+<p>Water cannot exist without a material: the Output's <strong>Material</strong> port needs a <strong>Water Material</strong> node, and a graph
+without one does not build (&quot;The water has no material: wire a Water Material node...&quot;). <strong>Place in scene</strong> writes
+that node as a real project asset, <code>Water/&lt;name&gt;.mat</code> (colour and opacity, roughness, a low base reflectance, a thin
+clearcoat, transmission and the refraction index of water, alpha blend), and assigns it to the water entity, so the
+material is visible in the Assets panel and editable in the <strong>Material</strong> tab like any other. The engine renders the
+water with the entity's material whenever it has one (without a material it falls back to a built-in water look).
+Placing again regenerates the <code>.mat</code> from the node; keep your edits by assigning your own material afterwards.</p>
+<h2 id="2-why-this-is-modular-and-cheap">2. Why this is modular and cheap<a class="anchor" href="#2-why-this-is-modular-and-cheap" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Waves are the unit of work.</strong> A sea is a handful of well-chosen waves, not a texture or a simulation. The
+engine evaluates at most <strong>16 explicit waves</strong> on a vertex-displaced mesh, so the cost is
+<code>vertices x waves</code> regardless of how you built them. <em>Merge</em> keeps the strongest; the Gerstner stability
+bound (<code>sum(Q k A) &lt; 1</code>, crests never fold over themselves) is enforced by the sources and tested.</li>
+<li><strong>One model for everything.</strong> Lake, river, pool and ocean differ only in graph and Output: a river is two
+stretched waves along the flow plus cross ripples; a storm is a gale-driven spectrum plus a tall swell.</li>
+<li><strong>Gameplay can sample it.</strong> <code>caffeine_session_water_height(entity, x, z)</code> returns the simulated surface
+height, so boats and floating objects follow the same waves you see.</li>
+<li><strong>Mesh-aware.</strong> A vertex mesh cannot show a wave shorter than about three of its cells. Instead of aliasing
+into blocky patterns, such waves are <strong>faded out</strong> (between 2.5 and 4 cells) and the tab says how many.
+Fine detail needs a higher <em>Mesh resolution</em> (up to 256), a smaller body, or longer waves.</li>
+</ul>
+<h2 id="3-presets">3. Presets<a class="anchor" href="#3-presets" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Presets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Still</td>
+<td><strong>Calm Lake</strong>, <strong>Pond</strong>, <strong>Swimming Pool</strong></td>
+</tr>
+<tr>
+<td>Coast</td>
+<td><strong>Tropical Lagoon</strong></td>
+</tr>
+<tr>
+<td>Inland</td>
+<td><strong>River</strong>, <strong>Swamp</strong></td>
+</tr>
+<tr>
+<td>Sea</td>
+<td><strong>Open Sea</strong>, <strong>Storm</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Each is a graph you can open and edit. Tested properties: every preset builds valid water, the storm is
+taller than the sea which is taller than the lake, a stormier sea has a lower foam threshold, seeds change
+the waves, and no preset contains a wave its mesh cannot show.</p>
+<h2 id="4-engine-side-c-abi-v7">4. Engine side (C ABI v7)<a class="anchor" href="#4-engine-side-c-abi-v7" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><code>NaturalFluidComponent</code> gained <code>customWaveCount</code> and <code>customWaves[16][6]</code>, <strong>appended</strong> at the end: older
+scenes load unchanged (the serialiser copies the common prefix) and tests cover it. With custom waves the
+component uses them instead of the generated wind spectrum (<code>WaveSettings::explicitWaves</code>; the dispersion
+relation fills in the missing angular frequency).</li>
+<li><code>CaffeineWater</code> (POD, up to 16 <code>CaffeineWaterWave</code>) with <code>caffeine_session_set_water</code>,
+<code>caffeine_session_water</code> and <code>caffeine_session_water_height</code>. The Rust <code>doppio-engine</code> crate wraps them as
+<code>Water</code>, <code>WaterWave</code>, <code>Engine::set_water/water/water_height</code>.</li>
+<li><code>caffeine_session_tick</code> now steps natural fluids, and the editor ticks the engine while a water surface is
+in the scene, so the surface animates in the viewport (the runtime app already did this).</li>
+<li><strong>Waves run on the GPU.</strong> The surface used to be rebuilt on the CPU every frame (a 256 x 256 grid sampled
+against 16 waves, normals included, then re-uploaded: about <strong>28 ms per frame</strong> at 256 x 256). Now an
+analytic sea is a <strong>flat grid uploaded once</strong>; <code>water.vert</code> evaluates the Gerstner sum (the same maths as
+<code>WaveField::sample</code>, so <code>water_height</code> agrees with what you see) and the CPU cost per frame is about zero.
+The culling box is padded by the wave amplitude and choppiness (<code>MeshGeometryComponent::boundsPadding</code>).
+Surfaces with <strong>shallow-water physics</strong> or more than 16 waves keep the CPU mesh, as before.</li>
+<li><strong>Water look in the shader</strong> (<code>scene_lit.frag</code>, enabled for water surfaces): two layers of procedural
+<strong>ripple normals</strong> that fade out with distance (the fine, chaotic detail a displaced mesh cannot show),
+<strong>depth colour</strong> (turquoise shallows when looking down, deep blue at grazing angles), <strong>whitecaps</strong> from the
+wave Jacobian (crests that compress), broken up by noise, and sun glints from the ripples on the glossy
+surface. The body is still the PBR transparent path with the retuned low F0 and thin clearcoat.</li>
+</ul>
+<h3 id="artefacts-that-were-fixed-and-why-they-cannot-come-back">Artefacts that were fixed (and why they cannot come back)<a class="anchor" href="#artefacts-that-were-fixed-and-why-they-cannot-come-back" aria-label="Link to this section">#</a></h3>
+<table class="doc-table">
+  <thead><tr><th>What you saw</th><th>Cause</th><th>Fix and guard</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Thin straight bright lines forming a grid across the water</td>
+      <td>The ripple normals came from <em>value</em> noise with a smooth blend. Its slope is exactly zero along every lattice line, so each line is a flat, mirror-bright stripe in a field of tilted ripples.</td>
+      <td>Ripples are now <strong>gradient (Perlin) noise</strong> with an integer hash, every octave rotated so no two lattices line up. There is no slope-free line left.</td>
+    </tr>
+    <tr>
+      <td>Large smooth black patches with hard, scalloped edges (very visible in the Storm)</td>
+      <td>The screen-space reflection trace of the water read last frame's depth and colour. Water writes no depth, so the trace hit stale or black pixels, and the patch edge followed the screen border.</td>
+      <td>Water takes <strong>no screen-space reflection</strong>: it reflects the sky/probe only. The mirror direction is also kept above the horizon (<code>R.y = abs(R.y)</code>) so a tilted ripple never samples the dark ground half of the environment. Guard: <code>storm_water_has_no_dark_reflection_patches</code> renders the sea then the storm and checks that the darkest 5&nbsp;% of the frame stays within 72&nbsp;% of the median (it was 64&nbsp;% before the fix, 81&nbsp;% after).</td>
+    </tr>
+    <tr>
+      <td>Crests that fold over themselves</td>
+      <td><code>Scale</code> (choppiness above 1) and <code>Merge</code> can push <code>sum(Q&nbsp;k&nbsp;A)</code> past 1.</td>
+      <td>The final wave list is scaled so <code>sum(Q&nbsp;k&nbsp;A) &le; 0.95</code>, both in the editor (<code>limit_total_steepness</code>) and in the engine for authored waves (<code>WaveField::configure</code>). Guard: a C++ test with eight over-steep waves checks the Jacobian and the normal stay positive on a grid of points.</td>
+    </tr>
+  </tbody>
+</table>
+<p>The trade-off: because water takes no screen-space reflection, objects standing in the water are not mirrored in it yet. A planar reflection pass for water is the way to get them (listed below).</p>
+<h2 id="5-agents-and-scripting">5. Agents and scripting<a class="anchor" href="#5-agents-and-scripting" aria-label="Link to this section">#</a></h2>
+<p>The tab is a pane like the others (<code>editor.pane.water_generator</code>, <code>watergen.*</code> ids). Headless: fixture
+<code>water</code> (<code>reset</code> takes a <code>preset</code>, e.g. <code>Storm</code>); no engine is needed for the graph and preview. Placement
+and animation are covered by engine-backed tests.</p>
+<h2 id="6-limits-and-roadmap">6. Limits and roadmap<a class="anchor" href="#6-limits-and-roadmap" aria-label="Link to this section">#</a></h2>
+<h3 id="reference-targets-and-what-they-say-about-the-gap">Reference targets and what they say about the gap<a class="anchor" href="#reference-targets-and-what-they-say-about-the-gap" aria-label="Link to this section">#</a></h3>
+<p>Four references frame where water has to get to. They are context, not assets: the images are not stored here.</p>
+<ol>
+<li><strong>A sculpted block of stylised sea</strong> (layered, folding, glossy turquoise-to-blue crests). Real water is
+<strong>not uniform</strong>: waves overtake, steepen, fold and break against each other, and the colour moves with
+depth and angle. Our graphs are a <em>sum of 16 regular Gerstner waves</em>, which is smooth and periodic; at a
+distance it reads as a repeating pattern. It needs irregular, non-repeating energy: a real spectrum with
+many more components (FFT), noise-driven amplitude and direction that vary over space, wave groups,
+and breaking/foam where crests fold.</li>
+<li><strong>A pool cut-away with caustics</strong> (bright net-like light patterns on the floor and walls, a sphere
+floating in the surface). Water is a <strong>volume</strong>: the interesting light happens <em>under</em> the surface, so it
+needs <strong>depth-based absorption, refraction and caustics</strong>, plus walls and a floor to receive them.</li>
+<li><strong>A rubber duck on a simulated surface, annotated</strong>: <em>water simulation, object interaction, reflection,
+god rays, shadow, caustic</em>. These are the layers a complete system has, and the objects both float and
+<strong>disturb the water</strong>. That is two-way coupling (displacement and impulses from bodies into the
+height field), which the engine's shallow-water solver can provide.</li>
+<li><strong>A top-down ripple from an impact</strong> (concentric rings that interfere, caustic filaments, a brighter
+rim). Ripples are <strong>a simulation, not a sum of fixed waves</strong>: they spread from a point, reflect from edges,
+interfere and fade. Gerstner waves cannot make them; a <strong>height-field solver</strong> (shallow water or a
+wave equation on a grid) driven by drops and moving objects can.</li>
+</ol>
+<p>What this changes in the roadmap, in order:</p>
+<ul>
+<li><strong>Chaos before polish.</strong> Add <em>spatially varying</em> and <em>non-repeating</em> waves: an <strong>FFT/spectrum ocean node</strong>
+with many hundreds of components, <strong>noise-modulated amplitude and direction</strong> (so no two patches look
+alike), <strong>wave groups</strong> and <strong>breaking foam</strong>. A hand-built Wind Sea of 8-12 waves will always look tidy.</li>
+<li><strong>Water as a volume.</strong> Depth-based absorption and colour, refraction of what is under the surface,
+<strong>caustics</strong> projected on floors and walls, and <strong>god rays</strong>. A water body then needs a <strong>container shape</strong>
+(pool, basin, shoreline), not only a flat rectangle.</li>
+<li><strong>A simulation layer next to the waves.</strong> A <strong>height-field solver node</strong> (drops, impacts, rain, boundary
+reflection) added on top of the analytic waves; objects add <strong>buoyancy</strong> and push the surface back
+(<strong>two-way interaction</strong>), with <code>water_height</code> already available for the first half.</li>
+<li><strong>Detail without vertices.</strong> Normal-map layers and a <strong>dedicated water shader</strong> for the fine, chaotic
+ripples that a displaced mesh cannot show (see the mesh limit below).</li>
+<li><strong>Reflection and shadow.</strong> Planar/screen-space reflection tuned for water, and the shadow of floating
+objects on the water and the floor under it.</li>
+</ul>
+<h3 id="limits-of-the-current-implementation">Limits of the current implementation<a class="anchor" href="#limits-of-the-current-implementation" aria-label="Link to this section">#</a></h3>
+<p>This is the foundation of the rework, not all of it. Honest status:</p>
+<ul>
+<li><strong>The water shading is a mode of the lit shader, not a full water shader.</strong> Done: ripple detail, depth-ish
+colour from the view angle, whitecaps, GPU waves. Still missing: <strong>true depth-based absorption</strong> (it needs
+the floor depth), <strong>refraction</strong> with a floor, <strong>shoreline foam</strong>, <strong>caustics</strong>, <strong>god rays</strong>, and the
+<strong>Look node's colour does not yet vary over depth</strong>, and <strong>no reflection of objects</strong> (see the table
+above: the screen-space trace is off for water, a planar reflection pass is the fix). The editor grid shows
+through clear water (it is part of the refracted scene).</li>
+<li><strong>Vertex-displaced grid</strong>, up to 256 x 256 cells (a few thousand quads cost nothing now; the grid is no longer
+rebuilt). A <strong>clipmap/LOD mesh</strong> around the camera is what lets an ocean reach the horizon with the detail
+near you; waves are already plain data for it.</li>
+<li><strong>Orbit-free preview</strong>: the tab previews the surface top-down; the 3D look is in the viewport after Place.</li>
+<li>No <strong>FFT ocean</strong> node, no <strong>flow maps</strong> (rivers are stretched waves, not advected), no <strong>interactive
+ripples</strong> from objects yet (the shallow-water solver exists in the engine and is the way to get them), no
+<strong>buoyancy</strong> component, and water bodies are flat rectangles (no shorelines or islands).</li>
+<li>One water colour per body; a Look cannot vary over depth until the shader lands.</li>
+<li>The Nature Generator can scatter plants and rocks at the edges once bodies have shorelines.</li>
+</ul>
+<h2 id="7-regenerating-the-images">7. Regenerating the images<a class="anchor" href="#7-regenerating-the-images" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/capture-water-docs.sh                                   <span class="hljs-comment"># the tab (headless, no engine)</span>
+DOPPIO_WATER_DUMP=/tmp/water cargo <span class="hljs-built_in">test</span> -p doppio-ui --lib water_presets_render   <span class="hljs-comment"># engine renders of every preset</span>
+</code></pre></div>
+<h2 id="the-material-is-an-asset-from-the-start">The material is an asset from the start<a class="anchor" href="#the-material-is-an-asset-from-the-start" aria-label="Link to this section">#</a></h2>
+<p>The Water Material node is a mould. Applying a preset (or placing) writes <code>Water/&lt;name&gt;.mat</code> into the
+project and turns the node into <strong>Your Water Material (.mat)</strong> pointing at it. An existing file is
+never overwritten, so repainting it in the Material tab, or pointing the node at your own <code>.mat</code>,
+sticks. The terrain's splat layers are still shaded by the engine; making them project materials
+needs an engine change and is on the list.</p>
+<h3 id="opening-old-water-files">Opening old <code>.water</code> files<a class="anchor" href="#opening-old-water-files" aria-label="Link to this section">#</a></h3>
+<p>A graph saved before the material was required has no Water Material node. It gets the default one wired
+into the Output when it loads, so it builds again; apply or place to turn it into the project's <code>.mat</code>.
+Graphs saved with <em>Your Water Material</em> keep their <code>.mat</code> path (stored with the graph, spaces escaped).</p>
+<h2 id="using-it-in-a-world">Using it in a world<a class="anchor" href="#using-it-in-a-world" aria-label="Link to this section">#</a></h2>
+<p>In the <a href="/en/docs/doppio/world-composition/">World Composer</a> a <code>water</code> line names a <code>*.generator.water</code> recipe and says where the
+water is: <code>follow flow min 0.8</code> for a river along the terrain's flow mask (with <code>carve &lt;metres&gt;</code> to dig its bed) or
+<code>fill basins level 0.18</code> for a lake in the basins under a normalised level. The composer then writes the
+<code>water_distance</code> mask, so classes can grow reeds only at the bank.</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/water-generator-guide.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/texture-generator-guide/"><span>Previous</span><strong>Texture Generator: procedural sprites, VFX and packed masks</strong></a><a class="pager-next" href="/en/docs/doppio/world-composition/"><span>Next</span><strong>World Composer: build a prefab world from generator recipes</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-how-a-graph-works">1. How a graph works</a></li><li class="l2"><a href="#1b-the-water-always-has-its-material">1b. The water always has its material</a></li><li class="l2"><a href="#2-why-this-is-modular-and-cheap">2. Why this is modular and cheap</a></li><li class="l2"><a href="#3-presets">3. Presets</a></li><li class="l2"><a href="#4-engine-side-c-abi-v7">4. Engine side (C ABI v7)</a></li><li class="l3"><a href="#artefacts-that-were-fixed-and-why-they-cannot-come-back">Artefacts that were fixed (and why they cannot come back)</a></li><li class="l2"><a href="#5-agents-and-scripting">5. Agents and scripting</a></li><li class="l2"><a href="#6-limits-and-roadmap">6. Limits and roadmap</a></li><li class="l3"><a href="#reference-targets-and-what-they-say-about-the-gap">Reference targets and what they say about the gap</a></li><li class="l3"><a href="#limits-of-the-current-implementation">Limits of the current implementation</a></li><li class="l2"><a href="#7-regenerating-the-images">7. Regenerating the images</a></li><li class="l2"><a href="#the-material-is-an-asset-from-the-start">The material is an asset from the start</a></li><li class="l3"><a href="#opening-old-water-files">Opening old .water files</a></li><li class="l2"><a href="#using-it-in-a-world">Using it in a world</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

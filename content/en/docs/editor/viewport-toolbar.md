@@ -91,5 +91,5 @@ on the next completed frame.
 ## Related pages
 
 - [Scene viewport](scene-viewport.md) — readback pipeline, picking and camera maths.
-- [Gizmos and markers](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/gizmos-and-markers.md)
+- [Gizmos and markers](../doppio/gizmos-and-markers.md)
 - [Performance](../performance/editor-viewport-performance.md)

@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environment: clouds, fog, rain and lightning in Doppio · Caffeine</title>
+<meta name="description" content="Clouds that shade the ground, height fog, rain with depth, wind and lightning with thunder as one system that agrees with the sun and with Photon's GI, and the Environment tab that manages it.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Environment: clouds, fog, rain and lightning in Doppio · Caffeine">
+<meta property="og:description" content="Clouds that shade the ground, height fog, rain with depth, wind and lightning with thunder as one system that agrees with the sun and with Photon's GI, and the Environment tab that manages it.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/environment-guide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/environment-guide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/environment-guide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/environment-guide/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/en/docs/doppio/environment-guide/" aria-current="page">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Environment: clouds, fog, rain and lightning in Doppio</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last updated: <time datetime="2026-11-21">2026-11-21</time></span>
+</div>
+<p class="doc-lede">Clouds that shade the ground, height fog, rain with depth, wind and lightning with thunder as one system that agrees with the sun and with Photon's GI, and the Environment tab that manages it.</p>
+<p>The scene's weather lives in two reflected components on one entity: <code>Volumetric Clouds</code> (the sky) and <code>Weather</code> (fog, rain, wind, lightning
+and the coupling between everything). Doppio edits them from the <strong>Environment</strong> tab (View menu, next to Photon) and from the
+Inspector: both write the same fields, so they never disagree, and scripts and agents use the same fields too.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/environment/ui/environment-pane.png" alt="The Environment tab with the components added" loading="lazy">
+  <figcaption>The Environment tab: presets, clouds, fog, rain and the link between them</figcaption>
+</figure>
+<h2 id="1-what-was-already-there">1. What was already there<a class="anchor" href="#1-what-was-already-there" aria-label="Link to this section">#</a></h2>
+<p>The environment work reused what the engine had instead of building a second copy:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Before</th>
+<th>Now</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clouds</td>
+<td><code>VolumetricCloudsComponent</code> drawn by <code>sky.frag</code> (ray-marched, procedural, with wind and mist), serialised but not reflected and with no UI</td>
+<td>Reflected, editable in the tab; new fields <code>Tint</code>, <code>Darkness</code> and <code>Sky Light</code> appended</td>
+</tr>
+<tr>
+<td>Fog</td>
+<td>A linear post-process fog (<code>deferredFog</code>) and the forward pass's volumetric light</td>
+<td>Both stay as they are; a new <strong>exponential height fog</strong> in the composite pass, with the sky fading into it</td>
+</tr>
+<tr>
+<td>Wetness</td>
+<td><code>modWetness</code> per mesh renderer</td>
+<td>A scene-wide wetness added on top of it</td>
+</tr>
+<tr>
+<td>Rain</td>
+<td>Nothing</td>
+<td>Layered screen-space streaks and wet surfaces</td>
+</tr>
+<tr>
+<td>Photon sky</td>
+<td>A fixed sky colour times <code>Sky intensity</code></td>
+<td>The same colour times a weather factor (section 6)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="2-the-environment-tab">2. The Environment tab<a class="anchor" href="#2-the-environment-tab" aria-label="Link to this section">#</a></h2>
+<p>The tab edits the first entity that carries the weather components. <strong>Add environment</strong> creates one on a new entity (clouds on,
+from the <em>Clear sky</em> preset) when the scene has none. Every edit goes through the engine's component API and records one undo
+step (a slider is one step per field, not per value); a preset is one step.</p>
+<p>The hierarchy's <strong>+</strong> palette (World) also has an <strong>Environment</strong> entry: it creates the environment entity once and, when the
+scene already has one, selects it and opens this tab, so there is never a second one.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Preset</strong></td>
+<td></td>
+<td>Off, Clear sky, Cloudy, Fog, Light rain or Storm: sets clouds, fog and rain together</td>
+</tr>
+<tr>
+<td><strong>Clouds</strong></td>
+<td><code>Volumetric Clouds</code></td>
+<td>Section 3</td>
+</tr>
+<tr>
+<td><strong>Fog</strong></td>
+<td><code>Weather</code></td>
+<td>Section 4</td>
+</tr>
+<tr>
+<td><strong>Rain</strong></td>
+<td><code>Weather</code></td>
+<td>Section 5</td>
+</tr>
+<tr>
+<td><strong>Sky, sun and light</strong></td>
+<td><code>Weather</code></td>
+<td><code>Enabled</code> (master switch) and <code>Link Sky</code> (section 6)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3-clouds">3. Clouds<a class="anchor" href="#3-clouds" aria-label="Link to this section">#</a></h2>
+<p>Procedural volumetric clouds between two altitudes, ray-marched in the sky pass, so they cost nothing when the sky is hidden.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enabled</strong>, <strong>Quality</strong></td>
+<td><code>Enabled</code>, <code>Quality</code></td>
+<td>Off, Low (8 steps), Medium (16) or High (24)</td>
+</tr>
+<tr>
+<td><strong>Coverage</strong></td>
+<td><code>Coverage</code></td>
+<td>0 is a clear sky, 1 a full one</td>
+</tr>
+<tr>
+<td><strong>Density</strong></td>
+<td><code>Density</code></td>
+<td>Extinction: thin and wispy to thick</td>
+</tr>
+<tr>
+<td><strong>Base altitude</strong>, <strong>Top altitude</strong></td>
+<td><code>Base Altitude</code>, <code>Top Altitude</code></td>
+<td>The layer's bounds, in metres</td>
+</tr>
+<tr>
+<td><strong>Detail</strong></td>
+<td><code>Detail</code></td>
+<td>Weight of the high-frequency octaves</td>
+</tr>
+<tr>
+<td><strong>Wind speed</strong>, <strong>Wind dir</strong></td>
+<td><code>Wind Speed</code>, <code>Wind Direction</code></td>
+<td>Drift, in metres per second and degrees around +Y</td>
+</tr>
+<tr>
+<td><strong>Sun scatter</strong></td>
+<td><code>Sun Scatter</code></td>
+<td>How strongly the sun lights them</td>
+</tr>
+<tr>
+<td><strong>Darkness</strong></td>
+<td><code>Darkness</code></td>
+<td>0 to 1: darker, heavier clouds for a storm</td>
+</tr>
+<tr>
+<td><strong>Sky light</strong></td>
+<td><code>Sky Light</code></td>
+<td>The light that fills the shadowed side</td>
+</tr>
+<tr>
+<td><strong>Mist</strong>, <strong>Mist height</strong></td>
+<td><code>Mist Density</code>, <code>Mist Height</code></td>
+<td>Ground mist at the horizon (above 0 it also switches on the forward pass's volumetric fog, a few milliseconds at 720p: the presets leave it at 0)</td>
+</tr>
+<tr>
+<td><strong>Sun-lit tint</strong></td>
+<td><code>Tint</code></td>
+<td>Colour multiplied into the sun-lit side: orange at dusk, grey in a storm</td>
+</tr>
+<tr>
+<td><strong>Clouds dim the sun</strong></td>
+<td><code>Cast Shadows</code></td>
+<td>The cloud cover lowers the direct light (section 8)</td>
+</tr>
+<tr>
+<td><strong>Shadows on the ground</strong>, <strong>Shadow strength</strong></td>
+<td><code>Ground Shadows</code>, <code>Shadow Strength</code></td>
+<td>Moving cloud shadows on everything the sun lights, and in Photon's bounce (section 8)</td>
+</tr>
+<tr>
+<td><strong>Silver lining</strong></td>
+<td><code>Silver Lining</code></td>
+<td>A bright rim on thin cloud edges in front of the sun</td>
+</tr>
+<tr>
+<td><strong>Sun shafts</strong></td>
+<td><code>Sun Shafts</code></td>
+<td>Rays through the gaps of the clouds while the sun is in view</td>
+</tr>
+</tbody>
+</table></div>
+<p>The clouds animate with the wind whenever the sky is drawn.</p>
+<h2 id="4-fog">4. Fog<a class="anchor" href="#4-fog" aria-label="Link to this section">#</a></h2>
+<p>Exponential height fog, integrated along each view ray in the composite pass: <code>density * exp(-falloff * (y - baseHeight))</code> per metre.
+Because it uses the depth buffer it covers every object, terrain and water alike, and the sky fades into it near the horizon.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fog</strong></td>
+<td><code>Fog Enabled</code></td>
+<td>The switch</td>
+</tr>
+<tr>
+<td><strong>Density</strong></td>
+<td><code>Fog Density</code></td>
+<td>Per metre at the base height</td>
+</tr>
+<tr>
+<td><strong>Falloff</strong></td>
+<td><code>Fog Height Falloff</code></td>
+<td>How fast it thins with height; 0 is uniform</td>
+</tr>
+<tr>
+<td><strong>Base height</strong></td>
+<td><code>Fog Base Height</code></td>
+<td>World height where the density applies</td>
+</tr>
+<tr>
+<td><strong>Start</strong></td>
+<td><code>Fog Start</code></td>
+<td>Metres before the fog begins</td>
+</tr>
+<tr>
+<td><strong>Max opacity</strong></td>
+<td><code>Fog Max Opacity</code></td>
+<td>The most it can hide</td>
+</tr>
+<tr>
+<td><strong>Sky blend</strong></td>
+<td><code>Fog Sky Blend</code></td>
+<td>0 uses the fog colour, 1 uses the sky's own colour at the horizon in the direction looked at</td>
+</tr>
+<tr>
+<td><strong>Sun glow</strong>, <strong>Glow tight</strong></td>
+<td><code>Fog Sun Scatter</code>, <code>Fog Sun Exponent</code></td>
+<td>The glow of the fog towards the sun</td>
+</tr>
+<tr>
+<td><strong>Fog colour</strong></td>
+<td><code>Fog Color</code></td>
+<td>sRGB</td>
+</tr>
+</tbody>
+</table></div>
+<p>With a sky blend above 0 the fog samples the same sky texture the sky pass draws, so a ground haze matches the horizon behind it.</p>
+<h2 id="5-rain">5. Rain<a class="anchor" href="#5-rain" aria-label="Link to this section">#</a></h2>
+<p>Rain is still one screen-space shader, with no particles and no models, but it is computed in the world: six shells of falling
+streaks from 2.5 m to about 60 m in front of the camera, each a lattice of cells in world space. A streak is a slanted capsule
+with a bright head, it is hidden wherever geometry is nearer than its shell, and a drop near the camera is long and sharp while
+a far one is short and soft. Because the shells live in the world, moving the camera gives <strong>parallax</strong>: the near drops sweep past
+and the far ones hang, which is what gives the rain its depth.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/environment/road-Storm.png" alt="The test road in a storm: rain with depth and splashes on the road" loading="lazy">
+  <figcaption>Rain with depth: streaks at several distances, rings and sparks where it meets the road</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rain</strong></td>
+<td><code>Rain Enabled</code></td>
+<td>The switch</td>
+</tr>
+<tr>
+<td><strong>Intensity</strong></td>
+<td><code>Rain Intensity</code></td>
+<td>0 to 1: how many streaks, and how much the scene loses contrast</td>
+</tr>
+<tr>
+<td><strong>Wind speed</strong>, <strong>Wind dir</strong></td>
+<td><code>Rain Wind Speed</code>, <code>Rain Wind Direction</code></td>
+<td>The wind's velocity: the whole lattice leans along it against a fall speed of about 9 m/s</td>
+</tr>
+<tr>
+<td><strong>Drop length</strong></td>
+<td><code>Rain Drop Length</code></td>
+<td>0 to 1</td>
+</tr>
+<tr>
+<td><strong>Fall speed</strong></td>
+<td><code>Rain Speed</code></td>
+<td>Animation speed</td>
+</tr>
+<tr>
+<td><strong>Brightness</strong></td>
+<td><code>Rain Brightness</code></td>
+<td>How bright a streak is; the colour follows the sky and the light level</td>
+</tr>
+<tr>
+<td><strong>Wetness</strong></td>
+<td><code>Rain Wetness</code></td>
+<td>How wet surfaces get at full intensity</td>
+</tr>
+<tr>
+<td><strong>Splashes</strong></td>
+<td><code>Rain Splashes</code></td>
+<td>0 to 1: rings and sparks where the rain meets an upward-facing surface within about 35 m (the normal is rebuilt from the depth buffer, so it also works on the terrain)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Wet surfaces: the scene-wide wetness is <code>intensity * wetness</code> and is added to each mesh renderer's own <code>Wetness</code>. The lit shader
+darkens the albedo and makes the surface glossy, as it already did for <code>modWetness</code>.</p>
+<h2 id="6-wind">6. Wind<a class="anchor" href="#6-wind" aria-label="Link to this section">#</a></h2>
+<p>One wind drives the whole scene. Its mean is <code>Rain Wind Speed</code> and <code>Rain Wind Direction</code> (the clouds keep their own drift), and
+it surges: a sum of slow sines, never negative and never repeating within minutes, scaled by <strong>Gusts</strong> (<code>Wind Gust</code>, 0 to 1).
+The same gust factor leans the rain, shakes the foliage and is reported by the engine, so everything moves together.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gusts</strong></td>
+<td><code>Wind Gust</code></td>
+<td>0 is a steady wind, 1 surges between calm and about twice the mean</td>
+</tr>
+<tr>
+<td><strong>Foliage sway</strong></td>
+<td><code>Wind Foliage</code></td>
+<td>Multiplies the sway of foliage materials by <code>1 + value * speed / 8 * gust</code>; 0 leaves foliage alone</td>
+</tr>
+<tr>
+<td><strong>Weather sound</strong>, <strong>Volume</strong></td>
+<td><code>Audio Enabled</code>, <code>Audio Volume</code></td>
+<td>Plays the rain, the wind and the thunder (section 7); a preset leaves them as you set them</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="7-lightning-and-thunder">7. Lightning and thunder<a class="anchor" href="#7-lightning-and-thunder" aria-label="Link to this section">#</a></h2>
+<p>Switch <strong>Lightning</strong> on and the sky strikes on its own. Strikes are deterministic: each minute is cut into slots and every slot
+holds one strike whose moment, bearing, distance and strength are hashed from the seed, so the same seed gives the same storm and a
+test can predict it. With the link on, lightning needs an overcast sky (cloud cover or rain of at least 0.4), as there is no
+lightning in a clear sky.</p>
+<p>What a strike does, all within a second:</p>
+<ul>
+<li><strong>The flash.</strong> Up to three return strokes flicker, over an afterglow of the cloud. The flash lights the scene as a cold
+directional light from where the bolt struck (no shadow of its own), so it also <strong>reaches Photon</strong>: the bounce flashes with it.
+It raises the sky light and Photon's sky, flares the rain and lights the fog and the clouds from inside.</li>
+<li><strong>The bolt.</strong> A forked line from the cloud base to the horizon, in the sky pass, at the strike's bearing.</li>
+<li><strong>The thunder.</strong> Each strike raises one event that arrives after the sound's travel time (distance / 343 m/s). Doppio logs it in
+the Console (<em>Thunder, 1.2 km away</em>); the engine makes no sound itself, see the limits.</li>
+</ul>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/environment/road-lightning.png" alt="The test road at the peak of a lightning flash" loading="lazy">
+  <figcaption>A strike at its peak: the cold flash lights the road, the fog and the rain</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lightning</strong></td>
+<td><code>Lightning Enabled</code></td>
+<td>The switch</td>
+</tr>
+<tr>
+<td><strong>Thunder events</strong></td>
+<td><code>Thunder</code></td>
+<td>Whether strikes raise thunder events</td>
+</tr>
+<tr>
+<td><strong>Strikes / min</strong></td>
+<td><code>Lightning Rate</code></td>
+<td>One strike per slot of <code>60 / rate</code> seconds</td>
+</tr>
+<tr>
+<td><strong>Flash</strong></td>
+<td><code>Lightning Intensity</code></td>
+<td>0 to 2: the brightness of the flash</td>
+</tr>
+<tr>
+<td><strong>Nearest</strong>, <strong>Farthest</strong></td>
+<td><code>Lightning Distance Min</code>, <code>Lightning Distance Max</code></td>
+<td>Where strikes land, in metres; a close strike is brighter and louder</td>
+</tr>
+</tbody>
+</table></div>
+<p>Thunder is also <strong>heard</strong>: with <code>Audio Enabled</code> on (the <em>Sound</em> card), the session plays each clap from noise, panned to the strike's
+bearing and quieter with the distance, along with a rain bed and a wind bed that follow the weather (see the
+<a href="/en/docs/audio/audio-system/">audio system</a>). Off by default, so a scene stays silent until it asks. A game or a script that wants its own sound
+can still poll <code>caffeine_session_poll_thunder</code> (section 12).</p>
+<h2 id="8-how-they-agree-sun-sky-and-photon">8. How they agree: sun, sky and Photon<a class="anchor" href="#8-how-they-agree-sun-sky-and-photon" aria-label="Link to this section">#</a></h2>
+<p>With <strong>Link sky, sun and fog</strong> on (the default) the sections act on each other, and on the light:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>When</th>
+<th>Then</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>It rains and clouds are on</td>
+<td>Coverage rises to at least <code>0.55 + 0.40 * intensity</code>, the density grows by up to 80% and the clouds darken</td>
+</tr>
+<tr>
+<td>It rains and fog is on</td>
+<td>The fog density grows by <code>1 + intensity</code></td>
+</tr>
+<tr>
+<td>The sky is overcast (cloud cover, or rain)</td>
+<td>The sun's intensity drops by up to 80% for every stage that uses it: the forward shader, the cloud lighting, the fog glow and Photon's injection</td>
+</tr>
+<tr>
+<td>The sky is overcast</td>
+<td>The sky light Photon falls back to, and the forward ambient, grow by up to 25% and tend to a neutral grey of the same brightness</td>
+</tr>
+<tr>
+<td>Thick fog</td>
+<td>The sky light takes the fog's hue, keeping its brightness</td>
+</tr>
+</tbody>
+</table></div>
+<p>Photon needs nothing new for these: the sun reaches it through the same light list, and its sky radiance is the fixed sky colour times
+<code>Sky intensity</code>, now also times the weather's scale and tint (<code>kPhotonSkyRadiance</code>). These factors depend only on the
+settings, never on time or on the frame, so they add no noise: Photon's temporal average and its per-probe sampling offsets
+keep working as before, and the fog is applied after Photon's resolve, so it also softens what is left of the noise in the distance.</p>
+<p>With the link off every section acts alone, and the clouds keep exactly the values in the component.</p>
+<h3 id="clouds-that-move-the-light">Clouds that move the light<a class="anchor" href="#clouds-that-move-the-light" aria-label="Link to this section">#</a></h3>
+<p>Three effects tie the clouds to the lighting without baking anything (switch them on in <strong>Clouds</strong>; the presets do):</p>
+<ul>
+<li><strong>Shadows on the ground</strong> (<code>Ground Shadows</code>, <code>Shadow Strength</code>). The forward shaders trace the sun's ray to the cloud layer and
+read the same noise as the sky at two heights of it, so a cloud's shadow crosses the ground, the terrain and every object the
+sun lights, moves with the wind and agrees with what the sky shows. Photon's injection reads the same function for every voxel,
+so the <strong>bounce follows the shadow</strong> (the near field already did: it reads the forward pass's direct light). No texture is
+added: the forward pass is at the 16-sampler limit.</li>
+</ul>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/environment/road-Cloudy_shadows.png" alt="The test road under cloud shadows" loading="lazy">
+  <figcaption><em>Cloudy</em> with the ground shadows on: the sun is shaded by the layer above (compare with the same sky without them)</figcaption>
+</figure>
+<ul>
+<li><strong>Silver lining</strong> (<code>Silver Lining</code>). The thin edges of the clouds in front of the sun glow, by forward scattering.</li>
+<li><strong>Sun shafts</strong> (<code>Sun Shafts</code>). A screen-space radial gather towards the sun: rays through the gaps of the clouds, in 14
+steps, and only while the sun is in front of the camera (looking away costs nothing).</li>
+</ul>
+<h2 id="9-presets">9. Presets<a class="anchor" href="#9-presets" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Clouds</th>
+<th>Fog</th>
+<th>Rain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Off</strong></td>
+<td>off</td>
+<td>off</td>
+<td>off</td>
+</tr>
+<tr>
+<td><strong>Clear sky</strong></td>
+<td>coverage 0.25</td>
+<td>off</td>
+<td>off</td>
+</tr>
+<tr>
+<td><strong>Cloudy</strong></td>
+<td>coverage 0.75, a little dark</td>
+<td>off</td>
+<td>off</td>
+</tr>
+<tr>
+<td><strong>Fog</strong></td>
+<td>coverage 0.55</td>
+<td>density 0.03, falloff 0.035, sky blend 0.7</td>
+<td>off</td>
+</tr>
+<tr>
+<td><strong>Light rain</strong></td>
+<td>coverage 0.8</td>
+<td>thin</td>
+<td>intensity 0.35</td>
+</tr>
+<tr>
+<td><strong>Storm</strong></td>
+<td>coverage 0.95, dark, fast wind, gusts 0.7, lightning 9 a minute</td>
+<td>thin, grey</td>
+<td>intensity 0.95, strong wind</td>
+</tr>
+</tbody>
+</table></div>
+<p>Every preset with clouds also switches on ground shadows, a silver lining, a little sun shaft strength and foliage sway.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/environment/road-Clear_sky.png" alt="The test road under the Clear sky preset" loading="lazy">
+  <figcaption>The regression road, <em>Clear sky</em>: the blocks keep their contrast all the way down the road</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/environment/road-Fog.png" alt="The test road under the Fog preset" loading="lazy">
+  <figcaption><em>Fog</em>: the far blocks fade into the fog and the sky fades into it at the horizon</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/environment/road-Storm.png" alt="The test road under the Storm preset" loading="lazy">
+  <figcaption><em>Storm</em>: dark clouds, an overcast sun, thin fog, wet road and rain leaning with the wind</figcaption>
+</figure>
+<h2 id="10-components-scripts-and-agents">10. Components, scripts and agents<a class="anchor" href="#10-components-scripts-and-agents" aria-label="Link to this section">#</a></h2>
+<p>The two components are reflected, so <code>add_component</code> and <code>set_component_field</code> by name reach every field (the Inspector shows
+them too). The <code>Weather</code> struct is serialised as a raw prefix and a scene without it renders exactly as before; the new
+cloud fields are appended, so an older scene keeps their defaults (no tint, no darkness).</p>
+<p>Agents (<code>ICED_MCP=1</code>, feature <code>agent</code>) read the <code>environment</code> query and use <code>show_environment</code>, <code>environment_add</code>,
+<code>environment_set</code> and <code>environment_preset</code>:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;environment_preset&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Storm&quot;</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;environment_set&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;fog_density&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0.02</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;environment_set&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;fog_color&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0.5</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.55</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.6</span><span class="hljs-punctuation">]</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h2 id="11-limits">11. Limits<a class="anchor" href="#11-limits" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Rain is a screen-space effect with world-space depth: no particles and no collision, and it does not know about roofs (a streak is
+hidden by geometry in front of it, but rain falls on the camera inside a building too). Splashes reach about 35 m and only on
+surfaces the depth buffer shows.</li>
+<li>The wetness is not smoothed in time, and it does not reach terrain, which has its own shader.</li>
+<li>Fog and rain are drawn in the final pass, so they are not in the images reflection probes and planar reflections show.</li>
+<li>Cloud shadows are traced at two heights of the layer with a soft three-octave noise: they are soft shadows, not sharp edges, and they do
+not shade the sky light. Photon's voxels read the same function, so the bounce is as soft.</li>
+<li>The weather's sound plays in the editor session (and wherever a session is hosted), not in <code>caffeine-runtime</code>, which does not use
+this renderer. It is mono and made from noise: it does not follow rooms or roofs (the rain is as loud indoors), and the thunder is
+panned but has no Doppler or echo.</li>
+<li>The bolt is a sky effect: it has no geometry, casts no shadow and strikes nothing.</li>
+<li>Rain with the link on thickens existing clouds; with no clouds component the sky stays as it is.</li>
+</ul>
+<h2 id="12-where-it-lives-and-how-it-is-tested">12. Where it lives and how it is tested<a class="anchor" href="#12-where-it-lives-and-how-it-is-tested" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Part</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Components</td>
+<td><code>src/caffeine/ecs/WeatherComponents.hpp</code> (<code>Weather</code>, serialised as scene type 60), <code>include/caffeine/environment/VolumetricClouds.hpp</code>; both reflected through <code>scripts/gen-component-reflection.py</code> (ids 128 and 129)</td>
+</tr>
+<tr>
+<td>The coupling</td>
+<td><code>src/caffeine/scene/WeatherSystem.hpp</code>: <code>resolveWeather()</code> is pure, so every rule in section 8 is a unit test; the wind gust and the lightning (<code>windGustFactor</code>, <code>lightningStrike</code>, <code>lightningAt</code>, <code>thunderBetween</code>) are pure functions too</td>
+</tr>
+<tr>
+<td>Renderer</td>
+<td><code>GpuSceneRenderer</code> (resolves the weather once per frame, scales the lights, the ambient and Photon's sky), <code>sky.frag</code> (clouds, bolt, silver lining), <code>scene_lit.frag</code> and <code>terrain_lit.frag</code> (cloud shadows), <code>photon_inject.comp</code> (the same shadow for the bounce), <code>post_composite.frag</code> (fog, rain, sun shafts)</td>
+</tr>
+<tr>
+<td>Panel</td>
+<td><code>uikit/panels/environment.rs</code> (one table of switches, numbers and colours drives the panel, the presets and the agent), <code>windows/main/environment.rs</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The weather itself goes through the reflected components. C ABI v19 adds two read-only calls for what moves on its own:
+<code>caffeine_session_weather_state</code> (the flash, the bolt, the wind's gust, the clock of the strikes) and <code>caffeine_session_poll_thunder</code>
+(the claps that have arrived since the last call), plus <code>caffeine_session_audio_state</code> for the weather's sound (device, levels, claps).</p>
+<p>Nothing of this moves while the editor is stopped. C ABI v21 adds <code>caffeine_session_set_simulating</code>: off, a rendered frame stands still
+(clouds, rain, wind on foliage, lightning, water and the scene's sound do not advance and the sound device closes); on, each frame advances them.
+A new session simulates, so the runtime and older callers are unchanged; Doppio turns it off at start and on only while <strong>Play</strong> is active, and
+a stopped viewport draws a frame only when something changed (an edit, the camera, a setting), a few more while TAA and Photon settle, and none otherwise.</p>
+<p>Tests:</p>
+<ul>
+<li><code>tests/test_weather.cpp</code>: defaults, the coupling rules, scene round trip and old-prefix loading, reflection, the gust, the strikes (the same
+seed gives the same storm, the flash peaks and fades, thunder arrives at distance / 343 s) and the thunder synth.</li>
+<li><code>tests/test_weather_gpu.cpp</code>: the real post stack on a known scene (needs a GPU, skipped without one): fog hides the far half and not
+the near half, the start distance and the maximum opacity, rain adds streaks on the sky and none behind near geometry, a flash lights the rain
+and the fog, wind bends the streaks, a floor gets splashes, and shafts stream from an HDR sun only while it is ahead.</li>
+<li><code>windows/main/tests.rs</code>, module <code>environment_weather</code>: the panel's table, the presets through the engine, undo, and
+images of a road of blocks: everything off equals no weather, fog loses contrast with distance, rain adds streaks that fall,
+wet roads darken, clouds and their tint show in the sky, an overcast sky dims the sun only when linked, Photon's sky light greys
+without adding flicker, cloud shadows darken the lit ground only while on, wind changes the rain, and a storm flashes the scene and
+raises thunder once the sound has travelled (and nothing with the lightning off).</li>
+<li>UI flows <code>environment-panel.json</code> and <code>environment-scene.json</code>, and the capture flow <code>captures/flows/capture-environment-docs.json</code>
+(run it with <code>scripts/capture-environment-docs.sh</code>, which also writes the renders this page shows).</li>
+</ul>
+<p>Things to know when you write a test like these:</p>
+<ul>
+<li>The renderer is not bit-exact between still frames (ambient occlusion and dithering): two frames of one scene differ by about
+0.03 levels on average and by up to about 10 at single pixels. &quot;Nothing changes&quot; is therefore measured against that noise, not with
+equality.</li>
+<li>A linked fog also hands its hue to the sky light, even when its maximum opacity is 0: switch the link off to compare a fog that hides
+nothing with no fog.</li>
+<li><code>Mist Density</code> also drives the forward pass's volumetric fog, so set it to 0 when a test isolates the sun.</li>
+<li>Compare images with a difference helper, not with <code>assert_eq!</code> on the pixels: a failure prints every byte.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/environment-guide.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/"><span>Previous</span><strong>Doppio: the editor guides</strong></a><a class="pager-next" href="/en/docs/doppio/generator-recipes/"><span>Next</span><strong>Generator recipes (generator.*)</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-what-was-already-there">1. What was already there</a></li><li class="l2"><a href="#2-the-environment-tab">2. The Environment tab</a></li><li class="l2"><a href="#3-clouds">3. Clouds</a></li><li class="l2"><a href="#4-fog">4. Fog</a></li><li class="l2"><a href="#5-rain">5. Rain</a></li><li class="l2"><a href="#6-wind">6. Wind</a></li><li class="l2"><a href="#7-lightning-and-thunder">7. Lightning and thunder</a></li><li class="l2"><a href="#8-how-they-agree-sun-sky-and-photon">8. How they agree: sun, sky and Photon</a></li><li class="l3"><a href="#clouds-that-move-the-light">Clouds that move the light</a></li><li class="l2"><a href="#9-presets">9. Presets</a></li><li class="l2"><a href="#10-components-scripts-and-agents">10. Components, scripts and agents</a></li><li class="l2"><a href="#11-limits">11. Limits</a></li><li class="l2"><a href="#12-where-it-lives-and-how-it-is-tested">12. Where it lives and how it is tested</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

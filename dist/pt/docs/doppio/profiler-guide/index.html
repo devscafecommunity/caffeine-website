@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profiler: para onde vai o tempo de um frame · Caffeine</title>
+<meta name="description" content="Uma árvore de scopes cronometrados para o renderer, com tempo real de GPU por passo quando o pede, no separador Profiler, pela C ABI e para agentes.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Profiler: para onde vai o tempo de um frame · Caffeine">
+<meta property="og:description" content="Uma árvore de scopes cronometrados para o renderer, com tempo real de GPU por passo quando o pede, no separador Profiler, pela C ABI e para agentes.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/doppio/profiler-guide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/doppio/profiler-guide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/profiler-guide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/doppio/profiler-guide/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab active" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/doppio/profiler-guide/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/doppio/profiler-guide/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Painéis do editor</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/editor/test-automation/">Automação de testes do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-editor/">Editor de cena</a></li><li><a class="nav-link" href="/pt/docs/editor/material-editor/">Editor de materiais</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-gallery/">Galeria de UI do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-migration/">Guia de migração de plugins</a></li><li><a class="nav-link" href="/pt/docs/editor/viewport-toolbar/">HUD e controlos do viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/photon/">Photon — GI híbrido nativo por radiance cascades</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-manager/">Plugin Manager (host legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-sdk/">Plugin SDK (C++ legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-reference/">Referência da UI do Doppio</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/workspace-and-theme/">Workspace, tema e componentes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/doppio/">Geradores &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-roadmap/">Edição de terreno: pincéis, paleta de materiais e vegetação</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-phase-0/">Edição de terreno: relatório da Fase 0</a></li><li><a class="nav-link" href="/pt/docs/doppio/environment-guide/">Environment: nuvens, névoa, chuva e relâmpagos no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/rust-ui/">Frontend Rust UI (Iced)</a></li><li><a class="nav-link" href="/pt/docs/doppio/gizmos-and-markers/">Gizmos e marcadores de cena</a></li><li><a class="nav-link" href="/pt/docs/doppio/materials-guide/">Materiais no Doppio: biblioteca procedural, profundidade real e bake</a></li><li><a class="nav-link" href="/pt/docs/doppio/graphics-roadmap/">Melhoria gráfica — Roadmap de Micromeshes e Photon</a></li><li><a class="nav-link" href="/pt/docs/doppio/micromeshes/">Micromeshes: clusters, cortes e o draw na GPU</a></li><li><a class="nav-link" href="/pt/docs/doppio/runtime-modifiers/">Modificadores em tempo de execução para materiais gerados</a></li><li><a class="nav-link" href="/pt/docs/doppio/photoreal-world-roadmap/">Mundo procedural fotorrealista — validação e roadmap</a></li><li><a class="nav-link" href="/pt/docs/doppio/nature-generator-guide/">Nature Generator: rochas, árvores e plantas procedurais, construídas com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/photon-guide/">Photon: iluminação global no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/material-pipeline/">Pipeline de materiais, texturas e geradores — backlog</a></li><li><a class="nav-link active" href="/pt/docs/doppio/profiler-guide/" aria-current="page">Profiler: para onde vai o tempo de um frame</a></li><li><a class="nav-link" href="/pt/docs/doppio/generator-recipes/">Receitas de geradores (generator.*)</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/headless-testing/">Testes de UI headless para o Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/pt/docs/doppio/texture-generator-guide/">Texture Generator: sprites procedurais, VFX e máscaras empacotadas</a></li><li><a class="nav-link" href="/pt/docs/doppio/water-generator-guide/">Water Generator: corpos de água construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/world-composition/">World Composer: construir um mundo prefab a partir de receitas de geradores</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plugins/compatibility/">Compatibilidade de plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/pt/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/pt/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/pt/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/pt/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Profiler: para onde vai o tempo de um frame</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Estável</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Última atualização: <time datetime="2026-11-21">2026-11-21</time></span>
+</div>
+<p class="doc-lede">Uma árvore de scopes cronometrados para o renderer, com tempo real de GPU por passo quando o pede, no separador Profiler, pela C ABI e para agentes.</p>
+<p>Os frames lentos eram adivinhados. O profiler dá os números: cada etapa do renderer é um scope, e o separador Profiler (menu View) mostra-os como uma árvore com a média, o pior caso e quantas vezes cada um correu.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/profiler/ui/profiler-pane.png" alt="O separador Profiler com os scopes do renderer" loading="lazy">
+  <figcaption>O separador Profiler: o tempo do frame, os dois controlos e a árvore de scopes com uma barra por scope</figcaption>
+</figure>
+<h2 id="1-o-que-cronometra">1. O que cronometra<a class="anchor" href="#1-o-que-cronometra" aria-label="Link to this section">#</a></h2>
+<p>O motor tem uma árvore de scopes para todo o processo (<code>Debug::Profiler</code>). O renderer abre um scope para cada etapa: reunir a cena,
+as sombras, os passos opaco e translúcido, reflexos, os passos do Photon um a um, e a stack de pós-processamento.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Modo</th>
+<th>O que é o tempo de um scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CPU scopes</strong> (predefinido)</td>
+<td>O tempo que o CPU gastou a gravar essa etapa. A GPU corre atrás, por isso não é o custo da GPU</td>
+</tr>
+<tr>
+<td><strong>GPU timing</strong></td>
+<td>O tempo que a etapa realmente leva: os passos de GPU esperam pela GPU nos seus extremos, por isso o scope cobre gravação mais execução</td>
+</tr>
+</tbody>
+</table></div>
+<p>O SDL3 GPU não tem queries de timestamp portáteis, por isso o GPU timing funciona submetendo o que foi gravado e esperando por isso no início e
+no fim de cada scope de GPU (<code>CF_GPU_SCOPE</code>). Isso serializa o CPU e a GPU: <strong>os frames ficam mais lentos enquanto está ligado</strong>. É um modo
+de medição, desligado por omissão. Um scope dentro de um render pass (os scopes por mesh e de terreno) não pode esperar, por isso mostra sempre tempo de CPU.</p>
+<h2 id="2-o-separador-profiler">2. O separador Profiler<a class="anchor" href="#2-o-separador-profiler" aria-label="Link to this section">#</a></h2>
+<p>O separador tem quatro gráficos sobre o último minuto (quatro amostras por segundo), e depois a árvore de scopes.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Gráfico</th>
+<th>O que desenha</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frame rate</strong></td>
+<td>As frames por segundo do viewport; a legenda dá a última, a média e a mais baixa</td>
+</tr>
+<tr>
+<td><strong>CPU per core</strong></td>
+<td>A parte ocupada de cada core lógico, uma cor por core (a legenda sob o gráfico repete as cores com o último valor de cada core), e depois a máquina inteira e este processo (em percentagem de um core)</td>
+</tr>
+<tr>
+<td><strong>GPU</strong></td>
+<td>A parte ocupada da GPU e a memória de vídeo em uso como parte do seu tamanho (NVML na NVIDIA, o contador <code>gpu_busy_percent</code> na AMD); vazio onde a plataforma não o consegue dizer</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>A memória em uso na máquina e por este processo, em MiB, até ao tamanho da máquina</td>
+</tr>
+</tbody>
+</table></div>
+<p>Os números de CPU, GPU e memória vêm de <code>caffeine_system_metrics</code> (C ABI v19). São lidos de <code>/proc</code>, NVML e sysfs em Linux, dos contadores de desempenho do processador, de <code>GlobalMemoryStatusEx</code> e de <code>nvml.dll</code> em Windows, e dos contadores do host Mach em macOS (sem valores de GPU aí). As leituras de Windows e macOS foram escritas sem essas máquinas para correr: só o cálculo partilhado das percentagens é testado aí.
+Onde uma plataforma não consegue dizer, o gráfico diz por baixo o que falta.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controlo</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GPU timing</strong></td>
+<td>Liga ou desliga o modo acima</td>
+</tr>
+<tr>
+<td><strong>Reset</strong></td>
+<td>Esquece todas as amostras (scopes e gráficos)</td>
+</tr>
+<tr>
+<td>Linha do frame</td>
+<td>A média do scope de topo do renderer e a taxa de frames que implica</td>
+</tr>
+<tr>
+<td>Tabela</td>
+<td>Uma linha por scope, indentada pela profundidade, pela ordem em que correram pela primeira vez: os milissegundos médios e do pior caso das suas últimas 120 chamadas (cerca de dois segundos de um scope a 60 fps), o número de chamadas, e uma barra contra o tempo do frame</td>
+</tr>
+</tbody>
+</table></div>
+<p>Os gráficos amostram nos frames do viewport, e o separador lê os scopes ao mesmo ritmo enquanto está visível.</p>
+<h2 id="3-ler-um-perfil">3. Ler um perfil<a class="anchor" href="#3-ler-um-perfil" aria-label="Link to this section">#</a></h2>
+<p>A cena de benchmark (<code>assets/benchmarks/dense_outdoor.caf</code>, 287 entidades, 1,1M triângulos) a 1280 x 720, antes e depois da primeira ronda de
+descobertas:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Antes</th>
+<th>Depois</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frame, tempo real</td>
+<td>22.7 ms (44 fps)</td>
+<td>10.7 ms (93 fps)</td>
+</tr>
+<tr>
+<td>Reunir a cena (CPU)</td>
+<td>1.7 ms</td>
+<td>0.3 ms</td>
+</tr>
+<tr>
+<td>Passo opaco</td>
+<td>13.5 ms</td>
+<td>2.3 ms</td>
+</tr>
+<tr>
+<td>Sombras</td>
+<td>2.8 ms</td>
+<td>3.3 ms</td>
+</tr>
+<tr>
+<td>Pós-processamento</td>
+<td>1.3 ms</td>
+<td>1.3 ms</td>
+</tr>
+</tbody>
+</table></div>
+<p>O que o perfil mostrou, e o que foi feito:</p>
+<ul>
+<li><strong>Cada desenho de terreno custava 0.7 ms de CPU.</strong> Cada desenho pedia as suas imagens à cache de texturas, e cada pedido resolvia o caminho e lia
+o timestamp do ficheiro: um punhado de chamadas ao sistema de ficheiros por desenho por frame, e o mesmo outra vez para uma imagem que não existe. A cache
+agora responde da memória, volta a olhar para o disco só de meio em meio segundo (um ficheiro reescrito continua a aparecer), e lembra-se das imagens que
+faltam. O passo opaco desceu de 13.5 para 2.3 ms.</li>
+<li><strong>As probes do far field do Photon custavam 25 ms.</strong> A cada frame, 16 384 probes traçavam cerca de 100 raios cada. As probes a mais de 1.8 espaçamentos fora do frustum da câmara não têm
+leitor no ecrã, por isso não são traçadas (os seus tiles são transportados); os níveis grossos, que mudam devagar, são traçados de dois em dois ou de quatro em quatro frames enquanto a cena
+está calma. O passo das probes desceu para 9 ms e todas as cenas de regressão do Photon continuam a passar. Veja o <a href="/pt/docs/doppio/photon-guide/">guia do Photon</a>.</li>
+<li><strong>As nuvens custavam cerca de 5 ms</strong> com o céu à vista. A marcha para o sol lê agora a forma barata da nuvem (4 oitavas de ruído em vez de 7) em 3 passos, o que a baixou para cerca de 2.7 ms.</li>
+<li><strong>Os materiais tinham o mesmo problema.</strong> O reunir da cena pedia à cache de materiais o material de cada desenho, a cada frame, e cada pedido canonizava o caminho e lia o timestamp do ficheiro. Com 600
+arbustos o gather levava 1.3 ms e 150 arbustos 2.9 ms; agora responde da memória com a mesma revisão de meio segundo.</li>
+<li><strong>As cascatas de sombra do sol desenhavam todos os casters.</strong> Um caster totalmente fora dos lados de uma cascata é agora saltado (era cortado de qualquer forma, por isso nenhum pixel muda). Com 600 arbustos a abanar na cena de benchmark as sombras
+passaram de 10.8 para 6.6 ms, e o frame de 19.6 para 16.6 ms. As estatísticas de render reportam <code>shadow_draws</code> e <code>shadow_draws_culled</code>.</li>
+<li><strong>A borda do tile da probe já não traça raios.</strong> Cada probe mantém um tile de 10 por 10 (8 por 8 direções e uma borda de um texel que repete a direção mais próxima); a borda eram 36 raios a mais por probe, um terço do
+passo, e agora copia o que o interior acabou de calcular. Com as cascatas grossas do 2 para cima traçadas em frames alternados, o Photon em High passou de 34 para 23 ms e as cenas de regressão continuam a passar.</li>
+<li><strong>As duas cascatas mais grossas do Photon</strong> são traçadas em frames alternados enquanto a câmara está parada e a cena calma (mantêm o atlas entretanto): o campo próximo desceu de 12.7 para 9.7 ms.</li>
+<li><strong>Criar muitas entidades do mesmo tipo era cúbico.</strong> Escolher o nome da n-ésima &quot;Sphere&quot; pedia ao motor todas as entidades uma vez por sufixo: 150 esferas levavam 14 s. Agora é uma só passagem (600 levam 3 s).</li>
+<li><strong>Uma neblina de nuvens acima de 0 liga a névoa volumétrica do passo forward</strong> (mais 4 ms a 720p), por isso as predefinições do Environment deixam a neblina em 0; a névoa de altura cobre a bruma.</li>
+</ul>
+<h2 id="4-acrescentar-scopes-a-c-abi-e-agentes">4. Acrescentar scopes, a C ABI e agentes<a class="anchor" href="#4-acrescentar-scopes-a-c-abi-e-agentes" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Renderer::drawThing</span><span class="hljs-params">(RHI::CommandBuffer* cmd)</span> </span>{
+    <span class="hljs-built_in">CF_GPU_SCOPE</span>(cmd, <span class="hljs-string">&quot;Thing::draw&quot;</span>);      <span class="hljs-comment">// GPU pass: real time with GPU timing on, CPU time otherwise</span>
+    <span class="hljs-comment">// ...</span>
+    <span class="hljs-built_in">CF_PROFILE_SCOPE</span>(<span class="hljs-string">&quot;Thing::prepare&quot;</span>);    <span class="hljs-comment">// CPU work: always CPU time</span>
+}
+</code></pre></div>
+<p>Ponha um <code>CF_GPU_SCOPE</code> fora de render e compute passes: ele faz flush da command buffer nos seus extremos.</p>
+<p>C ABI v18 e v19: <code>caffeine_system_metrics</code> (v19), <code>caffeine_profiler_report</code> (scopes em profundidade), <code>caffeine_profiler_reset</code>, <code>caffeine_profiler_set_gpu_timing</code> e
+<code>caffeine_profiler_gpu_timing</code>. O crate Rust do motor embrulha-as como <code>Engine::profiler_scopes</code>, <code>profiler_reset</code>, <code>set_profiler_gpu_timing</code>
+e <code>profiler_gpu_timing</code>.</p>
+<p>Os agentes (<code>ICED_MCP=1</code>, feature <code>agent</code>) leem a query <code>profiler</code>, e usam <code>show_profiler</code>, <code>profiler_gpu_timing</code> e <code>profiler_reset</code>:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;profiler_gpu_timing&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;enabled&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;profiler_reset&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h2 id="5-medir-a-partir-dos-testes">5. Medir a partir dos testes<a class="anchor" href="#5-medir-a-partir-dos-testes" aria-label="Link to this section">#</a></h2>
+<p>As medições acima vêm de testes ignorados que imprimem a árvore: corra-os na máquina que lhe interessa.</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> doppio
+cargo <span class="hljs-built_in">test</span> -p doppio-ui --lib zz_profile_dense_outdoor -- --ignored --nocapture
+PERF_ALL=1 cargo <span class="hljs-built_in">test</span> -p doppio-ui --lib zz_profile_features -- --ignored --nocapture
+</code></pre></div>
+<p><code>zz_profile_features</code> imprime o tempo real e os scopes de topo da cena de benchmark com a base, as nuvens, a névoa, a tempestade e o Photon
+ligados, um a seguir ao outro. Nada ali falha por velocidade: a velocidade depende da máquina.</p>
+<h2 id="6-limites-e-o-que-vem-a-seguir">6. Limites e o que vem a seguir<a class="anchor" href="#6-limites-e-o-que-vem-a-seguir" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>O GPU timing é por passo, não por desenho: um scope que cobre muitos desenhos não diz qual é lento. Acrescente um scope, ou compare duas corridas.</li>
+<li>Os gráficos de CPU, GPU e memória de Windows e macOS não foram testados; o uso da GPU precisa de NVML (NVIDIA) ou de um contador sysfs do amdgpu (Linux), por isso AMD e Intel em Windows, e todos os Mac, não mostram valores de GPU.</li>
+<li>A cena de benchmark com 600 arbustos a abanar corre a cerca de 60 fps a 720p; as sombras (6.6 ms) e o passo opaco (4.3 ms) são para onde vai o tempo. Um mar de 400 por 400 m custa cerca de 4 ms (incluindo o lado CPU da
+simulação da água). O Photon em High custa 23 ms nesta máquina (eram 34), dos quais as probes do far field (7 ms) e o campo próximo (7 ms) são o maior.
+O campo próximo já traça uma probe por 4 por 4 pixéis em todos os níveis de qualidade (o nível não muda o espaçamento; o <code>s0</code> muda), por isso um campo próximo a meia resolução é uma definição, não uma poupança gratuita, e não foi tornado automático.</li>
+<li>A tabela segue as últimas 120 chamadas de cada scope, por isso mostra o que a cena faz agora; <code>avg_ms</code> e <code>max_ms</code> na C ABI continuam a cobrir tudo desde o último reset.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/doppio/profiler-guide.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/doppio/material-pipeline/"><span>Anterior</span><strong>Pipeline de materiais, texturas e geradores — backlog</strong></a><a class="pager-next" href="/pt/docs/doppio/generator-recipes/"><span>Seguinte</span><strong>Receitas de geradores (generator.*)</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-o-que-cronometra">1. O que cronometra</a></li><li class="l2"><a href="#2-o-separador-profiler">2. O separador Profiler</a></li><li class="l2"><a href="#3-ler-um-perfil">3. Ler um perfil</a></li><li class="l2"><a href="#4-acrescentar-scopes-a-c-abi-e-agentes">4. Acrescentar scopes, a C ABI e agentes</a></li><li class="l2"><a href="#5-medir-a-partir-dos-testes">5. Medir a partir dos testes</a></li><li class="l2"><a href="#6-limites-e-o-que-vem-a-seguir">6. Limites e o que vem a seguir</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

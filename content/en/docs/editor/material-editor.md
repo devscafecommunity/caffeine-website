@@ -87,8 +87,8 @@ channel views (base, normal, height, roughness, AO, emissive, opacity, metal) an
 channel packing for ORM and Unity layouts. **Bake to Material** writes the selected
 maps into the open material.
 
-See the [material pipeline](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/material-pipeline.md)
-and [materials guide](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/materials-guide.md).
+See the [material pipeline](../doppio/material-pipeline.md)
+and [materials guide](../doppio/materials-guide.md).
 
 ## File format
 
@@ -103,5 +103,5 @@ and [materials guide](https://github.com/devscafecommunity/caffeine/blob/main/do
 
 - [PBR materials](../rendering/materials-pbr.md)
 - [Reflections](../rendering/reflections.md)
-- [Material pipeline](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/material-pipeline.md)
-- [Texture Generator guide](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/texture-generator-guide.md)
+- [Material pipeline](../doppio/material-pipeline.md)
+- [Texture Generator guide](../doppio/texture-generator-guide.md)

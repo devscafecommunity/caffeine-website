@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gizmos and scene markers · Caffeine</title>
+<meta name="description" content="Move, rotate and scale handles for the selected entity, plus icons and frusta for lights, cameras, colliders and empties.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Gizmos and scene markers · Caffeine">
+<meta property="og:description" content="Move, rotate and scale handles for the selected entity, plus icons and frusta for lights, cameras, colliders and empties.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/gizmos-and-markers/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/gizmos-and-markers/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/gizmos-and-markers/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/gizmos-and-markers/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link active" href="/en/docs/doppio/gizmos-and-markers/" aria-current="page">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Gizmos and scene markers</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last updated: <time datetime="2026-11-20">2026-11-20</time></span>
+</div>
+<p class="doc-lede">Move, rotate and scale handles for the selected entity, plus icons and frusta for lights, cameras, colliders and empties.</p>
+<p>The viewport draws two overlays over the engine's render. Both are 2D canvases that rebuild the
+orbit camera's projection (<code>uikit/components/viewport_math.rs</code>), so they need no engine calls: they
+work from plain transform values and from component data the editor already reads.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Overlay</th>
+<th>Component</th>
+<th>Shows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Transform gizmo</strong></td>
+<td><code>components/gizmo.rs</code></td>
+<td>the Move, Rotate and Scale handles of the selected entity</td>
+</tr>
+<tr>
+<td><strong>Scene markers</strong></td>
+<td><code>components/scene_markers.rs</code></td>
+<td>lights, cameras, colliders and empties, which have no mesh to look at</td>
+</tr>
+</tbody>
+</table></div>
+<p>Markers sit <strong>under</strong> the gizmo: a click goes to a gizmo handle first, then to a marker icon, then
+to the scene (orbit and mesh picking).</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/gizmos/gizmo-move.png" alt="Move gizmo, light markers and a camera frustum" loading="lazy">
+  <figcaption>Move gizmo, light markers and a camera frustum</figcaption>
+</figure>
+<h2 id="1-transform-gizmo">1. Transform gizmo<a class="anchor" href="#1-transform-gizmo" aria-label="Link to this section">#</a></h2>
+<p>Switch tools with <code>1</code> (Move), <code>2</code> (Rotate), <code>3</code> (Scale) while the pointer is over the viewport, or
+from the View menu. <code>X</code> over the viewport (or <strong>View &gt; Snapping</strong>) turns snapping on: Move snaps to 0.25 m, Rotate to
+15 degrees and Scale to 0.1, on the axis or plane being dragged only. The handle under the cursor lights up before you press it, and the one you are
+dragging turns yellow. Every drag is one undo step per handle.</p>
+<h3 id="move-1">Move (<code>1</code>)<a class="anchor" href="#move-1" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Axis arrows</strong> with shaded 3D cones and depth cueing: an axis pointing away from the camera is
+fainter, so the three arrows read as three dimensions instead of a flat cross.</li>
+<li><strong>Plane handles</strong> (the small squares between two arrows): drag inside the XY, XZ or YZ plane. The
+press ray is intersected with the plane, so the object follows the cursor exactly on that plane.</li>
+<li>Movement is in <strong>world</strong> axes and writes the world position, so a child of a moved parent still
+follows the handle.</li>
+</ul>
+<h3 id="rotate-2">Rotate (<code>2</code>)<a class="anchor" href="#rotate-2" aria-label="Link to this section">#</a></h3>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/gizmos/gizmo-rotate.png" alt="Rotate gizmo" loading="lazy">
+  <figcaption>Rotate gizmo</figcaption>
+</figure>
+<ul>
+<li>Three rings on a translucent sphere. The half of each ring that is <strong>in front</strong> of the object is
+bright and thick, the half behind it is faint, which makes the orientation of every ring obvious.</li>
+<li>While dragging, a <strong>wedge</strong> shows the swept angle and a label below the sphere shows the delta and the
+resulting angle (<code>Y +37.5°  →  62.5°</code>).</li>
+<li>The object turns <strong>the way the cursor goes</strong> from either side of the ring: the sign of the turn
+depends on whether the axis points at you or away from you (a positive rotation looks
+counter-clockwise when the axis points at the viewer, and screen angles run clockwise). It used to
+be a fixed sign, so the gizmo felt inverted from half of the viewing angles.</li>
+</ul>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/gizmos/gizmo-rotate-camera.png" alt="Rotate gizmo on the camera" loading="lazy">
+  <figcaption>Rotate gizmo on the camera</figcaption>
+</figure>
+<h3 id="scale-3">Scale (<code>3</code>)<a class="anchor" href="#scale-3" aria-label="Link to this section">#</a></h3>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/gizmos/gizmo-scale.png" alt="Scale gizmo" loading="lazy">
+  <figcaption>Scale gizmo</figcaption>
+</figure>
+<ul>
+<li>The axis handles follow the object's <strong>local</strong> axes, with shaded cube ends. A rotated object
+therefore scales along what you see; before, the handles were world-aligned while the scale is
+local, so dragging &quot;X&quot; on a rotated mesh scaled a different, invisible axis and looked broken.</li>
+<li>The <strong>centre cube</strong> scales all three axes by the same factor (drag right or up to grow, left or
+down to shrink). The factor is exponential, so it never flips the sign and never reaches zero.</li>
+<li>Values are clamped to <code>0.01 .. 1000</code>.</li>
+</ul>
+<p>For the texture side of scaling (a quad twice as big no longer stretches its material), see
+<a href="/en/docs/doppio/materials-guide/#6-scaling-an-object-keep-the-texture-density">the UV scale section of the materials guide</a>.</p>
+<h3 id="edits">Edits<a class="anchor" href="#edits" aria-label="Link to this section">#</a></h3>
+<p>The gizmo never calls the engine: it emits absolute edits and the app applies them.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Edit</th>
+<th>Applied as</th>
+<th>History key</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Move { axis, position }</code></td>
+<td>world position</td>
+<td><code>gizmo:move:&lt;id&gt;:&lt;axis&gt;</code></td>
+</tr>
+<tr>
+<td><code>MovePlane { plane, position }</code></td>
+<td>world position</td>
+<td><code>gizmo:move:&lt;id&gt;:&lt;plane&gt;</code></td>
+</tr>
+<tr>
+<td><code>Rotate { axis, rotation }</code></td>
+<td>Euler degrees</td>
+<td><code>gizmo:rotate:&lt;id&gt;:&lt;axis&gt;</code></td>
+</tr>
+<tr>
+<td><code>Scale { axis, scale }</code></td>
+<td>local scale</td>
+<td><code>gizmo:scale:&lt;id&gt;:&lt;axis&gt;</code></td>
+</tr>
+<tr>
+<td><code>ScaleUniform { scale }</code></td>
+<td>local scale</td>
+<td><code>gizmo:scale:&lt;id&gt;:uniform</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>With snapping on, <code>Edit::snapped(SnapSteps)</code> rounds the edit before it is applied (the handle's own coordinates only, never
+negative zero, scale never below one step), so history keys and undo steps are unchanged.</p>
+<h2 id="2-scene-markers">2. Scene markers<a class="anchor" href="#2-scene-markers" aria-label="Link to this section">#</a></h2>
+<p>Lights, cameras and colliders are invisible in the render, so each gets a marker. Every marker has a
+faint <strong>stem to the ground</strong> and a small ground ring, so its height is readable, and a plate icon
+you can <strong>click to select</strong> the entity (the mesh raycast cannot hit them). Hover shows the name.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Marker</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Directional light</strong></td>
+<td>a sun and a bundle of parallel rays along the real shining direction, plus a cross where the centre ray meets the ground. An unrotated sun uses the engine's default direction (0.35, -0.82, 0.45), exactly like the renderer.</td>
+</tr>
+<tr>
+<td><strong>Point light</strong></td>
+<td>a bulb; when selected, the radius as a wire sphere and a soft shell</td>
+</tr>
+<tr>
+<td><strong>Spot light</strong></td>
+<td>a bulb and the cone (angle and range); the range is capped at 6 m for unselected lights so long cones do not flood the view</td>
+</tr>
+<tr>
+<td><strong>Camera 3D</strong></td>
+<td>a camera body with a lens, the frustum (field of view, aspect ratio, near and far) and the &quot;up&quot; triangle. Its size is <strong>fixed in the world</strong> (2.6 m deep): it does not grow or shrink as you fly around it, only its proportions follow the lens.</td>
+</tr>
+<tr>
+<td><strong>Collider 3D</strong></td>
+<td>(selected only) the box, sphere or capsule with its offset and the entity's scale; triggers are orange and labelled</td>
+</tr>
+<tr>
+<td><strong>Empty entity</strong></td>
+<td>a three-axis locator (red X, green Y, blue Z)</td>
+</tr>
+</tbody>
+</table></div>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/gizmos/marker-directional.png" alt="Directional light" loading="lazy">
+  <figcaption>Directional light</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Point light (selected)</th>
+<th>Spot light (selected)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/en/docs/images/doppio/gizmos/marker-point.png" alt="point" loading="lazy"></td>
+<td><img src="/en/docs/images/doppio/gizmos/marker-spot.png" alt="spot" loading="lazy"></td>
+</tr>
+</tbody>
+</table></div>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Camera (selected)</th>
+<th>Collider (selected)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/en/docs/images/doppio/gizmos/marker-camera.png" alt="camera" loading="lazy"></td>
+<td><img src="/en/docs/images/doppio/gizmos/marker-collider.png" alt="collider" loading="lazy"></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Toggle:</strong> View &gt; Hide / Show Scene Markers (<code>editor.view.toggle_markers</code>). The data is kept, so
+showing them again is instant.</p>
+<h3 id="how-they-are-built">How they are built<a class="anchor" href="#how-they-are-built" aria-label="Link to this section">#</a></h3>
+<p><code>scene_markers::collect</code> walks the entities once and reads their components by name
+(<code>Directional Light</code>, <code>Spot Light</code>, <code>Point Light</code>, <code>Camera 3D</code>, <code>Collider 3D</code>, <code>Light</code> for the
+colour). It runs after every message that can change the scene (not on pointer moves or ticks), and
+measures about 6 ms for the 287 entities of <code>dense_outdoor.caf</code>. Orientation comes from the entity's
+local Euler angles, composed <code>Rz * Ry * Rx</code> like the engine; a directional light or camera under a
+rotated parent is therefore drawn with its local aim.</p>
+<h2 id="3-why-a-scale-or-rotation-edit-could-be-ignored-fixed">3. Why a scale or rotation edit could be ignored (fixed)<a class="anchor" href="#3-why-a-scale-or-rotation-edit-could-be-ignored-fixed" aria-label="Link to this section">#</a></h2>
+<p>An entity can carry the legacy <code>Transform</code> <strong>and</strong> the split <code>Position 3D</code> / <code>Rotation 3D</code> /
+<code>Scale 3D</code> components; scenes saved by older editors have both (the Chair project's cube, cylinder,
+sphere and camera do). The renderer and the hierarchy system build the world matrix from the split
+components whenever <code>Position 3D</code> exists, but the C ABI used to write rotation and scale only to
+<code>Transform</code>, and to read them from <code>Transform</code> first. The Inspector and the gizmos therefore showed
+the new number (<code>Scale 47.159, 6.127, 9.381</code>) while the object kept rendering with the old, unchanged
+<code>Scale 3D</code>: scale and rotation &quot;did nothing&quot;, while position worked because it was already written to
+both.</p>
+<p>Now (<code>EngineAPI.cpp</code>, <code>prefersSplitComponents</code>): reads report the components the renderer uses, and
+writes reach <strong>every</strong> component that is present, adding <code>Rotation 3D</code> / <code>Scale 3D</code> to a split entity
+that lacks them. Covered by <code>entities_with_both_transform_and_split_components_render_their_scale_and_rotation</code>
+(renders the entity before and after) and by a C ABI test (<code>tests/test_capi.cpp</code>).</p>
+<h2 id="4-for-agents-and-scripts">4. For agents and scripts<a class="anchor" href="#4-for-agents-and-scripts" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Query <code>markers</code>: whether they are visible and, per marker, the entity id, name, kind and world
+position.</li>
+<li>Actions <code>toggle_scene_markers</code>, <code>select_marker { id }</code> (the same as clicking the icon) and <code>toggle_gizmo_snap</code>; the
+<code>gizmo</code> query reports <code>snap</code>.</li>
+<li>Gizmo edits are ordinary <code>Message</code>s, so an agent can do no more than the UI.</li>
+<li>Headless driver: fixture <code>scene3d</code> builds a small engine-backed scene (floor, cubes, sun, point
+and spot light, camera) and needs <code>libcaffeine-capi</code>; see <a href="/en/docs/doppio/headless-testing/">headless-testing.md</a>.</li>
+</ul>
+<h2 id="5-limits">5. Limits<a class="anchor" href="#5-limits" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>The overlays use a 60° field of view and the orbit camera, like the viewport; a play-mode camera
+is not drawn through them.</li>
+<li>Move is world-space only (no local / world toggle yet), Rotate adds to the Euler angles (it can
+hit gimbal lock). Snapping uses fixed steps (0.25 m, 15 degrees, 0.1); the steps are not editable in the UI yet.</li>
+<li>Markers show a light's <em>shape</em>, not its colour or intensity numerically.</li>
+<li>Orientation ignores parent rotation (see above).</li>
+<li>Click-selection works on the icon only, not on the wire shapes.</li>
+</ul>
+<h2 id="6-regenerating-the-images">6. Regenerating the images<a class="anchor" href="#6-regenerating-the-images" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cmake --build build --target caffeine-capi -j
+./scripts/capture-gizmo-docs.sh        <span class="hljs-comment"># headless screenshots of the scene3d fixture</span>
+</code></pre></div>
+<p>The flow is <code>caffeine-website/captures/flows/capture-gizmo-docs.json</code>; it drives the real UI (hierarchy rows and
+the View menu) through the headless driver.</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/gizmos-and-markers.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/generator-recipes/"><span>Previous</span><strong>Generator recipes (generator.*)</strong></a><a class="pager-next" href="/en/docs/doppio/graphics-roadmap/"><span>Next</span><strong>Graphics improvement — Micromeshes and Photon roadmap</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-transform-gizmo">1. Transform gizmo</a></li><li class="l3"><a href="#move-1">Move (1)</a></li><li class="l3"><a href="#rotate-2">Rotate (2)</a></li><li class="l3"><a href="#scale-3">Scale (3)</a></li><li class="l3"><a href="#edits">Edits</a></li><li class="l2"><a href="#2-scene-markers">2. Scene markers</a></li><li class="l3"><a href="#how-they-are-built">How they are built</a></li><li class="l2"><a href="#3-why-a-scale-or-rotation-edit-could-be-ignored-fixed">3. Why a scale or rotation edit could be ignored (fixed)</a></li><li class="l2"><a href="#4-for-agents-and-scripts">4. For agents and scripts</a></li><li class="l2"><a href="#5-limits">5. Limits</a></li><li class="l2"><a href="#6-regenerating-the-images">6. Regenerating the images</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

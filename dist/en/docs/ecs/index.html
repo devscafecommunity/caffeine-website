@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caffeine ECS Core Documentation · Caffeine</title>
+<meta name="description" content="Caffeine is an archetype ECS: entities are numeric ids, components are plain structs, and every entity with the same component set shares one dense archetype that queries can walk linearly.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Caffeine ECS Core Documentation · Caffeine">
+<meta property="og:description" content="Caffeine is an archetype ECS: entities are numeric ids, components are plain structs, and every entity with the same component set shares one dense archetype that queries can walk linearly.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/ecs/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/ecs/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/ecs/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/ecs/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link active" href="/en/docs/ecs/" aria-current="page">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/en/docs/audio/volumetric-audio/">Volumetric audio</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Runtime UI (ImGui &amp; in-game HUD)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Asset system</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Caffeine ECS Core Documentation</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Engine</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/ecs/World.hpp"><code>ecs/World.hpp</code></a></span>
+</div>
+<p class="doc-lede">Caffeine is an archetype ECS: entities are numeric ids, components
+are plain structs, and every entity with the same component set shares one dense
+archetype that queries can walk linearly.</p>
+<h2 id="table-of-contents">Table of Contents<a class="anchor" href="#table-of-contents" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#architecture-overview">Architecture Overview</a></li>
+<li><a href="#components">Components</a></li>
+<li><a href="#entities">Entities</a></li>
+<li><a href="#queries">Queries</a></li>
+<li><a href="#systems">Systems</a></li>
+<li><a href="#command-buffer">Command Buffer</a></li>
+<li><a href="#performance">Performance</a></li>
+<li><a href="#api-reference">API Reference</a></li>
+<li><a href="#common-patterns">Common Patterns</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ol>
+<hr>
+<h2 id="introduction">Introduction<a class="anchor" href="#introduction" aria-label="Link to this section">#</a></h2>
+<p>The ECS stores game state as data and runs behaviour in systems. An <strong>entity</strong> is a
+<code>u32</code> id plus a <code>World*</code>; a <strong>component</strong> is a plain struct registered by type; a
+<strong>system</strong> is an object with <code>onUpdate(World&amp;, f32)</code>.</p>
+<h3 id="why-ecs">Why ECS?<a class="anchor" href="#why-ecs" aria-label="Link to this section">#</a></h3>
+<p>Traditional object-oriented game code puts state and behaviour in deep class
+hierarchies. That makes behaviour hard to combine, scatters related data across
+memory and makes safe parallel iteration difficult.</p>
+<p>The Caffeine ECS composes instead:</p>
+<ul>
+<li><strong>Components</strong> hold data only (<code>Position2D</code>, <code>Velocity2D</code>, <code>Health</code>, your own structs).</li>
+<li><strong>Entities</strong> are ids that group components; they have no data of their own.</li>
+<li><strong>Queries</strong> select every entity with a component signature.</li>
+<li><strong>Systems</strong> receive the matching components and mutate them.</li>
+</ul>
+<p>Result: contiguous component arrays, cheap archetype matching and a clear place for
+each piece of logic.</p>
+<h3 id="design-goals">Design goals<a class="anchor" href="#design-goals" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Fast query iteration over dense component arrays.</li>
+<li>Structural changes are explicit (<code>add</code>, <code>remove</code>, <code>destroy</code>) and never hidden in a
+getter.</li>
+<li>Parallel iteration is opt-in and does not require locks around component storage.</li>
+<li>No global system registry: the host decides which systems run and in what order.</li>
+</ul>
+<p>The correctness suite lives in <code>tests/test_phase2_3.cpp</code>; measure frame budgets on
+your own scene rather than relying on a fixed number.</p>
+<hr>
+<h2 id="architecture-overview">Architecture Overview<a class="anchor" href="#architecture-overview" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">World
+├── EntityData[]              one entry per id: archetype index + index in archetype
+└── Archetype[]               one archetype per distinct ComponentSet
+    ├── EntityID[]            dense entity ids
+    └── ComponentPool&lt;T&gt;[]    one dense array per component type
+
+Query (with Position2D, Velocity2D, without Disabled)
+    └── archetype.ComponentSet.matches(query) → iterate that archetype&#x27;s arrays
+</code></pre></div>
+<h3 id="key-concepts">Key Concepts<a class="anchor" href="#key-concepts" aria-label="Link to this section">#</a></h3>
+<p><strong>World</strong>: owns entity ids, archetypes and component storage. It creates and destroys
+entities, migrates entities between archetypes when components are added or removed,
+and runs <code>forEach</code> / <code>forEachParallel</code>.</p>
+<p><strong>Archetype</strong>: groups entities with an identical component signature. For example:</p>
+<ul>
+<li><code>[Transform]</code>: static scene objects</li>
+<li><code>[Transform, Position3D, Rotation3D, Scale3D]</code>: 3D transforms</li>
+<li><code>[Position2D, Velocity2D]</code>: moving 2D entities</li>
+</ul>
+<p>All entities in an archetype store components in dense arrays, one array per type.</p>
+<p><strong>ComponentID</strong>: a <code>u32</code> assigned the first time <code>ComponentID::get&lt;T&gt;()</code> runs. The
+counter is an atomic; the maximum is 256 component types (<code>ComponentID::MAX_COMPONENTS</code>).</p>
+<p><strong>ComponentSet</strong>: a 256-bit bitset of component ids. Archetype lookup hashes the set;
+query matching ANDs the bitsets, so it is O(1) per archetype rather than per entity.</p>
+<p><strong>Entity</strong>: a lightweight handle (<code>u32</code> id + <code>World*</code>). It can query, add, remove and
+destroy through the world that created it.</p>
+<p><strong>ComponentQuery</strong>: a builder with <code>with&lt;A, B&gt;()</code>, <code>without&lt;C&gt;()</code> and <code>any&lt;D, E&gt;()</code>.
+<code>matches(const Archetype*)</code> is what <code>World::forEach</code> uses.</p>
+<p><strong>System</strong>: implements <code>ISystem</code>; the host calls <code>onUpdate(World&amp;, f32 deltaTime)</code>.
+Movement, rendering and physics are ordinary systems.</p>
+<hr>
+<h2 id="components">Components<a class="anchor" href="#components" aria-label="Link to this section">#</a></h2>
+<p>Components are small plain structs containing state only.</p>
+<h3 id="predefined-components">Predefined components<a class="anchor" href="#predefined-components" aria-label="Link to this section">#</a></h3>
+<p><code>ecs/Components.hpp</code> ships the shared transform plus a small 2D set:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Shared 3D transform, also used by the scene hierarchy.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Transform</span> {
+    Vec3 position = {<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>};
+    Vec3 rotation = {<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>};  <span class="hljs-comment">// Euler degrees in the hierarchy helper</span>
+    Vec3 scale    = {<span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>};
+};
+
+<span class="hljs-comment">// Position in 2D space.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Position2D</span> {
+    f32 x = <span class="hljs-number">0.0f</span>;
+    f32 y = <span class="hljs-number">0.0f</span>;
+    <span class="hljs-built_in">Position2D</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-built_in">Position2D</span>(f32 x_, f32 y_) : <span class="hljs-built_in">x</span>(x_), <span class="hljs-built_in">y</span>(y_) {}
+};
+
+<span class="hljs-comment">// Velocity (rate of change).</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Velocity2D</span> {
+    f32 x = <span class="hljs-number">0.0f</span>;
+    f32 y = <span class="hljs-number">0.0f</span>;
+    <span class="hljs-built_in">Velocity2D</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-built_in">Velocity2D</span>(f32 x_, f32 y_) : <span class="hljs-built_in">x</span>(x_), <span class="hljs-built_in">y</span>(y_) {}
+};
+
+<span class="hljs-comment">// Acceleration.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Acceleration2D</span> {
+    f32 x = <span class="hljs-number">0.0f</span>;
+    f32 y = <span class="hljs-number">0.0f</span>;
+};
+
+<span class="hljs-comment">// Rotation angle (radians).</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rotation</span> {
+    f32 angle = <span class="hljs-number">0.0f</span>;
+    <span class="hljs-built_in">Rotation</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">Rotation</span><span class="hljs-params">(f32 angle_)</span> : angle(angle_) {</span>}
+};
+
+<span class="hljs-comment">// Scale factors.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Scale2D</span> {
+    f32 x = <span class="hljs-number">1.0f</span>;
+    f32 y = <span class="hljs-number">1.0f</span>;
+    <span class="hljs-built_in">Scale2D</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-built_in">Scale2D</span>(f32 x_, f32 y_) : <span class="hljs-built_in">x</span>(x_), <span class="hljs-built_in">y</span>(y_) {}
+};
+
+<span class="hljs-comment">// Visual representation.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Sprite</span> {
+    std::string name;      <span class="hljs-comment">// texture/sprite name</span>
+    u32 frameIndex = <span class="hljs-number">0</span>;    <span class="hljs-comment">// for sprite sheets</span>
+};
+
+<span class="hljs-comment">// Health system.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Health</span> {
+    u32 current = <span class="hljs-number">100</span>;
+    u32 max     = <span class="hljs-number">100</span>;
+    <span class="hljs-built_in">Health</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-built_in">Health</span>(u32 current_, u32 max_) : <span class="hljs-built_in">current</span>(current_), <span class="hljs-built_in">max</span>(max_) {}
+};
+
+<span class="hljs-comment">// Zero-cost marker component for tagging.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Tag</span> { };
+</code></pre></div>
+<p><code>Components.hpp</code> also declares <code>ParticleEmitterComponent</code>, <code>PersistentComponent</code> and
+<code>DisabledTag</code>, and includes the 3D, camera, light, mesh, skybox and terrain component
+headers. <code>Transform</code> is the component the scene hierarchy composes; <code>Position3D</code>,
+<code>Rotation3D</code> and <code>Scale3D</code> live in <code>ecs/Components3D.hpp</code>.</p>
+<h3 id="custom-components">Custom components<a class="anchor" href="#custom-components" aria-label="Link to this section">#</a></h3>
+<p>Define your own components for game-specific data:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Damage-dealing weapon.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">DamageDealer</span> {
+    u32 damagePerHit = <span class="hljs-number">10</span>;
+    f32 cooldownTime = <span class="hljs-number">0.2f</span>;
+    f32 timeSinceLastHit = <span class="hljs-number">0.0f</span>;
+};
+
+<span class="hljs-comment">// Inventory system.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Inventory</span> {
+    std::vector&lt;Item&gt; items;
+    u32 maxCapacity = <span class="hljs-number">20</span>;
+};
+
+<span class="hljs-comment">// AI state machine.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AIController</span> {
+    <span class="hljs-keyword">enum</span> <span class="hljs-title class_">State</span> { Idle, Chasing, Attacking } state = Idle;
+    Entity target = <span class="hljs-built_in">Entity</span>();
+    f32 visionRange = <span class="hljs-number">100.0f</span>;
+};
+</code></pre></div>
+<h3 id="component-guidelines">Component guidelines<a class="anchor" href="#component-guidelines" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Data only</strong>: behaviour belongs in systems.</li>
+<li><strong>Copyable</strong>: components are copied when an entity migrates between archetypes.</li>
+<li><strong>Small</strong>: cache locality matters; aim for well under 64 bytes.</li>
+<li><strong>Default-constructible</strong>: <code>Entity::getOrAdd&lt;T&gt;()</code> and <code>World::add&lt;T&gt;(e)</code> default it.</li>
+<li><strong>No heavy destructors or owning pointers</strong>: prefer handles or asset ids.</li>
+</ul>
+<hr>
+<h2 id="entities">Entities<a class="anchor" href="#entities" aria-label="Link to this section">#</a></h2>
+<p>An entity is an id that aggregates components.</p>
+<h3 id="entity-lifecycle">Entity lifecycle<a class="anchor" href="#entity-lifecycle" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Create an entity. The name argument is accepted but not stored by the</span>
+<span class="hljs-comment">// world; the editor keeps names in Editor::NameComponent.</span>
+Entity player = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Player&quot;</span>);
+
+<span class="hljs-comment">// Add components later.</span>
+world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(player, Position2D{<span class="hljs-number">10.0f</span>, <span class="hljs-number">20.0f</span>});
+world.<span class="hljs-built_in">add</span>&lt;Velocity2D&gt;(player, Velocity2D{<span class="hljs-number">5.0f</span>, <span class="hljs-number">0.0f</span>});
+world.<span class="hljs-built_in">add</span>&lt;Health&gt;(player, Health{<span class="hljs-number">100</span>, <span class="hljs-number">100</span>});
+
+<span class="hljs-comment">// Check and read.</span>
+<span class="hljs-keyword">if</span> (world.<span class="hljs-built_in">has</span>&lt;Position2D&gt;(player)) {
+    Position2D* pos = world.<span class="hljs-built_in">get</span>&lt;Position2D&gt;(player);
+    pos-&gt;x += <span class="hljs-number">5.0f</span>;  <span class="hljs-comment">// modify in place</span>
+}
+
+<span class="hljs-comment">// Add-or-get through the handle.</span>
+Health&amp; health = player.<span class="hljs-built_in">getOrAdd</span>&lt;Health&gt;();
+health.current = <span class="hljs-number">80</span>;
+
+<span class="hljs-comment">// Remove a component (the entity migrates to a new archetype).</span>
+world.<span class="hljs-built_in">remove</span>&lt;Velocity2D&gt;(player);
+
+<span class="hljs-comment">// Destroy the entity.</span>
+world.<span class="hljs-built_in">destroy</span>(player);
+</code></pre></div>
+<h3 id="important-notes">Important notes<a class="anchor" href="#important-notes" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Entity ids are 32-bit</strong>; copy the handle freely.</li>
+<li><strong><code>Entity::isValid()</code> only rejects the default <code>INVALID</code> id.</strong> It does not prove the
+entity is still alive after <code>destroy</code>, so re-check with <code>world.isEntityAlive(e)</code>
+after structural changes.</li>
+<li><strong>Ids are not recycled</strong> (<code>World::create</code> increments a counter), but stale handles
+still address the old slot; do not keep handles across destruction.</li>
+<li><strong>Component access is O(1)</strong> after the entity's archetype is known.</li>
+<li><strong>Archetype migration is automatic</strong> on add/remove and invalidates references
+returned earlier by <code>get&lt;T&gt;()</code>.</li>
+<li><strong><code>World::create()</code> does not take component arguments.</strong> Create, then <code>add&lt;T&gt;</code>.</li>
+<li><strong>The name argument is ignored.</strong> <code>World::create(&quot;Player&quot;)</code> reads well at the call
+site, but the world stores no name; the editor uses <code>Editor::NameComponent</code>.</li>
+</ul>
+<hr>
+<h2 id="queries">Queries<a class="anchor" href="#queries" aria-label="Link to this section">#</a></h2>
+<p>Queries select entities matching a component signature.</p>
+<h3 id="query-builder">Query builder<a class="anchor" href="#query-builder" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Require Position2D and Velocity2D.</span>
+ComponentQuery moving;
+moving.<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;();
+
+<span class="hljs-comment">// Require Position2D, exclude a Disabled tag.</span>
+ComponentQuery visible;
+visible.<span class="hljs-built_in">with</span>&lt;Position2D&gt;().<span class="hljs-built_in">without</span>&lt;DisabledTag&gt;();
+
+<span class="hljs-comment">// Require one of several components.</span>
+ComponentQuery armed;
+armed.<span class="hljs-built_in">with</span>&lt;Health&gt;().<span class="hljs-built_in">any</span>&lt;Shield, Armor&gt;();  <span class="hljs-comment">// Health AND (Shield OR Armor)</span>
+</code></pre></div>
+<h3 id="single-threaded-iteration">Single-threaded iteration<a class="anchor" href="#single-threaded-iteration" aria-label="Link to this section">#</a></h3>
+<p>The template arguments must match the callback's component parameters (after the
+entity). The query can be narrower than the callback signature:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">world.forEach&lt;Position2D, Velocity2D&gt;(
+    <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;(),
+    [deltaTime](Entity e, Position2D&amp; pos, Velocity2D&amp; vel) {
+        pos.x += vel.x * deltaTime;
+        pos.y += vel.y * deltaTime;
+    }
+);
+</code></pre></div>
+<h3 id="parallel-iteration">Parallel iteration<a class="anchor" href="#parallel-iteration" aria-label="Link to this section">#</a></h3>
+<p><code>forEachParallel</code> takes the job system by reference, then the callback:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">world.forEachParallel&lt;Position2D, Velocity2D&gt;(
+    <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;(),
+    jobSystem,
+    [deltaTime](Entity e, Position2D&amp; pos, Velocity2D&amp; vel) {
+        pos.x += vel.x * deltaTime;  <span class="hljs-comment">// each entity is visited by one worker</span>
+        pos.y += vel.y * deltaTime;
+    }
+);
+</code></pre></div>
+<p>The callback must be safe to run concurrently and must not add, remove or destroy
+entities.</p>
+<h3 id="query-performance">Query performance<a class="anchor" href="#query-performance" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Archetype filtering</strong> is one bitset match per archetype.</li>
+<li><strong>Entity iteration</strong> inside an archetype is dense array access.</li>
+<li><strong>No sorting or searching</strong> is required.</li>
+<li><strong>Work is split in batches of 1000 entities</strong> per archetype for parallel queries.</li>
+</ul>
+<hr>
+<h2 id="systems">Systems<a class="anchor" href="#systems" aria-label="Link to this section">#</a></h2>
+<p>Systems encapsulate game logic over matching entities.</p>
+<h3 id="basic-system">Basic system<a class="anchor" href="#basic-system" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MovementSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        world.forEach&lt;Position2D, Velocity2D&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;(),
+            [deltaTime](Entity e, Position2D&amp; pos, Velocity2D&amp; vel) {
+                pos.x += vel.x * deltaTime;
+                pos.y += vel.y * deltaTime;
+            }
+        );
+    }
+};
+</code></pre></div>
+<h3 id="system-registry">System registry<a class="anchor" href="#system-registry" aria-label="Link to this section">#</a></h3>
+<p><code>SystemRegistry</code> is a convenience owner; the engine and runtime are not required to
+use it.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">SystemRegistry systems;
+systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;MovementSystem&gt;());
+systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;PhysicsSystem&gt;());
+systems.<span class="hljs-built_in">add</span>(std::<span class="hljs-built_in">make_unique</span>&lt;RenderSystem&gt;());
+
+<span class="hljs-comment">// Game loop</span>
+<span class="hljs-keyword">while</span> (running) {
+    systems.<span class="hljs-built_in">updateAll</span>(world, deltaTime);
+    <span class="hljs-built_in">render</span>();
+}
+</code></pre></div>
+<p><code>ISystem</code> has only <code>onUpdate</code>; there is no priority field. Registration order is
+execution order.</p>
+<h3 id="deferred-operations-in-systems">Deferred operations in systems<a class="anchor" href="#deferred-operations-in-systems" aria-label="Link to this section">#</a></h3>
+<p>Do not modify the world directly inside <code>forEach</code> callbacks. Use <code>CommandBuffer</code>:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HealthSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        CommandBuffer commands;
+
+        world.forEach&lt;Health&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Health&gt;(),
+            [&amp;commands](Entity e, Health&amp; health) {
+                <span class="hljs-keyword">if</span> (health.current == <span class="hljs-number">0</span>) {
+                    commands.<span class="hljs-built_in">destroy</span>(e);  <span class="hljs-comment">// queued until after iteration</span>
+                }
+            }
+        );
+
+        commands.<span class="hljs-built_in">execute</span>(world);  <span class="hljs-comment">// apply all changes</span>
+    }
+};
+</code></pre></div>
+<hr>
+<h2 id="command-buffer">Command Buffer<a class="anchor" href="#command-buffer" aria-label="Link to this section">#</a></h2>
+<p><code>CommandBuffer</code> defers entity modifications, enabling safe changes during query
+iteration.</p>
+<h3 id="operations">Operations<a class="anchor" href="#operations" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">CommandBuffer commands;
+
+<span class="hljs-comment">// Create an entity, optionally with one or two components.</span>
+Entity empty  = commands.<span class="hljs-built_in">create</span>();
+Entity mover  = commands.<span class="hljs-built_in">create</span>(Position2D{<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>});
+Entity walker = commands.<span class="hljs-built_in">create</span>(Position2D{<span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>}, Velocity2D{<span class="hljs-number">10.0f</span>, <span class="hljs-number">0.0f</span>});
+
+<span class="hljs-comment">// Add a component to an existing entity.</span>
+commands.<span class="hljs-built_in">addComponent</span>&lt;Velocity2D&gt;(myEntity, Velocity2D{<span class="hljs-number">10.0f</span>, <span class="hljs-number">0.0f</span>});
+
+<span class="hljs-comment">// Remove a component.</span>
+commands.<span class="hljs-built_in">removeComponent</span>&lt;Velocity2D&gt;(myEntity);
+
+<span class="hljs-comment">// Destroy an entity.</span>
+commands.<span class="hljs-built_in">destroy</span>(myEntity);
+
+<span class="hljs-comment">// Execute all queued operations in order.</span>
+commands.<span class="hljs-built_in">execute</span>(world);
+</code></pre></div>
+<p><code>create</code> accepts zero, one or two components; add further components with
+<code>addComponent&lt;T&gt;</code>.</p>
+<div class="doc-callout doc-callout--warning">
+  <p><strong>Placeholder handle.</strong> The <code>Entity</code> returned by
+  <code>CommandBuffer::create</code> is not remapped by <code>execute</code>: the real
+  entity is created by <code>World::create()</code> and the pending id is discarded. Do not
+  pass that handle to <code>addComponent</code> or <code>get</code>; use the one/two-component
+  overloads, or create the entity directly on the world outside iteration.</p>
+</div>
+<h3 id="why-commandbuffer">Why CommandBuffer?<a class="anchor" href="#why-commandbuffer" aria-label="Link to this section">#</a></h3>
+<p>Without deferred operations:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// DANGEROUS: adding/removing components or destroying entities</span>
+<span class="hljs-comment">// while an archetype is being iterated invalidates the iteration.</span>
+world.forEach&lt;Position2D&gt;([&amp;](Entity e, Position2D&amp; pos) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">shouldDestroy</span>(e)) {
+        world.<span class="hljs-built_in">destroy</span>(e);
+    }
+});
+</code></pre></div>
+<p>With CommandBuffer:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// SAFE: changes are applied after the iteration completes.</span>
+CommandBuffer commands;
+world.forEach&lt;Position2D&gt;([&amp;](Entity e, Position2D&amp; pos) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">shouldDestroy</span>(e)) {
+        commands.<span class="hljs-built_in">destroy</span>(e);
+    }
+});
+commands.<span class="hljs-built_in">execute</span>(world);
+</code></pre></div>
+<hr>
+<h2 id="performance">Performance<a class="anchor" href="#performance" aria-label="Link to this section">#</a></h2>
+<h3 id="practical-guidance">Practical guidance<a class="anchor" href="#practical-guidance" aria-label="Link to this section">#</a></h3>
+<ol>
+<li><strong>Use <code>forEachParallel</code></strong> for large, independent batches (roughly 1000+ entities).</li>
+<li><strong>Batch structural changes</strong> to reduce archetype migrations.</li>
+<li><strong>Keep components small</strong> for cache efficiency.</li>
+<li><strong>Narrow the query</strong> with <code>with</code> / <code>without</code> so fewer archetypes match.</li>
+<li><strong>Measure your scene</strong>: the test suite (<code>tests/test_phase2_3.cpp</code>) covers
+correctness; <code>tests/benchmarks.cpp</code> covers allocators and containers, not the ECS.</li>
+</ol>
+<h3 id="parallel-scaling">Parallel scaling<a class="anchor" href="#parallel-scaling" aria-label="Link to this section">#</a></h3>
+<p><code>forEachParallel</code> builds one work item per archetype, or one per 1000-entity chunk
+for larger archetypes, and waits on a <code>JobBarrier</code>. Each chunk touches a disjoint
+index range, so component writes do not race. Structural changes are not allowed
+inside the callback.</p>
+<hr>
+<h2 id="api-reference">API Reference<a class="anchor" href="#api-reference" aria-label="Link to this section">#</a></h2>
+<h3 id="world-class">World class<a class="anchor" href="#world-class" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">World</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// Entity lifecycle</span>
+    <span class="hljs-function">Entity <span class="hljs-title">create</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name = <span class="hljs-literal">nullptr</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>   <span class="hljs-title">destroy</span><span class="hljs-params">(Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>   <span class="hljs-title">destroyAll</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-comment">// Counts and validity</span>
+    <span class="hljs-function">u32 <span class="hljs-title">entityCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">u32 <span class="hljs-title">archetypeCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isEntityAlive</span><span class="hljs-params">(Entity e)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">EntityLocation</span> {
+        u32 archetypeIndex = u32_max;
+        u32 indexInArchetype = u32_max;
+        <span class="hljs-type">bool</span> alive = <span class="hljs-literal">false</span>;
+    };
+    <span class="hljs-function">EntityLocation <span class="hljs-title">getEntityLocation</span><span class="hljs-params">(Entity e)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-comment">// Component access</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... Args&gt;
+    T&amp; <span class="hljs-title">add</span><span class="hljs-params">(Entity e, Args&amp;&amp;... args)</span></span>;      <span class="hljs-comment">// returns the stored component</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">remove</span><span class="hljs-params">(Entity e)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">bool</span> <span class="hljs-title">has</span><span class="hljs-params">(Entity e)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    T* <span class="hljs-title">get</span><span class="hljs-params">(Entity e)</span></span>;                      <span class="hljs-comment">// nullptr if absent</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">const</span> T* <span class="hljs-title">get</span><span class="hljs-params">(Entity e)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-comment">// Query execution</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span>... Ts, <span class="hljs-keyword">typename</span> Callback&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">forEach</span><span class="hljs-params">(<span class="hljs-type">const</span> ComponentQuery&amp; query, Callback cb)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span>... Ts, <span class="hljs-keyword">typename</span> Callback&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">forEachParallel</span><span class="hljs-params">(<span class="hljs-type">const</span> ComponentQuery&amp; query,
+                         Threading::JobSystem&amp; jobSystem,
+                         Callback cb)</span></span>;
+};
+</code></pre></div>
+<h3 id="entity-class">Entity class<a class="anchor" href="#entity-class" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Entity</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-type">static</span> <span class="hljs-type">const</span> Entity INVALID;
+
+    <span class="hljs-function">u32  <span class="hljs-title">id</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isValid</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;                  <span class="hljs-comment">// id != u32_max</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... Args&gt;
+    T&amp; <span class="hljs-title">add</span><span class="hljs-params">(Args&amp;&amp;... args)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">remove</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">bool</span> <span class="hljs-title">has</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    T* <span class="hljs-title">get</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    T&amp; <span class="hljs-title">getOrAdd</span><span class="hljs-params">()</span></span>;                         <span class="hljs-comment">// default-constructs when absent</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>==(<span class="hljs-type">const</span> Entity&amp; other) <span class="hljs-type">const</span>;
+};
+</code></pre></div>
+<h3 id="componentquery-class">ComponentQuery class<a class="anchor" href="#componentquery-class" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ComponentQuery</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... Ts&gt;
+    ComponentQuery&amp; <span class="hljs-title">with</span><span class="hljs-params">()</span></span>;                <span class="hljs-comment">// all required</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... Ts&gt;
+    ComponentQuery&amp; <span class="hljs-title">without</span><span class="hljs-params">()</span></span>;             <span class="hljs-comment">// none present</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... Ts&gt;
+    ComponentQuery&amp; <span class="hljs-title">any</span><span class="hljs-params">()</span></span>;                 <span class="hljs-comment">// at least one present per call</span>
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">matches</span><span class="hljs-params">(<span class="hljs-type">const</span> Archetype* archetype)</span> <span class="hljs-type">const</span></span>;
+};
+</code></pre></div>
+<h3 id="isystem-interface">ISystem interface<a class="anchor" href="#isystem-interface" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ISystem</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">ISystem</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> </span>= <span class="hljs-number">0</span>;
+};
+</code></pre></div>
+<h3 id="systemregistry-class">SystemRegistry class<a class="anchor" href="#systemregistry-class" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SystemRegistry</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add</span><span class="hljs-params">(std::unique_ptr&lt;ISystem&gt; system)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">updateAll</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span></span>;
+    <span class="hljs-function">usize <span class="hljs-title">count</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+};
+</code></pre></div>
+<h3 id="commandbuffer-class">CommandBuffer class<a class="anchor" href="#commandbuffer-class" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">CommandBuffer</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function">Entity <span class="hljs-title">create</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;   Entity <span class="hljs-title">create</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; component)</span></span>;
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T1, <span class="hljs-keyword">typename</span> T2&gt;
+    Entity <span class="hljs-title">create</span><span class="hljs-params">(<span class="hljs-type">const</span> T1&amp; c1, <span class="hljs-type">const</span> T2&amp; c2)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-type">void</span> <span class="hljs-title">addComponent</span><span class="hljs-params">(Entity e, <span class="hljs-type">const</span> T&amp; component)</span></span>;
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-type">void</span> <span class="hljs-title">removeComponent</span><span class="hljs-params">(Entity e)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">(Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">execute</span><span class="hljs-params">(World&amp; world)</span></span>;
+};
+</code></pre></div>
+<hr>
+<h2 id="common-patterns">Common Patterns<a class="anchor" href="#common-patterns" aria-label="Link to this section">#</a></h2>
+<h3 id="pattern-1-movement-system">Pattern 1: Movement system<a class="anchor" href="#pattern-1-movement-system" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">MovementSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        world.forEach&lt;Position2D, Velocity2D&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;(),
+            [deltaTime](Entity e, Position2D&amp; pos, Velocity2D&amp; vel) {
+                pos.x += vel.x * deltaTime;
+                pos.y += vel.y * deltaTime;
+            }
+        );
+    }
+};
+</code></pre></div>
+<h3 id="pattern-2-damage-and-destruction">Pattern 2: Damage and destruction<a class="anchor" href="#pattern-2-damage-and-destruction" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">HealthSystem</span> : <span class="hljs-keyword">public</span> ISystem {
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(World&amp; world, f32 deltaTime)</span> <span class="hljs-keyword">override</span> </span>{
+        CommandBuffer commands;
+
+        world.forEach&lt;Health&gt;(
+            <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Health&gt;(),
+            [&amp;commands](Entity e, Health&amp; health) {
+                <span class="hljs-keyword">if</span> (health.current &lt;= <span class="hljs-number">0</span>) {
+                    commands.<span class="hljs-built_in">destroy</span>(e);
+                }
+            }
+        );
+
+        commands.<span class="hljs-built_in">execute</span>(world);
+    }
+};
+</code></pre></div>
+<h3 id="pattern-3-conditional-processing">Pattern 3: Conditional processing<a class="anchor" href="#pattern-3-conditional-processing" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Process entities that have Health and at least one of Shield/Armor.</span>
+world.forEach&lt;Health&gt;(
+    <span class="hljs-built_in">ComponentQuery</span>().<span class="hljs-built_in">with</span>&lt;Health&gt;().<span class="hljs-built_in">any</span>&lt;Shield, Armor&gt;(),
+    [](Entity e, Health&amp; health) {
+        <span class="hljs-comment">// ...</span>
+    }
+);
+</code></pre></div>
+<h3 id="pattern-4-filtering-with-without">Pattern 4: Filtering with without<a class="anchor" href="#pattern-4-filtering-with-without" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Update only active entities (no DisabledTag).</span>
+world.forEach&lt;Position2D, Velocity2D&gt;(
+    <span class="hljs-built_in">ComponentQuery</span>()
+        .<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;()
+        .<span class="hljs-built_in">without</span>&lt;DisabledTag&gt;(),
+    [deltaTime](Entity e, Position2D&amp; pos, Velocity2D&amp; vel) {
+        pos.x += vel.x * deltaTime;
+        pos.y += vel.y * deltaTime;
+    }
+);
+</code></pre></div>
+<hr>
+<h2 id="troubleshooting">Troubleshooting<a class="anchor" href="#troubleshooting" aria-label="Link to this section">#</a></h2>
+<h3 id="issue-entity-is-not-valid">Issue: &quot;Entity is not valid&quot;<a class="anchor" href="#issue-entity-is-not-valid" aria-label="Link to this section">#</a></h3>
+<p><strong>Cause</strong>: the handle is default-constructed (<code>Entity()</code> / <code>Entity::INVALID</code>).</p>
+<p><strong>Solution</strong>: check <code>isValid()</code> before use. After <code>destroy</code> or an archetype change,
+also check <code>world.isEntityAlive(entity)</code>.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">if</span> (entity.<span class="hljs-built_in">isValid</span>()) {
+    <span class="hljs-comment">// Safe to query components; use isEntityAlive after structural changes.</span>
+}
+</code></pre></div>
+<h3 id="issue-component-not-found">Issue: &quot;Component not found&quot;<a class="anchor" href="#issue-component-not-found" aria-label="Link to this section">#</a></h3>
+<p><strong>Cause</strong>: the entity does not have that component.</p>
+<p><strong>Solution</strong>: check <code>has&lt;T&gt;()</code>, or use <code>get&lt;T&gt;()</code>, which returns <code>nullptr</code>.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">if</span> (world.<span class="hljs-built_in">has</span>&lt;Position2D&gt;(entity)) {
+    <span class="hljs-keyword">auto</span>* pos = world.<span class="hljs-built_in">get</span>&lt;Position2D&gt;(entity);
+}
+</code></pre></div>
+<h3 id="issue-iteration-breaks-or-crashes">Issue: iteration breaks or crashes<a class="anchor" href="#issue-iteration-breaks-or-crashes" aria-label="Link to this section">#</a></h3>
+<p><strong>Cause</strong>: <code>add</code>, <code>remove</code>, <code>create</code> or <code>destroy</code> inside <code>forEach</code>.</p>
+<p><strong>Solution</strong>: queue the change in <code>CommandBuffer</code> and execute it after the loop.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// WRONG:</span>
+world.forEach&lt;Position2D&gt;([&amp;](Entity e, Position2D&amp; pos) {
+    <span class="hljs-keyword">if</span> (condition) world.<span class="hljs-built_in">destroy</span>(e);
+});
+
+<span class="hljs-comment">// CORRECT:</span>
+CommandBuffer commands;
+world.forEach&lt;Position2D&gt;([&amp;](Entity e, Position2D&amp; pos) {
+    <span class="hljs-keyword">if</span> (condition) commands.<span class="hljs-built_in">destroy</span>(e);
+});
+commands.<span class="hljs-built_in">execute</span>(world);
+</code></pre></div>
+<h3 id="issue-performance-degradation">Issue: performance degradation<a class="anchor" href="#issue-performance-degradation" aria-label="Link to this section">#</a></h3>
+<p><strong>Cause</strong>: many tiny queries, frequent structural changes, or sequential iteration
+of a large batch.</p>
+<p><strong>Solution</strong>:</p>
+<ul>
+<li>Batch structural changes to reduce archetype migrations.</li>
+<li>Use <code>forEachParallel</code> for large independent batches.</li>
+<li>Narrow queries so fewer archetypes are visited.</li>
+<li>Profile your own scene; do not assume a fixed budget.</li>
+</ul>
+<hr>
+<h2 id="next-steps">Next Steps<a class="anchor" href="#next-steps" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Read <a href="/en/docs/ecs/examples/">ECS examples</a> for complete programs.</li>
+<li>See <a href="/en/docs/ecs/core/">ECS core</a> for the short API summary.</li>
+<li>See <a href="/en/docs/ecs/scene/">Scene manager</a> for the hierarchy and scene serializer built on top.</li>
+<li>Check <code>tests/test_phase2_3.cpp</code> for the correctness suite.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/ecs/README.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/core/types/"><span>Previous</span><strong>Core Module</strong></a><a class="pager-next" href="/en/docs/ecs/scene/"><span>Next</span><strong>🗺️ Scene Manager</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#table-of-contents">Table of Contents</a></li><li class="l2"><a href="#introduction">Introduction</a></li><li class="l3"><a href="#why-ecs">Why ECS?</a></li><li class="l3"><a href="#design-goals">Design goals</a></li><li class="l2"><a href="#architecture-overview">Architecture Overview</a></li><li class="l3"><a href="#key-concepts">Key Concepts</a></li><li class="l2"><a href="#components">Components</a></li><li class="l3"><a href="#predefined-components">Predefined components</a></li><li class="l3"><a href="#custom-components">Custom components</a></li><li class="l3"><a href="#component-guidelines">Component guidelines</a></li><li class="l2"><a href="#entities">Entities</a></li><li class="l3"><a href="#entity-lifecycle">Entity lifecycle</a></li><li class="l3"><a href="#important-notes">Important notes</a></li><li class="l2"><a href="#queries">Queries</a></li><li class="l3"><a href="#query-builder">Query builder</a></li><li class="l3"><a href="#single-threaded-iteration">Single-threaded iteration</a></li><li class="l3"><a href="#parallel-iteration">Parallel iteration</a></li><li class="l3"><a href="#query-performance">Query performance</a></li><li class="l2"><a href="#systems">Systems</a></li><li class="l3"><a href="#basic-system">Basic system</a></li><li class="l3"><a href="#system-registry">System registry</a></li><li class="l3"><a href="#deferred-operations-in-systems">Deferred operations in systems</a></li><li class="l2"><a href="#command-buffer">Command Buffer</a></li><li class="l3"><a href="#operations">Operations</a></li><li class="l3"><a href="#why-commandbuffer">Why CommandBuffer?</a></li><li class="l2"><a href="#performance">Performance</a></li><li class="l3"><a href="#practical-guidance">Practical guidance</a></li><li class="l3"><a href="#parallel-scaling">Parallel scaling</a></li><li class="l2"><a href="#api-reference">API Reference</a></li><li class="l3"><a href="#world-class">World class</a></li><li class="l3"><a href="#entity-class">Entity class</a></li><li class="l3"><a href="#componentquery-class">ComponentQuery class</a></li><li class="l3"><a href="#isystem-interface">ISystem interface</a></li><li class="l3"><a href="#systemregistry-class">SystemRegistry class</a></li><li class="l3"><a href="#commandbuffer-class">CommandBuffer class</a></li><li class="l2"><a href="#common-patterns">Common Patterns</a></li><li class="l3"><a href="#pattern-1-movement-system">Pattern 1: Movement system</a></li><li class="l3"><a href="#pattern-2-damage-and-destruction">Pattern 2: Damage and destruction</a></li><li class="l3"><a href="#pattern-3-conditional-processing">Pattern 3: Conditional processing</a></li><li class="l3"><a href="#pattern-4-filtering-with-without">Pattern 4: Filtering with without</a></li><li class="l2"><a href="#troubleshooting">Troubleshooting</a></li><li class="l3"><a href="#issue-entity-is-not-valid">Issue: &quot;Entity is not valid&quot;</a></li><li class="l3"><a href="#issue-component-not-found">Issue: &quot;Component not found&quot;</a></li><li class="l3"><a href="#issue-iteration-breaks-or-crashes">Issue: iteration breaks or crashes</a></li><li class="l3"><a href="#issue-performance-degradation">Issue: performance degradation</a></li><li class="l2"><a href="#next-steps">Next Steps</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

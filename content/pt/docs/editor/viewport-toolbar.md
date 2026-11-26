@@ -91,5 +91,5 @@ próximo frame concluído.
 ## Páginas relacionadas
 
 - [Scene viewport](scene-viewport.md) — pipeline de readback, picking e câmara.
-- [Gizmos e marcadores](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/gizmos-and-markers.md)
+- [Gizmos e marcadores](../doppio/gizmos-and-markers.md)
 - [Performance](../performance/editor-viewport-performance.md)

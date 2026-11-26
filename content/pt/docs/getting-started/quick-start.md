@@ -123,5 +123,5 @@ hierarchy têm undo com `Ctrl+Z` e `Ctrl+Shift+Z`.
 
 - [Galeria de UI do editor](../editor/ui-gallery.md) para uma visita visual a cada painel.
 - [Scene viewport](../editor/scene-viewport.md) para render e câmara.
-- [Headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- [Headless testing](../doppio/headless-testing.md)
   para automatizar os mesmos passos sem janela.

@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Object Selection via Raycasting Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: Execute this plan task-by-task directly in this session. No subagents.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Object Selection via Raycasting Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: Execute this plan task-by-task directly in this session. No subagents.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-object-selection-raycasting/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-object-selection-raycasting/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-object-selection-raycasting/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-23-object-selection-raycasting/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-23-object-selection-raycasting/" aria-current="page">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Object Selection via Raycasting Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> Execute this plan task-by-task directly in this session. No subagents.</p>
+</blockquote>
+<p><strong>Goal:</strong> Implement click-to-select for entities in 3D viewport using raycasting against AABB bounding boxes.</p>
+<p><strong>Architecture:</strong>
+On left-click, convert screen coords to world-space ray (reuse <code>screenToWorldRay</code> ), test ray against all entity AABBs (transformed to world space), find closest intersection, update <code>ctx.selectedEntity</code> , which automatically updates Inspector.</p>
+<p><strong>Tech Stack:</strong> C++20, Mat4 (in-house), Vec3/Vec4, ImGui for click detection, existing Transform + MeshFilter components</p>
+<hr>
+<h2 id="task-1-add-rayintersectsaabb-helper-function">Task 1: Add <code>rayIntersectsAABB()</code> Helper Function<a class="anchor" href="#task-1-add-rayintersectsaabb-helper-function" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.hpp</code> (add function declaration)</li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (add implementation)</li>
+</ul>
+<p><strong>Step 1: Add function declaration to header</strong></p>
+<p>In <code>SceneViewport.hpp</code> , add to private section:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Ray-AABB intersection test (returns t_enter distance, or -1 if no hit)</span>
+<span class="hljs-comment">// Used for object selection and culling</span>
+<span class="hljs-function">f32 <span class="hljs-title">rayIntersectsAABB</span><span class="hljs-params">(<span class="hljs-type">const</span> Vec3&amp; rayOrigin, <span class="hljs-type">const</span> Vec3&amp; rayDir,
+                      <span class="hljs-type">const</span> Vec3&amp; aabbMin, <span class="hljs-type">const</span> Vec3&amp; aabbMax)</span></span>;
+</code></pre></div>
+<p><strong>Step 2: Implement rayIntersectsAABB in SceneViewport.cpp</strong></p>
+<p>Add before <code>onImGuiRender()</code> method body (around line 80):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">f32 <span class="hljs-title">SceneViewport::rayIntersectsAABB</span><span class="hljs-params">(<span class="hljs-type">const</span> Vec3&amp; rayOrigin, <span class="hljs-type">const</span> Vec3&amp; rayDir,
+                                     <span class="hljs-type">const</span> Vec3&amp; aabbMin, <span class="hljs-type">const</span> Vec3&amp; aabbMax)</span> </span>{
+    <span class="hljs-comment">// Slab intersection test for ray vs AABB</span>
+    <span class="hljs-comment">// Ray: p(t) = rayOrigin + t * rayDir</span>
+    <span class="hljs-comment">// Test against 3 axis-aligned slabs (X, Y, Z)</span>
+    
+    f32 t_enter = <span class="hljs-number">0.0f</span>;
+    f32 t_exit = <span class="hljs-number">1e10f</span>;  <span class="hljs-comment">// Very large value</span>
+    
+    <span class="hljs-comment">// Test X slab</span>
+    <span class="hljs-keyword">if</span> (std::<span class="hljs-built_in">abs</span>(rayDir.x) &gt; <span class="hljs-number">1e-6f</span>) {
+        f32 t0 = (aabbMin.x - rayOrigin.x) / rayDir.x;
+        f32 t1 = (aabbMax.x - rayOrigin.x) / rayDir.x;
+        <span class="hljs-keyword">if</span> (t0 &gt; t1) std::<span class="hljs-built_in">swap</span>(t0, t1);
+        t_enter = std::<span class="hljs-built_in">max</span>(t_enter, t0);
+        t_exit = std::<span class="hljs-built_in">min</span>(t_exit, t1);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">// Ray parallel to X slab; check if within bounds</span>
+        <span class="hljs-keyword">if</span> (rayOrigin.x &lt; aabbMin.x || rayOrigin.x &gt; aabbMax.x) {
+            <span class="hljs-keyword">return</span> <span class="hljs-number">-1.0f</span>;
+        }
+    }
+    
+    <span class="hljs-comment">// Test Y slab</span>
+    <span class="hljs-keyword">if</span> (std::<span class="hljs-built_in">abs</span>(rayDir.y) &gt; <span class="hljs-number">1e-6f</span>) {
+        f32 t0 = (aabbMin.y - rayOrigin.y) / rayDir.y;
+        f32 t1 = (aabbMax.y - rayOrigin.y) / rayDir.y;
+        <span class="hljs-keyword">if</span> (t0 &gt; t1) std::<span class="hljs-built_in">swap</span>(t0, t1);
+        t_enter = std::<span class="hljs-built_in">max</span>(t_enter, t0);
+        t_exit = std::<span class="hljs-built_in">min</span>(t_exit, t1);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">if</span> (rayOrigin.y &lt; aabbMin.y || rayOrigin.y &gt; aabbMax.y) {
+            <span class="hljs-keyword">return</span> <span class="hljs-number">-1.0f</span>;
+        }
+    }
+    
+    <span class="hljs-comment">// Test Z slab</span>
+    <span class="hljs-keyword">if</span> (std::<span class="hljs-built_in">abs</span>(rayDir.z) &gt; <span class="hljs-number">1e-6f</span>) {
+        f32 t0 = (aabbMin.z - rayOrigin.z) / rayDir.z;
+        f32 t1 = (aabbMax.z - rayOrigin.z) / rayDir.z;
+        <span class="hljs-keyword">if</span> (t0 &gt; t1) std::<span class="hljs-built_in">swap</span>(t0, t1);
+        t_enter = std::<span class="hljs-built_in">max</span>(t_enter, t0);
+        t_exit = std::<span class="hljs-built_in">min</span>(t_exit, t1);
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">if</span> (rayOrigin.z &lt; aabbMin.z || rayOrigin.z &gt; aabbMax.z) {
+            <span class="hljs-keyword">return</span> <span class="hljs-number">-1.0f</span>;
+        }
+    }
+    
+    <span class="hljs-comment">// Ray hits AABB if t_enter &lt;= t_exit and t_enter &gt;= 0</span>
+    <span class="hljs-keyword">if</span> (t_enter &lt;= t_exit &amp;&amp; t_enter &gt;= <span class="hljs-number">0.0f</span>) {
+        <span class="hljs-keyword">return</span> t_enter;
+    }
+    
+    <span class="hljs-keyword">return</span> <span class="hljs-number">-1.0f</span>;  <span class="hljs-comment">// No intersection</span>
+}
+</code></pre></div>
+<p><strong>Step 3: Compile and verify</strong></p>
+<p>Run: <code>cd /home/pedro/repo/caffeine/build &amp;&amp; make doppio -j8 2&gt;&amp;1 | tail -5</code></p>
+<p>Expected: Build succeeds, &quot;Built target doppio&quot;</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine
+git add src/editor/SceneViewport.hpp src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;feat(selection): add rayIntersectsAABB for object picking&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-2-add-raycastselectentity---entity-iteration-hit-detection">Task 2: Add <code>raycastSelectEntity()</code> - Entity Iteration &amp; Hit Detection<a class="anchor" href="#task-2-add-raycastselectentity---entity-iteration-hit-detection" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.hpp</code> (add function declaration)</li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (add implementation)</li>
+</ul>
+<p><strong>Step 1: Add function declaration</strong></p>
+<p>In <code>SceneViewport.hpp</code> , add to private section:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Find closest entity under a ray (for click-to-select)</span>
+<span class="hljs-comment">// Returns INVALID if no hit</span>
+<span class="hljs-function">ECS::Entity <span class="hljs-title">raycastSelectEntity</span><span class="hljs-params">(<span class="hljs-type">const</span> Vec3&amp; rayOrigin, <span class="hljs-type">const</span> Vec3&amp; rayDir,
+                                ECS::World&amp; world)</span></span>;
+</code></pre></div>
+<p><strong>Step 2: Implement raycastSelectEntity</strong></p>
+<p>Add after <code>rayIntersectsAABB()</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">ECS::Entity <span class="hljs-title">SceneViewport::raycastSelectEntity</span><span class="hljs-params">(<span class="hljs-type">const</span> Vec3&amp; rayOrigin, <span class="hljs-type">const</span> Vec3&amp; rayDir,
+                                               ECS::World&amp; world)</span> </span>{
+    ECS::Entity closestEntity = ECS::Entity::INVALID;
+    f32 closestT = <span class="hljs-number">1e10f</span>;
+    
+    <span class="hljs-comment">// Iterate all entities with Transform</span>
+    ECS::ComponentQuery query;
+    query.<span class="hljs-built_in">with</span>&lt;ECS::Transform&gt;();
+    
+    world.forEach&lt;ECS::Transform&gt;(query, [&amp;](ECS::Entity entity, ECS::Transform&amp; transform) {
+        <span class="hljs-keyword">if</span> (Scene::<span class="hljs-built_in">isEffectivelyDisabled</span>(world, entity)) <span class="hljs-keyword">return</span>;
+        
+        <span class="hljs-comment">// Get world-space AABB</span>
+        Vec3 aabbMin = transform.position;
+        Vec3 aabbMax = transform.position;
+        
+        <span class="hljs-comment">// If entity has MeshFilter, use mesh bounds</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">auto</span>* meshFilter = world.<span class="hljs-built_in">get</span>&lt;ECS::MeshFilter&gt;(entity)) {
+            <span class="hljs-keyword">if</span> (!meshFilter-&gt;customMeshPath.<span class="hljs-built_in">empty</span>()) {
+                <span class="hljs-comment">// Get mesh from cache</span>
+                <span class="hljs-keyword">auto</span>* mesh = Assets::MeshCache::<span class="hljs-built_in">getInstance</span>().<span class="hljs-built_in">getMesh</span>(meshFilter-&gt;customMeshPath);
+                <span class="hljs-keyword">if</span> (!mesh) {
+                    std::string fullPath = std::<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;assets/raw/&quot;</span>) + meshFilter-&gt;customMeshPath;
+                    mesh = Assets::MeshCache::<span class="hljs-built_in">getInstance</span>().<span class="hljs-built_in">getMesh</span>(fullPath);
+                }
+                
+                <span class="hljs-keyword">if</span> (mesh &amp;&amp; !mesh-&gt;vertices.<span class="hljs-built_in">empty</span>()) {
+                    <span class="hljs-comment">// Transform mesh bounds to world space</span>
+                    Vec3 meshMin = mesh-&gt;bounds.min;
+                    Vec3 meshMax = mesh-&gt;bounds.max;
+                    
+                    <span class="hljs-comment">// Apply transform (simple AABB transform - not optimal for rotations)</span>
+                    aabbMin = transform.position + meshMin * transform.scale;
+                    aabbMax = transform.position + meshMax * transform.scale;
+                    
+                    <span class="hljs-comment">// Ensure min &lt; max</span>
+                    <span class="hljs-keyword">if</span> (aabbMin.x &gt; aabbMax.x) std::<span class="hljs-built_in">swap</span>(aabbMin.x, aabbMax.x);
+                    <span class="hljs-keyword">if</span> (aabbMin.y &gt; aabbMax.y) std::<span class="hljs-built_in">swap</span>(aabbMin.y, aabbMax.y);
+                    <span class="hljs-keyword">if</span> (aabbMin.z &gt; aabbMax.z) std::<span class="hljs-built_in">swap</span>(aabbMin.z, aabbMax.z);
+                }
+            }
+        }
+        
+        <span class="hljs-comment">// Test ray intersection</span>
+        f32 t = <span class="hljs-built_in">rayIntersectsAABB</span>(rayOrigin, rayDir, aabbMin, aabbMax);
+        
+        <span class="hljs-keyword">if</span> (t &gt;= <span class="hljs-number">0.0f</span> &amp;&amp; t &lt; closestT) {
+            closestT = t;
+            closestEntity = entity;
+        }
+    });
+    
+    <span class="hljs-keyword">return</span> closestEntity;
+}
+</code></pre></div>
+<p><strong>Step 3: Compile and verify</strong></p>
+<p>Run: <code>cd /home/pedro/repo/caffeine/build &amp;&amp; make doppio -j8 2&gt;&amp;1 | tail -5</code></p>
+<p>Expected: Build succeeds</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine
+git add src/editor/SceneViewport.hpp src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;feat(selection): add raycastSelectEntity for closest hit detection&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-3-integrate-click-detection-ray-generation-into-onimguirender">Task 3: Integrate Click Detection &amp; Ray Generation into onImGuiRender()<a class="anchor" href="#task-3-integrate-click-detection-ray-generation-into-onimguirender" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (add click handling logic)</li>
+</ul>
+<p><strong>Step 1: Find click handling location</strong></p>
+<p>In <code>onImGuiRender()</code> , locate the gizmo input handling (around line 250).</p>
+<p>Add click selection logic BEFORE gizmo handling, so selection happens first:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">    <span class="hljs-comment">// Handle entity selection via raycasting (only in 3D mode, not during gizmo drag)</span>
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">IsMouseClicked</span>(ImGuiMouseButton_Left) &amp;&amp; !m_gizmoDragging &amp;&amp; 
+        ctx.viewMode == EditorContext::ViewMode::Mode3D) {
+        
+        ImVec2 mousePos = ImGui::<span class="hljs-built_in">GetMousePos</span>();
+        ImVec2 vpMin = ImGui::<span class="hljs-built_in">GetItemRectMin</span>();
+        ImVec2 vpMax = ImGui::<span class="hljs-built_in">GetItemRectMax</span>();
+        
+        <span class="hljs-type">bool</span> mouseInViewport = (mousePos.x &gt;= vpMin.x &amp;&amp; mousePos.x &lt;= vpMax.x &amp;&amp;
+                                mousePos.y &gt;= vpMin.y &amp;&amp; mousePos.y &lt;= vpMax.y);
+        
+        <span class="hljs-keyword">if</span> (mouseInViewport) {
+            <span class="hljs-comment">// Convert screen click to world-space ray</span>
+            ImVec2 vpSize = ImGui::<span class="hljs-built_in">GetContentRegionAvail</span>();
+            <span class="hljs-function">Vec2 <span class="hljs-title">screenClick</span><span class="hljs-params">(mousePos.x - vpMin.x, mousePos.y - vpMin.y)</span></span>;
+            
+            <span class="hljs-comment">// Build VP matrix for raycasting</span>
+            f32 sinY = std::<span class="hljs-built_in">sin</span>(ctx.camYaw), cosY = std::<span class="hljs-built_in">cos</span>(ctx.camYaw);
+            f32 sinP = std::<span class="hljs-built_in">sin</span>(ctx.camPitch), cosP = std::<span class="hljs-built_in">cos</span>(ctx.camPitch);
+            Vec3 camPos = ctx.camFocus + <span class="hljs-built_in">Vec3</span>(sinY * cosP, -sinP, -cosY * cosP) * ctx.camDistance;
+            Mat4 view = Mat4::<span class="hljs-built_in">lookAt</span>(camPos, ctx.camFocus, <span class="hljs-built_in">Vec3</span>(<span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">0.0f</span>));
+            f32 aspect = vpSize.x / std::<span class="hljs-built_in">max</span>(vpSize.y, <span class="hljs-number">1.0f</span>);
+            Mat4 proj = Mat4::<span class="hljs-built_in">perspective</span>(<span class="hljs-number">1.0472f</span>, aspect, <span class="hljs-number">0.1f</span>, <span class="hljs-number">10000.0f</span>);
+            Mat4 vp = proj * view;
+            Mat4 vpInverse = vp.<span class="hljs-built_in">inverted</span>();
+            
+            <span class="hljs-comment">// Generate raycasting ray (reuse from gizmo raycasting)</span>
+            TransformGizmo::Ray3D ray;
+            {
+                f32 ndcX = (<span class="hljs-number">2.0f</span> * screenClick.x) / vpSize.x - <span class="hljs-number">1.0f</span>;
+                f32 ndcY = <span class="hljs-number">1.0f</span> - (<span class="hljs-number">2.0f</span> * screenClick.y) / vpSize.y;
+                <span class="hljs-function">Vec4 <span class="hljs-title">ndcNear</span><span class="hljs-params">(ndcX, ndcY, <span class="hljs-number">-1.0f</span>, <span class="hljs-number">1.0f</span>)</span></span>;
+                Vec4 worldNear = vpInverse.<span class="hljs-built_in">transformVec4</span>(ndcNear);
+                
+                <span class="hljs-keyword">if</span> (std::<span class="hljs-built_in">abs</span>(worldNear.w) &gt; <span class="hljs-number">0.0001f</span>) {
+                    worldNear.x /= worldNear.w;
+                    worldNear.y /= worldNear.w;
+                    worldNear.z /= worldNear.w;
+                }
+                
+                ray.origin = camPos;
+                ray.direction = (<span class="hljs-built_in">Vec3</span>(worldNear.x, worldNear.y, worldNear.z) - camPos).<span class="hljs-built_in">normalized</span>();
+            }
+            
+            <span class="hljs-comment">// Find and select closest entity</span>
+            ECS::Entity selectedEntity = <span class="hljs-built_in">raycastSelectEntity</span>(ray.origin, ray.direction, world);
+            ctx.selectedEntity = selectedEntity;
+        }
+    }
+</code></pre></div>
+<p><strong>Step 2: Add required includes at top of SceneViewport.cpp</strong></p>
+<p>Check if these are present:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/TransformGizmo.hpp&quot;</span>  <span class="hljs-comment">// For Ray3D struct</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/MeshCache.hpp&quot;</span>        <span class="hljs-comment">// For mesh lookup</span></span>
+</code></pre></div>
+<p><strong>Step 3: Compile and verify</strong></p>
+<p>Run: <code>cd /home/pedro/repo/caffeine/build &amp;&amp; make doppio -j8 2&gt;&amp;1 | tail -10</code></p>
+<p>Expected: Build succeeds, warnings about lua are OK</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine
+git add src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;feat(selection): integrate click detection and raycasting into viewport&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-4-manual-testing-validation">Task 4: Manual Testing &amp; Validation<a class="anchor" href="#task-4-manual-testing-validation" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>None (testing only)</li>
+</ul>
+<p><strong>Step 1: Build and launch</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build
+make doppio -j8
+./doppio
+</code></pre></div>
+<p><strong>Step 2: Create test scene</strong></p>
+<ol>
+<li>Open/create a scene with meshes (or use existing test project)</li>
+<li>Enter 3D viewport (click &quot;3D&quot; button)</li>
+<li>Position camera to see multiple objects</li>
+</ol>
+<p><strong>Step 3: Test single-object selection</strong></p>
+<ol>
+<li>Click on a mesh in viewport</li>
+<li><strong>Expect:</strong> Inspector updates to show selected entity's components</li>
+<li><strong>Verify:</strong> <code>ctx.selectedEntity</code> is set (check console or Inspector title)</li>
+<li>Gizmo should appear on selected entity</li>
+</ol>
+<p><strong>Step 4: Test multi-object click</strong></p>
+<ol>
+<li>Position two meshes close together (overlapping or near each other)</li>
+<li>Click at intersection point</li>
+<li><strong>Expect:</strong> Closest mesh selected (not furthest)</li>
+<li>Try clicking different areas to confirm closest-hit logic</li>
+</ol>
+<p><strong>Step 5: Test empty-space click</strong></p>
+<ol>
+<li>Click on empty area in viewport (no mesh)</li>
+<li><strong>Expect:</strong> Inspector clears (no entity selected)</li>
+<li>Gizmo should disappear</li>
+</ol>
+<p><strong>Step 6: Test gizmo doesn't interfere</strong></p>
+<ol>
+<li>Select an entity</li>
+<li>Press T/E/R to enable Translate/Rotate/Scale gizmo</li>
+<li>Drag gizmo to transform entity</li>
+<li><strong>Expect:</strong> Selection remains, gizmo works normally</li>
+</ol>
+<p><strong>Step 7: Test 2D mode skips raycasting</strong></p>
+<ol>
+<li>Click &quot;2D&quot; button</li>
+<li>Click on objects</li>
+<li><strong>Expect:</strong> Selection should NOT change (raycasting only in 3D mode)</li>
+<li>Switch back to 3D, click should work again</li>
+</ol>
+<p><strong>Step 8: Document results</strong></p>
+<p>Note any issues:</p>
+<ul>
+<li>Does selection feel responsive?</li>
+<li>Is closest-hit detection accurate?</li>
+<li>Any visual glitches or crashes?</li>
+</ul>
+<hr>
+<h2 id="task-5-edge-case-handling-robustness">Task 5: Edge Case Handling &amp; Robustness<a class="anchor" href="#task-5-edge-case-handling-robustness" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (add validation)</li>
+</ul>
+<p><strong>Step 1: Add null-check guards in raycastSelectEntity()</strong></p>
+<p>Before accessing <code>world.forEach</code> , verify world is valid:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">ECS::Entity <span class="hljs-title">SceneViewport::raycastSelectEntity</span><span class="hljs-params">(<span class="hljs-type">const</span> Vec3&amp; rayOrigin, <span class="hljs-type">const</span> Vec3&amp; rayDir,
+                                               ECS::World&amp; world)</span> </span>{
+    <span class="hljs-keyword">if</span> (!world.<span class="hljs-built_in">isValid</span>()) <span class="hljs-keyword">return</span> ECS::Entity::INVALID;
+    
+    ECS::Entity closestEntity = ECS::Entity::INVALID;
+    f32 closestT = <span class="hljs-number">1e10f</span>;
+    
+    <span class="hljs-comment">// ... rest of implementation</span>
+}
+</code></pre></div>
+<p><strong>Step 2: Add AABB bounds validation</strong></p>
+<p>In raycastSelectEntity loop, after getting mesh bounds:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Ensure AABB is valid (min &lt; max)</span>
+<span class="hljs-keyword">if</span> (aabbMin.x &gt;= aabbMax.x || aabbMin.y &gt;= aabbMax.y || aabbMin.z &gt;= aabbMax.z) {
+    <span class="hljs-comment">// Invalid AABB, use point-radius check instead</span>
+    Vec3 entityPos = transform.position;
+    Vec3 toEntity = entityPos - rayOrigin;
+    Vec3 proj = rayDir * toEntity.dot(rayDir);
+    f32 distToRay = (toEntity - proj).<span class="hljs-built_in">length</span>();
+    
+    <span class="hljs-keyword">if</span> (distToRay &lt; <span class="hljs-number">0.1f</span>) {  <span class="hljs-comment">// Tolerance for point-like entities</span>
+        f32 t = proj.<span class="hljs-built_in">length</span>();
+        <span class="hljs-keyword">if</span> (t &gt;= <span class="hljs-number">0.0f</span> &amp;&amp; t &lt; closestT) {
+            closestT = t;
+            closestEntity = entity;
+        }
+    }
+    <span class="hljs-keyword">return</span>;  <span class="hljs-comment">// Skip AABB test for this entity</span>
+}
+</code></pre></div>
+<p><strong>Step 3: Add VP inverse validity check</strong></p>
+<p>In click handling, after computing vpInverse:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Verify VP matrix is invertible</span>
+Mat4 vpInverse = vp.<span class="hljs-built_in">inverted</span>();
+<span class="hljs-comment">// (Mat4::inverted already returns identity if singular, so safe)</span>
+</code></pre></div>
+<p><strong>Step 4: Compile and verify</strong></p>
+<p>Run: <code>cd /home/pedro/repo/caffeine/build &amp;&amp; make doppio -j8 2&gt;&amp;1 | tail -5</code></p>
+<p>Expected: Build succeeds</p>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine
+git add src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;fix(selection): add edge case handling for invalid AABBs and world state&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-6-performance-verification-optimization">Task 6: Performance Verification &amp; Optimization<a class="anchor" href="#task-6-performance-verification-optimization" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>None (verification only, no code changes)</li>
+</ul>
+<p><strong>Step 1: Analyze raycasting cost</strong></p>
+<p>Per selection click:</p>
+<ul>
+<li>VP matrix construction: 2 matrix ops (~0.1ms)</li>
+<li>VP inversion: 1 inversion (~0.1ms)</li>
+<li>World.forEach with ray-AABB tests: O(N) where N = entity count
+<ul>
+<li>Each entity: 3 slab tests + 1 min/max check (~30 float ops)</li>
+<li>At 100 entities: ~0.1ms</li>
+</ul>
+</li>
+</ul>
+<p><strong>Total per click: ~0.2-0.3ms</strong> (negligible, click is user-initiated)</p>
+<p><strong>Step 2: Verify no repeated calls</strong></p>
+<p>Check that raycastSelectEntity is only called on <code>IsMouseClicked</code> (not every frame):</p>
+<ul>
+<li><code>IsMouseClicked</code> = true only frame mouse button transitions from up to down</li>
+<li><code>IsMouseDown</code> would be bad (every frame while held)</li>
+</ul>
+<p>Verify: search for <code>IsMouseClicked</code> in click handling code.</p>
+<p><strong>Step 3: Performance conclusion</strong></p>
+<ul>
+<li>♪ Raycasting only runs on click ♪</li>
+<li>✅ O(N) iteration acceptable for typical scene sizes (&lt;1000 entities)</li>
+<li>In VP matrix caching needed (already cheap)</li>
+<li>Future: Add spatial partitioning (octree/quadtree) if N &gt; 5000</li>
+</ul>
+<p><strong>Step 4: Document performance profile</strong></p>
+<p>No code changes needed. Performance is inherently good due to:</p>
+<ul>
+<li>Single ray test (not per-vertex)</li>
+<li>Early exit on first valid hit</li>
+<li>Click-driven (not continuous)</li>
+</ul>
+<hr>
+<h2 id="summary">Summary<a class="anchor" href="#summary" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>What</th>
+<th>Time</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Add rayIntersectsAABB()</td>
+<td>5 min</td>
+<td>SceneViewport.hpp/cpp</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Add raycastSelectEntity()</td>
+<td>10 min</td>
+<td>SceneViewport.hpp/cpp</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Integrate click handling</td>
+<td>10 min</td>
+<td>SceneViewport.cpp</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Manual testing</td>
+<td>15 min</td>
+<td>(test only)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Edge cases &amp; robustness</td>
+<td>10 min</td>
+<td>SceneViewport.cpp</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Performance verification</td>
+<td>5 min</td>
+<td>(analysis only)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Total: ~55 minutes</strong></p>
+<hr>
+<h2 id="key-implementation-notes">Key Implementation Notes<a class="anchor" href="#key-implementation-notes" aria-label="Link to this section">#</a></h2>
+<h3 id="ray-aabb-slab-intersection-algorithm">Ray-AABB Slab Intersection Algorithm<a class="anchor" href="#ray-aabb-slab-intersection-algorithm" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Robust</strong>: Handles rays parallel to slabs (division by near-zero)</li>
+<li><strong>Efficient</strong>: 3 sequential slab tests, early-exit on first miss</li>
+<li><strong>Correct</strong>: Returns t_enter distance (parametric value on ray)</li>
+</ul>
+<h3 id="entity-iteration-strategy">Entity Iteration Strategy<a class="anchor" href="#entity-iteration-strategy" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Uses <code>ECS::ComponentQuery</code> with Transform requirement</li>
+<li>Early-exits for disabled entities ( <code>Scene::isEffectivelyDisabled</code> )</li>
+<li>Tracks closest hit by t-parameter (distance along ray)</li>
+</ul>
+<h3 id="click-detection-placement">Click Detection Placement<a class="anchor" href="#click-detection-placement" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Before gizmo input</strong>: Allows selection to update first</li>
+<li><strong>Only in 3D mode</strong>: 2D/Isometric skip raycasting</li>
+<li><strong>Only when not dragging gizmo</strong>: <code>!m_gizmoDragging</code> guard</li>
+</ul>
+<h3 id="coordinate-space-handling">Coordinate Space Handling<a class="anchor" href="#coordinate-space-handling" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Screen → NDC</strong>: Standard viewport normalization</li>
+<li><strong>NDC → World</strong>: Reuse chalkmo raycasting code (VP−1 + w-divide)</li>
+<li><strong>World → AABB</strong>: Transform mesh bundles by entity transform</li>
+</ul>
+<hr>
+<h2 id="testing-checklist">Testing Checklist<a class="anchor" href="#testing-checklist" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[ ] Single entity selection works</li>
+<li>[ ] Closest-hit on overlapping entities</li>
+<li>[ ] Empty-space click deselects</li>
+<li>[ ] Gizmo appears on selection</li>
+<li>[ ] Inspector updates on selection</li>
+<li>[ ] 2D/Isometric modes skip raycasting</li>
+<li>[ ] No crashes on invalid world/entities</li>
+<li>[ ] Performance acceptable (instant click response)</li>
+<li>[ ] Ray generation uses correct VP−1</li>
+<li>[ ] AABB intersection uses slab algorithm</li>
+</ul>
+<hr>
+<h2 id="next-steps-after-this-plan">Next Steps After This Plan<a class="anchor" href="#next-steps-after-this-plan" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><strong>Multi-select with Shift+Click</strong> - Track list of selected entities</li>
+<li><strong>Double-click to focus</strong> - Center camera on selected entity</li>
+<li><strong>Outline selected entity</strong> - Visual feedback (highlight/glow)</li>
+<li><strong>Delete key removes selected</strong> - Quick delete selection</li>
+<li><strong>Spatial partitioning</strong> - Optimize for scenes with 1000+ entities</li>
+<li><strong>Frustum culling on raycast</strong> - Skip entities outside view frustum</li>
+</ol>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-23-object-selection-raycasting.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/"><span>Previous</span><strong>Doppio UI Test Framework Implementation Plan</strong></a><a class="pager-next" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/"><span>Next</span><strong>MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#task-1-add-rayintersectsaabb-helper-function">Task 1: Add rayIntersectsAABB() Helper Function</a></li><li class="l2"><a href="#task-2-add-raycastselectentity---entity-iteration-hit-detection">Task 2: Add raycastSelectEntity() - Entity Iteration &amp; Hit Detection</a></li><li class="l2"><a href="#task-3-integrate-click-detection-ray-generation-into-onimguirender">Task 3: Integrate Click Detection &amp; Ray Generation into onImGuiRender()</a></li><li class="l2"><a href="#task-4-manual-testing-validation">Task 4: Manual Testing &amp; Validation</a></li><li class="l2"><a href="#task-5-edge-case-handling-robustness">Task 5: Edge Case Handling &amp; Robustness</a></li><li class="l2"><a href="#task-6-performance-verification-optimization">Task 6: Performance Verification &amp; Optimization</a></li><li class="l2"><a href="#summary">Summary</a></li><li class="l2"><a href="#key-implementation-notes">Key Implementation Notes</a></li><li class="l3"><a href="#ray-aabb-slab-intersection-algorithm">Ray-AABB Slab Intersection Algorithm</a></li><li class="l3"><a href="#entity-iteration-strategy">Entity Iteration Strategy</a></li><li class="l3"><a href="#click-detection-placement">Click Detection Placement</a></li><li class="l3"><a href="#coordinate-space-handling">Coordinate Space Handling</a></li><li class="l2"><a href="#testing-checklist">Testing Checklist</a></li><li class="l2"><a href="#next-steps-after-this-plan">Next Steps After This Plan</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

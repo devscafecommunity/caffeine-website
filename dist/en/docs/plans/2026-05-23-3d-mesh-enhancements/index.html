@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D Mesh Enhancements Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to execute this plan task-by-task in the current session.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="3D Mesh Enhancements Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to execute this plan task-by-task in the current session.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-3d-mesh-enhancements/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-3d-mesh-enhancements/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-23-3d-mesh-enhancements/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/" aria-current="page">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">3D Mesh Enhancements Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to execute this plan task-by-task in the current session.</p>
+</blockquote>
+<p><strong>Goal:</strong> Extend 3D mesh rendering with mesh caching, filled geometry rendering, texture support, and LOD (Level of Detail) simplification.</p>
+<p><strong>Architecture:</strong></p>
+<ul>
+<li><strong>Mesh Cache</strong>: Global cache in <code>DragDropSystem</code> or new <code>MeshCache</code> singleton to avoid reloading same file per frame</li>
+<li><strong>Filled Geometry</strong>: Render triangle faces with colors/normals in addition to wireframe</li>
+<li><strong>Textures</strong>: Load embedded glTF textures (base64 URIs) and bind them for viewport preview</li>
+<li><strong>LOD</strong>: Generate simplified mesh versions at load time (quadric edge collapse or simple vertex reduction)</li>
+</ul>
+<p><strong>Tech Stack:</strong> tinygltf, ImGui rendering, existing Mesh3D/Vertex3D structures</p>
+<hr>
+<h2 id="task-1-create-mesh-cache-system">Task 1: Create Mesh Cache System<a class="anchor" href="#task-1-create-mesh-cache-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/assets/MeshCache.hpp</code></li>
+<li>Create: <code>src/caffeine/assets/MeshCache.cpp</code></li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (use cache in Custom mesh case)</li>
+</ul>
+<p><strong>Step 1: Create MeshCache header</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/MeshTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unordered_map&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MeshCache</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">static</span> MeshCache&amp; <span class="hljs-title">getInstance</span><span class="hljs-params">()</span></span>;
+    
+    <span class="hljs-comment">// Get or load mesh from cache</span>
+    <span class="hljs-function">Mesh3D* <span class="hljs-title">getMesh</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path)</span></span>;
+    
+    <span class="hljs-comment">// Clear cache</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>;
+    
+    <span class="hljs-comment">// Remove single entry</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-built_in">MeshCache</span>() = <span class="hljs-keyword">default</span>;
+    ~<span class="hljs-built_in">MeshCache</span>();
+    
+    std::unordered_map&lt;std::string, Mesh3D*&gt; m_cache;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<p><strong>Step 2: Implement MeshCache.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/MeshCache.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/MeshLoader.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cstdio&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-function">MeshCache&amp; <span class="hljs-title">MeshCache::getInstance</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">static</span> MeshCache instance;
+    <span class="hljs-keyword">return</span> instance;
+}
+
+<span class="hljs-function">Mesh3D* <span class="hljs-title">MeshCache::getMesh</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path)</span> </span>{
+    <span class="hljs-keyword">auto</span> it = m_cache.<span class="hljs-built_in">find</span>(path);
+    <span class="hljs-keyword">if</span> (it != m_cache.<span class="hljs-built_in">end</span>()) {
+        <span class="hljs-keyword">return</span> it-&gt;second;
+    }
+    
+    FILE* f = <span class="hljs-built_in">fopen</span>(path.<span class="hljs-built_in">c_str</span>(), <span class="hljs-string">&quot;rb&quot;</span>);
+    <span class="hljs-keyword">if</span> (!f) {
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;
+    }
+    
+    <span class="hljs-built_in">fseek</span>(f, <span class="hljs-number">0</span>, SEEK_END);
+    <span class="hljs-type">long</span> size = <span class="hljs-built_in">ftell</span>(f);
+    <span class="hljs-built_in">fseek</span>(f, <span class="hljs-number">0</span>, SEEK_SET);
+    
+    <span class="hljs-keyword">if</span> (size &lt;= <span class="hljs-number">0</span>) {
+        <span class="hljs-built_in">fclose</span>(f);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;
+    }
+    
+    <span class="hljs-function">std::vector&lt;u8&gt; <span class="hljs-title">buffer</span><span class="hljs-params">(size)</span></span>;
+    <span class="hljs-built_in">fread</span>(buffer.<span class="hljs-built_in">data</span>(), <span class="hljs-number">1</span>, size, f);
+    <span class="hljs-built_in">fclose</span>(f);
+    
+    Mesh3D* mesh = MeshLoader::<span class="hljs-built_in">parseGLTF</span>(buffer.<span class="hljs-built_in">data</span>(), buffer.<span class="hljs-built_in">size</span>(), path.<span class="hljs-built_in">c_str</span>());
+    <span class="hljs-keyword">if</span> (mesh) {
+        m_cache[path] = mesh;
+    }
+    
+    <span class="hljs-keyword">return</span> mesh;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MeshCache::clear</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; pair : m_cache) {
+        <span class="hljs-keyword">delete</span> pair.second;
+    }
+    m_cache.<span class="hljs-built_in">clear</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MeshCache::remove</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; path)</span> </span>{
+    <span class="hljs-keyword">auto</span> it = m_cache.<span class="hljs-built_in">find</span>(path);
+    <span class="hljs-keyword">if</span> (it != m_cache.<span class="hljs-built_in">end</span>()) {
+        <span class="hljs-keyword">delete</span> it-&gt;second;
+        m_cache.<span class="hljs-built_in">erase</span>(it);
+    }
+}
+
+MeshCache::~<span class="hljs-built_in">MeshCache</span>() {
+    <span class="hljs-built_in">clear</span>();
+}
+
+}  <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<p><strong>Step 3: Add MeshCache to CMakeLists.txt</strong></p>
+<p>Find <code>src/assets/CMakeLists.txt</code> and add <code>MeshCache.cpp</code> to the source list.</p>
+<p><strong>Step 4: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; cmake .. &amp;&amp; make -j8
+</code></pre></div>
+<p>Expected: No errors, MeshCache builds successfully.</p>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/assets/MeshCache.hpp src/assets/MeshCache.cpp
+git commit -m <span class="hljs-string">&quot;feat: add mesh caching system to avoid reloading per frame&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-2-update-sceneviewport-to-use-cache">Task 2: Update SceneViewport to Use Cache<a class="anchor" href="#task-2-update-sceneviewport-to-use-cache" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (lines 844-915, Custom mesh case)</li>
+</ul>
+<p><strong>Step 1: Include MeshCache header</strong></p>
+<p>Replace the current Custom case code to use the cache:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">case</span> ECS::MeshPrimitive::Custom: {
+    <span class="hljs-keyword">if</span> (!mesh-&gt;customMeshPath.<span class="hljs-built_in">empty</span>()) {
+        std::string meshPath = mesh-&gt;customMeshPath;
+        
+        <span class="hljs-comment">// Try cache first</span>
+        <span class="hljs-keyword">auto</span>* loadedMesh = Assets::MeshCache::<span class="hljs-built_in">getInstance</span>().<span class="hljs-built_in">getMesh</span>(meshPath);
+        
+        <span class="hljs-keyword">if</span> (!loadedMesh) {
+            <span class="hljs-comment">// Fallback: try with assets/raw/ prefix</span>
+            meshPath = std::<span class="hljs-built_in">string</span>(<span class="hljs-string">&quot;assets/raw/&quot;</span>) + mesh-&gt;customMeshPath;
+            loadedMesh = Assets::MeshCache::<span class="hljs-built_in">getInstance</span>().<span class="hljs-built_in">getMesh</span>(meshPath);
+        }
+        
+        <span class="hljs-keyword">if</span> (loadedMesh &amp;&amp; !loadedMesh-&gt;vertices.<span class="hljs-built_in">empty</span>() &amp;&amp; !loadedMesh-&gt;indices.<span class="hljs-built_in">empty</span>()) {
+            <span class="hljs-comment">// ... rest of wireframe rendering code ...</span>
+        }
+    }
+    <span class="hljs-keyword">break</span>;
+}
+</code></pre></div>
+<p><strong>Step 2: Verify compilation and test</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j8
+</code></pre></div>
+<p><strong>Step 3: Test with Matilda model</strong></p>
+<ul>
+<li>Open Doppio</li>
+<li>Import mesh again</li>
+<li>Verify wireframe still renders (from cache now)</li>
+<li>Switch to another viewport element and back → wireless renders instantly (cache hit)</li>
+</ul>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;feat: integrate mesh cache into viewport rendering&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-3-add-filled-geometry-rendering">Task 3: Add Filled Geometry Rendering<a class="anchor" href="#task-3-add-filled-geometry-rendering" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (Custom mesh case, lines 844-915)</li>
+</ul>
+<p><strong>Step 1: Add filled triangle rendering function</strong></p>
+<p>Inside the Custom mesh case, after wireframe rendering loop, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Render filled triangles with normals for shading</span>
+<span class="hljs-type">const</span> ImU32 fillCol = <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">100</span>, <span class="hljs-number">150</span>, <span class="hljs-number">200</span>, <span class="hljs-number">180</span>);  <span class="hljs-comment">// Semi-transparent blue</span>
+
+<span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i + <span class="hljs-number">2</span> &lt; loadedMesh-&gt;indices.<span class="hljs-built_in">size</span>(); i += <span class="hljs-number">3</span>) {
+    u32 i0 = loadedMesh-&gt;indices[i];
+    u32 i1 = loadedMesh-&gt;indices[i + <span class="hljs-number">1</span>];
+    u32 i2 = loadedMesh-&gt;indices[i + <span class="hljs-number">2</span>];
+    
+    <span class="hljs-keyword">if</span> (i0 &lt; loadedMesh-&gt;vertices.<span class="hljs-built_in">size</span>() &amp;&amp;
+        i1 &lt; loadedMesh-&gt;vertices.<span class="hljs-built_in">size</span>() &amp;&amp;
+        i2 &lt; loadedMesh-&gt;vertices.<span class="hljs-built_in">size</span>()) {
+        
+        Vec3 v0 = (loadedMesh-&gt;vertices[i0].position - meshCenter) * meshScale;
+        Vec3 v1 = (loadedMesh-&gt;vertices[i1].position - meshCenter) * meshScale;
+        Vec3 v2 = (loadedMesh-&gt;vertices[i2].position - meshCenter) * meshScale;
+        
+        Vec3 p0 = worldMatrix.<span class="hljs-built_in">transformPoint</span>(v0);
+        Vec3 p1 = worldMatrix.<span class="hljs-built_in">transformPoint</span>(v1);
+        Vec3 p2 = worldMatrix.<span class="hljs-built_in">transformPoint</span>(v2);
+        
+        ImVec2 sp0 = <span class="hljs-built_in">projectToScreen</span>(p0, origin, viewportSize, ctx);
+        ImVec2 sp1 = <span class="hljs-built_in">projectToScreen</span>(p1, origin, viewportSize, ctx);
+        ImVec2 sp2 = <span class="hljs-built_in">projectToScreen</span>(p2, origin, viewportSize, ctx);
+        
+        <span class="hljs-comment">// Draw filled triangle</span>
+        dl-&gt;<span class="hljs-built_in">AddTriangleFilled</span>(sp0, sp1, sp2, fillCol);
+    }
+}
+</code></pre></div>
+<p><strong>Step 2: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j8
+</code></pre></div>
+<p>Expected: No errors.</p>
+<p><strong>Step 3: Test with Matilda model</strong></p>
+<ul>
+<li>Open Doppio</li>
+<li>Select mesh entity</li>
+<li>Verify: Wireframe edges + filled semi-transparent blue triangles render together</li>
+</ul>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;feat: add filled geometry rendering with semi-transparent blue fill&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-4-add-texture-loading-and-display">Task 4: Add Texture Loading and Display<a class="anchor" href="#task-4-add-texture-loading-and-display" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/assets/MeshLoader.cpp</code> (parseGLTF function)</li>
+<li>Modify: <code>src/caffeine/assets/MeshTypes.hpp</code> (add texture field to Mesh3D)</li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (use texture data for coloring)</li>
+</ul>
+<p><strong>Step 1: Extend Mesh3D to store texture data</strong></p>
+<p>In <code>src/caffeine/assets/MeshTypes.hpp</code> , modify <code>Mesh3D</code> struct:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Mesh3D</span> {
+    std::vector&lt;Vertex3D&gt; vertices;
+    std::vector&lt;u32&gt; indices;
+    std::vector&lt;SubMesh&gt; subMeshes;
+    Rect3D bounds;
+    u32 lodCount = <span class="hljs-number">1</span>;
+    
+    <span class="hljs-comment">// Texture data (simple RGB for viewport preview)</span>
+    std::vector&lt;u8&gt; baseColorTexture;  <span class="hljs-comment">// Raw RGB bytes</span>
+    u32 textureWidth = <span class="hljs-number">0</span>;
+    u32 textureHeight = <span class="hljs-number">0</span>;
+    
+<span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_SDL3</span>
+    RHI::Buffer* vertexBuffer = <span class="hljs-literal">nullptr</span>;
+    RHI::Buffer* indexBuffer = <span class="hljs-literal">nullptr</span>;
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+};
+</code></pre></div>
+<p><strong>Step 2: Load embedded textures in parseGLTF</strong></p>
+<p>Modify <code>src/caffeine/assets/MeshLoader.cpp</code> parseGLTF function to extract base64 texture URIs from glTF:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// After successful model load, iterate textures:</span>
+<span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; texture : model.textures) {
+    <span class="hljs-keyword">if</span> (texture.source &gt;= <span class="hljs-number">0</span> &amp;&amp; texture.source &lt; (<span class="hljs-type">int</span>)model.images.<span class="hljs-built_in">size</span>()) {
+        <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; image = model.images[texture.source];
+        <span class="hljs-keyword">if</span> (!image.image.<span class="hljs-built_in">empty</span>()) {
+            mesh-&gt;baseColorTexture = image.image;
+            mesh-&gt;textureWidth = image.width;
+            mesh-&gt;textureHeight = image.height;
+            <span class="hljs-keyword">break</span>;  <span class="hljs-comment">// Use first texture for now</span>
+        }
+    }
+}
+</code></pre></div>
+<p><strong>Step 3: Use texture for coloring in viewport</strong></p>
+<p>In <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> , modify filled triangle rendering to sample texture color:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Inside filled triangle loop</span>
+<span class="hljs-keyword">auto</span> sampleTexture = [&amp;](<span class="hljs-type">const</span> Vec2&amp; uv) -&gt; ImU32 {
+    <span class="hljs-keyword">if</span> (mesh-&gt;baseColorTexture.<span class="hljs-built_in">empty</span>() || mesh-&gt;textureWidth == <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">100</span>, <span class="hljs-number">150</span>, <span class="hljs-number">200</span>, <span class="hljs-number">180</span>);  <span class="hljs-comment">// Default blue</span>
+    }
+    
+    u32 x = (u32)(uv.x * (mesh-&gt;textureWidth - <span class="hljs-number">1</span>));
+    u32 y = (u32)(uv.y * (mesh-&gt;textureHeight - <span class="hljs-number">1</span>));
+    u32 idx = (y * mesh-&gt;textureWidth + x) * <span class="hljs-number">3</span>;
+    
+    <span class="hljs-keyword">if</span> (idx + <span class="hljs-number">2</span> &lt; mesh-&gt;baseColorTexture.<span class="hljs-built_in">size</span>()) {
+        u8 r = mesh-&gt;baseColorTexture[idx];
+        u8 g = mesh-&gt;baseColorTexture[idx + <span class="hljs-number">1</span>];
+        u8 b = mesh-&gt;baseColorTexture[idx + <span class="hljs-number">2</span>];
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">IM_COL32</span>(r, g, b, <span class="hljs-number">180</span>);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">100</span>, <span class="hljs-number">150</span>, <span class="hljs-number">200</span>, <span class="hljs-number">180</span>);
+};
+
+<span class="hljs-comment">// Use interpolated UV for triangle color</span>
+Vec2 uv0 = loadedMesh-&gt;vertices[i0].texcoord;
+Vec2 uv1 = loadedMesh-&gt;vertices[i1].texcoord;
+Vec2 uv2 = loadedMesh-&gt;vertices[i2].texcoord;
+Vec2 uvAvg = <span class="hljs-built_in">Vec2</span>((uv0.x + uv1.x + uv2.x) / <span class="hljs-number">3.0f</span>, (uv0.y + uv1.y + uv2.y) / <span class="hljs-number">3.0f</span>);
+
+ImU32 triColor = <span class="hljs-built_in">sampleTexture</span>(uvAvg);
+dl-&gt;<span class="hljs-built_in">AddTriangleFilled</span>(sp0, sp1, sp2, triColor);
+</code></pre></div>
+<p><strong>Step 4: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j8
+</code></pre></div>
+<p><strong>Step 5: Test with textured model</strong></p>
+<p>If Matilda has embedded texture:</p>
+<ul>
+<li>Verify filled triangles now show colors from texture instead of solid blue</li>
+</ul>
+<p><strong>Step 6: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/assets/MeshTypes.hpp src/assets/MeshLoader.cpp src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;feat: load and display embedded glTF textures in viewport&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-5-add-lod-level-of-detail-generation">Task 5: Add LOD (Level of Detail) Generation<a class="anchor" href="#task-5-add-lod-level-of-detail-generation" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/assets/MeshLOD.hpp</code></li>
+<li>Create: <code>src/caffeine/assets/MeshLOD.cpp</code></li>
+<li>Modify: <code>src/caffeine/assets/MeshLoader.cpp</code> (call LOD generator)</li>
+</ul>
+<p><strong>Step 1: Create LOD header</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/MeshTypes.hpp&quot;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MeshLOD</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// Generate LOD levels for mesh (0 = highest detail, higher = simpler)</span>
+    <span class="hljs-comment">// Reduction ratio: 0.5 = 50% vertices, 0.25 = 25% vertices, etc.</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">generateLODs</span><span class="hljs-params">(Mesh3D* mesh, <span class="hljs-type">int</span> lodCount = <span class="hljs-number">3</span>, f32 reductionRatio = <span class="hljs-number">0.5f</span>)</span></span>;
+    
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-comment">// Simple quadric-based vertex simplification</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">simplifyMesh</span><span class="hljs-params">(<span class="hljs-type">const</span> Mesh3D&amp; source, Mesh3D&amp; target, f32 targetRatio)</span></span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<p><strong>Step 2: Implement simple LOD generator</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/MeshLOD.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MeshLOD::generateLODs</span><span class="hljs-params">(Mesh3D* mesh, <span class="hljs-type">int</span> lodCount, f32 reductionRatio)</span> </span>{
+    <span class="hljs-keyword">if</span> (!mesh || mesh-&gt;vertices.<span class="hljs-built_in">empty</span>() || lodCount &lt; <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span>;
+    
+    mesh-&gt;lodCount = lodCount;
+    
+    <span class="hljs-comment">// For now, store LOD0 (original) only</span>
+    <span class="hljs-comment">// Future: generate simplified versions and store separately</span>
+    <span class="hljs-comment">// This is a placeholder that maintains structure for future enhancement</span>
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MeshLOD::simplifyMesh</span><span class="hljs-params">(<span class="hljs-type">const</span> Mesh3D&amp; source, Mesh3D&amp; target, f32 targetRatio)</span> </span>{
+    <span class="hljs-comment">// Simple vertex reduction: keep first N% of vertices</span>
+    <span class="hljs-comment">// More sophisticated methods would use quadric error metrics</span>
+    
+    u32 targetVertexCount = (u32)(source.vertices.<span class="hljs-built_in">size</span>() * targetRatio);
+    <span class="hljs-keyword">if</span> (targetVertexCount &lt; <span class="hljs-number">3</span>) targetVertexCount = <span class="hljs-number">3</span>;
+    
+    target.vertices.<span class="hljs-built_in">resize</span>(targetVertexCount);
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; targetVertexCount; ++i) {
+        target.vertices[i] = source.vertices[i * source.vertices.<span class="hljs-built_in">size</span>() / targetVertexCount];
+    }
+    
+    <span class="hljs-comment">// Rebuild indices for simplified vertex set</span>
+    target.indices.<span class="hljs-built_in">clear</span>();
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i + <span class="hljs-number">2</span> &lt; target.vertices.<span class="hljs-built_in">size</span>(); i += <span class="hljs-number">3</span>) {
+        target.indices.<span class="hljs-built_in">push_back</span>(i);
+        target.indices.<span class="hljs-built_in">push_back</span>(i + <span class="hljs-number">1</span>);
+        target.indices.<span class="hljs-built_in">push_back</span>(i + <span class="hljs-number">2</span>);
+    }
+    
+    target.bounds = source.bounds;  <span class="hljs-comment">// Keep same bounds</span>
+}
+
+}  <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<p><strong>Step 3: Integrate LOD into parseGLTF</strong></p>
+<p>In <code>src/caffeine/assets/MeshLoader.cpp</code> , after mesh loading, call:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// After mesh is fully loaded:</span>
+Mesh3D* mesh = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Mesh3D</span>();
+<span class="hljs-comment">// ... (populate mesh with vertices/indices) ...</span>
+
+<span class="hljs-comment">// Generate LOD levels</span>
+MeshLOD::<span class="hljs-built_in">generateLODs</span>(mesh, <span class="hljs-number">3</span>);  <span class="hljs-comment">// Create 3 LOD levels</span>
+
+<span class="hljs-keyword">return</span> mesh;
+</code></pre></div>
+<p><strong>Step 4: Verify compilation</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j8
+</code></pre></div>
+<p><strong>Step 5: Test with Matilda model</strong></p>
+<ul>
+<li>Load mesh normally</li>
+<li>Verify lodCount is now 3 (can add debug output temporarily if needed)</li>
+</ul>
+<p><strong>Step 6: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/assets/MeshLOD.hpp src/assets/MeshLOD.cpp src/assets/MeshLoader.cpp
+git commit -m <span class="hljs-string">&quot;feat: add LOD level generation framework for mesh simplification&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-6-use-lod-based-on-viewport-distance">Task 6: Use LOD Based on Viewport Distance<a class="anchor" href="#task-6-use-lod-based-on-viewport-distance" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (Custom mesh case)</li>
+</ul>
+<p><strong>Step 1: Calculate distance from camera to mesh</strong></p>
+<p>In the Custom mesh rendering code, before rendering, calculate distance:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Calculate distance from viewport camera to mesh center</span>
+Vec3 meshWorldCenter = worldMatrix.<span class="hljs-built_in">transformPoint</span>(<span class="hljs-built_in">Vec3</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>));
+Vec3 cameraPos = ctx.viewMatrix.<span class="hljs-built_in">getTranslation</span>();  <span class="hljs-comment">// Approximate camera position</span>
+f32 distToCamera = std::<span class="hljs-built_in">sqrt</span>(
+    (meshWorldCenter.x - cameraPos.x) * (meshWorldCenter.x - cameraPos.x) +
+    (meshWorldCenter.y - cameraPos.y) * (meshWorldCenter.y - cameraPos.y) +
+    (meshWorldCenter.z - cameraPos.z) * (meshWorldCenter.z - cameraPos.z)
+);
+
+<span class="hljs-comment">// Select LOD based on distance</span>
+<span class="hljs-comment">// LOD 0: &lt; 5 units, LOD 1: 5-15 units, LOD 2: &gt; 15 units</span>
+<span class="hljs-type">int</span> selectedLOD = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">if</span> (distToCamera &gt; <span class="hljs-number">15.0f</span>) selectedLOD = <span class="hljs-number">2</span>;
+<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (distToCamera &gt; <span class="hljs-number">5.0f</span>) selectedLOD = <span class="hljs-number">1</span>;
+</code></pre></div>
+<p><strong>Step 2: Render appropriate LOD</strong></p>
+<p>For now, render full mesh but use the LOD selection framework for future enhancement.</p>
+<p><strong>Step 3: Verify compilation and test</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j8
+</code></pre></div>
+<p>Move viewport camera closer/farther from mesh and verify rendering still works.</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/SceneViewport.cpp
+git commit -m <span class="hljs-string">&quot;feat: add LOD selection based on camera distance&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-7-integration-test-and-final-polish">Task 7: Integration Test and Final Polish<a class="anchor" href="#task-7-integration-test-and-final-polish" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Test: Manual viewport testing</li>
+<li>Verify: No debug logs, clean rendering</li>
+</ul>
+<p><strong>Step 1: Full integration test</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j8
+/home/pedro/repo/caffeine/build/doppio
+</code></pre></div>
+<p>Test workflow:</p>
+<ol>
+<li>Open Doppio</li>
+<li>Create new project or open existing one</li>
+<li>Import 3D model via Asset Creator</li>
+<li>Verify in viewport:
+<ul>
+<li>Wireframe edges render</li>
+<li>Filled geometry renders with colors</li>
+<li>No lag (cache working)</li>
+<li>Close/reopen mesh → still cached</li>
+</ul>
+</li>
+</ol>
+<p><strong>Step 2: Verify Matilda model renders correctly</strong></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Expected: 103 meshes, filled + wireframe, with texture colors if embedded
+</code></pre></div>
+<p><strong>Step 3: Check for debug logs</strong></p>
+<p>Grep for any <code>fprintf</code> or <code>printf</code> in modified files:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">grep -n <span class="hljs-string">&quot;printf\|fprintf&quot;</span> src/assets/MeshCache.cpp src/assets/MeshLOD.cpp src/editor/SceneViewport.cpp
+</code></pre></div>
+<p>Expected: No matches (clean)</p>
+<p><strong>Step 4: Final commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git status
+git <span class="hljs-built_in">log</span> --oneline -7
+</code></pre></div>
+<p>Verify all enhancements are committed.</p>
+<p><strong>Step 5: Done</strong></p>
+<p>All features implemented:</p>
+<ul>
+<li>Mesh caching</li>
+<li>✅ Filled geometry rendering</li>
+<li>Texture loading and display</li>
+<li>✅ LOD framework</li>
+</ul>
+<hr>
+<h2 id="rollback-plan">Rollback Plan<a class="anchor" href="#rollback-plan" aria-label="Link to this section">#</a></h2>
+<p>If any task fails:</p>
+<ol>
+<li>Revert to last successful commit: <code>git reset --hard HEAD~1</code></li>
+<li>Debug the specific issue</li>
+<li>Re-implement the task with fixes</li>
+</ol>
+<p>If whole feature becomes unstable:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git revert HEAD~6..HEAD  <span class="hljs-comment"># Revert last 7 commits in reverse order</span>
+</code></pre></div>
+<p>Then start over with clearer understanding.</p>
+<hr>
+<h2 id="notes">Notes<a class="anchor" href="#notes" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>ImGui Rendering</strong>: Uses <code>ImDrawList</code> API already in SceneViewport</li>
+<li><strong>Texture Sampling</strong>: Simple bilinear interpolation from raw bytes (not GPU-bound)</li>
+<li><strong>LOD Framework</strong>: Current implementation is placeholder; future can add quadric error simplification</li>
+<li><strong>Performance</strong>: Caching eliminates per-frame file I/O; LOD framework ready for distance-based swapping</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-23-3d-mesh-enhancements.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/"><span>Previous</span><strong>Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</strong></a><a class="pager-next" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/"><span>Next</span><strong>Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#task-1-create-mesh-cache-system">Task 1: Create Mesh Cache System</a></li><li class="l2"><a href="#task-2-update-sceneviewport-to-use-cache">Task 2: Update SceneViewport to Use Cache</a></li><li class="l2"><a href="#task-3-add-filled-geometry-rendering">Task 3: Add Filled Geometry Rendering</a></li><li class="l2"><a href="#task-4-add-texture-loading-and-display">Task 4: Add Texture Loading and Display</a></li><li class="l2"><a href="#task-5-add-lod-level-of-detail-generation">Task 5: Add LOD (Level of Detail) Generation</a></li><li class="l2"><a href="#task-6-use-lod-based-on-viewport-distance">Task 6: Use LOD Based on Viewport Distance</a></li><li class="l2"><a href="#task-7-integration-test-and-final-polish">Task 7: Integration Test and Final Polish</a></li><li class="l2"><a href="#rollback-plan">Rollback Plan</a></li><li class="l2"><a href="#notes">Notes</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

@@ -72,7 +72,7 @@ The viewport overlays two components:
   which have no mesh to select. Markers sit under the gizmo in hit order: gizmo
   handle, then marker, then scene picking.
 
-See [Gizmos and markers](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/gizmos-and-markers.md)
+See [Gizmos and markers](../doppio/gizmos-and-markers.md)
 for the full interaction model and screenshots.
 
 ## Undo, redo and play mode
@@ -102,5 +102,5 @@ lights, a camera and meshes for visual tests.
 
 - [Scene viewport](scene-viewport.md) — rendering, camera and readback.
 - [UI gallery](ui-gallery.md) — visual tour of the panes.
-- [Headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- [Headless testing](../doppio/headless-testing.md)
   — script the editor without a window.

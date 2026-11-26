@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance — Viewport &amp; GPU Scene Editor · Caffeine</title>
+<meta name="description" content="Historical record of the C++ editor viewport optimisation session: the measurements, the GPU/CPU rules it produced, and which constraints still apply.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Performance — Viewport &amp; GPU Scene Editor · Caffeine">
+<meta property="og:description" content="Historical record of the C++ editor viewport optimisation session: the measurements, the GPU/CPU rules it produced, and which constraints still apply.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/performance/editor-viewport-performance/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/performance/editor-viewport-performance/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/performance/editor-viewport-performance/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/performance/editor-viewport-performance/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/en/docs/audio/volumetric-audio/">Volumetric audio</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Runtime UI (ImGui &amp; in-game HUD)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/en/docs/performance/editor-viewport-performance/" aria-current="page">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Asset system</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Performance — Viewport &amp; GPU Scene Editor</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p class="doc-lede">Historical record of the C++ editor viewport optimisation session: the
+measurements, the GPU/CPU rules it produced, and which constraints still apply.</p>
+<blockquote>
+<p><strong>Data:</strong> 2026-09-23
+<strong>Context:</strong> Research of FPS falls in Doppio (~12 FPS, ~77 ms in <code>SceneEditor::render</code> )</p>
+</blockquote>
+<hr>
+<div class="doc-callout doc-callout--note">
+  <p><strong>Historical.</strong> This page records the C++ editor optimisation session. The current Rust viewport uses offscreen <code>render_begin</code>/<code>render_poll</code> readback; see <a href="/en/docs/editor/scene-viewport/">Scene viewport</a>.</p>
+</div>
+<h2 id="resumo">Resumo<a class="anchor" href="#resumo" aria-label="Link to this section">#</a></h2>
+<p>The editor rendered the same geometry in <strong>CPU and GPU</strong> in the same frame, performed several GPU passes** (viewport + previews) with redundant shadows and binds, and rasterized the <strong>skybox in CPU</strong> the almost total resolution of the panel to each camera micro-movement.</p>
+<p>The corrections follow two rules:</p>
+<ol>
+<li>**Meshes/land:**GPU ** CPU per frame — never both.</li>
+<li><strong>Shadow passes</strong>(redraw from scene) are independent of the <strong>shadow samples</strong>(textures connected in shadow).</li>
+</ol>
+<hr>
+<h2 id="resultado-validado">Resultado validado<a class="anchor" href="#resultado-validado" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Antes</th>
+<th>Depois</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FPS</strong></td>
+<td><strong>~10</strong></td>
+<td><strong>~100</strong></td>
+</tr>
+<tr>
+<td>Frame time</td>
+<td>~77–213 ms</td>
+<td>~10 ms</td>
+</tr>
+</tbody>
+</table></div>
+<p>Gain measured in Doppio with 3D scene + ground chunked, after the package of corrections below.</p>
+<hr>
+<h2 id="sintomas-observados-profiler-antes">Sintomas observados (profiler, antes)<a class="anchor" href="#sintomas-observados-profiler-antes" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Valor</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frame time</td>
+<td>~77–213 ms</td>
+<td>Low CPU (~5%), GPU ~30% → Draw calls neck / driver</td>
+</tr>
+<tr>
+<td><code>SceneEditor::render</code></td>
+<td>~55 ms avg</td>
+<td>Single Scope Swallowed All Panels</td>
+</tr>
+<tr>
+<td><code>GpuSceneRenderer::draw</code></td>
+<td>~54 ms avg</td>
+<td>Pass principal da cena (terreno + meshes)</td>
+</tr>
+<tr>
+<td><code>SceneViewport::skybox</code></td>
+<td>0.9 ms avg, <strong>80 ms max</strong></td>
+<td>Picos ao re-rasterizar equirect em CPU</td>
+</tr>
+<tr>
+<td><code>cameraPreview</code> / <code>gameplayPreview</code></td>
+<td>~0 ms after throttle</td>
+<td>Previews deixaram de competir com o viewport</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="arquitetura-um-caminho-de-render-por-frame">Arquitetura: um caminho de render por frame<a class="anchor" href="#arquitetura-um-caminho-de-render-por-frame" aria-label="Link to this section">#</a></h2>
+<h3 id="scene-viewport-3d">Scene Viewport (3D)<a class="anchor" href="#scene-viewport-3d" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Camada</th>
+<th>Responsible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Meshes + terreno</td>
+<td><strong>GPU</strong> ( <code>GpuSceneRenderer</code> ) quando <code>m_useGpuScene</code> ativo</td>
+</tr>
+<tr>
+<td>Skybox</td>
+<td>CPU ( <code>SkyboxRenderer</code> ) como fundo; GPU limpa com alpha 0</td>
+</tr>
+<tr>
+<td>Grid, gizmos, frustums, marcadores</td>
+<td>CPU ( <code>ImDrawList</code> ) — editor overlays</td>
+</tr>
+</tbody>
+</table></div>
+<p>Quando <code>gpuOwnsSceneMeshes</code> is active, <code>drawEmptyEntities()</code> ** does not rasterize meshes in CPU (includes terrain and selection). Just empty entity markers and chunk debug.</p>
+<h3 id="camera-gameplay-preview">Camera / Gameplay Preview<a class="anchor" href="#camera-gameplay-preview" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>GPU path:</strong> <code>renderCameraPreviewGpu()</code> ou <code>GameplayPreviewPanel::m_renderer</code> — sem <code>drawSceneMeshesForCamera()</code> no mesmo frame.</li>
+<li>**CPU fallback:**only when GPU pass fails or is not available ( <code>#ifdef CF_HAS_SDL3</code> ).</li>
+<li>Throttle: <code>editorPanelWorthGpuRender(..., frameInterval=2)</code> — re-render GPU every 2 frames; reuses previous texture.</li>
+</ul>
+<hr>
+<h2 id="causa-raiz-em-gpuscenerendererdraw">Causa raiz em <code>GpuSceneRenderer::draw</code><a class="anchor" href="#causa-raiz-em-gpuscenerendererdraw" aria-label="Link to this section">#</a></h2>
+<p>Para <strong>cada chunk de terreno</strong>, o loop fazia trabalho que deveria ser <strong>uma vez por pass</strong> ou <strong>uma vez por entidade</strong>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Problema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pushUniformData(shadowUbo)</code></td>
+<td>Mesmo UBO repetido com sombras desligadas</td>
+</tr>
+<tr>
+<td><code>bindShadowTextures()</code></td>
+<td>6+ samplers por chunk</td>
+</tr>
+<tr>
+<td><code>texCache.acquire()</code></td>
+<td>Lookup de splat/albedo/normal por chunk</td>
+</tr>
+</tbody>
+</table></div>
+<p>With **50–200 Chunks ** Visible → <strong>000 frame redundant operations</strong>.</p>
+<hr>
+<h2 id="corrections-applied-10-100-fps">Corrections applied (10 → 100 FPS)<a class="anchor" href="#corrections-applied-10-100-fps" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Correction</th>
+<th>Impacto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>shadowUbo</code> ** once per pass** (not by draw)</td>
+<td>Menos uploads de uniform por frame</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Shadow <strong>passes</strong> off no editor; <strong>samplers</strong> sempre ligados</td>
+<td>No redraw × waterfalls; no SIGSEGV NVIDIA</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Cache of land textures</strong> — bind only on the first time per entity</td>
+<td>From O(chunks) → The texture binds</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>terrainLodDistanceScale = 2</code> no editor</td>
+<td>Less visible Chunks / Less Draws</td>
+</tr>
+<tr>
+<td>5</td>
+<td>GPU cap resolution <strong>1280 px</strong> in viewport</td>
+<td>Menos pixels no offscreen target</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>textureQuality.enabled = false</code> no editor</td>
+<td>Menos churn de mip/tier por draw</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Skybox cap <strong>512–1024 px</strong>(without frameThrottle)</td>
+<td>Cheapest CPU Raster without sky/land desync</td>
+</tr>
+</tbody>
+</table></div>
+<p>Complementary (same session): GPU/CPU frame separation, skip GPU in hidden previews, granular profiler.</p>
+<hr>
+<h2 id="optimizations-in-gpuscenerenderer">Optimizations in <code>GpuSceneRenderer</code><a class="anchor" href="#optimizations-in-gpuscenerenderer" aria-label="Link to this section">#</a></h2>
+<h3 id="1-shadow-passes-vs-shadow-samplers">1. Shadow passes vs shadow samplers<a class="anchor" href="#1-shadow-passes-vs-shadow-samplers" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Conceito</th>
+<th>Editor</th>
+<th>Runtime / play</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Shadow passes</strong> ( <code>renderDirectionalShadows</code> , etc.)</td>
+<td>Off</td>
+<td>When <code>enableShadows=true</code></td>
+</tr>
+<tr>
+<td><strong>Shadow samplers</strong> ( <code>bindShadowTextures</code> )</td>
+<td>** Always on (white/dummy)</td>
+<td>Always</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>⚠️ Regra crítica (SIGSEGV NVIDIA):</strong>
+Desligar <code>enableShadows</code> * Can't miss * <code>bindShadowTextures()</code> . Os shaders <code>scene_lit.frag</code> / <code>terrain_lit.frag</code> declare shade samplers; unconnected slots → crash on the driver.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Correto: passes condicionais, binds sempre</span>
+<span class="hljs-keyword">if</span> (options.enableShadows) {
+    <span class="hljs-built_in">renderDirectionalShadows</span>(...);
+}
+<span class="hljs-built_in">bindShadowTextures</span>(<span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">6</span>);  <span class="hljs-comment">// início do pass + ao trocar mesh ↔ terreno</span>
+</code></pre></div>
+<h3 id="2-uniform-de-sombra-uma-vez-por-pass">2. Uniform de sombra uma vez por pass<a class="anchor" href="#2-uniform-de-sombra-uma-vez-por-pass" aria-label="Link to this section">#</a></h3>
+<p><code>SceneShadowUBO</code> is sent ** once** before the draw loop (not by mesh/chunk).</p>
+<h3 id="3-cache-de-texturas-de-terreno">3. Cache de texturas de terreno<a class="anchor" href="#3-cache-de-texturas-de-terreno" aria-label="Link to this section">#</a></h3>
+<p>Splat/Albedo/normal textures are connected ** once per land entity**, not by Chunk LOD.</p>
+<h3 id="4-lod-de-terreno-no-editor">4. LOD de terreno no editor<a class="anchor" href="#4-lod-de-terreno-no-editor" aria-label="Link to this section">#</a></h3>
+<p><code>GpuSceneRenderOptions::terrainLodDistanceScale = 2.0f</code> in Scene Viewport — folded effective distance → LOD coarser, less visible Chunks.</p>
+<hr>
+<h2 id="optimizations-in-scene-viewport">Optimizations in Scene Viewport<a class="anchor" href="#optimizations-in-scene-viewport" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Valor no editor</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enableShadows</code></td>
+<td><code>false</code></td>
+<td>Evita 4+ redraws da cena por cascata</td>
+</tr>
+<tr>
+<td><code>terrainLodDistanceScale</code></td>
+<td><code>2.0</code></td>
+<td>Menos chunks GPU</td>
+</tr>
+<tr>
+<td><code>textureQuality.enabled</code></td>
+<td><code>false</code></td>
+<td>Menos churn de mips/tiers por draw</td>
+</tr>
+<tr>
+<td><code>imguiFramebufferSize</code> cap</td>
+<td><strong>1280</strong> px</td>
+<td>Menos pixels no offscreen target</td>
+</tr>
+<tr>
+<td>Skybox <code>maxRasterDim</code></td>
+<td>512–1024</td>
+<td>Raster CPU cheaper; re-rasterizes every camera move</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="optimizations-in-previews">Optimizations in previews<a class="anchor" href="#optimizations-in-previews" aria-label="Link to this section">#</a></h2>
+<p>Helper: <code>editorPanelWorthGpuRender()</code> em <code>EditorPanelUtils.hpp</code></p>
+<ul>
+<li>Ignores collapsed panels, &lt; 32 px, or outside <code>IsRectVisible</code></li>
+<li>Skybox desenhado <strong>todo frame</strong> nos previews (antes do <code>AddImage</code> GPU)</li>
+<li>GPU is only jumped when the panel is collapsed / invisible / &lt; 32 px</li>
+<li>GPU cap resolution <strong>960</strong> px in previews</li>
+<li>Canvas sempre inicializado antes do primeiro draw ( <code>resizeCanvas</code> se targets nulos)</li>
+</ul>
+<hr>
+<h2 id="instrumentation-cf_profile_scope-">Instrumentation ( <code>CF_PROFILE_SCOPE</code> )<a class="anchor" href="#instrumentation-cf_profile_scope-" aria-label="Link to this section">#</a></h2>
+<p>The profiler maintains a hierarchical tree** of strips (consumer stack trace). Each node records:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>self ms</strong></td>
+<td>Exclusive time (no children) — where to look for bottlenecks</td>
+</tr>
+<tr>
+<td><strong>total ms</strong></td>
+<td>Tempo inclusivo (scope + filhos)</td>
+</tr>
+<tr>
+<td>** %frame**</td>
+<td><code>avg self</code> vs last frame time</td>
+</tr>
+<tr>
+<td><strong>%parent</strong></td>
+<td><code>avg self</code> vs <code>avg total</code> do pai</td>
+</tr>
+</tbody>
+</table></div>
+<p>Scopes added for diagnosis in the panel <strong>Profiler</strong>:</p>
+<h3 id="sceneeditor">SceneEditor<a class="anchor" href="#sceneeditor" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>SceneEditor::render</code> (raiz do frame do editor)</li>
+<li><code>SceneEditor::propagateTransforms</code></li>
+<li><code>SceneEditor::hierarchy</code> , <code>inspector</code> , <code>viewport</code> , <code>assetBrowser</code> , <code>console</code> , <code>profiler</code></li>
+<li><code>SceneEditor::cameraPreview</code> , <code>gameplayPreview</code> , <code>materialEditor</code> , <code>terrainEditor</code> , <code>plugins</code> , …</li>
+</ul>
+<h3 id="sceneviewport">SceneViewport<a class="anchor" href="#sceneviewport" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>SceneViewport::render</code></li>
+<li><code>SceneViewport::gpuPass</code></li>
+<li><code>SceneViewport::skybox</code></li>
+<li><code>SceneViewport::sprites</code> , <code>SceneViewport::entities</code></li>
+</ul>
+<h3 id="gpuscenerenderer">GpuSceneRenderer<a class="anchor" href="#gpuscenerenderer" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>GpuSceneRenderer::renderWithCamera</code></li>
+<li><code>GpuSceneRenderer::gather</code></li>
+<li><code>GpuSceneRenderer::shadows</code> (quando passes activos)</li>
+<li><code>GpuSceneRenderer::draw</code></li>
+</ul>
+<ul>
+<li><em>How to use:</em>* open Profiler → <strong>Reset Stats</strong> → orbit camera / open previews → expand tree in <strong>Scope tree</strong> → sort by <strong>self ms</strong> (default active). Passing the mouse over a scope shows the full path ( <code>SceneEditor::render &gt; SceneEditor::viewport &gt; …</code> ).</li>
+</ul>
+<hr>
+<h2 id="pipeline-actual-3d">Pipeline actual (3D)<a class="anchor" href="#pipeline-actual-3d" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><code>1. imguiFramebufferSize(viewportSize, 1280)</code></li>
+<li><code>2. syncTerrainMeshes(world) // só se resolução/revisão mudou</code></li>
+<li><code>3. GpuSceneRenderer::render(...)</code>
+<ul>
+<li><code>gatherMeshDraws (frustum + LOD terreno ×2)</code></li>
+<li><code>(sem shadow passes no editor)</code></li>
+<li><code>renderMeshes — bind samplers dummy, 1× shadow UBO</code></li>
+</ul>
+</li>
+<li><code>4. ImGui: skybox (CPU, cap resolução) → AddImage(GPU) → grid → overlays CPU</code></li>
+</ul>
+<hr>
+<h2 id="ficheiros-principais">Ficheiros principais<a class="anchor" href="#ficheiros-principais" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ficheiro</th>
+<th>Amendments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/caffeine/render/GpuSceneRenderer.cpp</code></td>
+<td>Shadow UBO 1×, ground cache, mandatory binds</td>
+</tr>
+<tr>
+<td><code>src/caffeine/render/GpuSceneRenderer.hpp</code></td>
+<td><code>terrainLodDistanceScale</code></td>
+</tr>
+<tr>
+<td><code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code></td>
+<td>GPU-only meshes, editor options, scopes</td>
+</tr>
+<tr>
+<td><code>doppio-archived/src/doppio/editor/CameraPreviewPanel.cpp</code></td>
+<td>GPU-only / CPU fallback, throttle</td>
+</tr>
+<tr>
+<td><code>doppio-archived/src/doppio/editor/GameplayPreviewPanel.cpp</code></td>
+<td>Idem + resizeCanvas seguro</td>
+</tr>
+<tr>
+<td><code>doppio-archived/src/doppio/editor/EditorPanelUtils.hpp</code></td>
+<td><code>editorPanelWorthGpuRender()</code></td>
+</tr>
+<tr>
+<td><code>src/caffeine/render/SkyboxRenderer.cpp</code></td>
+<td>Cap resolution; raster synchronized with camera</td>
+</tr>
+<tr>
+<td><code>src/caffeine/terrain/TerrainLodSystem.cpp</code></td>
+<td><code>lodDistanceScale</code> no gather</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="limitations-and-future-work">Limitations and future work<a class="anchor" href="#limitations-and-future-work" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GpuSceneRenderer::draw</code> ainda domina frame time em cenas com muito terreno</td>
+<td>Next step: flashing/batching</td>
+</tr>
+<tr>
+<td>Skybox continua CPU</td>
+<td>Migrar para cubemap GPU ou shader fullscreen</td>
+</tr>
+<tr>
+<td>MSAA no pass GPU</td>
+<td>Pendente</td>
+</tr>
+<tr>
+<td>Profiler itself can sting ~30 ms</td>
+<td><code>SceneEditor::profiler</code> ao redesenhar tabela</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/editor/scene-viewport/">Scene Viewport</a></li>
+<li><a href="/en/docs/rendering/shadow-mapping/">Shadow Mapping</a></li>
+<li><a href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD</a></li>
+<li><a href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport</a></li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/performance/editor-viewport-performance.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/performance/"><span>Previous</span><strong>Performance</strong></a><a class="pager-next" href="/en/docs/concurrency/job-system/"><span>Next</span><strong>🔗 Job System</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#resumo">Resumo</a></li><li class="l2"><a href="#resultado-validado">Resultado validado</a></li><li class="l2"><a href="#sintomas-observados-profiler-antes">Sintomas observados (profiler, antes)</a></li><li class="l2"><a href="#arquitetura-um-caminho-de-render-por-frame">Arquitetura: um caminho de render por frame</a></li><li class="l3"><a href="#scene-viewport-3d">Scene Viewport (3D)</a></li><li class="l3"><a href="#camera-gameplay-preview">Camera / Gameplay Preview</a></li><li class="l2"><a href="#causa-raiz-em-gpuscenerendererdraw">Causa raiz em GpuSceneRenderer::draw</a></li><li class="l2"><a href="#corrections-applied-10-100-fps">Corrections applied (10 → 100 FPS)</a></li><li class="l2"><a href="#optimizations-in-gpuscenerenderer">Optimizations in GpuSceneRenderer</a></li><li class="l3"><a href="#1-shadow-passes-vs-shadow-samplers">1. Shadow passes vs shadow samplers</a></li><li class="l3"><a href="#2-uniform-de-sombra-uma-vez-por-pass">2. Uniform de sombra uma vez por pass</a></li><li class="l3"><a href="#3-cache-de-texturas-de-terreno">3. Cache de texturas de terreno</a></li><li class="l3"><a href="#4-lod-de-terreno-no-editor">4. LOD de terreno no editor</a></li><li class="l2"><a href="#optimizations-in-scene-viewport">Optimizations in Scene Viewport</a></li><li class="l2"><a href="#optimizations-in-previews">Optimizations in previews</a></li><li class="l2"><a href="#instrumentation-cf_profile_scope-">Instrumentation ( CF_PROFILE_SCOPE )</a></li><li class="l3"><a href="#sceneeditor">SceneEditor</a></li><li class="l3"><a href="#sceneviewport">SceneViewport</a></li><li class="l3"><a href="#gpuscenerenderer">GpuSceneRenderer</a></li><li class="l2"><a href="#pipeline-actual-3d">Pipeline actual (3D)</a></li><li class="l2"><a href="#ficheiros-principais">Ficheiros principais</a></li><li class="l2"><a href="#limitations-and-future-work">Limitations and future work</a></li><li class="l2"><a href="#see-also">See also</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

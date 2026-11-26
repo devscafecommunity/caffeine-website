@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>⌨️ Input System · Caffeine</title>
+<meta name="description" content="An action-based input layer with remappable keyboard, mouse and gamepad bindings, exposed as per-frame action and axis state without a compile-time SDL dependency.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="⌨️ Input System · Caffeine">
+<meta property="og:description" content="An action-based input layer with remappable keyboard, mouse and gamepad bindings, exposed as per-frame action and axis state without a compile-time SDL dependency.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/input/input-system/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/input/input-system/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/input/input-system/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/input/input-system/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/en/docs/audio/volumetric-audio/">Volumetric audio</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/en/docs/input/input-system/" aria-current="page">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Runtime UI (ImGui &amp; in-game HUD)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Asset system</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">⌨️ Input System</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Engine</span>
+  <span><strong>Namespace:</strong> <code>Caffeine::Input</code></span>
+  <span><strong>Files:</strong> <code>src/caffeine/input/InputManager.hpp</code>, <code>src/caffeine/input/InputManager.cpp</code></span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p class="doc-lede">An action-based input layer with remappable keyboard, mouse
+and gamepad bindings, exposed as per-frame action and axis state without a
+compile-time SDL dependency.</p>
+<hr>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>The Input System abstracts devices (keyboard, mouse, gamepad) and exposes
+<strong>named actions</strong> instead of raw scancodes. This lets the game remap controls
+without changing gameplay code.</p>
+<p><strong>Philosophy:</strong> game code never asks &quot;was W pressed?&quot; — it asks &quot;was the
+<code>MoveUp</code> action activated?&quot;. Bindings map W → <code>MoveUp</code>, but the player can
+reconfigure them.</p>
+<p>The header has <strong>no SDL3 dependency</strong>. The host application translates SDL
+events into <code>injectKeyDown()</code> / <code>injectKeyUp()</code> / <code>injectMouseButtonDown()</code> /
+<code>injectGamepadAxis()</code> calls; tests feed the same injection API directly.</p>
+<hr>
+<h2 id="architecture">Architecture<a class="anchor" href="#architecture" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Host event pump (SDL or another backend)</li>
+<li><code>InputManager.beginFrame()</code> — snapshots raw and action state for the new frame</li>
+<li>Host injects events (<code>injectKey*</code>, <code>injectMouse*</code>, <code>injectGamepad*</code>)</li>
+<li><code>InputManager.endFrame()</code> — evaluates bindings, updates <code>ActionState</code>
+(<code>pressed</code> / <code>justPressed</code> / <code>justReleased</code>) and fires callbacks</li>
+<li>Game systems query <code>actionState()</code> / <code>axisState()</code> during update</li>
+</ul>
+<p><code>beginFrame()</code> does not poll events and <code>endFrame()</code> does not inject them; the
+host owns that boundary. Call <code>beginFrame()</code> before injecting a frame's events
+and <code>endFrame()</code> once all events have been injected.</p>
+<hr>
+<h2 id="api">API<a class="anchor" href="#api" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Input {
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Action</span> : u8 {
+    MoveUp = <span class="hljs-number">0</span>, MoveDown, MoveLeft, MoveRight,
+    Jump, Attack, Interact, Pause,
+    Count
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Axis</span> : u8 {
+    MoveX = <span class="hljs-number">0</span>,
+    MoveY,
+    LookX,
+    LookY,
+    Count
+};
+
+<span class="hljs-comment">// SDL-compatible values; no SDL header is included.</span>
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Key</span> : u16 { <span class="hljs-comment">/* A–Z, digits, arrows, Space, Escape, modifiers, ... */</span> };
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">MouseButton</span> : u8 { Left = <span class="hljs-number">1</span>, Middle, Right, X1, X2, Count };
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">GamepadButton</span> : u8 { A = <span class="hljs-number">0</span>, B, X, Y, <span class="hljs-comment">/* ... */</span> Count };
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">GamepadAxis</span> : u8 { LeftX = <span class="hljs-number">0</span>, LeftY, RightX, RightY, TriggerLeft, TriggerRight, Count };
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">ActionState</span> {
+    <span class="hljs-type">bool</span> pressed      = <span class="hljs-literal">false</span>;   <span class="hljs-comment">// held while any binding is active</span>
+    <span class="hljs-type">bool</span> justPressed  = <span class="hljs-literal">false</span>;   <span class="hljs-comment">// true only on the first frame</span>
+    <span class="hljs-type">bool</span> justReleased = <span class="hljs-literal">false</span>;   <span class="hljs-comment">// true only on the release frame</span>
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AxisState</span> {
+    f32 value = <span class="hljs-number">0.0f</span>;  <span class="hljs-comment">// -1.0 .. +1.0</span>
+    f32 delta = <span class="hljs-number">0.0f</span>;  <span class="hljs-comment">// change since the previous frame</span>
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">BindingType</span> : u8 {
+    Key,
+    MouseButton,
+    GamepadButton,
+    GamepadAxis
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Binding</span> {
+    BindingType type;
+    <span class="hljs-keyword">union</span> {
+        Key           key;
+        MouseButton   mouseButton;
+        GamepadButton gamepadButton;
+        GamepadAxis   gamepadAxis;
+    };
+
+    <span class="hljs-function"><span class="hljs-type">static</span> Binding <span class="hljs-title">fromKey</span><span class="hljs-params">(Key k)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Binding <span class="hljs-title">fromMouseButton</span><span class="hljs-params">(MouseButton mb)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Binding <span class="hljs-title">fromGamepadButton</span><span class="hljs-params">(GamepadButton gb)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Binding <span class="hljs-title">fromGamepadAxis</span><span class="hljs-params">(GamepadAxis ga)</span></span>;
+};
+
+<span class="hljs-type">static</span> <span class="hljs-keyword">constexpr</span> usize MAX_BINDINGS_PER_ACTION = <span class="hljs-number">4</span>;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">InputManager</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">InputManager</span>();
+
+    <span class="hljs-comment">// --- Frame lifecycle (called by the host/GameLoop) ---</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">beginFrame</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">endFrame</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-comment">// --- Event injection (testable without SDL3) ---</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">injectKeyDown</span><span class="hljs-params">(Key key)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">injectKeyUp</span><span class="hljs-params">(Key key)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">injectMouseButtonDown</span><span class="hljs-params">(MouseButton button)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">injectMouseButtonUp</span><span class="hljs-params">(MouseButton button)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">injectMouseMove</span><span class="hljs-params">(f32 x, f32 y)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">injectGamepadButtonDown</span><span class="hljs-params">(GamepadButton button)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">injectGamepadButtonUp</span><span class="hljs-params">(GamepadButton button)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">injectGamepadAxis</span><span class="hljs-params">(GamepadAxis axis, f32 value)</span></span>;
+
+    <span class="hljs-comment">// --- State queries ---</span>
+    <span class="hljs-function">ActionState <span class="hljs-title">actionState</span><span class="hljs-params">(Action action)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">AxisState   <span class="hljs-title">axisState</span><span class="hljs-params">(Axis axis)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span>        <span class="hljs-title">isKeyDown</span><span class="hljs-params">(Key key)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span>        <span class="hljs-title">isMouseButtonDown</span><span class="hljs-params">(MouseButton button)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Vec2        <span class="hljs-title">mousePosition</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Vec2        <span class="hljs-title">mouseDelta</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-comment">// --- Binding management ---</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bind</span><span class="hljs-params">(Action action, Binding binding)</span></span>;          <span class="hljs-comment">// adds up to 4 bindings</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearBindings</span><span class="hljs-params">(Action action)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clearAllBindings</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resetToDefaults</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-comment">// --- Axis binding: one negative and one positive binding ---</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bindAxis</span><span class="hljs-params">(Axis axis, Binding negative, Binding positive)</span></span>;
+
+    <span class="hljs-comment">// --- Callbacks ---</span>
+    std::function&lt;<span class="hljs-type">void</span>(Action)&gt; onActionPressed;
+    std::function&lt;<span class="hljs-type">void</span>(Action)&gt; onActionReleased;
+
+    <span class="hljs-keyword">class</span> <span class="hljs-title class_">IInputCallbacks</span> {
+    <span class="hljs-keyword">public</span>:
+        <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">IInputCallbacks</span>() = <span class="hljs-keyword">default</span>;
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onActionPressed</span><span class="hljs-params">(Action action)</span> </span>= <span class="hljs-number">0</span>;
+        <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">onActionReleased</span><span class="hljs-params">(Action action)</span> </span>= <span class="hljs-number">0</span>;
+    };
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setCallbackHandler</span><span class="hljs-params">(IInputCallbacks* handler)</span></span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Input</span>
+</code></pre></div>
+<blockquote>
+<p>There is no <code>Action::None</code>, <code>CUSTOM_START</code>, <code>justPressed(Action)</code> accessor,
+<code>axisValue()</code> helper or mouse-relative mode in the current header. Use
+<code>actionState(action).justPressed</code> and <code>axisState(axis).value</code>.</p>
+</blockquote>
+<hr>
+<h2 id="default-bindings">Default Bindings<a class="anchor" href="#default-bindings" aria-label="Link to this section">#</a></h2>
+<p><code>InputManager::resetToDefaults()</code> installs:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Keyboard</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MoveUp</td>
+<td>W / ↑</td>
+</tr>
+<tr>
+<td>MoveDown</td>
+<td>S / ↓</td>
+</tr>
+<tr>
+<td>MoveLeft</td>
+<td>A / ←</td>
+</tr>
+<tr>
+<td>MoveRight</td>
+<td>D / →</td>
+</tr>
+<tr>
+<td>Jump</td>
+<td>Space</td>
+</tr>
+<tr>
+<td>Pause</td>
+<td>Esc</td>
+</tr>
+</tbody>
+</table></div>
+<p>Axes:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Axis</th>
+<th>Negative</th>
+<th>Positive</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MoveX</td>
+<td>A</td>
+<td>D</td>
+</tr>
+<tr>
+<td>MoveY</td>
+<td>S</td>
+<td>W</td>
+</tr>
+<tr>
+<td>LookX</td>
+<td>Right stick X</td>
+<td>Right stick X</td>
+</tr>
+<tr>
+<td>LookY</td>
+<td>Right stick Y</td>
+<td>Right stick Y</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>Attack</code> and <code>Interact</code> have no default binding. Gamepad face buttons are not
+bound to actions by default either; bind them explicitly.</p>
+<hr>
+<h2 id="usage-examples">Usage Examples<a class="anchor" href="#usage-examples" aria-label="Link to this section">#</a></h2>
+<h3 id="binding-actions-and-axes">Binding actions and axes<a class="anchor" href="#binding-actions-and-axes" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">Caffeine::Input::InputManager input;
+
+input.<span class="hljs-built_in">bind</span>(Caffeine::Input::Action::Jump,
+           Caffeine::Input::Binding::<span class="hljs-built_in">fromKey</span>(Caffeine::Input::Key::Space));
+input.<span class="hljs-built_in">bind</span>(Caffeine::Input::Action::Jump,
+           Caffeine::Input::Binding::<span class="hljs-built_in">fromGamepadButton</span>(
+               Caffeine::Input::GamepadButton::A));
+
+input.<span class="hljs-built_in">bindAxis</span>(Caffeine::Input::Axis::MoveX,
+               Caffeine::Input::Binding::<span class="hljs-built_in">fromKey</span>(Caffeine::Input::Key::A),
+               Caffeine::Input::Binding::<span class="hljs-built_in">fromKey</span>(Caffeine::Input::Key::D));
+</code></pre></div>
+<h3 id="frame-lifecycle">Frame lifecycle<a class="anchor" href="#frame-lifecycle" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">input.<span class="hljs-built_in">beginFrame</span>();
+
+<span class="hljs-comment">// The host translates SDL events into injection calls:</span>
+input.<span class="hljs-built_in">injectKeyDown</span>(Caffeine::Input::Key::W);
+input.<span class="hljs-built_in">injectMouseMove</span>(mouseX, mouseY);
+
+input.<span class="hljs-built_in">endFrame</span>();  <span class="hljs-comment">// evaluates bindings and fires callbacks</span>
+</code></pre></div>
+<h3 id="reading-input-in-a-system">Reading input in a system<a class="anchor" href="#reading-input-in-a-system" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-type">const</span> Caffeine::Input::ActionState jump =
+    input.<span class="hljs-built_in">actionState</span>(Caffeine::Input::Action::Jump);
+
+<span class="hljs-keyword">if</span> (jump.justPressed) {
+    velocity.y = jumpForce;
+}
+
+<span class="hljs-type">const</span> Caffeine::Input::AxisState moveX =
+    input.<span class="hljs-built_in">axisState</span>(Caffeine::Input::Axis::MoveX);
+velocity.x = moveX.value * moveSpeed;
+
+<span class="hljs-comment">// Mouse look: accumulate the per-frame delta yourself.</span>
+<span class="hljs-type">const</span> Caffeine::Vec2 look = input.<span class="hljs-built_in">mouseDelta</span>();
+yaw   += look.x * sensitivity;
+pitch += look.y * sensitivity;
+</code></pre></div>
+<h3 id="reacting-to-actions">Reacting to actions<a class="anchor" href="#reacting-to-actions" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">input.onActionPressed = [](Caffeine::Input::Action action) {
+    <span class="hljs-keyword">if</span> (action == Caffeine::Input::Action::Pause) {
+        <span class="hljs-built_in">togglePause</span>();
+    }
+};
+</code></pre></div>
+<p>Game code that needs per-entity control mapping can define its own component
+holding <code>Action</code> / <code>Axis</code> values; the engine does not ship a <code>PlayerInput</code>
+component.</p>
+<hr>
+<h2 id="tests">Tests<a class="anchor" href="#tests" aria-label="Link to this section">#</a></h2>
+<p><code>tests/test_input.cpp</code> (34 cases) covers:</p>
+<ul>
+<li><code>justPressed</code> / <code>justReleased</code> transitions across frames</li>
+<li>Multiple bindings on one action</li>
+<li>Mouse button and gamepad button bindings</li>
+<li>Mouse position and delta tracking</li>
+<li>Axis negative/positive pairs, gamepad pass-through and per-frame delta</li>
+<li>Clearing bindings and restoring defaults</li>
+<li>The 4-binding-per-action limit</li>
+<li><code>onActionPressed</code> / <code>onActionReleased</code> and <code>IInputCallbacks</code></li>
+<li>Default WASD/arrow bindings</li>
+</ul>
+<hr>
+<h2 id="design-decisions">Design Decisions<a class="anchor" href="#design-decisions" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Action-based, not scancode-based</td>
+<td>Portable games; runtime remapping without code changes</td>
+</tr>
+<tr>
+<td>Per-frame <code>justPressed</code> / <code>justReleased</code></td>
+<td>No manual edge detection in gameplay code</td>
+</tr>
+<tr>
+<td>Mutable binding table</td>
+<td>Runtime remapping in an options menu</td>
+</tr>
+<tr>
+<td>Event injection API</td>
+<td>Tests and alternative backends work without SDL</td>
+</tr>
+<tr>
+<td>No SDL headers in the public input header</td>
+<td>Core stays independent of the windowing backend</td>
+</tr>
+<tr>
+<td>Fixed arrays indexed by enum</td>
+<td>O(1) queries without hashing on the hot path</td>
+</tr>
+<tr>
+<td>Up to 4 bindings per action</td>
+<td>Covers keyboard + gamepad alternatives without unbounded growth</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="dependencies">Dependencies<a class="anchor" href="#dependencies" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Upstream:</strong> <code>Caffeine::Core::Types</code>, <code>Caffeine::Vec2</code>,
+<code>Caffeine::HashMap</code>, <code>Caffeine::Vector</code>, standard <code>&lt;array&gt;</code> and <code>&lt;functional&gt;</code></li>
+<li><strong>Downstream:</strong> <a href="/en/docs/core/game-loop/">Game Loop</a>, gameplay systems that query
+actions/axes</li>
+</ul>
+<hr>
+<h2 id="-related-topics">🔗 Related Topics<a class="anchor" href="#-related-topics" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="">Game Systems</a></td>
+<td>Input feeds ECS systems</td>
+</tr>
+<tr>
+<td><a href="">Concurrency &amp; Runtime</a></td>
+<td>Input is processed in the Game Loop</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="references">References<a class="anchor" href="#references" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/input/InputManager.hpp" rel="noopener" class="ext"><code>src/caffeine/input/InputManager.hpp</code></a> / <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/input/InputManager.cpp" rel="noopener" class="ext"><code>src/caffeine/input/InputManager.cpp</code></a></li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/tests/test_input.cpp" rel="noopener" class="ext"><code>tests/test_input.cpp</code></a></li>
+<li><a href="/en/docs/architecture_specs/"><code>docs/architecture_specs.md</code></a> — §3 Input System</li>
+<li><a href="/en/docs/core/game-loop/"><code>core/game-loop.md</code></a> — the host drives <code>beginFrame()</code> / <code>endFrame()</code></li>
+<li><a href="">Transversal Topic Index</a></li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/input/input-system.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/animation/skeletal-animation/"><span>Previous</span><strong>🦴 Skeletal Animation</strong></a><a class="pager-next" href="/en/docs/runtime-ui/game-ui/"><span>Next</span><strong>🖼️ UI System</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#overview">Overview</a></li><li class="l2"><a href="#architecture">Architecture</a></li><li class="l2"><a href="#api">API</a></li><li class="l2"><a href="#default-bindings">Default Bindings</a></li><li class="l2"><a href="#usage-examples">Usage Examples</a></li><li class="l3"><a href="#binding-actions-and-axes">Binding actions and axes</a></li><li class="l3"><a href="#frame-lifecycle">Frame lifecycle</a></li><li class="l3"><a href="#reading-input-in-a-system">Reading input in a system</a></li><li class="l3"><a href="#reacting-to-actions">Reacting to actions</a></li><li class="l2"><a href="#tests">Tests</a></li><li class="l2"><a href="#design-decisions">Design Decisions</a></li><li class="l2"><a href="#dependencies">Dependencies</a></li><li class="l2"><a href="#-related-topics">🔗 Related Topics</a></li><li class="l2"><a href="#references">References</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

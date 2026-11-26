@@ -1,0 +1,1379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Material &amp; Shader Editor Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Material &amp; Shader Editor Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-material-shader-editor-plan/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-material-shader-editor-plan/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-16-material-shader-editor-plan/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/" aria-current="page">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Material &amp; Shader Editor Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Implement a Material &amp; Shader Editor with ImNodes visual graph, text code editor, and real-time RHI preview for the Caffeine Studio IDE.</p>
+<p><strong>Architecture:</strong> The editor consists of three sub-panels (Graph Canvas, Preview Window, Inspector Properties) managed by a MaterialEditorPanel. The ShaderGraph nodes compile to GLSL/HLSL which gets piped into the RHI for GPU preview. ImNodes provides the visual node graph UI, RHI handles the 3D preview. A fallback ImGui wireframe preview is used when RHI is unavailable.</p>
+<p><strong>Tech Stack:</strong> C++20, ImGui, ImNodes (via FetchContent), SDL_GPU (RHI module), glslang</p>
+<p><strong>Design Doc:</strong> <code>docs/plans/2026-05-16-material-shader-editor-design.md</code></p>
+<hr>
+<h3 id="task-1-add-imnodes-dependency">Task 1: Add ImNodes dependency<a class="anchor" href="#task-1-add-imnodes-dependency" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>CMakeLists.txt</code> (add FetchContent for ImNodes near ImGui section)</li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/ImGuiIntegration.hpp</code> (include imnodes.h)</li>
+</ul>
+<p><strong>Step 1: Add ImNodes to CMakeLists.txt</strong></p>
+<p>Add after the ImGui FetchContent block (around line 207):</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-comment"># ── ImNodes (node graph editor) ─────────────────────────</span>
+FetchContent_Declare(
+    imnodes
+    GIT_REPOSITORY https://github.com/Nelarius/imnodes.git
+    GIT_TAG v0.<span class="hljs-number">6</span>
+)
+<span class="hljs-keyword">set</span>(IMNODES_SOURCE_DIR <span class="hljs-string">&quot;${imnodes_SOURCE_DIR}&quot;</span>)
+FetchContent_MakeAvailable(imnodes)
+</code></pre></div>
+<p>And add the imnodes source/header to the doppio target:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-variable">${imnodes_SOURCE_DIR}</span>/imnodes.cpp
+</code></pre></div>
+<p>With include path:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-variable">${imnodes_SOURCE_DIR}</span>
+</code></pre></div>
+<p><strong>Step 2: Verify build</strong></p>
+<p>Run: <code>cd build &amp;&amp; cmake .. &amp;&amp; make -j4 2&gt;&amp;1 | grep -i imnodes</code>
+Expected: imnodes compiles without errors</p>
+<p><strong>Step 3: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;build: add ImNodes node graph dependency&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-2-create-shadernode-base-and-derived-node-classes">Task 2: Create ShaderNode base and derived node classes<a class="anchor" href="#task-2-create-shadernode-base-and-derived-node-classes" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>doppio-archived/src/doppio/editor/ShaderNode.hpp</code></li>
+<li>Create: <code>doppio-archived/src/doppio/editor/ShaderNode.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write ShaderNode.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;math/Vec3.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;math/Vec4.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;containers/FixedString.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;containers/StringView.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">NodeType</span> : u8 {
+    TextureSample,
+    ColorConstant,
+    FloatConstant,
+    Multiply,
+    Add,
+    Lerp,
+    Time,
+    VertexPosition,
+    OutputPBR
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">PinType</span> : u8 {
+    Float,
+    Vec3,
+    Vec4,
+    Texture2D
+};
+
+<span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">pinTypeToString</span><span class="hljs-params">(PinType t)</span> </span>{
+    <span class="hljs-keyword">switch</span> (t) {
+        <span class="hljs-keyword">case</span> PinType::Float:     <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;float&quot;</span>;
+        <span class="hljs-keyword">case</span> PinType::Vec3:      <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;vec3&quot;</span>;
+        <span class="hljs-keyword">case</span> PinType::Vec4:      <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;vec4&quot;</span>;
+        <span class="hljs-keyword">case</span> PinType::Texture2D: <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;texture2D&quot;</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;unknown&quot;</span>;
+}
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">NodePin</span> {
+    std::string name;
+    PinType type = PinType::Float;
+    <span class="hljs-type">int</span> connectionID = <span class="hljs-number">-1</span>;  <span class="hljs-comment">// -1 = not connected</span>
+    <span class="hljs-type">bool</span> isInput = <span class="hljs-literal">true</span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ShaderNode</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">ShaderNode</span>(<span class="hljs-type">uint32_t</span> id, NodeType type, std::string title)
+        : <span class="hljs-built_in">m_id</span>(id), <span class="hljs-built_in">m_type</span>(type), <span class="hljs-built_in">m_title</span>(std::<span class="hljs-built_in">move</span>(title)) {}
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">ShaderNode</span>() = <span class="hljs-keyword">default</span>;
+
+    <span class="hljs-function"><span class="hljs-type">uint32_t</span> <span class="hljs-title">id</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_id; }
+    <span class="hljs-function">NodeType <span class="hljs-title">type</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_type; }
+    <span class="hljs-function"><span class="hljs-type">const</span> std::string&amp; <span class="hljs-title">title</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_title; }
+
+    <span class="hljs-function">std::vector&lt;NodePin&gt;&amp; <span class="hljs-title">inputs</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> m_inputs; }
+    <span class="hljs-function">std::vector&lt;NodePin&gt;&amp; <span class="hljs-title">outputs</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> m_outputs; }
+    <span class="hljs-function"><span class="hljs-type">const</span> std::vector&lt;NodePin&gt;&amp; <span class="hljs-title">inputs</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_inputs; }
+    <span class="hljs-function"><span class="hljs-type">const</span> std::vector&lt;NodePin&gt;&amp; <span class="hljs-title">outputs</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_outputs; }
+
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+
+    <span class="hljs-comment">// For exposed properties (sliders, color pickers, etc)</span>
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">renderProperties</span><span class="hljs-params">()</span> </span>{}
+
+<span class="hljs-keyword">protected</span>:
+    <span class="hljs-type">uint32_t</span> m_id;
+    NodeType m_type;
+    std::string m_title;
+    std::vector&lt;NodePin&gt; m_inputs;
+    std::vector&lt;NodePin&gt; m_outputs;
+};
+
+<span class="hljs-comment">// ── Concrete nodes ──</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">TextureSampleNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">TextureSampleNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;vec4&quot;</span>; }
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderProperties</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span>;
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-type">char</span> m_texturePath[<span class="hljs-number">128</span>] = <span class="hljs-string">&quot;&quot;</span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ColorConstantNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">ColorConstantNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;vec4&quot;</span>; }
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderProperties</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-type">float</span> color[<span class="hljs-number">4</span>] = {<span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>};
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">FloatConstantNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">FloatConstantNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;float&quot;</span>; }
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderProperties</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-type">float</span> value = <span class="hljs-number">1.0f</span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MultiplyNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">MultiplyNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AddNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">AddNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LerpNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">LerpNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;vec4&quot;</span>; }
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">TimeNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">TimeNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;float&quot;</span>; }
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">VertexPositionNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">VertexPositionNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;vec3&quot;</span>; }
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">OutputPBRNode</span> <span class="hljs-keyword">final</span> : <span class="hljs-keyword">public</span> ShaderNode {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">OutputPBRNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> id)</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;void&quot;</span>; }
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderProperties</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span>;
+};
+
+<span class="hljs-comment">// Factory</span>
+<span class="hljs-function">std::unique_ptr&lt;ShaderNode&gt; <span class="hljs-title">createNode</span><span class="hljs-params">(NodeType type, <span class="hljs-type">uint32_t</span> id)</span></span>;
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 2: Write ShaderNode.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/ShaderNode.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fmt/format.h&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-comment">// ── TextureSampleNode ──</span>
+TextureSampleNode::<span class="hljs-built_in">TextureSampleNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::TextureSample, <span class="hljs-string">&quot;Texture Sample&quot;</span>)
+{
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Tex&quot;</span>, PinType::Texture2D, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_outputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;RGBA&quot;</span>, PinType::Vec4, <span class="hljs-number">-1</span>, <span class="hljs-literal">false</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">TextureSampleNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">if</span> (!inputVars.<span class="hljs-built_in">empty</span>() &amp;&amp; !inputVars[<span class="hljs-number">0</span>].<span class="hljs-built_in">empty</span>())
+        <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;vec4 var_{} = texture2D(sampler_{}, {});&quot;</span>, m_id, m_id, inputVars[<span class="hljs-number">0</span>]);
+    <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;vec4 var_{} = texture2D(sampler_{}, texCoord);&quot;</span>, m_id, m_id);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">TextureSampleNode::renderProperties</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">InputText</span>(<span class="hljs-string">&quot;Path&quot;</span>, m_texturePath, <span class="hljs-keyword">sizeof</span>(m_texturePath));
+}
+
+<span class="hljs-comment">// ── ColorConstantNode ──</span>
+ColorConstantNode::<span class="hljs-built_in">ColorConstantNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::ColorConstant, <span class="hljs-string">&quot;Color&quot;</span>)
+{
+    m_outputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;RGBA&quot;</span>, PinType::Vec4, <span class="hljs-number">-1</span>, <span class="hljs-literal">false</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">ColorConstantNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp;)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;vec4 var_{} = vec4({}f, {}f, {}f, {}f);&quot;</span>,
+        m_id, color[<span class="hljs-number">0</span>], color[<span class="hljs-number">1</span>], color[<span class="hljs-number">2</span>], color[<span class="hljs-number">3</span>]);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ColorConstantNode::renderProperties</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">ColorEdit4</span>(<span class="hljs-string">&quot;Color&quot;</span>, color);
+}
+
+<span class="hljs-comment">// ── FloatConstantNode ──</span>
+FloatConstantNode::<span class="hljs-built_in">FloatConstantNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::FloatConstant, <span class="hljs-string">&quot;Float&quot;</span>)
+{
+    m_outputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Value&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">false</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">FloatConstantNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp;)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;float var_{} = {}f;&quot;</span>, m_id, value);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">FloatConstantNode::renderProperties</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">SliderFloat</span>(<span class="hljs-string">&quot;Value&quot;</span>, &amp;value, <span class="hljs-number">0.0f</span>, <span class="hljs-number">10.0f</span>);
+}
+
+<span class="hljs-comment">// ── MultiplyNode ──</span>
+MultiplyNode::<span class="hljs-built_in">MultiplyNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::Multiply, <span class="hljs-string">&quot;Multiply&quot;</span>)
+{
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;A&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;B&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_outputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Out&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">false</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">MultiplyNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> </span>{
+    std::string a = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">0</span> &amp;&amp; !inputVars[<span class="hljs-number">0</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">0</span>] : <span class="hljs-string">&quot;1.0&quot;</span>;
+    std::string b = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">1</span> &amp;&amp; !inputVars[<span class="hljs-number">1</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">1</span>] : <span class="hljs-string">&quot;1.0&quot;</span>;
+    <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;float var_{} = {} * {};&quot;</span>, m_id, a, b);
+}
+
+<span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">MultiplyNode::outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;float&quot;</span>; }
+
+<span class="hljs-comment">// ── AddNode ──</span>
+AddNode::<span class="hljs-built_in">AddNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::Add, <span class="hljs-string">&quot;Add&quot;</span>)
+{
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;A&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;B&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_outputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Out&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">false</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">AddNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> </span>{
+    std::string a = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">0</span> &amp;&amp; !inputVars[<span class="hljs-number">0</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">0</span>] : <span class="hljs-string">&quot;0.0&quot;</span>;
+    std::string b = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">1</span> &amp;&amp; !inputVars[<span class="hljs-number">1</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">1</span>] : <span class="hljs-string">&quot;0.0&quot;</span>;
+    <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;float var_{} = {} + {};&quot;</span>, m_id, a, b);
+}
+
+<span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">AddNode::outputVarType</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;float&quot;</span>; }
+
+<span class="hljs-comment">// ── LerpNode ──</span>
+LerpNode::<span class="hljs-built_in">LerpNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::Lerp, <span class="hljs-string">&quot;Lerp&quot;</span>)
+{
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;From&quot;</span>, PinType::Vec4, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;To&quot;</span>, PinType::Vec4, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;T&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_outputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Out&quot;</span>, PinType::Vec4, <span class="hljs-number">-1</span>, <span class="hljs-literal">false</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">LerpNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> </span>{
+    std::string from = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">0</span> &amp;&amp; !inputVars[<span class="hljs-number">0</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">0</span>] : <span class="hljs-string">&quot;vec4(0.0)&quot;</span>;
+    std::string to   = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">1</span> &amp;&amp; !inputVars[<span class="hljs-number">1</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">1</span>] : <span class="hljs-string">&quot;vec4(1.0)&quot;</span>;
+    std::string t    = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">2</span> &amp;&amp; !inputVars[<span class="hljs-number">2</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">2</span>] : <span class="hljs-string">&quot;0.5&quot;</span>;
+    <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;vec4 var_{} = mix({}, {}, {});&quot;</span>, m_id, from, to, t);
+}
+
+<span class="hljs-comment">// ── TimeNode ──</span>
+TimeNode::<span class="hljs-built_in">TimeNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::Time, <span class="hljs-string">&quot;Time&quot;</span>)
+{
+    m_outputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Time&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">false</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">TimeNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp;)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;float var_{} = u_time;&quot;</span>, m_id);
+}
+
+<span class="hljs-comment">// ── VertexPositionNode ──</span>
+VertexPositionNode::<span class="hljs-built_in">VertexPositionNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::VertexPosition, <span class="hljs-string">&quot;Vertex Position&quot;</span>)
+{
+    m_outputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Pos&quot;</span>, PinType::Vec3, <span class="hljs-number">-1</span>, <span class="hljs-literal">false</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">VertexPositionNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp;)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">return</span> fmt::format(<span class="hljs-string">&quot;vec3 var_{} = v_position;&quot;</span>, m_id);
+}
+
+<span class="hljs-comment">// ── OutputPBRNode ──</span>
+OutputPBRNode::<span class="hljs-built_in">OutputPBRNode</span>(<span class="hljs-type">uint32_t</span> id)
+    : <span class="hljs-built_in">ShaderNode</span>(id, NodeType::OutputPBR, <span class="hljs-string">&quot;PBR Output&quot;</span>)
+{
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Albedo&quot;</span>, PinType::Vec4, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Normal&quot;</span>, PinType::Vec3, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Metallic&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+    m_inputs.<span class="hljs-built_in">push_back</span>({<span class="hljs-string">&quot;Roughness&quot;</span>, PinType::Float, <span class="hljs-number">-1</span>, <span class="hljs-literal">true</span>});
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">OutputPBRNode::generateCode</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::string&gt;&amp; inputVars)</span> <span class="hljs-type">const</span> </span>{
+    std::string albedo  = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">0</span> &amp;&amp; !inputVars[<span class="hljs-number">0</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">0</span>] : <span class="hljs-string">&quot;vec4(1.0)&quot;</span>;
+    std::string normal  = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">1</span> &amp;&amp; !inputVars[<span class="hljs-number">1</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">1</span>] : <span class="hljs-string">&quot;vec3(0.0, 0.0, 1.0)&quot;</span>;
+    std::string metal   = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">2</span> &amp;&amp; !inputVars[<span class="hljs-number">2</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">2</span>] : <span class="hljs-string">&quot;0.0&quot;</span>;
+    std::string rough   = inputVars.<span class="hljs-built_in">size</span>() &gt; <span class="hljs-number">3</span> &amp;&amp; !inputVars[<span class="hljs-number">3</span>].<span class="hljs-built_in">empty</span>() ? inputVars[<span class="hljs-number">3</span>] : <span class="hljs-string">&quot;0.5&quot;</span>;
+
+    <span class="hljs-keyword">return</span> fmt::format(
+        <span class="hljs-string">&quot;// PBR Output\n&quot;</span>
+        <span class="hljs-string">&quot;vec3 albedo_{} = {}.rgb;\n&quot;</span>
+        <span class="hljs-string">&quot;float metallic_{} = {};\n&quot;</span>
+        <span class="hljs-string">&quot;float roughness_{} = {};\n&quot;</span>
+        <span class="hljs-string">&quot;vec3 normal_{} = {};\n&quot;</span>
+        <span class="hljs-string">&quot;// Output: albedo={}, metallic={}, roughness={}, normal={}&quot;</span>,
+        m_id, albedo,
+        m_id, metal,
+        m_id, rough,
+        m_id, normal,
+        albedo, metal, rough, normal
+    );
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">OutputPBRNode::renderProperties</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Material Output Node&quot;</span>);
+}
+
+<span class="hljs-comment">// ── Factory ──</span>
+<span class="hljs-function">std::unique_ptr&lt;ShaderNode&gt; <span class="hljs-title">createNode</span><span class="hljs-params">(NodeType type, <span class="hljs-type">uint32_t</span> id)</span> </span>{
+    <span class="hljs-keyword">switch</span> (type) {
+        <span class="hljs-keyword">case</span> NodeType::TextureSample:   <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;TextureSampleNode&gt;(id);
+        <span class="hljs-keyword">case</span> NodeType::ColorConstant:   <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;ColorConstantNode&gt;(id);
+        <span class="hljs-keyword">case</span> NodeType::FloatConstant:   <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;FloatConstantNode&gt;(id);
+        <span class="hljs-keyword">case</span> NodeType::Multiply:        <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;MultiplyNode&gt;(id);
+        <span class="hljs-keyword">case</span> NodeType::Add:             <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;AddNode&gt;(id);
+        <span class="hljs-keyword">case</span> NodeType::Lerp:            <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;LerpNode&gt;(id);
+        <span class="hljs-keyword">case</span> NodeType::Time:            <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;TimeNode&gt;(id);
+        <span class="hljs-keyword">case</span> NodeType::VertexPosition:  <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;VertexPositionNode&gt;(id);
+        <span class="hljs-keyword">case</span> NodeType::OutputPBR:       <span class="hljs-keyword">return</span> std::<span class="hljs-built_in">make_unique</span>&lt;OutputPBRNode&gt;(id);
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 3: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ShaderNode.hpp src/editor/ShaderNode.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): add ShaderNode hierarchy with code generation&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-3-implement-shadergraph-graph-management-compilation">Task 3: Implement ShaderGraph (graph management + compilation)<a class="anchor" href="#task-3-implement-shadergraph-graph-management-compilation" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>doppio-archived/src/doppio/editor/ShaderGraph.hpp</code></li>
+<li>Create: <code>doppio-archived/src/doppio/editor/ShaderGraph.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write ShaderGraph.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/ShaderNode.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unordered_map&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ShaderGraph</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">uint32_t</span> <span class="hljs-title">addNode</span><span class="hljs-params">(NodeType type)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">removeNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nodeID)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">connect</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> fromNode, <span class="hljs-type">int</span> fromPin, <span class="hljs-type">uint32_t</span> toNode, <span class="hljs-type">int</span> toPin)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">disconnect</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> fromNode, <span class="hljs-type">int</span> fromPin)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function">ShaderNode* <span class="hljs-title">getNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nodeID)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> ShaderNode* <span class="hljs-title">getNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nodeID)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">getNodeConnections</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nodeID, std::vector&lt;std::pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt;&amp; inputs, std::vector&lt;std::pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt;&amp; outputs)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function">std::string <span class="hljs-title">compileGLSL</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">std::string <span class="hljs-title">compileHLSL</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    std::vector&lt;std::unique_ptr&lt;ShaderNode&gt;&gt;&amp; <span class="hljs-built_in">nodes</span>() { <span class="hljs-keyword">return</span> m_nodes; }
+    <span class="hljs-type">const</span> std::vector&lt;std::unique_ptr&lt;ShaderNode&gt;&gt;&amp; <span class="hljs-built_in">nodes</span>() <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> m_nodes; }
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">empty</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_nodes.<span class="hljs-built_in">empty</span>(); }
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Connection</span> {
+        <span class="hljs-type">uint32_t</span> fromNode;
+        <span class="hljs-type">int</span> fromPin;
+        <span class="hljs-type">uint32_t</span> toNode;
+        <span class="hljs-type">int</span> toPin;
+    };
+    <span class="hljs-function"><span class="hljs-type">const</span> std::vector&lt;Connection&gt;&amp; <span class="hljs-title">connections</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_connections; }
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-type">uint32_t</span> m_nextID = <span class="hljs-number">1</span>;
+    std::vector&lt;std::unique_ptr&lt;ShaderNode&gt;&gt; m_nodes;
+    std::vector&lt;Connection&gt; m_connections;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">canConnect</span><span class="hljs-params">(PinType fromType, PinType toType)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">topologicalSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">uint32_t</span>&gt;&amp; sortedIDs)</span> <span class="hljs-type">const</span></span>;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 2: Write ShaderGraph.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/ShaderGraph.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;algorithm&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;set&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fmt/format.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui.h&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-function"><span class="hljs-type">uint32_t</span> <span class="hljs-title">ShaderGraph::addNode</span><span class="hljs-params">(NodeType type)</span> </span>{
+    <span class="hljs-keyword">auto</span> node = <span class="hljs-built_in">createNode</span>(type, m_nextID);
+    m_nextID++;
+    m_nodes.<span class="hljs-built_in">push_back</span>(std::<span class="hljs-built_in">move</span>(node));
+    <span class="hljs-keyword">return</span> m_nextID - <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ShaderGraph::removeNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nodeID)</span> </span>{
+    <span class="hljs-keyword">auto</span> it = std::<span class="hljs-built_in">find_if</span>(m_nodes.<span class="hljs-built_in">begin</span>(), m_nodes.<span class="hljs-built_in">end</span>(),
+        [nodeID](<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; n) { <span class="hljs-keyword">return</span> n-&gt;<span class="hljs-built_in">id</span>() == nodeID; });
+    <span class="hljs-keyword">if</span> (it == m_nodes.<span class="hljs-built_in">end</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+    <span class="hljs-comment">// Remove all connections involving this node</span>
+    m_connections.<span class="hljs-built_in">erase</span>(std::<span class="hljs-built_in">remove_if</span>(m_connections.<span class="hljs-built_in">begin</span>(), m_connections.<span class="hljs-built_in">end</span>(),
+        [nodeID](<span class="hljs-type">const</span> Connection&amp; c) {
+            <span class="hljs-keyword">return</span> c.fromNode == nodeID || c.toNode == nodeID;
+        }), m_connections.<span class="hljs-built_in">end</span>());
+
+    m_nodes.<span class="hljs-built_in">erase</span>(it);
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ShaderGraph::connect</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> fromNode, <span class="hljs-type">int</span> fromPin, <span class="hljs-type">uint32_t</span> toNode, <span class="hljs-type">int</span> toPin)</span> </span>{
+    <span class="hljs-keyword">auto</span>* from = <span class="hljs-built_in">getNode</span>(fromNode);
+    <span class="hljs-keyword">auto</span>* to   = <span class="hljs-built_in">getNode</span>(toNode);
+    <span class="hljs-keyword">if</span> (!from || !to) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">if</span> (fromPin &lt; <span class="hljs-number">0</span> || fromPin &gt;= (<span class="hljs-type">int</span>)from-&gt;<span class="hljs-built_in">outputs</span>().<span class="hljs-built_in">size</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-keyword">if</span> (toPin &lt; <span class="hljs-number">0</span> || toPin &gt;= (<span class="hljs-type">int</span>)to-&gt;<span class="hljs-built_in">inputs</span>().<span class="hljs-built_in">size</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">canConnect</span>(from-&gt;<span class="hljs-built_in">outputs</span>()[fromPin].type, to-&gt;<span class="hljs-built_in">inputs</span>()[toPin].type))
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+
+    <span class="hljs-comment">// Disconnect existing input</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; c : m_connections) {
+        <span class="hljs-keyword">if</span> (c.toNode == toNode &amp;&amp; c.toPin == toPin) {
+            c.fromNode = fromNode;
+            c.fromPin = fromPin;
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        }
+    }
+
+    m_connections.<span class="hljs-built_in">push_back</span>({fromNode, fromPin, toNode, toPin});
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ShaderGraph::disconnect</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> fromNode, <span class="hljs-type">int</span> fromPin)</span> </span>{
+    <span class="hljs-keyword">auto</span> it = std::<span class="hljs-built_in">find_if</span>(m_connections.<span class="hljs-built_in">begin</span>(), m_connections.<span class="hljs-built_in">end</span>(),
+        [fromNode, fromPin](<span class="hljs-type">const</span> Connection&amp; c) {
+            <span class="hljs-keyword">return</span> c.fromNode == fromNode &amp;&amp; c.fromPin == fromPin;
+        });
+    <span class="hljs-keyword">if</span> (it == m_connections.<span class="hljs-built_in">end</span>()) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    m_connections.<span class="hljs-built_in">erase</span>(it);
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ShaderGraph::clear</span><span class="hljs-params">()</span> </span>{
+    m_nodes.<span class="hljs-built_in">clear</span>();
+    m_connections.<span class="hljs-built_in">clear</span>();
+    m_nextID = <span class="hljs-number">1</span>;
+}
+
+<span class="hljs-function">ShaderNode* <span class="hljs-title">ShaderGraph::getNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nodeID)</span> </span>{
+    <span class="hljs-keyword">auto</span> it = std::<span class="hljs-built_in">find_if</span>(m_nodes.<span class="hljs-built_in">begin</span>(), m_nodes.<span class="hljs-built_in">end</span>(),
+        [nodeID](<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; n) { <span class="hljs-keyword">return</span> n-&gt;<span class="hljs-built_in">id</span>() == nodeID; });
+    <span class="hljs-keyword">return</span> it != m_nodes.<span class="hljs-built_in">end</span>() ? it-&gt;<span class="hljs-built_in">get</span>() : <span class="hljs-literal">nullptr</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">const</span> ShaderNode* <span class="hljs-title">ShaderGraph::getNode</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nodeID)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">auto</span> it = std::<span class="hljs-built_in">find_if</span>(m_nodes.<span class="hljs-built_in">begin</span>(), m_nodes.<span class="hljs-built_in">end</span>(),
+        [nodeID](<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; n) { <span class="hljs-keyword">return</span> n-&gt;<span class="hljs-built_in">id</span>() == nodeID; });
+    <span class="hljs-keyword">return</span> it != m_nodes.<span class="hljs-built_in">end</span>() ? it-&gt;<span class="hljs-built_in">get</span>() : <span class="hljs-literal">nullptr</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ShaderGraph::getNodeConnections</span><span class="hljs-params">(<span class="hljs-type">uint32_t</span> nodeID,
+    std::vector&lt;std::pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt;&amp; inputs,
+    std::vector&lt;std::pair&lt;<span class="hljs-type">int</span>, <span class="hljs-type">int</span>&gt;&gt;&amp; outputs)</span> <span class="hljs-type">const</span>
+</span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; c : m_connections) {
+        <span class="hljs-keyword">if</span> (c.toNode == nodeID)   inputs.<span class="hljs-built_in">push_back</span>({c.fromNode, c.fromPin});
+        <span class="hljs-keyword">if</span> (c.fromNode == nodeID) outputs.<span class="hljs-built_in">push_back</span>({c.toNode, c.toPin});
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">ShaderGraph::canConnect</span><span class="hljs-params">(PinType fromType, PinType toType)</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-keyword">if</span> (fromType == toType) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    <span class="hljs-comment">// Float can connect to vec3/vec4 (auto-broadcast)</span>
+    <span class="hljs-keyword">if</span> (fromType == PinType::Float) <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">ShaderGraph::topologicalSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">uint32_t</span>&gt;&amp; sortedIDs)</span> <span class="hljs-type">const</span> </span>{
+    std::unordered_map&lt;<span class="hljs-type">uint32_t</span>, <span class="hljs-type">int</span>&gt; inDegree;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; n : m_nodes) inDegree[n-&gt;<span class="hljs-built_in">id</span>()] = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; c : m_connections) inDegree[c.toNode]++;
+
+    std::queue&lt;<span class="hljs-type">uint32_t</span>&gt; q;
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; [id, deg] : inDegree)
+        <span class="hljs-keyword">if</span> (deg == <span class="hljs-number">0</span>) q.<span class="hljs-built_in">push</span>(id);
+
+    <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>()) {
+        <span class="hljs-type">uint32_t</span> id = q.<span class="hljs-built_in">front</span>(); q.<span class="hljs-built_in">pop</span>();
+        sortedIDs.<span class="hljs-built_in">push_back</span>(id);
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; c : m_connections) {
+            <span class="hljs-keyword">if</span> (c.fromNode == id) {
+                inDegree[c.toNode]--;
+                <span class="hljs-keyword">if</span> (inDegree[c.toNode] == <span class="hljs-number">0</span>) q.<span class="hljs-built_in">push</span>(c.toNode);
+            }
+        }
+    }
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">ShaderGraph::compileGLSL</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+    std::vector&lt;<span class="hljs-type">uint32_t</span>&gt; sorted;
+    <span class="hljs-built_in">topologicalSort</span>(sorted);
+
+    std::string header = <span class="hljs-string">&quot;#version 460 core\n\n&quot;</span>;
+    header += <span class="hljs-string">&quot;uniform float u_time;\n&quot;</span>;
+    header += <span class="hljs-string">&quot;in vec2 texCoord;\n&quot;</span>;
+    header += <span class="hljs-string">&quot;in vec3 v_position;\n&quot;</span>;
+    header += <span class="hljs-string">&quot;out vec4 fragColor;\n\n&quot;</span>;
+
+    std::string body;
+    std::string outputVar;
+
+    <span class="hljs-comment">// Gather input vars for each node</span>
+    std::unordered_map&lt;<span class="hljs-type">uint32_t</span>, std::vector&lt;std::string&gt;&gt; nodeInputVars;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">uint32_t</span> id : sorted) {
+        std::vector&lt;std::string&gt; inputVars;
+        <span class="hljs-comment">// Find incoming connections</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; c : m_connections) {
+            <span class="hljs-keyword">if</span> (c.toNode == id) {
+                <span class="hljs-comment">// Find the var name from source node</span>
+                <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; c2 : m_connections) {
+                    (<span class="hljs-type">void</span>)c2;
+                }
+                inputVars.<span class="hljs-built_in">push_back</span>(fmt::format(<span class="hljs-string">&quot;var_{}&quot;</span>, c.fromNode));
+            } <span class="hljs-keyword">else</span> {
+                inputVars.<span class="hljs-built_in">push_back</span>(<span class="hljs-string">&quot;&quot;</span>);
+            }
+        }
+        <span class="hljs-comment">// Pad if fewer connections than inputs</span>
+        <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>* node = <span class="hljs-built_in">getNode</span>(id);
+        <span class="hljs-keyword">if</span> (node) {
+            <span class="hljs-keyword">while</span> ((<span class="hljs-type">int</span>)inputVars.<span class="hljs-built_in">size</span>() &lt; (<span class="hljs-type">int</span>)node-&gt;<span class="hljs-built_in">inputs</span>().<span class="hljs-built_in">size</span>())
+                inputVars.<span class="hljs-built_in">push_back</span>(<span class="hljs-string">&quot;&quot;</span>);
+        }
+
+        <span class="hljs-keyword">auto</span>* nodePtr = <span class="hljs-built_in">getNode</span>(id);
+        <span class="hljs-keyword">if</span> (nodePtr) {
+            body += <span class="hljs-string">&quot;    &quot;</span> + nodePtr-&gt;<span class="hljs-built_in">generateCode</span>(inputVars) + <span class="hljs-string">&quot;\n&quot;</span>;
+            <span class="hljs-keyword">if</span> (nodePtr-&gt;<span class="hljs-built_in">type</span>() == NodeType::OutputPBR)
+                outputVar = fmt::format(<span class="hljs-string">&quot;var_{}&quot;</span>, id);
+        }
+    }
+
+    std::string result = header;
+    result += <span class="hljs-string">&quot;void main() {\n&quot;</span>;
+    result += body;
+
+    <span class="hljs-keyword">if</span> (!outputVar.<span class="hljs-built_in">empty</span>()) {
+        result += fmt::format(<span class="hljs-string">&quot;    fragColor = {};\n&quot;</span>, outputVar);
+    } <span class="hljs-keyword">else</span> {
+        result += <span class="hljs-string">&quot;    fragColor = vec4(1.0, 0.0, 1.0, 1.0);\n&quot;</span>; <span class="hljs-comment">// magenta fallback</span>
+    }
+
+    result += <span class="hljs-string">&quot;}\n&quot;</span>;
+    <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-function">std::string <span class="hljs-title">ShaderGraph::compileHLSL</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+    <span class="hljs-comment">// For now return GLSL; HLSL generation follows same pattern</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">compileGLSL</span>();
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 3: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/ShaderGraph.hpp src/editor/ShaderGraph.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): add ShaderGraph with GLSL code generation&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-4-create-materialeditorpanel-imnodes-integration">Task 4: Create MaterialEditorPanel (ImNodes integration)<a class="anchor" href="#task-4-create-materialeditorpanel-imnodes-integration" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>doppio-archived/src/doppio/editor/MaterialEditorPanel.hpp</code></li>
+<li>Create: <code>doppio-archived/src/doppio/editor/MaterialEditorPanel.cpp</code></li>
+<li>Modify: <code>CMakeLists.txt</code> (add new source files to doppio target)</li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneEditor.hpp</code> (include and member)</li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneEditor.cpp</code> (render + init)</li>
+</ul>
+<p><strong>Step 1: Write MaterialEditorPanel.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/ShaderGraph.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/EditorTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/MeshTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;rhi/RenderDevice.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">EditorMode</span> { Graph, Text };
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">MaterialEditorPanel</span> : <span class="hljs-keyword">public</span> EditorPanel {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">MaterialEditorPanel</span>();
+    ~<span class="hljs-built_in">MaterialEditorPanel</span>() <span class="hljs-keyword">override</span> = <span class="hljs-keyword">default</span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onImGuiRender</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setMaterial</span><span class="hljs-params">(Ref&lt;Assets::Material3D&gt; material)</span></span>;
+    <span class="hljs-function">Ref&lt;Assets::Material3D&gt; <span class="hljs-title">material</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_material; }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">open</span><span class="hljs-params">()</span>  </span>{ m_open = <span class="hljs-literal">true</span>; }
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span> </span>{ m_open = <span class="hljs-literal">false</span>; }
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isOpen</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_open; }
+
+    <span class="hljs-comment">// Exposed for SceneEditor</span>
+    <span class="hljs-function">ShaderGraph&amp; <span class="hljs-title">graph</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> m_graph; }
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderMenuBar</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderGraphCanvas</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderTextEditor</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderPreviewWindow</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderInspector</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">recompileShader</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">showCompileError</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; msg)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderNodeContextMenu</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addDefaultNodes</span><span class="hljs-params">()</span></span>; <span class="hljs-comment">// Initialize default OutputPBR node</span>
+
+    ShaderGraph m_graph;
+    EditorMode m_mode = EditorMode::Graph;
+    <span class="hljs-type">bool</span> m_open = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span> m_showGrid = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span> m_autoCompile = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">float</span> m_previewRotation = <span class="hljs-number">0.0f</span>;
+
+    <span class="hljs-comment">// Text editor buffer</span>
+    <span class="hljs-type">char</span> m_codeBuffer[<span class="hljs-number">16</span> * <span class="hljs-number">1024</span>];
+    <span class="hljs-type">bool</span> m_textDirty = <span class="hljs-literal">false</span>;
+
+    Ref&lt;Assets::Material3D&gt; m_material;
+    std::string m_lastCompileError;
+    <span class="hljs-type">bool</span> m_hasError = <span class="hljs-literal">false</span>;
+
+    <span class="hljs-comment">// Preview</span>
+    RHI::RenderDevice* m_renderDevice = <span class="hljs-literal">nullptr</span>;
+    std::string m_compiledShaderCode;
+
+    <span class="hljs-comment">// Context menu</span>
+    <span class="hljs-type">bool</span> m_showNodeMenu = <span class="hljs-literal">false</span>;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 2: Write MaterialEditorPanel.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/MaterialEditorPanel.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imnodes.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;fmt/format.h&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-type">static</span> <span class="hljs-type">int</span> s_pinCounter = <span class="hljs-number">0</span>;
+
+MaterialEditorPanel::<span class="hljs-built_in">MaterialEditorPanel</span>() {
+    m_codeBuffer[<span class="hljs-number">0</span>] = <span class="hljs-string">&#x27;\0&#x27;</span>;
+    <span class="hljs-built_in">addDefaultNodes</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::addDefaultNodes</span><span class="hljs-params">()</span> </span>{
+    m_graph.<span class="hljs-built_in">addNode</span>(NodeType::OutputPBR);
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::setMaterial</span><span class="hljs-params">(Ref&lt;Assets::Material3D&gt; material)</span> </span>{
+    m_material = material;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::onImGuiRender</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (!m_open) <span class="hljs-keyword">return</span>;
+
+    ImGui::<span class="hljs-built_in">PushStyleVar</span>(ImGuiStyleVar_WindowPadding, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>));
+    ImGui::<span class="hljs-built_in">Begin</span>(<span class="hljs-string">&quot;Material Editor&quot;</span>, &amp;m_open, ImGuiWindowFlags_MenuBar);
+
+    <span class="hljs-built_in">renderMenuBar</span>();
+
+    <span class="hljs-comment">// Split into three zones</span>
+    ImGui::<span class="hljs-built_in">Columns</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;MatEditorMain&quot;</span>, <span class="hljs-literal">false</span>);
+    ImGui::<span class="hljs-built_in">SetColumnWidth</span>(<span class="hljs-number">0</span>, ImGui::<span class="hljs-built_in">GetContentRegionAvail</span>().x * <span class="hljs-number">0.65f</span>);
+
+    <span class="hljs-comment">// Left side: Graph or Text editor</span>
+    <span class="hljs-keyword">if</span> (m_mode == EditorMode::Graph) {
+        <span class="hljs-built_in">renderGraphCanvas</span>();
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-built_in">renderTextEditor</span>();
+    }
+
+    ImGui::<span class="hljs-built_in">NextColumn</span>();
+
+    <span class="hljs-comment">// Right side: Preview + Inspector</span>
+    <span class="hljs-built_in">renderPreviewWindow</span>();
+    <span class="hljs-built_in">renderInspector</span>();
+
+    ImGui::<span class="hljs-built_in">Columns</span>(<span class="hljs-number">1</span>);
+    ImGui::<span class="hljs-built_in">End</span>();
+    ImGui::<span class="hljs-built_in">PopStyleVar</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::renderMenuBar</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginMenuBar</span>()) {
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginMenu</span>(<span class="hljs-string">&quot;File&quot;</span>)) {
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;New&quot;</span>)) { m_graph.<span class="hljs-built_in">clear</span>(); <span class="hljs-built_in">addDefaultNodes</span>(); }
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Compile&quot;</span>, <span class="hljs-string">&quot;F5&quot;</span>)) <span class="hljs-built_in">recompileShader</span>();
+            ImGui::<span class="hljs-built_in">Separator</span>();
+            ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Auto-Compile&quot;</span>, <span class="hljs-literal">nullptr</span>, &amp;m_autoCompile);
+            ImGui::<span class="hljs-built_in">EndMenu</span>();
+        }
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginMenu</span>(<span class="hljs-string">&quot;View&quot;</span>)) {
+            ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Show Grid&quot;</span>, <span class="hljs-literal">nullptr</span>, &amp;m_showGrid);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Graph Mode&quot;</span>, <span class="hljs-literal">nullptr</span>, m_mode == EditorMode::Graph)) m_mode = EditorMode::Graph;
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Text Mode&quot;</span>, <span class="hljs-literal">nullptr</span>, m_mode == EditorMode::Text)) m_mode = EditorMode::Text;
+            ImGui::<span class="hljs-built_in">EndMenu</span>();
+        }
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginMenu</span>(<span class="hljs-string">&quot;Add Node&quot;</span>)) {
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Texture Sample&quot;</span>))   m_graph.<span class="hljs-built_in">addNode</span>(NodeType::TextureSample);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Color Constant&quot;</span>))    m_graph.<span class="hljs-built_in">addNode</span>(NodeType::ColorConstant);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Float Constant&quot;</span>))    m_graph.<span class="hljs-built_in">addNode</span>(NodeType::FloatConstant);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Multiply&quot;</span>))          m_graph.<span class="hljs-built_in">addNode</span>(NodeType::Multiply);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Add&quot;</span>))               m_graph.<span class="hljs-built_in">addNode</span>(NodeType::Add);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Lerp&quot;</span>))              m_graph.<span class="hljs-built_in">addNode</span>(NodeType::Lerp);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Time&quot;</span>))              m_graph.<span class="hljs-built_in">addNode</span>(NodeType::Time);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Vertex Position&quot;</span>))   m_graph.<span class="hljs-built_in">addNode</span>(NodeType::VertexPosition);
+            ImGui::<span class="hljs-built_in">Separator</span>();
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;PBR Output&quot;</span>))        m_graph.<span class="hljs-built_in">addNode</span>(NodeType::OutputPBR);
+            ImGui::<span class="hljs-built_in">EndMenu</span>();
+        }
+        ImGui::<span class="hljs-built_in">EndMenuBar</span>();
+    }
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::renderGraphCanvas</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">BeginChild</span>(<span class="hljs-string">&quot;GraphCanvas&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>), <span class="hljs-literal">true</span>, ImGuiWindowFlags_NoScrollbar);
+
+    ImNodes::<span class="hljs-built_in">BeginNodeEditor</span>();
+
+    <span class="hljs-comment">// Render background grid</span>
+    <span class="hljs-keyword">if</span> (m_showGrid) {
+        ImNodes::<span class="hljs-built_in">GetCurrentEditor</span>()-&gt;style.flags |= ImNodesStyleFlags_GridLines;
+    }
+
+    <span class="hljs-comment">// Apply style</span>
+    ImNodesStyle&amp; style = ImNodes::<span class="hljs-built_in">GetStyle</span>();
+    style.Colors[ImNodesCol_NodeBackground] = <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">30</span>, <span class="hljs-number">30</span>, <span class="hljs-number">30</span>, <span class="hljs-number">255</span>);
+    style.Colors[ImNodesCol_NodeBackgroundHovered] = <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">40</span>, <span class="hljs-number">40</span>, <span class="hljs-number">40</span>, <span class="hljs-number">255</span>);
+    style.Colors[ImNodesCol_NodeBackgroundSelected] = <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">50</span>, <span class="hljs-number">50</span>, <span class="hljs-number">50</span>, <span class="hljs-number">255</span>);
+
+    <span class="hljs-comment">// Render all nodes</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">auto</span>&amp; node : m_graph.<span class="hljs-built_in">nodes</span>()) {
+        ImNodes::<span class="hljs-built_in">BeginNode</span>(node-&gt;<span class="hljs-built_in">id</span>());
+
+        <span class="hljs-comment">// Title bar</span>
+        ImNodes::<span class="hljs-built_in">BeginNodeTitleBar</span>();
+        ImGui::<span class="hljs-built_in">TextUnformatted</span>(node-&gt;<span class="hljs-built_in">title</span>().<span class="hljs-built_in">c_str</span>());
+        ImNodes::<span class="hljs-built_in">EndNodeTitleBar</span>();
+
+        <span class="hljs-comment">// Input pins</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; (<span class="hljs-type">int</span>)node-&gt;<span class="hljs-built_in">inputs</span>().<span class="hljs-built_in">size</span>(); i++) {
+            <span class="hljs-keyword">auto</span>&amp; pin = node-&gt;<span class="hljs-built_in">inputs</span>()[i];
+            ImNodes::<span class="hljs-built_in">BeginInputAttribute</span>(s_pinCounter++);
+            ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;%s&quot;</span>, pin.name.<span class="hljs-built_in">c_str</span>());
+            ImNodes::<span class="hljs-built_in">EndInputAttribute</span>();
+        }
+
+        <span class="hljs-comment">// Properties (if any)</span>
+        ImGui::<span class="hljs-built_in">Spacing</span>();
+        node-&gt;<span class="hljs-built_in">renderProperties</span>();
+        ImGui::<span class="hljs-built_in">Spacing</span>();
+
+        <span class="hljs-comment">// Output pins</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; (<span class="hljs-type">int</span>)node-&gt;<span class="hljs-built_in">outputs</span>().<span class="hljs-built_in">size</span>(); i++) {
+            <span class="hljs-keyword">auto</span>&amp; pin = node-&gt;<span class="hljs-built_in">outputs</span>()[i];
+            ImNodes::<span class="hljs-built_in">BeginOutputAttribute</span>(s_pinCounter++);
+            ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;%s&quot;</span>, pin.name.<span class="hljs-built_in">c_str</span>());
+            ImNodes::<span class="hljs-built_in">EndOutputAttribute</span>();
+        }
+
+        ImNodes::<span class="hljs-built_in">EndNode</span>();
+    }
+
+    <span class="hljs-comment">// Render connections</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; conn : m_graph.<span class="hljs-built_in">connections</span>()) {
+        <span class="hljs-comment">// Find the attribute IDs - we need to track these</span>
+        ImNodes::<span class="hljs-built_in">Connection</span>(conn.fromNode, conn.fromPin, conn.toNode, conn.toPin);
+    }
+
+    <span class="hljs-comment">// Handle new connections</span>
+    <span class="hljs-type">int</span> fromAttr, toAttr;
+    <span class="hljs-keyword">if</span> (ImNodes::<span class="hljs-built_in">IsLinkCreated</span>(&amp;fromAttr, &amp;toAttr)) {
+        <span class="hljs-comment">// Map attribute IDs back to node+pin</span>
+        <span class="hljs-comment">// For MVP, we accept the connection</span>
+    }
+
+    <span class="hljs-comment">// Handle deletion</span>
+    <span class="hljs-type">int</span> deletedLink;
+    <span class="hljs-keyword">if</span> (ImNodes::<span class="hljs-built_in">IsLinkDestroyed</span>(&amp;deletedLink)) {
+        <span class="hljs-comment">// Remove the connection</span>
+    }
+
+    <span class="hljs-comment">// Context menu</span>
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">IsMouseReleased</span>(<span class="hljs-number">1</span>) &amp;&amp; ImGui::<span class="hljs-built_in">IsWindowHovered</span>()) {
+        ImGui::<span class="hljs-built_in">OpenPopup</span>(<span class="hljs-string">&quot;AddNodePopup&quot;</span>);
+    }
+
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginPopup</span>(<span class="hljs-string">&quot;AddNodePopup&quot;</span>)) {
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Texture Sample&quot;</span>))   m_graph.<span class="hljs-built_in">addNode</span>(NodeType::TextureSample);
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Color Constant&quot;</span>))    m_graph.<span class="hljs-built_in">addNode</span>(NodeType::ColorConstant);
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Float Constant&quot;</span>))    m_graph.<span class="hljs-built_in">addNode</span>(NodeType::FloatConstant);
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Multiply&quot;</span>))          m_graph.<span class="hljs-built_in">addNode</span>(NodeType::Multiply);
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Add&quot;</span>))               m_graph.<span class="hljs-built_in">addNode</span>(NodeType::Add);
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Lerp&quot;</span>))              m_graph.<span class="hljs-built_in">addNode</span>(NodeType::Lerp);
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Time&quot;</span>))              m_graph.<span class="hljs-built_in">addNode</span>(NodeType::Time);
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Vertex Position&quot;</span>))   m_graph.<span class="hljs-built_in">addNode</span>(NodeType::VertexPosition);
+        ImGui::<span class="hljs-built_in">Separator</span>();
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;PBR Output&quot;</span>))        m_graph.<span class="hljs-built_in">addNode</span>(NodeType::OutputPBR);
+        ImGui::<span class="hljs-built_in">EndPopup</span>();
+    }
+
+    ImNodes::<span class="hljs-built_in">EndNodeEditor</span>();
+    ImGui::<span class="hljs-built_in">EndChild</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::renderTextEditor</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">BeginChild</span>(<span class="hljs-string">&quot;TextEditor&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>), <span class="hljs-literal">true</span>);
+
+    ImGui::<span class="hljs-built_in">TextUnformatted</span>(<span class="hljs-string">&quot;GLSL Editor (Text mode)&quot;</span>);
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    ImVec2 size = ImGui::<span class="hljs-built_in">GetContentRegionAvail</span>();
+    ImGui::<span class="hljs-built_in">InputTextMultiline</span>(<span class="hljs-string">&quot;##code&quot;</span>, m_codeBuffer, <span class="hljs-keyword">sizeof</span>(m_codeBuffer),
+        size, ImGuiInputTextFlags_AllowTabInput);
+
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Compile&quot;</span>)) {
+        <span class="hljs-built_in">recompileShader</span>();
+    }
+    ImGui::<span class="hljs-built_in">SameLine</span>();
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">Button</span>(<span class="hljs-string">&quot;Sync to Graph&quot;</span>)) {
+        <span class="hljs-comment">// For now, just copy text</span>
+    }
+
+    ImGui::<span class="hljs-built_in">EndChild</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::renderPreviewWindow</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">BeginChild</span>(<span class="hljs-string">&quot;Preview&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>), <span class="hljs-literal">true</span>);
+
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Preview&quot;</span>);
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    <span class="hljs-comment">// Get the available size for the preview</span>
+    ImVec2 avail = ImGui::<span class="hljs-built_in">GetContentRegionAvail</span>();
+    avail.y -= <span class="hljs-number">30</span>; <span class="hljs-comment">// Leave room for controls</span>
+
+    <span class="hljs-comment">// Render a placeholder preview sphere using ImGui</span>
+    ImDrawList* drawList = ImGui::<span class="hljs-built_in">GetWindowDrawList</span>();
+    ImVec2 center = ImGui::<span class="hljs-built_in">GetCursorScreenPos</span>();
+    center.x += avail.x * <span class="hljs-number">0.5f</span>;
+    center.y += avail.y * <span class="hljs-number">0.5f</span>;
+    <span class="hljs-type">float</span> radius = (avail.x &lt; avail.y ? avail.x : avail.y) * <span class="hljs-number">0.4f</span>;
+
+    <span class="hljs-comment">// Draw a 3D-looking sphere (ImGui fallback)</span>
+    ImU32 sphereColor = ImGui::<span class="hljs-built_in">GetColorU32</span>(<span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0.3f</span>, <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.9f</span>, <span class="hljs-number">1.0f</span>));
+    ImU32 outlineColor = ImGui::<span class="hljs-built_in">GetColorU32</span>(<span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0.1f</span>, <span class="hljs-number">0.2f</span>, <span class="hljs-number">0.4f</span>, <span class="hljs-number">1.0f</span>));
+
+    drawList-&gt;<span class="hljs-built_in">AddCircleFilled</span>(center, radius, sphereColor, <span class="hljs-number">32</span>);
+    drawList-&gt;<span class="hljs-built_in">AddCircle</span>(center, radius, outlineColor, <span class="hljs-number">32</span>);
+
+    <span class="hljs-comment">// Add some &quot;lighting&quot; effect</span>
+    drawList-&gt;<span class="hljs-built_in">AddCircleFilled</span>(
+        <span class="hljs-built_in">ImVec2</span>(center.x - radius * <span class="hljs-number">0.3f</span>, center.y - radius * <span class="hljs-number">0.3f</span>),
+        radius * <span class="hljs-number">0.15f</span>,
+        <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">80</span>),
+        <span class="hljs-number">16</span>);
+
+    ImGui::<span class="hljs-built_in">SetCursorScreenPos</span>(<span class="hljs-built_in">ImVec2</span>(center.x - radius, center.y + radius + <span class="hljs-number">5</span>));
+    ImGui::<span class="hljs-built_in">TextUnformatted</span>(<span class="hljs-string">&quot;RHI Preview&quot;</span>);
+
+    <span class="hljs-comment">// Controls below preview</span>
+    ImGui::<span class="hljs-built_in">SetCursorPosY</span>(ImGui::<span class="hljs-built_in">GetCursorPosY</span>() + <span class="hljs-number">10</span>);
+    ImGui::<span class="hljs-built_in">SliderFloat</span>(<span class="hljs-string">&quot;Rotation&quot;</span>, &amp;m_previewRotation, <span class="hljs-number">0.0f</span>, <span class="hljs-number">360.0f</span>, <span class="hljs-string">&quot;%.0f deg&quot;</span>);
+
+    <span class="hljs-keyword">if</span> (m_hasError) {
+        ImGui::<span class="hljs-built_in">PushStyleColor</span>(ImGuiCol_Text, <span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>));
+        ImGui::<span class="hljs-built_in">TextWrapped</span>(<span class="hljs-string">&quot;Error: %s&quot;</span>, m_lastCompileError.<span class="hljs-built_in">c_str</span>());
+        ImGui::<span class="hljs-built_in">PopStyleColor</span>();
+    }
+
+    ImGui::<span class="hljs-built_in">EndChild</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::renderInspector</span><span class="hljs-params">()</span> </span>{
+    ImGui::<span class="hljs-built_in">BeginChild</span>(<span class="hljs-string">&quot;Inspector&quot;</span>, <span class="hljs-built_in">ImVec2</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>), <span class="hljs-literal">true</span>);
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Properties&quot;</span>);
+    ImGui::<span class="hljs-built_in">Separator</span>();
+
+    <span class="hljs-comment">// Show selected node properties</span>
+    ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Selected node properties&quot;</span>);
+
+    <span class="hljs-comment">// Material-level properties</span>
+    <span class="hljs-keyword">if</span> (m_material) {
+        ImGui::<span class="hljs-built_in">Separator</span>();
+        ImGui::<span class="hljs-built_in">Text</span>(<span class="hljs-string">&quot;Material: %s&quot;</span>, m_material-&gt;name.<span class="hljs-built_in">c_str</span>());
+
+        ImGui::<span class="hljs-built_in">ColorEdit4</span>(<span class="hljs-string">&quot;Albedo&quot;</span>, &amp;m_material-&gt;albedoColor.r);
+        ImGui::<span class="hljs-built_in">SliderFloat</span>(<span class="hljs-string">&quot;Roughness&quot;</span>, &amp;m_material-&gt;roughness, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>);
+        ImGui::<span class="hljs-built_in">SliderFloat</span>(<span class="hljs-string">&quot;Metallic&quot;</span>, &amp;m_material-&gt;metallic, <span class="hljs-number">0.0f</span>, <span class="hljs-number">1.0f</span>);
+    }
+
+    ImGui::<span class="hljs-built_in">EndChild</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::recompileShader</span><span class="hljs-params">()</span> </span>{
+    m_hasError = <span class="hljs-literal">false</span>;
+    m_lastCompileError.<span class="hljs-built_in">clear</span>();
+
+    std::string code;
+    <span class="hljs-keyword">if</span> (m_mode == EditorMode::Graph) {
+        code = m_graph.<span class="hljs-built_in">compileGLSL</span>();
+        m_compiledShaderCode = code;
+    } <span class="hljs-keyword">else</span> {
+        code = m_codeBuffer;
+    }
+
+    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Pass to RHI for real GPU compilation</span>
+    <span class="hljs-comment">// For now, validate syntax-level checks</span>
+    <span class="hljs-keyword">if</span> (code.<span class="hljs-built_in">empty</span>()) {
+        <span class="hljs-built_in">showCompileError</span>(<span class="hljs-string">&quot;Generated shader code is empty&quot;</span>);
+        <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (code.<span class="hljs-built_in">find</span>(<span class="hljs-string">&quot;void main()&quot;</span>) == std::string::npos) {
+        <span class="hljs-built_in">showCompileError</span>(<span class="hljs-string">&quot;Shader missing main() function&quot;</span>);
+        <span class="hljs-keyword">return</span>;
+    }
+
+    <span class="hljs-comment">// Store compiled code for RHI pipeline creation</span>
+    m_compiledShaderCode = code;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">MaterialEditorPanel::showCompileError</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; msg)</span> </span>{
+    m_hasError = <span class="hljs-literal">true</span>;
+    m_lastCompileError = msg;
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 3: Add to CMakeLists.txt</strong></p>
+<p>Add these source files to the doppio target:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake">src/editor/ShaderNode.cpp
+src/editor/ShaderGraph.cpp
+src/editor/MaterialEditorPanel.cpp
+</code></pre></div>
+<p>And imnodes include:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-variable">${imnodes_SOURCE_DIR}</span>
+</code></pre></div>
+<p>And imnodes source:</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-variable">${imnodes_SOURCE_DIR}</span>/imnodes.cpp
+</code></pre></div>
+<p><strong>Step 4: Integrate into SceneEditor</strong></p>
+<p>In <code>SceneEditor.hpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/MaterialEditorPanel.hpp&quot;</span></span>
+<span class="hljs-comment">// Member:</span>
+MaterialEditorPanel m_materialEditor;
+</code></pre></div>
+<p>In <code>SceneEditor.cpp</code> render loop:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">m_materialEditor.<span class="hljs-built_in">onImGuiRender</span>();
+</code></pre></div>
+<p><strong>Step 5: Verify build</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; cmake .. &amp;&amp; make -j4 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+</code></pre></div>
+<p><strong>Step 6: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add CMakeLists.txt src/editor/MaterialEditorPanel.hpp src/editor/MaterialEditorPanel.cpp src/editor/SceneEditor.hpp src/editor/SceneEditor.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): add Material Editor panel with ImNodes graph&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-5-connect-rhi-preview">Task 5: Connect RHI preview<a class="anchor" href="#task-5-connect-rhi-preview" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/MaterialEditorPanel.cpp</code></li>
+<li>Create: <code>src/editor/PreviewRenderer.hpp</code></li>
+<li>Create: <code>src/editor/PreviewRenderer.cpp</code></li>
+</ul>
+<p><strong>Step 1: Write PreviewRenderer.hpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;rhi/RenderDevice.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;rhi/CommandBuffer.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;assets/MeshTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;memory&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PreviewRenderer</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">PreviewRenderer</span>() = <span class="hljs-keyword">default</span>;
+    ~<span class="hljs-built_in">PreviewRenderer</span>();
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">init</span><span class="hljs-params">(RHI::RenderDevice* device)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shutdown</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">render</span><span class="hljs-params">(RHI::CommandBuffer* cmd, <span class="hljs-type">const</span> std::string&amp; shaderCode)</span></span>;
+
+    <span class="hljs-comment">// ImGui fallback when RHI unavailable</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">renderFallback</span><span class="hljs-params">(<span class="hljs-type">float</span> rotationDeg, <span class="hljs-type">float</span> width, <span class="hljs-type">float</span> height)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    RHI::RenderDevice* m_device = <span class="hljs-literal">nullptr</span>;
+    RHI::Shader* m_vertexShader = <span class="hljs-literal">nullptr</span>;
+    RHI::Shader* m_fragmentShader = <span class="hljs-literal">nullptr</span>;
+    RHI::Pipeline* m_pipeline = <span class="hljs-literal">nullptr</span>;
+    RHI::Buffer* m_sphereVertices = <span class="hljs-literal">nullptr</span>;
+    RHI::Buffer* m_sphereIndices = <span class="hljs-literal">nullptr</span>;
+    u32 m_indexCount = <span class="hljs-number">0</span>;
+    <span class="hljs-type">bool</span> m_initialized = <span class="hljs-literal">false</span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">createSphereMesh</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">createShaderPipeline</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; shaderCode)</span></span>;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 2: Write PreviewRenderer.cpp</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;editor/PreviewRenderer.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;imgui.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Editor {
+
+PreviewRenderer::~<span class="hljs-built_in">PreviewRenderer</span>() {
+    <span class="hljs-built_in">shutdown</span>();
+}
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">PreviewRenderer::init</span><span class="hljs-params">(RHI::RenderDevice* device)</span> </span>{
+    m_device = device;
+    <span class="hljs-keyword">if</span> (!m_device || !m_device-&gt;<span class="hljs-built_in">isInitialized</span>()) {
+        m_initialized = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    m_initialized = <span class="hljs-built_in">createSphereMesh</span>();
+    <span class="hljs-keyword">return</span> m_initialized;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">PreviewRenderer::shutdown</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (m_device) {
+        <span class="hljs-keyword">if</span> (m_vertexShader)   m_device-&gt;<span class="hljs-built_in">destroyShader</span>(m_vertexShader);
+        <span class="hljs-keyword">if</span> (m_fragmentShader) m_device-&gt;<span class="hljs-built_in">destroyShader</span>(m_fragmentShader);
+        <span class="hljs-keyword">if</span> (m_pipeline)       { <span class="hljs-comment">/* destroy via RHI */</span> }
+        <span class="hljs-keyword">if</span> (m_sphereVertices) m_device-&gt;<span class="hljs-built_in">destroyBuffer</span>(m_sphereVertices);
+        <span class="hljs-keyword">if</span> (m_sphereIndices)  m_device-&gt;<span class="hljs-built_in">destroyBuffer</span>(m_sphereIndices);
+    }
+    m_vertexShader = <span class="hljs-literal">nullptr</span>;
+    m_fragmentShader = <span class="hljs-literal">nullptr</span>;
+    m_pipeline = <span class="hljs-literal">nullptr</span>;
+    m_sphereVertices = <span class="hljs-literal">nullptr</span>;
+    m_sphereIndices = <span class="hljs-literal">nullptr</span>;
+    m_initialized = <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">PreviewRenderer::createSphereMesh</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// Simple sphere with 32 segments</span>
+    <span class="hljs-type">const</span> <span class="hljs-type">int</span> segs = <span class="hljs-number">32</span>;
+    std::vector&lt;<span class="hljs-type">float</span>&gt; verts;
+    std::vector&lt;<span class="hljs-type">uint32_t</span>&gt; indices;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> lat = <span class="hljs-number">0</span>; lat &lt;= segs; lat++) {
+        <span class="hljs-type">float</span> theta = (<span class="hljs-type">float</span>)lat * <span class="hljs-number">3.14159f</span> / (<span class="hljs-type">float</span>)segs;
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> lon = <span class="hljs-number">0</span>; lon &lt;= segs; lon++) {
+            <span class="hljs-type">float</span> phi = (<span class="hljs-type">float</span>)lon * <span class="hljs-number">2.0f</span> * <span class="hljs-number">3.14159f</span> / (<span class="hljs-type">float</span>)segs;
+            <span class="hljs-type">float</span> x = <span class="hljs-built_in">sinf</span>(theta) * <span class="hljs-built_in">cosf</span>(phi);
+            <span class="hljs-type">float</span> y = <span class="hljs-built_in">cosf</span>(theta);
+            <span class="hljs-type">float</span> z = <span class="hljs-built_in">sinf</span>(theta) * <span class="hljs-built_in">sinf</span>(phi);
+            verts.<span class="hljs-built_in">push_back</span>(x); verts.<span class="hljs-built_in">push_back</span>(y); verts.<span class="hljs-built_in">push_back</span>(z);
+            verts.<span class="hljs-built_in">push_back</span>(x); verts.<span class="hljs-built_in">push_back</span>(y); verts.<span class="hljs-built_in">push_back</span>(z); <span class="hljs-comment">// normal</span>
+            verts.<span class="hljs-built_in">push_back</span>((<span class="hljs-type">float</span>)lon / segs); verts.<span class="hljs-built_in">push_back</span>((<span class="hljs-type">float</span>)lat / segs); <span class="hljs-comment">// uv</span>
+        }
+    }
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> lat = <span class="hljs-number">0</span>; lat &lt; segs; lat++) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> lon = <span class="hljs-number">0</span>; lon &lt; segs; lon++) {
+            <span class="hljs-type">int</span> first = lat * (segs + <span class="hljs-number">1</span>) + lon;
+            <span class="hljs-type">int</span> second = first + segs + <span class="hljs-number">1</span>;
+            indices.<span class="hljs-built_in">push_back</span>(first);
+            indices.<span class="hljs-built_in">push_back</span>(second);
+            indices.<span class="hljs-built_in">push_back</span>(first + <span class="hljs-number">1</span>);
+            indices.<span class="hljs-built_in">push_back</span>(second);
+            indices.<span class="hljs-built_in">push_back</span>(second + <span class="hljs-number">1</span>);
+            indices.<span class="hljs-built_in">push_back</span>(first + <span class="hljs-number">1</span>);
+        }
+    }
+
+    m_indexCount = (<span class="hljs-type">uint32_t</span>)indices.<span class="hljs-built_in">size</span>();
+
+    <span class="hljs-keyword">if</span> (m_device) {
+        RHI::BufferDesc desc;
+        desc.size = verts.<span class="hljs-built_in">size</span>() * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">float</span>);
+        desc.name = <span class="hljs-string">&quot;SphereVerts&quot;</span>;
+        m_sphereVertices = m_device-&gt;<span class="hljs-built_in">createBuffer</span>(desc, RHI::BufferUsage::Vertex);
+
+        desc.size = indices.<span class="hljs-built_in">size</span>() * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">uint32_t</span>);
+        desc.name = <span class="hljs-string">&quot;SphereIndices&quot;</span>;
+        m_sphereIndices = m_device-&gt;<span class="hljs-built_in">createBuffer</span>(desc, RHI::BufferUsage::Index);
+        <span class="hljs-comment">// Note: actual upload requires CommandBuffer::upload()</span>
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">PreviewRenderer::createShaderPipeline</span><span class="hljs-params">(<span class="hljs-type">const</span> std::string&amp; shaderCode)</span> </span>{
+    (<span class="hljs-type">void</span>)shaderCode;
+    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Create RHI shader and pipeline from generated code</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">PreviewRenderer::render</span><span class="hljs-params">(RHI::CommandBuffer* cmd, <span class="hljs-type">const</span> std::string&amp; shaderCode)</span> </span>{
+    (<span class="hljs-type">void</span>)cmd;
+    (<span class="hljs-type">void</span>)shaderCode;
+    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> Full RHI pipeline render</span>
+}
+
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">PreviewRenderer::renderFallback</span><span class="hljs-params">(<span class="hljs-type">float</span> rotationDeg, <span class="hljs-type">float</span> width, <span class="hljs-type">float</span> height)</span> </span>{
+    ImDrawList* dl = ImGui::<span class="hljs-built_in">GetWindowDrawList</span>();
+    ImVec2 center = ImGui::<span class="hljs-built_in">GetCursorScreenPos</span>();
+    center.x += width * <span class="hljs-number">0.5f</span>;
+    center.y += height * <span class="hljs-number">0.5f</span>;
+    <span class="hljs-type">float</span> radius = (width &lt; height ? width : height) * <span class="hljs-number">0.4f</span>;
+
+    ImU32 col = ImGui::<span class="hljs-built_in">GetColorU32</span>(<span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0.3f</span>, <span class="hljs-number">0.5f</span>, <span class="hljs-number">0.9f</span>, <span class="hljs-number">1.0f</span>));
+    ImU32 outline = ImGui::<span class="hljs-built_in">GetColorU32</span>(<span class="hljs-built_in">ImVec4</span>(<span class="hljs-number">0.1f</span>, <span class="hljs-number">0.2f</span>, <span class="hljs-number">0.4f</span>, <span class="hljs-number">1.0f</span>));
+
+    <span class="hljs-comment">// Animated rotation</span>
+    <span class="hljs-type">float</span> rad = rotationDeg * <span class="hljs-number">3.14159f</span> / <span class="hljs-number">180.0f</span>;
+
+    dl-&gt;<span class="hljs-built_in">AddCircleFilled</span>(center, radius, col, <span class="hljs-number">32</span>);
+    dl-&gt;<span class="hljs-built_in">AddCircle</span>(center, radius, outline, <span class="hljs-number">32</span>);
+
+    <span class="hljs-comment">// highlight</span>
+    dl-&gt;<span class="hljs-built_in">AddCircleFilled</span>(
+        <span class="hljs-built_in">ImVec2</span>(center.x + <span class="hljs-built_in">cosf</span>(rad) * radius * <span class="hljs-number">0.3f</span>, center.y + <span class="hljs-built_in">sinf</span>(rad) * radius * <span class="hljs-number">0.3f</span>),
+        radius * <span class="hljs-number">0.12f</span>, <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">255</span>, <span class="hljs-number">60</span>), <span class="hljs-number">16</span>);
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Editor</span>
+</code></pre></div>
+<p><strong>Step 3: Integrate PreviewRenderer into MaterialEditorPanel</strong></p>
+<p>Add as member: <code>PreviewRenderer m_previewRenderer;</code></p>
+<p>Call in <code>renderPreviewWindow()</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">m_previewRenderer.<span class="hljs-built_in">renderFallback</span>(m_previewRotation, avail.x, avail.y);
+</code></pre></div>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/editor/PreviewRenderer.hpp src/editor/PreviewRenderer.cpp
+git commit -m <span class="hljs-string">&quot;feat(editor): add PreviewRenderer for RHI + ImGui shader preview&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-6-update-testscmakeliststxt-and-verify-all-tests-pass">Task 6: Update tests/CMakeLists.txt and verify all tests pass<a class="anchor" href="#task-6-update-testscmakeliststxt-and-verify-all-tests-pass" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>tests/CMakeLists.txt</code> (add all new editor source files)</li>
+</ul>
+<p><strong>Step 1: Add to tests/CMakeLists.txt</strong></p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake">../src/editor/ShaderNode.cpp
+../src/editor/ShaderGraph.cpp
+../src/editor/MaterialEditorPanel.cpp
+../src/editor/PreviewRenderer.cpp
+</code></pre></div>
+<p><strong>Step 2: Build tests</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; cmake .. &amp;&amp; make -j4 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -10
+</code></pre></div>
+<p><strong>Step 3: Run tests</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./tests/CaffeineTest
+</code></pre></div>
+<p>Expected: All tests pass</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add tests/CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;build: add shader editor source files to test build&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-7-integration-and-edge-case-handling">Task 7: Integration and edge case handling<a class="anchor" href="#task-7-integration-and-edge-case-handling" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/MaterialEditorPanel.cpp</code></li>
+</ul>
+<p><strong>Step 1: Handle edge cases</strong></p>
+<ul>
+<li>Empty graph → show &quot;Add nodes to begin&quot; placeholder</li>
+<li>No OutputPBR node → show warning</li>
+<li>Cyclic connections → detect and reject in connect()</li>
+<li>Empty code buffer in text mode → show &quot;No shadow code written&quot;</li>
+<li>Compilation with errors → show red indicator on affected nodes</li>
+</ul>
+<p><strong>Step 2: Final testing</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> build &amp;&amp; cmake .. &amp;&amp; make -j4 &amp;&amp; ./tests/CaffeineTest
+</code></pre></div>
+<p><strong>Step 3: Final commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git commit -am <span class="hljs-string">&quot;feat(editor): add Material &amp; Shader Editor with ImNodes graph and preview&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="summary">Summary<a class="anchor" href="#summary" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+<th>Files</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Add ImNodes dependency</td>
+<td>CMakeLists.txt</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ShaderNode hierarchy (9 node types + code gen)</td>
+<td>ShaderNode.hpp, ShaderNode.cpp</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ShaderGraph (graph management + GLSL compilation)</td>
+<td>ShaderGraph.hpp, ShaderGraph.cpp</td>
+</tr>
+<tr>
+<td>4</td>
+<td>MaterialEditorPanel (ImNodes UI, 3 sub-panels)</td>
+<td>MaterialEditorPanel.hpp/.cpp, SceneEditor integration</td>
+</tr>
+<tr>
+<td>5</td>
+<td>PreviewRenderer (RHI + ImGui fallback)</td>
+<td>PreviewRenderer.hpp/.cpp</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Test build + pass</td>
+<td>tests/CMakeLists.txt</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Edge cases + final integration</td>
+<td>MaterialEditorPanel.cpp</td>
+</tr>
+</tbody>
+</table></div>
+<p>Total new files: 6 (hpp/cpp pairs for ShaderNode, ShaderGraph, MaterialEditorPanel, PreviewRenderer)</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-16-material-shader-editor-plan.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/"><span>Previous</span><strong>ProjectStartupDialog - Tab-Based Project Management Design</strong></a><a class="pager-next" href="/en/docs/plans/2026-05-16-material-shader-editor-design/"><span>Next</span><strong>Material &amp; Shader Editor - Design Document</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l3"><a href="#task-1-add-imnodes-dependency">Task 1: Add ImNodes dependency</a></li><li class="l3"><a href="#task-2-create-shadernode-base-and-derived-node-classes">Task 2: Create ShaderNode base and derived node classes</a></li><li class="l3"><a href="#task-3-implement-shadergraph-graph-management-compilation">Task 3: Implement ShaderGraph (graph management + compilation)</a></li><li class="l3"><a href="#task-4-create-materialeditorpanel-imnodes-integration">Task 4: Create MaterialEditorPanel (ImNodes integration)</a></li><li class="l3"><a href="#task-5-connect-rhi-preview">Task 5: Connect RHI preview</a></li><li class="l3"><a href="#task-6-update-testscmakeliststxt-and-verify-all-tests-pass">Task 6: Update tests/CMakeLists.txt and verify all tests pass</a></li><li class="l3"><a href="#task-7-integration-and-edge-case-handling">Task 7: Integration and edge case handling</a></li><li class="l2"><a href="#summary">Summary</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

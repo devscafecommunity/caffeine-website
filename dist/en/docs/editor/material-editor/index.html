@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Material editor · Caffeine</title>
+<meta name="description" content="The Material tab edits .mat PBR assets in the Rust editor, while the engine owns the material model, the preview renderer and the CAFMAT3 file format.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Material editor · Caffeine">
+<meta property="og:description" content="The Material tab edits .mat PBR assets in the Rust editor, while the engine owns the material model, the preview renderer and the CAFMAT3 file format.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/editor/material-editor/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/editor/material-editor/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/editor/material-editor/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/editor/material-editor/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link active" href="/en/docs/editor/material-editor/" aria-current="page">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Material editor</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span class="doc-badge">Engine</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/crates/ui/src/uikit/panels/material.rs"><code>panels/material.rs</code></a></span>
+</div>
+<p class="doc-lede">The Material tab edits <code>.mat</code> PBR assets in the Rust
+editor, while the engine owns the material model, the preview renderer and the
+<code>CAFMAT3</code> file format.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/editor/material-panel.png" alt="Material tab with surface, maps, UV, advanced and baker sections" loading="lazy">
+  <figcaption>The Material tab. Values publish to the engine material cache immediately; the renderer reads the same surface for the viewport and the preview sphere.</figcaption>
+</figure>
+<h2 id="where-it-lives">Where it lives<a class="anchor" href="#where-it-lives" aria-label="Link to this section">#</a></h2>
+<table class="doc-table">
+  <thead>
+    <tr><th>Part</th><th>Owner</th><th>Location</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Material panel (Rust UI)</td><td>Doppio</td><td><code>uikit/panels/material.rs</code></td></tr>
+    <tr><td>Material model and file format</td><td>Engine</td><td><code>src/caffeine/assets/MaterialTypes.hpp</code>, <code>MaterialFile.cpp</code></td></tr>
+    <tr><td>Offscreen preview</td><td>Engine</td><td><code>src/caffeine/render/MaterialPreviewRenderer.cpp</code></td></tr>
+    <tr><td>PBR shader</td><td>Engine</td><td><code>scene_lit.frag</code> / <code>terrain_lit.frag</code></td></tr>
+  </tbody>
+</table>
+<p>The archived C++ <code>MaterialEditorPanel.cpp</code> is not the current editor. Doppio reads and
+writes materials through the C ABI, and the panel is a pure Rust view over
+<code>doppio_engine::Material</code>.</p>
+<h2 id="data-flow">Data flow<a class="anchor" href="#data-flow" aria-label="Link to this section">#</a></h2>
+<ol>
+<li>Open or create a <code>.mat</code> (the file starts with <code>CAFMAT3</code>; <code>CAFMAT1</code> and <code>CAFMAT2</code> are still loaded).</li>
+<li>A field edit updates <code>MaterialSurface</code> in memory. The engine crate wraps
+<code>caffeine_material_save</code>, <code>caffeine_session_apply_material</code> and the asynchronous
+<code>caffeine_session_render_material_preview_begin</code> / <code>..._poll</code> pair.</li>
+<li>The engine updates its material cache and asks the preview renderer for a new
+frame; the viewport reads the same surface.</li>
+<li>The preview renderer draws a sphere on a small floor with a directional light and
+the scene sky, using HDR, the post-processing stack and reflection probes.</li>
+<li><strong>Save</strong> writes <code>CAFMAT3</code> to disk; the material is then available to the asset
+browser and to scenes.</li>
+</ol>
+<div class="doc-callout doc-callout--note">
+  <p><strong>Note.</strong> Albedo is stored in sRGB as picked in the editor. The
+  renderer linearises it in the shader; do not pre-linearise values in a script.</p>
+</div>
+<h2 id="panel-sections">Panel sections<a class="anchor" href="#panel-sections" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Surface</strong></td>
+<td>Albedo (RGBA), metallic, roughness, reflectance, emission colour and strength.</td>
+</tr>
+<tr>
+<td><strong>Maps</strong></td>
+<td>Albedo, normal, ORM and emission map slots with asset pickers, normal strength, AO strength and DirectX normal convention.</td>
+</tr>
+<tr>
+<td><strong>UV</strong></td>
+<td>Tiling, offset and object-scale UVs (a mesh scaled 2× keeps texture density).</td>
+</tr>
+<tr>
+<td><strong>Advanced</strong></td>
+<td>Alpha mode and cutoff, transmission and IOR, clearcoat and roughness, sheen colour and roughness, iridescence strength/thickness/IOR, reflection controls and parallax/displacement.</td>
+</tr>
+<tr>
+<td><strong>Baker</strong></td>
+<td>Normal/AO/roughness/metallic/ORM bakes, Unity packings, resolution and strength.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Height is read from the alpha channel of the normal map. <code>heightScale</code> enables
+parallax occlusion; <code>displacementMode = 1</code> switches to geometric displacement with
+mesh subdivision, so the silhouette changes and relief casts real shadows.</p>
+<h2 id="preview">Preview<a class="anchor" href="#preview" aria-label="Link to this section">#</a></h2>
+<p>The preview sphere uses the same <code>scene_lit</code> shader as the viewport. Controls in the
+panel choose the shape, environment, exposure, light generation and sun
+yaw/elevation/intensity. TAA, probes and auto-exposure request extra frames until the
+image converges.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/editor/generator-red-brick.png" alt="Material Generator baking a red brick material into the open material" loading="lazy">
+  <figcaption>The Material Generator can build a material from a node graph and bake it into the open <code>.mat</code>.</figcaption>
+</figure>
+<h2 id="material-generator">Material Generator<a class="anchor" href="#material-generator" aria-label="Link to this section">#</a></h2>
+<p>The <strong>Material Generator</strong> tab shares the centre pane with the viewport. It is a node
+graph over image, noise, pattern, filter, blend and output nodes, with a live preview,
+channel views (base, normal, height, roughness, AO, emissive, opacity, metal) and
+channel packing for ORM and Unity layouts. <strong>Bake to Material</strong> writes the selected
+maps into the open material.</p>
+<p>See the <a href="/en/docs/doppio/material-pipeline/">material pipeline</a>
+and <a href="/en/docs/doppio/materials-guide/">materials guide</a>.</p>
+<h2 id="file-format">File format<a class="anchor" href="#file-format" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MaterialTypes.hpp</code></td>
+<td><code>MaterialSurface</code>, <code>MaterialAlphaMode</code>, defaults and validation.</td>
+</tr>
+<tr>
+<td><code>MaterialFile.cpp</code></td>
+<td><code>CAFMAT3</code> read/write and <code>sanitizeMaterialSurface</code>.</td>
+</tr>
+<tr>
+<td><code>MaterialPresets.hpp</code></td>
+<td>Named presets (mirror, chrome, gold, glass…).</td>
+</tr>
+<tr>
+<td><code>MaterialPreviewRenderer.cpp</code></td>
+<td>Offscreen preview world, lights and readback.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="related-pages">Related pages<a class="anchor" href="#related-pages" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/rendering/materials-pbr/">PBR materials</a></li>
+<li><a href="/en/docs/rendering/reflections/">Reflections</a></li>
+<li><a href="/en/docs/doppio/material-pipeline/">Material pipeline</a></li>
+<li><a href="/en/docs/doppio/texture-generator-guide/">Texture Generator guide</a></li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/editor/material-editor.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/editor/git-plugin/"><span>Previous</span><strong>Git Plugin</strong></a><a class="pager-next" href="/en/docs/editor/photon/"><span>Next</span><strong>Photon — native hybrid radiance-cascade GI</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#where-it-lives">Where it lives</a></li><li class="l2"><a href="#data-flow">Data flow</a></li><li class="l2"><a href="#panel-sections">Panel sections</a></li><li class="l2"><a href="#preview">Preview</a></li><li class="l2"><a href="#material-generator">Material Generator</a></li><li class="l2"><a href="#file-format">File format</a></li><li class="l2"><a href="#related-pages">Related pages</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

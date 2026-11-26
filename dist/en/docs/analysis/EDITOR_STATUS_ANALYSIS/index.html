@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doppio Editor — Component Status Analysis · Caffeine</title>
+<meta name="description" content="Date : 2026-05-16 Analyzer : Sisyphus Status : Complete investigation with actionable findings">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Doppio Editor — Component Status Analysis · Caffeine">
+<meta property="og:description" content="Date : 2026-05-16 Analyzer : Sisyphus Status : Complete investigation with actionable findings">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/" aria-current="page">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Doppio Editor — Component Status Analysis</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p><strong>Date</strong>: 2026-05-16
+<strong>Analyzer</strong>: Sisyphus
+<strong>Status</strong>: Complete investigation with actionable findings</p>
+<hr>
+<h2 id="executive-summary">Executive Summary<a class="anchor" href="#executive-summary" aria-label="Link to this section">#</a></h2>
+<p>The Doppio editor is <strong>well-architected but has a critical workflow gap</strong>:</p>
+<ul>
+<li>✅ <strong>8/12 components are fully functional</strong></li>
+<li>⚠️ <strong>4 components are blocked by missing integrations</strong> (not broken)</li>
+<li>No Project Manager UI → editor starts with hardcoded &quot;Untitled&quot; scene</li>
+<li><strong>User's main complaint</strong> (&quot;Asset Browser broken, blocks other editors&quot;) is <strong>incorrect</strong>:
+<ul>
+<li>Asset Browser is fully functional</li>
+<li>Problem: 4 editors need drag-drop event handlers to connect to Asset Browser</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="the-real-problems-in-priority-order">The Real Problems (in priority order)<a class="anchor" href="#the-real-problems-in-priority-order" aria-label="Link to this section">#</a></h2>
+<h3 id="-critical-scene-startup-flow-missing">🔴 CRITICAL: Scene Startup Flow Missing<a class="anchor" href="#-critical-scene-startup-flow-missing" aria-label="Link to this section">#</a></h3>
+<p><strong>What happens now</strong>:</p>
+<pre class="mermaid">flowchart TD
+  A[main.cpp] --&gt; B[RenderDevice + AssetManager init]
+  B --&gt; C[SceneEditor.init]
+  C --&gt; D[&quot;newScene('Untitled') — hardcoded&quot;]
+  D --&gt; E[render]
+</pre>
+<p><strong>What should happen</strong>:</p>
+<pre class="mermaid">flowchart TD
+  A[main.cpp] --&gt; B[ProjectManager UI]
+  B --&gt; B1[Create New Project]
+  B --&gt; B2[Open Recent Project]
+  B --&gt; B3[Browse for Project]
+  B --&gt; C[Load ProjectConfig]
+  C --&gt; D[SceneEditor.init config]
+  D --&gt; E[Load last scene from config.LastScene]
+</pre>
+<p><strong>Impact</strong>: Users cannot create/manage projects; cannot switch projects without restarting</p>
+<p><strong>Root Cause</strong>: ProjectManager code exists (ProjectManager.cpp), but:</p>
+<ul>
+<li>No UI dialog implementation</li>
+<li>Not wired into SceneEditor.init()</li>
+<li>No startup flow in main.cpp</li>
+</ul>
+<p><strong>Effort to Fix</strong>: ~3-4 hours (create ProjectStartupDialog, wire into main.cpp)</p>
+<hr>
+<h3 id="-high-editors-disconnected-from-asset-browser">🟠 HIGH: Editors disconnected from Asset Browser<a class="anchor" href="#-high-editors-disconnected-from-asset-browser" aria-label="Link to this section">#</a></h3>
+<p>User reported 4 editors as &quot;broken&quot;:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Editor</th>
+<th>Current Status</th>
+<th>Real Issue</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Script Editor</strong></td>
+<td>Date layer</td>
+<td>No drag-drop handler for .lua</td>
+<td>Add <code>ImGui::AcceptDragDropPayload(&quot;ASSET_PATH&quot;)</code> ~15 min</td>
+</tr>
+<tr>
+<td><strong>Audio Preview</strong></td>
+<td>Playback</td>
+<td>No drag-drop handler for .wav/.ogg</td>
+<td>Add payload handler ~15 min</td>
+</tr>
+<tr>
+<td><strong>Animation Timeline</strong></td>
+<td>Keyframe system</td>
+<td>render() missing delta-time param</td>
+<td>Update signature ~30 min</td>
+</tr>
+<tr>
+<td><strong>Tilemap Editor</strong></td>
+<td>Cell date</td>
+<td>Only shows tile IDs, no visual grid</td>
+<td>Implementation grid canvas ~2 hours</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Why they appear broken</strong>:</p>
+<ul>
+<li>User tries to drag .lua file from AssetBrowser to ScriptEditor → nothing happens</li>
+<li>Asset drop event never reaches the editor because it has no handler</li>
+<li><strong>Not a bug in Asset Browser, but missing integration in each editor</strong></li>
+</ul>
+<p><strong>Evidence</strong>:</p>
+<ul>
+<li><code>AssetBrowser::getDroppedAsset()</code> implemented (line 414 of AssetBrowser.cpp)</li>
+<li><code>ImGui::AcceptDragDropPayload()</code> used elsewhere:
+<ul>
+<li>HierarchyPanel.cpp line 146 (for entity drag)</li>
+<li>InspectorPanel.cpp line 295 (for asset path)</li>
+</ul>
+</li>
+<li>SceneEditor.cpp line 468: <code>auto dropped = m_assetBrowser.getDroppedAsset();</code> ← Works here!</li>
+</ul>
+<p><strong>So why not in Script Editor?</strong> It just wasn't done.</p>
+<hr>
+<h3 id="-medium-partially-implemented-editors">🟡 MEDIUM: Partially-implemented editors<a class="anchor" href="#-medium-partially-implemented-editors" aria-label="Link to this section">#</a></h3>
+<h4 id="animation-timeline">Animation Timeline<a class="anchor" href="#animation-timeline" aria-label="Link to this section">#</a></h4>
+<ul>
+<li><strong>What works</strong>: Keyframe data structures, play/stop logic, easing functions</li>
+<li><strong>What's blocked</strong>:
+<ul>
+<li><code>render()</code> has no delta-time parameter</li>
+<li>Timeline playback needs <code>m_currentTime += deltaTime</code> in render loop</li>
+<li>TODO comment on line 55 explains it</li>
+</ul>
+</li>
+<li><strong>Fix</strong>: Pass <code>f32 deltaTime</code> through render signature chain</li>
+</ul>
+<h4 id="tilemap-editor">Tilemap Editor<a class="anchor" href="#tilemap-editor" aria-label="Link to this section">#</a></h4>
+<ul>
+<li><strong>What works</strong>: Layer management, tile cell storage, auto-tiling rules</li>
+<li><strong>What's blocked</strong>: Visual representation
+<ul>
+<li>Currently: Renders tile IDs as numbers in grid layout</li>
+<li>Needed: ImGui child windows with tile visualization, drag-select, paint tools</li>
+</ul>
+</li>
+<li><strong>Fix</strong>: Visual implementation grid canvas (~200 lines of ImGui)</li>
+</ul>
+<hr>
+<h2 id="component-detail-report">Component Detail Report<a class="anchor" href="#component-detail-report" aria-label="Link to this section">#</a></h2>
+<h3 id="-fully-functional-8-components">✅ FULLY FUNCTIONAL (8 components)<a class="anchor" href="#-fully-functional-8-components" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>File</th>
+<th>Lines</th>
+<th>Capability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AssetBrowser</strong></td>
+<td>AssetBrowser.cpp</td>
+<td>428</td>
+<td>File browsing, search, filter, thumbnails, drag-drop</td>
+</tr>
+<tr>
+<td><strong>HierarchyPanel</strong></td>
+<td>HierarchyPanel.cpp</td>
+<td>250+</td>
+<td>Entity tree, parent-child, drag-reorder</td>
+</tr>
+<tr>
+<td><strong>InspectorPanel</strong></td>
+<td>InspectorPanel.cpp</td>
+<td>400+</td>
+<td>Component editor, property serialization</td>
+</tr>
+<tr>
+<td><strong>SceneViewport</strong></td>
+<td>SceneViewport.cpp</td>
+<td>300+</td>
+<td>2D/3D rendering, camera, transform gizmos</td>
+</tr>
+<tr>
+<td><strong>ConsoleWindow</strong></td>
+<td>ConsoleWindow.hpp (inline)</td>
+<td>~100</td>
+<td>Log display, error output</td>
+</tr>
+<tr>
+<td><strong>ProfilerWindow</strong></td>
+<td>ProfilerWindow.hpp (inline)</td>
+<td>~100</td>
+<td>Frame stats, perf metrics</td>
+</tr>
+<tr>
+<td><strong>CommandPalette</strong></td>
+<td>CommandPalette.cpp</td>
+<td>350+</td>
+<td>Keyboard command search &amp; dispatch</td>
+</tr>
+<tr>
+<td><strong>SceneTabManager</strong></td>
+<td>SceneTabManager.cpp</td>
+<td>200+</td>
+<td>Multi-tab scenes, active scene switching</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h3 id="-partially-functional-4-components">⚠️ PARTIALLY FUNCTIONAL (4 components)<a class="anchor" href="#-partially-functional-4-components" aria-label="Link to this section">#</a></h3>
+<h4 id="scripteditorwindow">ScriptEditorWindow<a class="anchor" href="#scripteditorwindow" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// File: src/editor/ScriptEditorWindow.cpp (148 lines)</span>
+
+<span class="hljs-comment">// ✅ Works:</span>
+- <span class="hljs-built_in">openFile</span>(path)      <span class="hljs-comment">// Load .lua from disk</span>
+- <span class="hljs-built_in">saveFile</span>(index)     <span class="hljs-comment">// Save to disk</span>
+- <span class="hljs-built_in">render</span>()            <span class="hljs-comment">// Tab UI with text area</span>
+
+<span class="hljs-comment">// ❌ Missing:</span>
+- Drag-drop from AssetBrowser
+- <span class="hljs-function">Syntax <span class="hljs-title">highlighting</span> <span class="hljs-params">(TextEditor integration)</span>
+- Script execution/debugging
+</span></code></pre></div>
+<p><strong>Fix Priority</strong>: HIGH (1-2 hours)
+<strong>Effort</strong>: Add payload handler in <code>render()</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginDragDropTarget</span>()) {
+    <span class="hljs-keyword">if</span> (<span class="hljs-type">const</span> ImGuiPayload* payload = ImGui::<span class="hljs-built_in">AcceptDragDropPayload</span>(<span class="hljs-string">&quot;ASSET_PATH&quot;</span>)) {
+        <span class="hljs-type">const</span> <span class="hljs-type">char</span>* path = (<span class="hljs-type">const</span> <span class="hljs-type">char</span>*)payload-&gt;Data;
+        <span class="hljs-built_in">openFile</span>(path);
+    }
+    ImGui::<span class="hljs-built_in">EndDragDropTarget</span>();
+}
+</code></pre></div>
+<hr>
+<h4 id="audiopreviewpanel">AudioPreviewPanel<a class="anchor" href="#audiopreviewpanel" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// File: src/editor/AudioPreviewPanel.cpp (237 lines)</span>
+
+<span class="hljs-comment">// ✅ Works:</span>
+- <span class="hljs-built_in">init</span>()              <span class="hljs-comment">// Create AudioSystem</span>
+- <span class="hljs-built_in">loadAsset</span>(clip)     <span class="hljs-comment">// Load AudioClip*</span>
+- <span class="hljs-built_in">play</span>(), <span class="hljs-built_in">stop</span>()      <span class="hljs-comment">// Playback control</span>
+- <span class="hljs-built_in">onImGuiRender</span>()     <span class="hljs-comment">// UI with waveform</span>
+
+<span class="hljs-comment">// ❌ Missing:</span>
+- Drag-drop asset loading
+- Waveform visualization
+</code></pre></div>
+<p><strong>Fix Priority</strong>: HIGH (1 hour)
+<strong>Effort</strong>: Same as ScriptEditor — add drag-drop handler</p>
+<hr>
+<h4 id="animationtimeline">AnimationTimeline<a class="anchor" href="#animationtimeline" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// File: src/editor/AnimationTimeline.cpp (283 lines)</span>
+
+<span class="hljs-comment">// ✅ Works:</span>
+- SpriteTrack, TransformTrack, EventTrack classes
+- <span class="hljs-built_in">addKeyframe</span>(), <span class="hljs-built_in">removeKeyframe</span>()
+- <span class="hljs-built_in">applyEasing</span>(), <span class="hljs-built_in">interpolateValue</span>()
+- Keyframe data storage
+
+<span class="hljs-comment">// ❌ Missing:</span>
+- <span class="hljs-built_in">render</span>() signature missing delta-time parameter
+  Line <span class="hljs-number">55</span>: TODO comment explains the blocker
+- <span class="hljs-function">Timeline UI <span class="hljs-title">interaction</span> <span class="hljs-params">(click to add keyframes)</span>
+</span></code></pre></div>
+<p><strong>Fix Priority</strong>: MEDIUM (1.5 hours)</p>
+<p><strong>Requirement</strong>: Update render signature everywhere:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Old:</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AnimationTimelinePanel::render</span><span class="hljs-params">()</span></span>;
+
+<span class="hljs-comment">// New:</span>
+<span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AnimationTimelinePanel::render</span><span class="hljs-params">(f32 deltaTime)</span></span>;
+
+<span class="hljs-comment">// Then in SceneEditor.render():</span>
+m_animationTimeline.<span class="hljs-built_in">render</span>(deltaTime);  <span class="hljs-comment">// Need to calculate deltaTime</span>
+</code></pre></div>
+<hr>
+<h4 id="tilemapeditor">TilemapEditor<a class="anchor" href="#tilemapeditor" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// File: src/editor/TilemapEditor.cpp (280 lines)</span>
+
+<span class="hljs-comment">// ✅ Works:</span>
+- <span class="hljs-function">TileLayer <span class="hljs-title">class</span> <span class="hljs-params">(cell storage, resize)</span>
+- Tilemap <span class="hljs-title">class</span> <span class="hljs-params">(layer management)</span>
+- <span class="hljs-title">paintTile</span><span class="hljs-params">()</span>, <span class="hljs-title">applyAutoTile</span><span class="hljs-params">()</span>
+- Neighbor detection &amp; <span class="hljs-keyword">auto</span>-tiling rules
+
+<span class="hljs-comment">// ❌ Missing:</span>
+- Visual grid <span class="hljs-title">rendering</span> <span class="hljs-params">(just shows IDs)</span>
+- Mouse <span class="hljs-title">interaction</span> <span class="hljs-params">(paint, select, erase)</span>
+- Tile palette UI
+</span></code></pre></div>
+<p><strong>Fix Priority</strong>: MEDIUM (3-4 hours)</p>
+<p><strong>Current output</strong>:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">render() {
+    ImGui::Text(&quot;Layer %d&quot;, currentLayer);
+    ImGui::Text(&quot;Tile IDs: %d %d %d ...&quot;);
+}
+</code></pre></div>
+<p><strong>Needed output</strong>:</p>
+<ul>
+<li>Visual grid with tile graphics</li>
+<li>Selectable tiles (highlight on hover)</li>
+<li>Paint tool, erase tool</li>
+<li>Layer visibility toggle</li>
+</ul>
+<hr>
+<h3 id="-stub-missing-3-components">❌ STUB / MISSING (3 components)<a class="anchor" href="#-stub-missing-3-components" aria-label="Link to this section">#</a></h3>
+<h4 id="material-editor">Material Editor<a class="anchor" href="#material-editor" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// File: src/editor/MaterialEditorPanel.cpp</span>
+
+<span class="hljs-comment">// Status: STUB</span>
+- <span class="hljs-built_in">onImGuiRender</span>() exists but does nothing
+- ShaderGraph.cpp has data structures but no UI rendering
+- No visual shader graph editor
+
+<span class="hljs-comment">// Impact: Cannot edit materials; shaders are code-only</span>
+</code></pre></div>
+<h4 id="projectmanager-ui">ProjectManager (UI)<a class="anchor" href="#projectmanager-ui" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// File: src/editor/ProjectManager.cpp</span>
+
+<span class="hljs-comment">// Status: IMPLEMENTATION exists, NO UI</span>
+- <span class="hljs-built_in">CreateNewProject</span>() ✅ (functional)
+- <span class="hljs-built_in">OpenProject</span>() ✅ (functional)
+- <span class="hljs-built_in">SaveProjectFile</span>() ✅ (functional)
+- <span class="hljs-built_in">LoadProjectFile</span>() ✅ (functional)
+
+<span class="hljs-comment">// Missing:</span>
+- <span class="hljs-built_in">ProjectStartupDialog</span> (ImGui)
+- Integration into SceneEditor.<span class="hljs-built_in">init</span>()
+- Recent projects UI
+</code></pre></div>
+<h4 id="scene-startup-flow">Scene Startup Flow<a class="anchor" href="#scene-startup-flow" aria-label="Link to this section">#</a></h4>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// File: apps/doppio/main.cpp</span>
+
+<span class="hljs-comment">// Current (line 56-64):</span>
+Caffeine::Editor::SceneEditor editor;
+<span class="hljs-keyword">if</span> (!editor.<span class="hljs-built_in">init</span>(&amp;device, &amp;assetManager)) {
+    <span class="hljs-comment">// Fails: no project context, hardcoded to &quot;Untitled&quot;</span>
+}
+
+<span class="hljs-comment">// Needed:</span>
+<span class="hljs-comment">// 1. Show ProjectManager UI first</span>
+<span class="hljs-comment">// 2. Load ProjectConfig</span>
+<span class="hljs-comment">// 3. Pass config to SceneEditor.init()</span>
+<span class="hljs-comment">// 4. Load project&#x27;s last scene</span>
+</code></pre></div>
+<hr>
+<h2 id="architecture-assessment">Architecture Assessment<a class="anchor" href="#architecture-assessment" aria-label="Link to this section">#</a></h2>
+<h3 id="strengths">Strengths<a class="anchor" href="#strengths" aria-label="Link to this section">#</a></h3>
+<p><strong>Clear separation</strong>: Data layer (always compiled) / IU layer (CF HAS IMGUI)
+Each editor is self-contained
+✅ <strong>Drag-drop system</strong>: DragDropSystem.cpp provides infrastructure
+** Tab management**: SceneTabManager handles multi-scene workflow
+== sync, corrected by elderman == @elder man</p>
+<h3 id="weaknesses">Weaknesses<a class="anchor" href="#weaknesses" aria-label="Link to this section">#</a></h3>
+<p>No project initiation UI
+<strong>Incomplete integrations</strong>: Editors don't consume AssetBrowser drops
+<strong>No delta-time propagation</strong>: Animation timeline blocked
+<strong>Stub components</strong>: Material editor + Shader graph unfinished</p>
+<hr>
+<h2 id="actionable-fixes-priority-ordered">Actionable Fixes (Priority-Ordered)<a class="anchor" href="#actionable-fixes-priority-ordered" aria-label="Link to this section">#</a></h2>
+<h3 id="-critical-fix-first-blocks-workflow">🔴 CRITICAL (Fix first — blocks workflow)<a class="anchor" href="#-critical-fix-first-blocks-workflow" aria-label="Link to this section">#</a></h3>
+<p><strong>1. Create ProjectStartupDialog</strong> (2 hours)</p>
+<ul>
+<li>New file: <code>src/editor/ProjectStartupDialog.hpp/cpp</code></li>
+<li>Show &quot;New Project&quot;, &quot;Open Recent&quot;, &quot;Browse...&quot; buttons</li>
+<li>Return selected ProjectConfig to main.cpp</li>
+<li>Integrate into SceneEditor initialization</li>
+</ul>
+<p><strong>2. Wire ProjectManager into SceneEditor</strong> (1 hour)</p>
+<ul>
+<li>Update <code>SceneEditor::init()</code> to accept <code>const ProjectConfig&amp;</code></li>
+<li>Pass asset paths from config to AssetBrowser.init()</li>
+<li>Load last scene from config instead of hardcoded &quot;Untitled&quot;</li>
+</ul>
+<p><strong>3. Update main.cpp startup flow</strong> (0.5 hour)</p>
+<ul>
+<li>Show ProjectStartupDialog before SceneEditor.init()</li>
+<li>Pass returned ProjectConfig to editor</li>
+</ul>
+<h3 id="-high-fix-next-unblock-dependent-work">🟠 HIGH (Fix next — unblock dependent work)<a class="anchor" href="#-high-fix-next-unblock-dependent-work" aria-label="Link to this section">#</a></h3>
+<p><strong>4. Add drag-drop to ScriptEditor</strong> (0.5 hour)</p>
+<ul>
+<li>Add <code>ImGui::AcceptDragDropPayload(&quot;ASSET_PATH&quot;)</code> in render()</li>
+<li>Call <code>openFile(path)</code> on drop</li>
+</ul>
+<p><strong>5. Add drag-drop to AudioPreviewPanel</strong> (0.5 hour)</p>
+<ul>
+<li>Same pattern as ScriptEditor</li>
+<li>Call <code>loadAsset(path)</code> on drop</li>
+</ul>
+<h3 id="-medium-fix-when-ready-complete-features">🟡 MEDIUM (Fix when ready — complete features)<a class="anchor" href="#-medium-fix-when-ready-complete-features" aria-label="Link to this section">#</a></h3>
+<p><strong>6. Update AnimationTimeline render signature</strong> (1 hour)</p>
+<ul>
+<li>Add <code>f32 deltaTime</code> parameter</li>
+<li>Update all call sites in SceneEditor</li>
+<li>Implement playback advancement</li>
+</ul>
+<p><strong>7. Implement Tilemap visual grid</strong> (3 hours)</p>
+<ul>
+<li>Create child window for tile grid</li>
+<li>Render tiles with visual appearance</li>
+<li>Add paint/select tools</li>
+</ul>
+<h3 id="-low-nice-to-have">🟢 LOW (Nice-to-have)<a class="anchor" href="#-low-nice-to-have" aria-label="Link to this section">#</a></h3>
+<p><strong>8. Implement Material Editor / ShaderGraph UI</strong> (4+ hours)</p>
+<ul>
+<li>Visual shader graph node editor</li>
+<li>Connection UI</li>
+<li>Shader preview</li>
+</ul>
+<hr>
+<h2 id="file-locations-quick-reference">File Locations Quick Reference<a class="anchor" href="#file-locations-quick-reference" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><code>doppio-archived/src/doppio/editor/</code>
+<ul>
+<li><code>AssetBrowser.{hpp,cpp} ✅ Complete</code></li>
+<li><code>SceneEditor.{hpp,cpp} ⚠️ Missing startup</code></li>
+<li><code>ProjectManager.{hpp,cpp} ⚠️ Code OK, no UI</code></li>
+<li><code>ScriptEditorWindow.{hpp,cpp} ⚠️ Missing drag-drop</code></li>
+<li><code>AudioPreviewPanel.{hpp,cpp} ⚠️ Missing drag-drop</code></li>
+<li><code>AnimationTimeline.{hpp,cpp} ⚠️ Missing delta-time</code></li>
+<li><code>TilemapEditor.{hpp,cpp} ⚠️ Missing visual grid</code></li>
+<li><code>MaterialEditorPanel.{hpp,cpp} ❌ Stub only</code></li>
+<li><code>[6 more fully functional]</code></li>
+</ul>
+</li>
+<li><code>apps/doppio/</code>
+<ul>
+<li><code>main.cpp ⚠️ Missing ProjectManager UI init</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="conclusion">Conclusion<a class="anchor" href="#conclusion" aria-label="Link to this section">#</a></h2>
+<p><strong>The user's diagnosis was incomplete.</strong> Asset Browser is not broken; the workflow is broken. The fixes are straightforward integration work:</p>
+<ol>
+<li><strong>High-impact</strong> (2-4 hours): Create project startup dialog, wire integrations</li>
+<li><strong>High-value</strong> (2 hours): Add drag-drop handlers to 2 editors</li>
+<li><strong>Medium-value</strong> (4 hours): Fix animation timeline, tilemap grid</li>
+</ol>
+<p>Once these are done, the editor becomes fully functional for 2D game development with scenes, assets, scripts, and animation.</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/analysis/EDITOR_STATUS_ANALYSIS.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/"><span>Previous</span><strong>ProjectStartupDialog + File Picker Implementation - Session Summary</strong></a><a class="pager-next" href="/en/docs/HISTORY/"><span>Next</span><strong>Development history</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#executive-summary">Executive Summary</a></li><li class="l2"><a href="#the-real-problems-in-priority-order">The Real Problems (in priority order)</a></li><li class="l3"><a href="#-critical-scene-startup-flow-missing">🔴 CRITICAL: Scene Startup Flow Missing</a></li><li class="l3"><a href="#-high-editors-disconnected-from-asset-browser">🟠 HIGH: Editors disconnected from Asset Browser</a></li><li class="l3"><a href="#-medium-partially-implemented-editors">🟡 MEDIUM: Partially-implemented editors</a></li><li class="l2"><a href="#component-detail-report">Component Detail Report</a></li><li class="l3"><a href="#-fully-functional-8-components">✅ FULLY FUNCTIONAL (8 components)</a></li><li class="l3"><a href="#-partially-functional-4-components">⚠️ PARTIALLY FUNCTIONAL (4 components)</a></li><li class="l3"><a href="#-stub-missing-3-components">❌ STUB / MISSING (3 components)</a></li><li class="l2"><a href="#architecture-assessment">Architecture Assessment</a></li><li class="l3"><a href="#strengths">Strengths</a></li><li class="l3"><a href="#weaknesses">Weaknesses</a></li><li class="l2"><a href="#actionable-fixes-priority-ordered">Actionable Fixes (Priority-Ordered)</a></li><li class="l3"><a href="#-critical-fix-first-blocks-workflow">🔴 CRITICAL (Fix first — blocks workflow)</a></li><li class="l3"><a href="#-high-fix-next-unblock-dependent-work">🟠 HIGH (Fix next — unblock dependent work)</a></li><li class="l3"><a href="#-medium-fix-when-ready-complete-features">🟡 MEDIUM (Fix when ready — complete features)</a></li><li class="l3"><a href="#-low-nice-to-have">🟢 LOW (Nice-to-have)</a></li><li class="l2"><a href="#file-locations-quick-reference">File Locations Quick Reference</a></li><li class="l2"><a href="#conclusion">Conclusion</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9",mermaid:"/assets/vendor/mermaid.min.js"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

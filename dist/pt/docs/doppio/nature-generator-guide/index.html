@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nature Generator: rochas, árvores e plantas procedurais, construídas com nós · Caffeine</title>
+<meta name="description" content="Construa rochas, árvores e vegetação rasteira a partir de um grafo de nós, escolha um nível de qualidade e coloque o resultado na cena.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Nature Generator: rochas, árvores e plantas procedurais, construídas com nós · Caffeine">
+<meta property="og:description" content="Construa rochas, árvores e vegetação rasteira a partir de um grafo de nós, escolha um nível de qualidade e coloque o resultado na cena.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/doppio/nature-generator-guide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/doppio/nature-generator-guide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/nature-generator-guide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/doppio/nature-generator-guide/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab active" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/doppio/nature-generator-guide/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/doppio/nature-generator-guide/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Painéis do editor</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/editor/test-automation/">Automação de testes do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-editor/">Editor de cena</a></li><li><a class="nav-link" href="/pt/docs/editor/material-editor/">Editor de materiais</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-gallery/">Galeria de UI do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-migration/">Guia de migração de plugins</a></li><li><a class="nav-link" href="/pt/docs/editor/viewport-toolbar/">HUD e controlos do viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/photon/">Photon — GI híbrido nativo por radiance cascades</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-manager/">Plugin Manager (host legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-sdk/">Plugin SDK (C++ legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-reference/">Referência da UI do Doppio</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/workspace-and-theme/">Workspace, tema e componentes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/doppio/">Geradores &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-roadmap/">Edição de terreno: pincéis, paleta de materiais e vegetação</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-phase-0/">Edição de terreno: relatório da Fase 0</a></li><li><a class="nav-link" href="/pt/docs/doppio/environment-guide/">Environment: nuvens, névoa, chuva e relâmpagos no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/rust-ui/">Frontend Rust UI (Iced)</a></li><li><a class="nav-link" href="/pt/docs/doppio/gizmos-and-markers/">Gizmos e marcadores de cena</a></li><li><a class="nav-link" href="/pt/docs/doppio/materials-guide/">Materiais no Doppio: biblioteca procedural, profundidade real e bake</a></li><li><a class="nav-link" href="/pt/docs/doppio/graphics-roadmap/">Melhoria gráfica — Roadmap de Micromeshes e Photon</a></li><li><a class="nav-link" href="/pt/docs/doppio/micromeshes/">Micromeshes: clusters, cortes e o draw na GPU</a></li><li><a class="nav-link" href="/pt/docs/doppio/runtime-modifiers/">Modificadores em tempo de execução para materiais gerados</a></li><li><a class="nav-link" href="/pt/docs/doppio/photoreal-world-roadmap/">Mundo procedural fotorrealista — validação e roadmap</a></li><li><a class="nav-link active" href="/pt/docs/doppio/nature-generator-guide/" aria-current="page">Nature Generator: rochas, árvores e plantas procedurais, construídas com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/photon-guide/">Photon: iluminação global no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/material-pipeline/">Pipeline de materiais, texturas e geradores — backlog</a></li><li><a class="nav-link" href="/pt/docs/doppio/profiler-guide/">Profiler: para onde vai o tempo de um frame</a></li><li><a class="nav-link" href="/pt/docs/doppio/generator-recipes/">Receitas de geradores (generator.*)</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/headless-testing/">Testes de UI headless para o Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/pt/docs/doppio/texture-generator-guide/">Texture Generator: sprites procedurais, VFX e máscaras empacotadas</a></li><li><a class="nav-link" href="/pt/docs/doppio/water-generator-guide/">Water Generator: corpos de água construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/world-composition/">World Composer: construir um mundo prefab a partir de receitas de geradores</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plugins/compatibility/">Compatibilidade de plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/pt/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/pt/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/pt/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/pt/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Nature Generator: rochas, árvores e plantas procedurais, construídas com nós</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Estável</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Última atualização: <time datetime="2026-11-21">2026-11-21</time></span>
+</div>
+<p class="doc-lede">Construa rochas, árvores e vegetação rasteira a partir de um grafo de nós, escolha um nível de qualidade e coloque o resultado na cena.</p>
+<p>O separador <strong>Nature</strong> (ao lado de Inspector e Material) constrói rochas, árvores e vegetação rasteira a partir de um <strong>grafo
+de nós</strong>. O mesmo grafo serve um pinheiro low-poly com flat shading e uma floresta musgosa hi-fi: escolha uma <strong>Quality</strong>,
+ligue os nós que quiser, dê a cada parte <strong>o seu próprio material ou textura</strong> e use <strong>Place in scene</strong>. O terreno é uma ferramenta à parte: nada aqui faz scatter automático sobre uma paisagem.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/ui/nature-pane.png" alt="O separador Nature com o grafo Oak" loading="lazy">
+  <figcaption>O separador Nature com o grafo Oak</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/ui/nature-scene.png" alt="Árvores geradas colocadas na cena" loading="lazy">
+  <figcaption>Árvores geradas colocadas na cena</figcaption>
+</figure>
+<div class="doc-note">
+<strong>Tudo é guardado e nada se perde.</strong> <em>Place in scene</em> e <em>Export</em> escrevem as meshes, um
+material (e as suas texturas) por parte, <code>generator.nature</code> (com a lista dos ficheiros que escreveu),
+<code>generator.material</code> para cada material de biblioteca e <code>Prefabs/&lt;name&gt;.prefab</code>. Faça duplo clique na
+receita, no modelo do prefab ou chame <code>open_generator</code> para recuperar o grafo; faça duplo clique no prefab para colocar
+outra cópia. Veja <a href="/pt/docs/doppio/generator-recipes/">Receitas de geradores</a>.
+</div>
+<h2 id="1-como-funciona-um-grafo">1. Como funciona um grafo<a class="anchor" href="#1-como-funciona-um-grafo" aria-label="Link to this section">#</a></h2>
+<p>Três portas tipadas, desenhadas em três cores; uma ligação só une portas do mesmo tipo e nunca fecha um
+ciclo (a linha de estado diz porque é que uma ligação foi recusada):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Porta</th>
+<th>Transporta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mesh</strong></td>
+<td>geometria (posições, normais, UVs, índices)</td>
+</tr>
+<tr>
+<td><strong>Skeleton</strong></td>
+<td>uma árvore de ramos (tronco, ramos, raízes) que <em>Branch Tubes</em> e <em>Leaves</em> transformam em meshes</td>
+</tr>
+<tr>
+<td><strong>Points</strong></td>
+<td>posições, orientações e escalas produzidas por <em>Scatter Points</em></td>
+</tr>
+</tbody>
+</table></div>
+<p>Toda a mesh que deva acabar no modelo passa por um nó <strong>Part</strong> até ao nó <strong>Output</strong> (uma entrada
+por parte). Uma Part é uma mesh <strong>e o seu material, ambos ligados</strong>: a sua porta <em>Material</em> aceita um nó da
+categoria <strong>Materials</strong>, e nada é escolhido dentro da Part. Uma parte sem material recusa-se a construir (&quot;The
+trunk part has no material: wire a material node...&quot;). O motor dá um material por mesh, por isso cada parte
+torna-se a sua própria entidade quando é colocada.</p>
+<p>Interação: adicione nós a partir da paleta à esquerda (caixa de pesquisa, categorias) ou arraste-os dela; arraste os nós pelo
+cabeçalho; arraste de uma porta de saída para uma porta de entrada; <strong>Fit</strong> enquadra o grafo; undo/redo cobrem todas as edições.
+Selecionar um nó mostra os seus parâmetros na coluna da direita, ao lado da pré-visualização 3D em direto (arraste para orbitar).
+Tudo é determinístico: o mesmo grafo, qualidade e seeds constroem sempre o mesmo modelo.</p>
+<h2 id="2-catálogo-de-nós">2. Catálogo de nós<a class="anchor" href="#2-catálogo-de-nós" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Nós</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shapes</td>
+<td><strong>Icosphere</strong>, <strong>Ellipsoid</strong></td>
+</tr>
+<tr>
+<td>Modifiers</td>
+<td><strong>Noise Displace</strong> (altos e baixos fractais), <strong>Cut Planes</strong> (faces de rocha facetadas), <strong>Flat Base</strong>, <strong>Transform</strong>, <strong>Place on Ground</strong>, <strong>Subdivide</strong>, <strong>Shade</strong> (smooth / flat / ângulo de crease), <strong>UV Box Projection</strong></td>
+</tr>
+<tr>
+<td>Combine</td>
+<td><strong>Merge</strong></td>
+</tr>
+<tr>
+<td>Trees</td>
+<td><strong>Grow Branches</strong> (skeleton), <strong>Roots</strong>, <strong>Branch Tubes</strong>, <strong>Leaves</strong> (cards dobrados e caídos com um atlas de formas de folha, ou blobs)</td>
+</tr>
+<tr>
+<td>Plants</td>
+<td><strong>Grass Blades</strong>, <strong>Fern Fronds</strong>, <strong>Leafy Bush</strong>, <strong>Stem</strong>, <strong>Petals</strong></td>
+</tr>
+<tr>
+<td>Scatter</td>
+<td><strong>Scatter Points</strong>, <strong>Instance on Points</strong> (musgo, seixos, folhas pequenas sobre qualquer mesh)</td>
+</tr>
+<tr>
+<td>Output</td>
+<td><strong>Texture</strong> (imagens somadas num material), <strong>Material</strong> (definições de superfície), <strong>Part</strong>, <strong>Output</strong></td>
+</tr>
+<tr>
+<td>Materials</td>
+<td><strong>Library Material</strong> (presets de rocha, casca, chão), <strong>Leaf / Petal Texture</strong> (cards e atlas), <strong>Solid Colour</strong>, <strong>Your Material (.mat)</strong>, <strong>Your Texture (PNG)</strong></td>
+</tr>
+<tr>
+<td>Output</td>
+<td><strong>Part</strong>, <strong>Output</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>As rochas são <code>Icosphere → Noise Displace → Cut Planes → Noise Displace (grain) → Flat Base → Transform → Place on Ground → Shade → UV Box → Part</code>. As árvores são <code>Grow Branches → Branch Tubes → Part</code> mais
+<code>Grow Branches → Leaves → Part</code> (e <strong>Roots</strong>). Como as etapas são nós, pode inserir as suas:
+um segundo noise para desgaste, um Merge de duas rochas, um Scatter de seixos sobre um rochedo.</p>
+<h2 id="3-qualidade-de-low-poly-a-alta-fidelidade">3. Qualidade: de low poly a alta fidelidade<a class="anchor" href="#3-qualidade-de-low-poly-a-alta-fidelidade" aria-label="Link to this section">#</a></h2>
+<p>A qualidade é uma propriedade do grafo (o seletor da barra de ferramentas); os nós leem-na, por isso <strong>um só grafo cobre todo o
+intervalo</strong>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Quality</th>
+<th>O que muda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Stylized (low poly)</strong></td>
+<td>no máximo 2 subdivisões da icosphere, rochas facetadas, copas em blob e troncos de 5 lados com flat shading, metade das contagens; os materiais passam para <strong>cores sólidas</strong> (não são precisas texturas)</td>
+</tr>
+<tr>
+<td>Balanced</td>
+<td>o grafo tal como foi criado</td>
+</tr>
+<tr>
+<td><strong>Detailed</strong></td>
+<td>mais uma subdivisão, troncos mais redondos, 1,6x os segmentos, folhas e lâminas, raízes e musgo que ficam desligados em qualidade inferior</td>
+</tr>
+</tbody>
+</table></div>
+<p>Regra testada: Stylized &lt; Balanced &lt; Detailed em contagem de triângulos para rochas, árvores e plantas.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/nature-rocks.png" alt="Presets de rochas" loading="lazy">
+  <figcaption>Presets de rochas</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/nature-trees.png" alt="Presets de árvores" loading="lazy">
+  <figcaption>Presets de árvores</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/nature-plants.png" alt="Presets de plantas" loading="lazy">
+  <figcaption>Presets de plantas</figcaption>
+</figure>
+<p>Os presets também são grafos (23 deles; abra um e todos os nós estão lá para editar). Os hi-fi mostram para que
+serve o grafo: <strong>Mossy Rock</strong> (cards de musgo espalhados sobre a rocha), <strong>Ancient Oak</strong> (raízes, ramos grossos
+e uma copa densa) e <strong>Fern Patch</strong> (um scatter de tufos de feto). Presets low-poly: Low-poly Rock,
+Low-poly Tree e Low-poly Pine.</p>
+<h2 id="4-os-materiais-são-nós-e-são-assets-reais">4. Os materiais são nós, e são assets reais<a class="anchor" href="#4-os-materiais-são-nós-e-são-assets-reais" aria-label="Link to this section">#</a></h2>
+<p>Nada de um material fica escondido dentro de um objeto gerado. Cada parte tem um <strong>nó de material</strong> ligado à sua
+Part, e os grafos dos presets mostram-nos (um nó de casca a alimentar o tronco, uma textura de folha a alimentar as folhas):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Nó</th>
+<th>Dá</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Library Material</strong></td>
+<td>um preset da biblioteca PBR (rocha, casca, chão), cozinhado uma vez em <code>Nature/Materials/</code></td>
+</tr>
+<tr>
+<td><strong>Leaf / Petal Texture</strong></td>
+<td>um card recortado procedural (folha, pétala) ou um <strong>atlas</strong> (<em>Broadleaf Mix</em>, <em>Autumn Mix</em>: oito formas e tons de folha numa só imagem) cozinhado para RGBA</td>
+</tr>
+<tr>
+<td><strong>Solid Colour</strong></td>
+<td>uma cor simples e roughness, ideal para low poly</td>
+</tr>
+<tr>
+<td><strong>Your Material (.mat)</strong></td>
+<td>qualquer <code>.mat</code> do projeto, usado <strong>tal como está</strong>, nunca copiado nem recozinhado</td>
+</tr>
+<tr>
+<td><strong>Your Texture (PNG)</strong></td>
+<td>um PNG com alpha; é criado um material <strong>Cutout</strong> à sua volta (<code>Nature/Materials/project_&lt;name&gt;.mat</code>)</td>
+</tr>
+<tr>
+<td><strong>Edit Library Material</strong></td>
+<td>recebe um <em>Library Material</em> ou <em>Leaf / Petal Texture</em> (ou outro nó de edição) e passa-o adiante com alterações por cima; veja abaixo</td>
+</tr>
+</tbody>
+</table></div>
+<p>Quando usa <strong>Place in scene</strong>, o material de cada parte é escrito no projeto como um asset normal e atribuído à
+entidade: abra-o no separador <strong>Material</strong> ou no Texture Generator e altere-o. Troque um nó (um Solid Colour
+pelo seu próprio <code>.mat</code>) para mudar o que o modelo inteiro usa. O low poly (<em>Stylized</em>) transforma os materiais de biblioteca e de
+cards em cores sólidas, mas <strong>os seus próprios assets nunca são substituídos</strong>.</p>
+<p>O nó <strong>Leaves</strong> também recebe a textura da folha na sua porta <em>Texture</em> (o mesmo nó que alimenta a
+Part das folhas), é assim que ele conhece a disposição do atlas, e dimensiona as folhas como uma <strong>percentagem da altura da árvore</strong>
+(<em>Leaf size</em>, por defeito 7 %), para que as proporções acompanhem a árvore em vez de serem um número em metros.</p>
+<p>As UVs vêm dos nós (UV Box para rochas, UVs de tubo para troncos, UVs de card para folhas), para que as suas texturas façam tiling
+como esperado. Os ficheiros <code>.nature</code> guardados antes desta alteração não têm nós de material e precisam de um ligado.</p>
+<h3 id="editar-um-material-de-biblioteca-ou-uma-textura-de-folha">Editar um material de biblioteca ou uma textura de folha<a class="anchor" href="#editar-um-material-de-biblioteca-ou-uma-textura-de-folha" aria-label="Link to this section">#</a></h3>
+<p>Um asset de biblioteca é só de leitura: é a mesma casca ou o mesmo atlas de folhas para todas as árvores. Para o alterar para <em>este</em> modelo, selecione
+o nó <strong>Library Material</strong> ou <strong>Leaf / Petal Texture</strong> e prima <strong>Edit this material</strong> (ação de agente
+<code>nature_edit_material</code>). O Doppio adiciona um nó <strong>Edit Library Material</strong> a seguir a ele e liga-o entre o nó de biblioteca e
+o que o usava, pelo que a árvore mantém o aspeto até mover um slider. O nó só aceita um nó de biblioteca, outro nó
+de edição, ou um nó <strong>Your Material</strong> que aponta para um material que a biblioteca cozinhou para o projeto (<code>Materials/Nature/…</code>:
+aplicar um preset num projeto transforma os nós de biblioteca nestes) na sua porta <em>Material</em>: qualquer outra coisa é recusada, por isso
+o que ele edita é sempre um asset de biblioteca. Uma cadeia de nós de edição aplica-se por ordem.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/ui/nature-edit-node.png" alt="O Nature Generator com um nó Edit Library Material ligado entre o material das folhas e o Part das folhas, e os seus sliders no inspetor" loading="lazy">
+  <figcaption>O material das folhas do Oak depois de <strong>Edit this material</strong>: o nó novo fica por baixo do grafo, ligado entre
+  o material e o Part das folhas, com os seus sliders à direita. Capturado por
+  <code>docs/flows/capture-nature-docs.json</code>.</figcaption>
+</figure>
+<p>Os outros geradores não têm um nó destes porque não têm um asset de biblioteca fixo para proteger: um preset de Material, Textura, Água ou
+Terreno carrega-se como um grafo inteiro, e todos os nós dele já são editáveis.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Slider</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hue shift</strong>, <strong>Saturation</strong>, <strong>Brightness</strong>, <strong>Contrast</strong>, <strong>Tint R/G/B</strong></td>
+<td>uma correção de cor do mapa de cor (um atlas de folhas mantém o seu alpha). É escrita uma cópia graduada da imagem; uma base <em>Solid Colour</em> muda antes a sua cor.</td>
+</tr>
+<tr>
+<td><strong>Roughness ×</strong>, <strong>Normal strength ×</strong>, <strong>Extra depth (parallax)</strong></td>
+<td>a superfície: multiplica a roughness base e a força da normal; a profundidade é somada à altura do parallax (a altura vive no alpha do mapa de normais, por isso folhas e casca têm alguma).</td>
+</tr>
+<tr>
+<td><strong>Texture repeats ×</strong></td>
+<td>multiplica o tiling de UV do material (uma casca ou um chão mais apertado ou mais largo).</td>
+</tr>
+<tr>
+<td><strong>Cut-out threshold shift</strong></td>
+<td>faz crescer ou afina as formas das folhas de um material cut-out.</td>
+</tr>
+<tr>
+<td><strong>Translucency +</strong>, <strong>Wind sway +</strong>, <strong>Leaf flutter +</strong></td>
+<td>somados ao que a parte já tem.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Colocar escreve o resultado como <code>&lt;base&gt;_e&lt;hash&gt;.mat</code> e <code>&lt;base&gt;_e&lt;hash&gt;_albedo.png</code> ao lado do material base; o hash é dos
+valores dos sliders, por isso cada conjunto de alterações é o seu próprio par de ficheiros e o material de biblioteca por baixo nunca é tocado.
+Um preset mantém os seus nós de biblioteca vivos quando um nó de edição os lê (a <em>regra de ouro</em> abaixo transforma os outros em
+ficheiros <em>Your Material</em>), pelo que pode voltar ao nó e continuar a editar.</p>
+<h3 id="nós-texture-e-material">Nós Texture e Material<a class="anchor" href="#nós-texture-e-material" aria-label="Link to this section">#</a></h3>
+<p>As texturas vão <strong>depois do objeto</strong>: ligue a mesh (Leaves, Branch Tubes, uma rocha...) a um nó <strong>Texture</strong> e depois
+a uma <strong>Part</strong>. Uma Part nova mantém <em>From nodes (Material / Texture)</em>, por isso o que os nós fizeram é o que é colocado;
+escolher qualquer outro material na Part substitui-os.</p>
+<ul>
+<li><strong>Texture</strong> recebe uma imagem através de um <strong>asset slot</strong>: uma miniatura com o nome do ficheiro, um <strong>×</strong> para limpar, <strong>arraste uma imagem do painel Assets para cima dele</strong>, ou clique nele para abrir o <strong>seletor com pré-visualizações</strong> (pesquisa incluída); continua a existir um campo de caminho para escrever e coloca-a num <strong>mapa</strong>:
+<em>Albedo</em>, <em>Normal</em> ou <em>Occlusion / Roughness / Metal</em>. Encadeie vários nós Texture e eles são <strong>somados</strong>
+por mapa, pela ordem de ligação, cada um com um <strong>blend</strong> (<em>Replace</em>, <em>Add</em>, <em>Multiply</em>, <em>Overlay</em>), uma força, os seus próprios
+repeats e (para o albedo) uma tint: uma cor de casca, depois uma textura de musgo multiplicada por cima, depois um mapa de normais de
+fissuras somado a um segundo. As normais somam as suas inclinações em vez das suas cores.</li>
+<li><strong>Fit to the object</strong> reprojeta as UVs da parte a partir do seu próprio tamanho, para que a textura se adapte ao objeto:
+<em>Fit to object</em> repete-a N vezes ao longo da parte inteira, <em>Per metre</em> mantém a densidade de texels seja qual for o
+tamanho. <em>Keep mesh UVs</em> deixa as UVs do nó (os cards de folhas mantêm a sua célula do atlas).</li>
+<li>Uma imagem de albedo com transparência torna o material <strong>cut-out</strong> automaticamente (um PNG de folha); o cut-out também
+projeta sombras testadas por alpha.</li>
+<li><strong>Material</strong> tem um slot <strong>Base material (.mat)</strong> (o mesmo seletor, arrastar e largar, apenas materiais): o material colocado parte desse <code>.mat</code> (os seus mapas e definições mantêm-se) e só as camadas e os interruptores que definir o alteram. Define a superfície da mesh: cor (a base sobre a qual as camadas fazem blend), roughness, metallic,
+cut-out, força da normal, translucência, wind sway e flutter. Ponha-o antes ou depois dos nós Texture: as
+camadas mantêm-se.</li>
+</ul>
+<p>Colocar faz o bake dos mapas somados para <code>Textures/Nature/custom_&lt;hash&gt;_{albedo,normal,orm}.png</code> mais um <code>.mat</code> em <code>Materials/Nature/</code> (o
+hash vem das definições, por isso definições diferentes nunca se sobrepõem). As imagens de origem são lidas a partir
+do projeto e nunca são copiadas nem alteradas.</p>
+<h2 id="4b-superfícies-geradas-um-conjunto-de-texturas-cozinhado-a-partir-do-próprio-modelo">4b. Superfícies geradas: um conjunto de texturas cozinhado a partir do próprio modelo<a class="anchor" href="#4b-superfícies-geradas-um-conjunto-de-texturas-cozinhado-a-partir-do-próprio-modelo" aria-label="Link to this section">#</a></h2>
+<p>O nó <strong>Rock Surface</strong> (categoria <em>Surface</em>, entre o último nó de mesh e <strong>Part</strong>) substitui um preset de biblioteca
+por um <strong>conjunto de texturas PBR gerado</strong> (albedo, normal + height, occlusion/roughness/metal), para que uma
+rocha tenha a superfície de um scan em vez de uma só textura repetida.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/nature-photoreal-rock.png" alt="O preset Photoreal Rock, colocado no motor" loading="lazy">
+  <figcaption>O preset Photoreal Rock, colocado no motor</figcaption>
+</figure>
+<p>Como funciona (<code>uikit/nature/bake.rs</code>, <code>surface.rs</code>):</p>
+<ol>
+<li><strong>Atlas</strong>: a mesh é desdobrada de novo em seis charts sem sobreposição (um cube map a partir do centro do modelo),
+cada um encaixado na sua própria célula. Os mapas cozinhados precisam de UVs únicas; as UVs de box-projection dos outros nós repetem-se.</li>
+<li><strong>Mapas da mesh</strong>: para cada texel, a posição, a normal suave, a <strong>curvature</strong> (arestas convexas vs fendas),
+a <strong>ambient occlusion</strong> (oclusores em disco num spatial hash, sem ray casting) e a altura são rasterizadas para o espaço UV.</li>
+<li>As <strong>camadas</strong> leem esses mapas e ruído 3D nas posições cozinhadas, por isso nada parte nas costuras: tons de pedra
+e estratos, grão, <strong>fissuras</strong> que se aprofundam nas fendas, <strong>desgaste das arestas</strong> na curvatura convexa, crostas de <strong>líquen</strong>
+nas faces expostas, <strong>musgo</strong> nas cavidades e no topo, <strong>pó</strong> nas faces voltadas para cima.</li>
+<li>A altura torna-se o mapa de normais (e o seu alpha, para parallax/displacement geométrico); a occlusion e a
+roughness são empacotadas no mapa ORM. Colocar escreve <code>Textures/Nature/rock_*_{albedo,normal,orm}.png</code>
+mais um <code>.mat</code>, reutilizado até um parâmetro mudar.</li>
+</ol>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/nature-surface-maps.png" alt="Albedo, normal, ORM, ambient occlusion e curvature do Photoreal Rock" loading="lazy">
+  <figcaption>Albedo, normal, ORM, ambient occlusion e curvature do Photoreal Rock</figcaption>
+</figure>
+<p>Parâmetros: moss, lichen, cracks, edge wear, dust, pattern scale, warmth (de cinzento a arenito), texture size
+(256-2048; Stylized limita-o a 512) e seed. Tudo é determinístico e testado (cobertura, sinal da curvature,
+mais musgo significa mais verde, as mesmas entradas dão os mesmos mapas).</p>
+<p>O motor amostra as linhas das texturas como <code>v * height</code> (sem inversão de V) e aplica <code>ORM</code> sobre os escalares do material com
+a AO escalada pela força de AO do material; o bake segue ambos.</p>
+<h2 id="4c-realismo-casca-folhas-vento-e-translucência">4c. Realismo: casca, folhas, vento e translucência<a class="anchor" href="#4c-realismo-casca-folhas-vento-e-translucência" aria-label="Link to this section">#</a></h2>
+<p>Colocar um modelo escreve agora materiais que fazem mais do que transportar uma textura plana.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/nature-oak-wind.gif" alt="Um carvalho colocado a balançar numa rajada: a copa inclina-se e as folhas cintilam, a base do tronco fica quieta" loading="lazy">
+  <figcaption>Um carvalho colocado no motor, numa rajada constante. A copa inclina-se mais do que a base do tronco (o balanço cresce com a altura
+  acima da origem), os cards de folhas cintilam por cima disso, e a sombra move-se com eles. Renderizado por
+  <code>./scripts/render-world-docs.sh</code>.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>O quê</th>
+<th>Como</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bark</strong></td>
+<td>As escolhas de casca <em>Oak</em>, <em>Pine</em> e <em>Birch</em> são <strong>geradas</strong>, não o bake plano da biblioteca: um albedo com tiling, um mapa de normais com a altura no seu alpha (parallax e micro auto-sombreamento nos sulcos) e um mapa de occlusion/roughness. O Oak tem sulcos profundos e sinuosos com um pouco de musgo nas fendas, o pinheiro placas grandes cortadas por fissuras horizontais, o vidoeiro casca lisa e pálida com lenticelas escuras. Um repeat cobre o tronco uma vez à volta.</td>
+</tr>
+<tr>
+<td><strong>Leaf normals</strong></td>
+<td>Cada card de folha e de pétala recebe um <strong>mapa de normais derivado do card</strong>: nervuras a partir da luminância, um perfil de lâmina arredondado a partir da aresta do alpha. A roughness desce para 0,55 para que as folhas apanhem um brilho.</td>
+</tr>
+<tr>
+<td><strong>Crown depth</strong></td>
+<td>Os cards no fundo da copa escolhem a <strong>folha madura escura</strong> do atlas com mais frequência do que a casca exterior, e cada vértice de folha leva <strong>occlusion cozinhada</strong> (mais escuro dentro da copa, um pouco diferente por folha) na sua cor pintada.</td>
+</tr>
+<tr>
+<td><strong>Alpha-tested shadows</strong></td>
+<td>Os cards cut-out (folhas, pétalas, lâminas) <strong>projetam sombras através do seu alpha</strong>: a passagem de sombras do motor lê o albedo e descarta os buracos, por isso o sol passa pela copa e cada folha faz sombra às de baixo.</td>
+</tr>
+<tr>
+<td><strong>Painted colour and flutter weight</strong></td>
+<td>Os cards de folhas e as lâminas de relva/feto são exportados com uma <strong>cor de vértice</strong> (<code>v x y z r g b a</code> no <code>.obj</code>): o rgb tinge o albedo (occlusion, variação por folha), o alpha é o <strong>peso do flutter</strong> pintado ao longo da lâmina: 0 no caule ou na raiz (rígido, segue o seu ramo), 1 na ponta (cintilação total). O motor lê-o para um segundo stream de vértices; a inclinação com o vento segue sempre o objeto, só o flutter é pintado.</td>
+</tr>
+<tr>
+<td><strong>GPU-instanced scatter</strong></td>
+<td>As partes <em>Instance on Points</em> (musgo, seixos, plantas pequenas sobre uma superfície) são colocadas como <strong>uma mesh modelo mais uma entidade por cópia</strong>, agrupadas sob uma entidade contentora. As cópias partilham mesh e material, por isso o renderer faz batch delas numa só draw call instanciada, e cada cópia tem a sua própria fase de vento. A geometria fundida continua a ser o que a pré-visualização e o <strong>Export</strong> usam. Isto também vale para meshes com um stream de cor pintada (um terceiro vertex buffer alimenta o pipeline de folhagem instanciada).</td>
+</tr>
+<tr>
+<td><strong>Translucency</strong></td>
+<td>Folhas, lâminas, frondes e pétalas deixam passar a luz: a face virada para longe do sol brilha na cor da folha (as copas com luz por trás deixam de ficar pretas), mais forte quando se olha na direção do sol. Valores: folhas 0,55, lâminas e frondes 0,45, pétalas 0,4.</td>
+</tr>
+<tr>
+<td><strong>Wind</strong></td>
+<td><code>wind_strength</code> é o balanço <strong>por metro de altura acima da origem da entidade</strong>, por isso uma copa alta mexe-se mais do que a base do tronco e a relva mexe-se nas pontas. Tronco, ramos e folhas usam o mesmo 0,012 (uma copa de 6 m inclina-se cerca de 20 cm numa rajada, com fase por árvore para que uma floresta não se mova em uníssono); as folhas somam <code>wind_flutter</code> 0,6 (cintilação rápida por vértice). As plantas baixas usam 0,25. A passagem de sombras aplica o mesmo deslocamento, por isso as sombras movem-se com a folhagem.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Desde esta passagem a biblioteca está mais nítida e as folhas assentam melhor na árvore:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>O quê</th>
+<th>Agora</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Resolution</strong></td>
+<td>Casca, chão e rocha fazem bake a <strong>1024 px</strong> (eram 512); o atlas de folhas é <strong>2048 x 1024</strong> (oito folhas de 512 px). Os materiais escritos no tamanho antigo são <strong>reconstruídos uma vez</strong> da próxima vez que colocar.</td>
+</tr>
+<tr>
+<td><strong>Leaf height map</strong></td>
+<td>O mapa de normais da folha leva uma <strong>altura</strong> no seu alpha (as nervuras sobressaem da lâmina, a lâmina sobe a partir da sua aresta) e o material usa um pouco de parallax (0,02), por isso uma folha tem profundidade em vez de ser um card plano.</td>
+</tr>
+<tr>
+<td><strong>Bark is not stretched</strong></td>
+<td>A imagem da casca dá a volta a um ramo um número inteiro de vezes e o seu comprimento segue a circunferência do próprio ramo, para que os texels fiquem quadrados num raminho como num tronco (<code>bark_scale</code>: repeats à volta por metro de circunferência).</td>
+</tr>
+<tr>
+<td><strong>Leaf size</strong></td>
+<td>Os presets de folhosas usam folhas de 0,28 a 0,38 m numa árvore de 5 a 7 m (eram 0,5 a 0,75 m), com mais folhas e mais níveis de ramos; o <strong>orçamento de triângulos</strong> é distribuído por igual pelos ramos, para que a copa fique preenchida em vez de os primeiros ramos ficarem com tudo.</td>
+</tr>
+<tr>
+<td><strong>Round crown</strong></td>
+<td>O nó Grow Branches tem dois parâmetros novos, <strong>Extra main limbs</strong> (<code>scaffold</code>) e <strong>Limbs sweep up</strong> (<code>lift</code>), ambos a 0 por omissão, pelo que todos os outros presets e ficheiros antigos crescem como antes. O Oak usa 4 e 0,5: oito ramos mestres distribuídos por igual à volta do tronco (azimutes de ângulo de ouro, a começar mais acima) que saem dele a subir e a abrir, para que a copa encha em vez de ser meia dúzia de braços finos.</td>
+</tr>
+<tr>
+<td><strong>Leaf shape</strong></td>
+<td>As folhas em Balanced têm 3 filas (5 em Detailed) e os presets de folhosas curvam-nas em concha e em arco (<em>Fold</em> 0,55, <em>Droop</em> 0,4), por isso uma folha tem perfil em vez de ficar plana; continua a ser um cartão, com o relevo do seu mapa de altura.</td>
+</tr>
+<tr>
+<td><strong>Brighter leaves</strong></td>
+<td>A imagem da folha é aclarada (brilho x1,45, saturação x1,12) quando é cozinhada, para <code>&lt;nome&gt;_leaf.png</code> e <code>_leaf_n.png</code>; os ficheiros <code>_cards</code> antigos são refeitos uma vez.</td>
+</tr>
+<tr>
+<td><strong>Shade</strong></td>
+<td>As superfícies translúcidas (folhas, pétalas, lâminas) recebem no shader um mínimo de luz de céu dispersa, para que o lado de uma copa afastado do sol seja verde escuro em vez de preto. Use <em>Brightness</em> num nó de edição para ir mais longe.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Estas definições também são sliders no separador <strong>Material</strong> (<em>Translucency</em>, <em>Wind sway</em>, <em>Wind speed</em>, <em>Leaf
+flutter</em>) para os seus próprios materiais, e vivem no <code>.mat</code> como <code>wind_strength</code>, <code>wind_speed</code>, <code>wind_flutter</code> e
+<code>translucency</code> (C ABI v9). O vento depende do tempo, por isso toca no viewport enquanto o motor renderiza.</p>
+<p><strong>Stylized (low poly)</strong> mantém tudo isto: as cores sólidas continuam a balançar, a cintilar e a deixar passar a luz, de modo que um
+tronco de 5 lados com copas em blob se move e brilha como o modelo detalhado. As partes chamadas <code>rock</code>, <code>moss</code>, <code>ground</code>
+e <code>body</code> ficam quietas.</p>
+<p>Os ficheiros de material escritos por versões anteriores não são reutilizados: o perfil de vento faz parte do nome do ficheiro
+(por exemplo <code>green_leaf_w12f60t55.mat</code>), por isso colocar de novo escreve os novos.</p>
+<h2 id="4d-pastas-de-assets">4d. Pastas de assets<a class="anchor" href="#4d-pastas-de-assets" aria-label="Link to this section">#</a></h2>
+<p>Todos os geradores perguntam a um único sítio (<code>uikit/asset_folders.rs</code>) onde escrever, e esse sítio <strong>reutiliza uma pasta
+existente seja qual for a capitalização</strong> (um projeto com <code>textures/</code> continua a usá-la) e só cria o nome com maiúscula
+quando não existe nenhuma:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Conteúdo</th>
+<th>Pasta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Meshes Nature e receitas <code>.nature</code></td>
+<td><code>Models/Nature/</code></td>
+</tr>
+<tr>
+<td>Ficheiros <code>.mat</code> Nature</td>
+<td><code>Materials/Nature/</code></td>
+</tr>
+<tr>
+<td>Mapas cozinhados desses materiais</td>
+<td><code>Textures/Nature/</code></td>
+</tr>
+<tr>
+<td><code>.png</code> + <code>.texgraph</code> do Texture Generator</td>
+<td><code>Textures/</code></td>
+</tr>
+<tr>
+<td>Projetos Texture Set</td>
+<td><code>TextureSets/</code></td>
+</tr>
+<tr>
+<td>Resultado do Material Generator</td>
+<td><code>Materials/</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="5-colocar-modelos-na-cena">5. Colocar modelos na cena<a class="anchor" href="#5-colocar-modelos-na-cena" aria-label="Link to this section">#</a></h2>
+<p><strong>Export</strong> escreve <code>Models/Nature/&lt;name&gt;_&lt;part&gt;.obj</code> (um por parte) e a receita editável
+<code>Models/Nature/&lt;name&gt;.generator.nature</code> na pasta de assets do projeto (veja <em>Pastas de assets</em> abaixo). <strong>Place in scene</strong> faz isso e constrói o modelo como uma <strong>entidade de grupo</strong> com um
+filho por parte:</p>
+<ul>
+<li>a mesh vai para um <strong>Mesh Filter</strong> (primitiva Custom) mais um Mesh Renderer;</li>
+<li>todas as partes projetam sombras; os cards cut-out usam sombras testadas por alpha (veja 4c);</li>
+<li>as partes com scatter tornam-se uma entidade contentora com um filho por cópia (veja 4c, GPU-instanced scatter);</li>
+<li>o grupo aparece no foco do viewport, fica selecionado, e a colocação é um único passo de undo.</li>
+</ul>
+<h3 id="merge-parts-uma-entidade-um-slot-de-material-por-parte">Merge parts: uma entidade, um slot de material por parte<a class="anchor" href="#merge-parts-uma-entidade-um-slot-de-material-por-parte" aria-label="Link to this section">#</a></h3>
+<p>Com <strong>Merge parts</strong> ligado (por defeito, uma checkbox na barra de ferramentas ao lado de <em>Place in scene</em>; ação de agente <code>nature_merge_parts</code>) as partes que não são cópias de scatter
+são colocadas como <strong>no máximo duas entidades</strong>: uma para as partes sólidas (tronco, ramos, raízes, rochas) e outra para as partes cut-out (folhas, pétalas,
+lâminas; mantêm a sua definição sem sombra). Cada entidade fundida tem <strong>uma mesh com uma sub-mesh por parte</strong>: Place escreve
+<code>&lt;name&gt;_solid.obj</code> / <code>&lt;name&gt;_foliage.obj</code> com um grupo <code>usemtl &lt;part&gt;</code> por parte (o motor transforma cada grupo numa sub-mesh), e preenche os
+<strong>Material slots</strong> do Mesh Filter com o <code>.mat</code> de cada parte, pela mesma ordem (<code>a.mat;b.mat</code>, um slot vazio usa o material da própria entidade).
+Os material slots são uma funcionalidade do motor, não um truque do Nature: qualquer OBJ com grupos <code>usemtl</code> ou um glTF com várias primitivas os aceita (veja
+<code>micromeshes.md</code> e o roadmap). Desligue Merge parts para voltar a ter uma entidade por parte.</p>
+<h3 id="micromesh-ao-colocar">Micromesh ao colocar<a class="anchor" href="#micromesh-ao-colocar" aria-label="Link to this section">#</a></h3>
+<p>Com <strong>Micromesh</strong> ligado (também na barra de ferramentas; ação de agente <code>nature_micromesh</code>) uma parte sólida com <strong>3 000 triângulos ou mais</strong> é colocada com o interruptor Micromesh do Mesh
+Renderer ligado, para que rochas e troncos densos sejam desenhados como um corte de clusters escolhido pela GPU (veja <code>micromeshes.md</code>). Os cards cut-out e
+as cópias de scatter nunca o recebem (os caminhos testados por alpha e instanciados mantêm-se como estão); uma parte com wind sway volta por si a um draw simples.</p>
+<h3 id="add-to-scatter-plan-de-uma-árvore-a-uma-floresta">Add to scatter plan: de uma árvore a uma floresta<a class="anchor" href="#add-to-scatter-plan-de-uma-árvore-a-uma-floresta" aria-label="Link to this section">#</a></h3>
+<p><strong>Add to scatter plan</strong> (barra de ferramentas; ação de agente <code>nature_add_to_scatter</code>) escreve o modelo no <code>Scatter/default.scatter</code> do projeto como uma <strong>classe
+composta</strong>: as meshes sólida e de folhagem são escritas como OBJs fundidos com os seus material slots, e a classe lista-as como linhas <code>part</code>, de modo que cada
+instância que a ação de scatter coloca é uma entidade vazia com um filho por parte. O espaçamento vem da pegada do modelo (uma copa de 6 m recebe cerca de 2,4 m de
+raio e 7 m entre células), o intervalo de escala é 0,8 a 1,3, e <em>where</em> começa em encostas suaves; edite o plano para alterar qualquer um deles
+(separador <em>Terrain</em> &gt; <em>Edit scatter plan</em>). Veja <em>Scatter on a terrain</em> em <code>terrain-generator-guide.md</code>. Testado de ponta a ponta: um Oak adicionado a partir do separador Nature
+é plantado pelo <em>Scatter</em> do separador Terrain como uma floresta de árvores de duas partes (<code>nature_models_scatter_from_the_terrain_tab_as_composite_instances</code>).</p>
+<figure class="doc-figure">
+  <img loading="lazy" src="/pt/docs/images/doppio/nature/material-slots.png" alt="Uma rocha com duas sub-meshes desenhada com os slots moss;stone e stone;moss, e uma Pink Flower colocada fundida">
+  <figcaption>Material slots no motor. Esquerda e meio: a mesma rocha de dois grupos, <code>Material slots</code> = <code>moss;stone</code> e
+  <code>stone;moss</code>. Direita: a Pink Flower colocada com Merge parts, 4 entidades passam a 2 (caule e folha partilham uma, pétalas e centro a
+  outra), cada uma com a sua própria lista de slots. Regenere com <code>scripts/render-material-slots-docs.sh</code>.</figcaption>
+</figure>
+<h2 id="6-ficheiros-scripting-e-agentes">6. Ficheiros, scripting e agentes<a class="anchor" href="#6-ficheiros-scripting-e-agentes" aria-label="Link to this section">#</a></h2>
+<p><code>.nature</code> é texto: o cabeçalho <code>CAFNATURE2</code>, o nome e a qualidade, depois as linhas de nós e ligações <code>NATUREGRAPH1</code>
+(incluindo quaisquer caminhos de assets do projeto). Carregá-lo reconstrói exatamente o mesmo modelo. Sem janela nem motor:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">doppio-material nature --list
+doppio-material nature Oak --out /tmp/nature --quality 2
+doppio-material nature --all --out /tmp/nature --seed 7
+</code></pre></div>
+<p>MCP (<code>--features agent</code>): consulta <code>nature</code> (grafo, nós, parâmetros, presets); ações <code>nature_apply_preset { name }</code>, <code>nature_add_node { op }</code>, <code>nature_connect { from, output, to, input }</code>, <code>nature_set { node, param, value | string, quality, name }</code>, <code>nature_export</code> e <code>nature_place</code>. Headless: a fixture <code>nature</code> constrói uma
+cena com motor de modelos gerados (<code>reset</code> aceita um <code>preset</code>).</p>
+<h3 id="variantes-a-partir-de-uma-receita">Variantes a partir de uma receita<a class="anchor" href="#variantes-a-partir-de-uma-receita" aria-label="Link to this section">#</a></h3>
+<p>A receita guardada também é uma entrada para outras ferramentas. <code>doppio-material variants Oak.generator.nature --out DIR --count 8 --seed 3</code>
+cozinha oito variantes determinísticas: o <code>seed</code> de cada nó é movido por um hash da seed da variante, e as partes OBJ vão para
+<code>DIR/&lt;name&gt;_&lt;key&gt;/</code>, onde a chave faz o hash do grafo da receita, da sua <code>generator_version</code>, da seed e da qualidade. Executá-lo
+de novo reutiliza as pastas; editar a receita muda a chave. Um gerador de scatter ou de vegetação deverá chamar a mesma
+função (<code>uikit::recipe_ref::nature_variants</code>). Veja <a href="/pt/docs/doppio/generator-recipes/"><code>generator-recipes.md</code></a>.</p>
+<h2 id="7-correções-do-motor-encontradas-ao-construir-isto">7. Correções do motor encontradas ao construir isto<a class="anchor" href="#7-correções-do-motor-encontradas-ao-construir-isto" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Um crash em <code>propagateTransforms</code></strong>: um grupo cujos filhos ainda não tinham matriz de mundo adicionava o componente
+enquanto a hierarquia estava a ser iterada, o que invalidava a iteração. As matrizes novas são agora recolhidas
+primeiro e escritas depois (teste C++ em <code>tests/test_scenemanager.cpp</code>).</li>
+<li>As meshes custom são desenhadas a partir do <strong>Mesh Filter</strong>, não do caminho <code>Mesh</code> do Mesh Renderer, por isso a colocação
+define o filter.</li>
+</ul>
+<h2 id="8-limites-e-roadmap">8. Limites e roadmap<a class="anchor" href="#8-limites-e-roadmap" aria-label="Link to this section">#</a></h2>
+<h3 id="folhas-o-que-está-feito-o-que-ainda-falta">Folhas: o que está feito, o que ainda falta<a class="anchor" href="#folhas-o-que-está-feito-o-que-ainda-falta" aria-label="Link to this section">#</a></h3>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/nature-oak-round-crown.png" alt="O Oak colocado no motor: uma copa redonda de folhas verdes em concha, sobre ramos mestres que sobem e abrem" loading="lazy">
+  <figcaption>O Oak colocado num projeto, tal como o motor o desenha, com a copa redonda, as folhas mais pequenas em concha e a
+  imagem da folha aclarada. Renderizado a partir das entidades colocadas, com uma luz direcional.</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/nature/nature-oak-atlas.png" alt="Um carvalho com o atlas de folhosas: formas, tons, dobras e queda diferentes" loading="lazy">
+  <figcaption>Um carvalho com o atlas de folhosas: formas, tons, dobras e queda diferentes</figcaption>
+</figure>
+<p><strong>Feito (o primeiro refinamento da vegetação):</strong></p>
+<ul>
+<li><strong>Folhas de muitas formas.</strong> A opção <em>Leaf shapes</em> do nó Leaves usa um <strong>atlas 4 x 2</strong> cozinhado a partir do operador de folha do
+Texture Generator: folhas ovadas, serrilhadas, estreitas, arredondadas, maduras escuras, jovens verde-amareladas, de bordo seco e
+lobadas (<em>Broadleaf Mix</em>), ou a paleta de outono (<em>Autumn Mix</em>). Cada card escolhe uma célula aleatória, por isso uma copa
+mistura formas e tons; os tamanhos dos cards variam de 0,55x a 1,35x. Oak, Birch, Autumn Maple, Ancient Oak e os
+outros presets de folhosas usam-no.</li>
+<li><strong>Folhas que não são um quad plano.</strong> Cada card é uma <strong>lâmina dobrada e caída</strong>: três vértices na largura (as
+bordas ficam mais baixas do que a nervura central, um V pouco profundo), 2-4 segmentos ao longo dela consoante a qualidade, a ponta a cair sob o seu
+peso e uma ligeira torção. <em>Fold</em> e <em>Droop</em> são parâmetros do nó. Um teste verifica que o atlas é amostrado por inteiro,
+que a lâmina não é plana e que Detailed tem mais segmentos do que Balanced.</li>
+</ul>
+<p><strong>Ainda falta:</strong></p>
+<ul>
+<li><strong>Meshes de folha 3D reais</strong> para as folhas mais próximas. (A face de trás translúcida e o mapa de normais do card estão feitos,
+veja 4c.)</li>
+<li><strong>Folhas compostas e tufos de agulhas</strong> como células do atlas (o atlas é só de folhosas; as coníferas continuam a usar o
+card único). A tint por folha vem agora também da cor de vértice pintada, além das células do atlas.</li>
+<li><strong>Casca a partir do bake da mesh.</strong> A casca gerada (4c) faz tiling no espaço UV; o mesmo bake usado pelo Rock Surface
+(curvature, AO, height) poderia gerar nós, descasque, musgo no lado sombrio, raízes que se alargam para o chão,
+ramos partidos e tocos (a referência é um toco podre e musgoso).</li>
+<li><strong>Cobertura de solo que se mistura.</strong> Tapetes de musgo e relva baixa misturados com folhada, ramitos, pinhas e plantas
+pequenas, como um <strong>material de solo misturado mais instâncias</strong>: o musgo como camada de superfície (já o é nas rochas)
+e como tufos grossos; a relva como lâminas GPU-instanced com variação de cor e manchas secas.</li>
+<li><strong>Árvores como um modelo mais um conjunto de texturas</strong>: uma mesh de tronco com o seu conjunto de casca, tubos de ramos com o seu próprio, e
+aglomerados de folhas, tudo conduzido pelo mesmo grafo e intervalo de qualidade.</li>
+</ul>
+<p>Referências para o objetivo: um toco musgoso fotorrealista com fetos, trevo e folhada à volta; uma copa densa de
+carvalho com folhas variadas e curvas.</p>
+<ul>
+<li>O nó Rock Surface cobre <strong>apenas rocha</strong> por agora; as superfícies de casca, cards de relva e solo usam o mesmo bake com outras camadas. As faces íngremes de uma rocha muito irregular ainda esticam um pouco no atlas em cubo (um desdobramento com noção de costuras resolveria isso).</li>
+<li>Os material slots já existem (veja <em>Merge parts</em>); o que falta para a vegetação hi-fi é o alargamento das raízes e a mistura no contacto com o solo.</li>
+<li>A lista de slots é um campo de texto de no máximo ~250 bytes: cerca de sete slots com caminhos relativos ao projeto. A colocação mantém os slots que cabem inteiros
+e reporta os restantes.</li>
+<li>O preset Low-poly Pine continua a ser uma pilha de blobs em vez de cones em níveis; é desejado um nó de níveis cónicos.</li>
+<li>A cor pintada existe apenas em cards de folhas e lâminas (troncos e rochas são brancos), não há cadeia de LOD nem
+impostor billboard para árvores distantes.</li>
+<li>A pré-visualização é um render rápido de formas sem texturas nem sombras; <strong>Place in scene</strong> mostra a coisa real.</li>
+<li>Apenas <code>.obj</code> (ainda não há escritor de <code>.glb</code>).</li>
+<li>O scatter sobre terreno, os biomas e os mapas de densidade pertencem ao gerador de terreno, que é separado.</li>
+</ul>
+<p>Scatter, LOD e impostores estão planeados em <a href="/pt/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>.</p>
+<h2 id="8b-árvores-quase-fotorrealistas-com-o-que-existe-hoje">8b. Árvores quase fotorrealistas com o que existe hoje<a class="anchor" href="#8b-árvores-quase-fotorrealistas-com-o-que-existe-hoje" aria-label="Link to this section">#</a></h2>
+<p>Uma árvore fotorrealista não é uma funcionalidade: é uma <strong>silhueta</strong> irregular, <strong>casca</strong> com relevo real, uma copa
+cujas folhas diferem e se sombreiam umas às outras, <strong>luz que atravessa as folhas</strong>, <strong>movimento</strong>, e sobretudo
+<strong>variedade</strong> (não há duas árvores iguais). A ferramenta já tem resposta para a maioria destes pontos; esta secção é a receita para
+os combinar, seguida de uma lista honesta do que ainda fica aquém de uma fotografia de perto.</p>
+<table class="doc-table">
+  <thead><tr><th>Ingrediente</th><th>Estado</th><th>Como obter agora</th></tr></thead>
+  <tbody>
+    <tr><td>Esqueleto irregular</td><td>Feito</td><td><strong>Grow Branches</strong>: <em>Gnarl</em>, <em>Droop</em>, 3-4 níveis, <em>Branches start at</em> 0,3-0,4, um orçamento alto de segmentos, seeds diferentes</td></tr>
+    <tr><td>Relevo e cor da casca</td><td>Feito (espaço UV)</td><td>casca gerada de carvalho, pinheiro ou vidoeiro: sulcos com parallax, occlusion nas fendas, musgo nas fendas do carvalho; empilhe os seus próprios scans com nós <strong>Texture</strong></td></tr>
+    <tr><td>Raízes e base do tronco</td><td>Parcial</td><td>nó <strong>Roots</strong> (o alargamento é geometria, não uma saia misturada)</td></tr>
+    <tr><td>Folhas variadas</td><td>Feito</td><td>atlas de folhas 4 x 2, cards dobrados e caídos, tamanhos de 0,55-1,35x, folhas interiores escuras</td></tr>
+    <tr><td>Sombreamento das folhas</td><td>Feito</td><td>occlusion da copa cozinhada na cor de vértice, mapa de normais a partir do card, sombras testadas por alpha, <em>translucency</em></td></tr>
+    <tr><td>Movimento</td><td>Feito</td><td>wind sway partilhado por tronco e copa, flutter pintado nas pontas das folhas, fase por árvore</td></tr>
+    <tr><td>Variedade numa floresta</td><td>Feito na ferramenta, ainda não no mundo</td><td>variantes com seed (<code>doppio-material variants</code>) e o núcleo de scatter (tint, escala, variante por instância)</td></tr>
+    <tr><td>Estação, chuva, neve, idade</td><td>Feito</td><td>modificadores em tempo de execução no Mesh Renderer ou no material: tint, wetness, snow, age</td></tr>
+    <tr><td>Massa de árvores</td><td>Parcial</td><td>cópias instanciadas em batch; ainda sem cadeia de LOD nem impostores</td></tr>
+  </tbody>
+</table>
+<h3 id="a-receita-uma-folhosa-madura-cerca-de-12-m">A receita (uma folhosa madura, cerca de 12 m)<a class="anchor" href="#a-receita-uma-folhosa-madura-cerca-de-12-m" aria-label="Link to this section">#</a></h3>
+<ol>
+<li><strong>Quality: Detailed.</strong> Acrescenta segmentos, troncos mais redondos e as raízes; mantenha a pré-visualização em Balanced enquanto edita.</li>
+<li><strong>Skeleton.</strong> <em>Grow Branches</em>: Height 12, Trunk radius 0,35-0,45, Branch levels 4, Branches per limb 4-5, Branch angle
+40-55, Child length 0,55-0,65, Taper 0,85, <strong>Gnarl 0,4-0,55</strong>, <strong>Droop 0,2-0,3</strong>, Branches start at 0,35, Segment budget
+4000-6000. Gnarl e droop é o que separa uma árvore de um diagrama; mude apenas a seed para obter uma irmã.</li>
+<li><strong>Tronco.</strong> <em>Branch Tubes</em> com ~10-12 lados, depois um nó <strong>Roots</strong> (6-9 raízes, Dive below ground 0,4) fundido na mesma
+parte para que a base se alargue. Acrescente a seguir um nó <em>Texture</em> (veja abaixo) em vez de um preset de casca plano.</li>
+<li><strong>Material da casca.</strong> Um <em>Library Material</em> para a casca de carvalho gerada dá relevo e occlusion. Para um plano de perto, ligue
+nós <em>Texture</em> por esta ordem ao tronco: <strong>Albedo</strong> (o seu scan de casca, <em>Per metre</em> 0,5), <strong>Normal</strong> (o mapa de
+normais do scan, <em>Add</em>), <strong>ORM</strong> (a sua roughness e occlusion), depois um segundo <strong>Albedo</strong> com uma imagem de musgo ou líquen
+(<em>Multiply</em>, força 0,4, tint para o verde) para que o tronco inferior à sombra não tenha a mesma cor que os ramos superiores.
+<em>Per metre</em> mantém a mesma densidade de texels num tronco de 12 m e num ramo de 2 m.</li>
+<li><strong>Folhas.</strong> <em>Leaves</em> nos ramos exteriores e ~0,45 nos interiores, <strong>Leaf shapes: Atlas</strong>, Leaf size cerca de 5-7 % da
+altura da árvore, Fold 0,35, Droop 0,3, orçamento de triângulos 15000-30000. O atlas dá oito formas e tons; as folhas
+interiores usam automaticamente a célula escura e levam occlusion cozinhada, que é a maior parte da &quot;profundidade&quot; da copa.</li>
+<li><strong>Material da folha.</strong> Uma <em>Leaf / Petal Texture</em> com o atlas de folhosas, ou o seu próprio PNG com alpha através de um nó <em>Texture</em>
+(torna-se cut-out e projeta sombras através do seu alpha). Acrescente um nó <em>Material</em>: <strong>Translucency 0,5-0,6, Wind sway
+0,012 (o mesmo do tronco), Leaf flutter 0,5-0,7</strong>. O sway tem de coincidir com o do tronco ou as folhas descolam-se dos
+ramos.</li>
+<li><strong>Contacto com o solo.</strong> Ponha a árvore no terreno com <em>Place on Ground</em>; faça scatter de partes <em>Instance on Points</em> de musgo, feto e
+folhada à volta da base (são colocadas como cópias em batch com a sua própria fase de vento).</li>
+<li><strong>Variantes.</strong> Guarde a receita e cozinhe de oito a dezasseis seeds (<code>doppio-material variants Oak.generator.nature --count 12</code>)
+para que um grupo de árvores não seja doze cópias. A escala (0,8-1,25) e uma variação de tint de alguns por cento por canal são a segunda
+metade da variedade; o núcleo de scatter gera ambas por instância.</li>
+</ol>
+<h3 id="definições-de-iluminação-e-renderização-que-importam">Definições de iluminação e renderização que importam<a class="anchor" href="#definições-de-iluminação-e-renderização-que-importam" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Uma <strong>luz direcional com cascaded shadows</strong> e o céu de ambiente: as folhas só ficam bem quando a luz lhes chega
+por trás. A translucency é o que impede uma copa com luz por trás de ficar preta.</li>
+<li>Mantenha as <strong>sombras testadas por alpha</strong> ligadas (por defeito): a copa faz sombra a si própria e ao tronco.</li>
+<li>Deixe o <strong>Photon</strong> ou a ambient occlusion ligados para o escurecimento de contacto entre o tronco e o solo.</li>
+<li>Use os <strong>modificadores em tempo de execução</strong> em vez de voltar a fazer bake: <em>Age</em> 0,2-0,4 numa árvore velha, <em>Wetness</em> depois da chuva (casca mais escura,
+folhas brilhantes), <em>Snow</em> por estação, uma <em>Tint</em> quente para o outono.</li>
+</ul>
+<h3 id="o-que-ainda-fica-aquém-de-uma-fotografia-de-perto">O que ainda fica aquém de uma fotografia de perto<a class="anchor" href="#o-que-ainda-fica-aquém-de-uma-fotografia-de-perto" aria-label="Link to this section">#</a></h3>
+<details>
+  <summary>Lista honesta, e que roadmap resolve cada ponto</summary>
+  <ul>
+    <li><strong>As folhas são cards, não meshes.</strong> A um metro a silhueta é um card com borda de alpha; estão planeadas meshes de folha 3D reais para as folhas mais próximas (secção 8, <em>Real 3D leaf meshes</em>).</li>
+    <li><strong>A casca faz tiling no espaço UV.</strong> Sem nós, placas a descascar, tocos partidos nem musgo que siga o lado sombrio: o bake da mesh que conduz o Rock Surface poderia fazê-lo (<em>Bark from the mesh bake</em>).</li>
+    <li><strong>Um material por tipo de superfície.</strong> Uma entidade fundida tem um material slot por parte (tronco, ramos, raízes, cada um com a sua casca), mas as partes sólidas e cut-out continuam a ser duas entidades porque as sombras são por entidade.</li>
+    <li><strong>Sem modelo de subsurface scattering.</strong> A translucency é um termo de luz por trás, não luz a difundir-se dentro de uma folha ou casca.</li>
+    <li><strong>Sem cadeia de LOD nem impostores.</strong> Uma árvore hero é cara e uma floresta delas ainda não é possível (<a href="/pt/docs/doppio/photoreal-world-roadmap/">photoreal-world-roadmap.md</a>, fase 4).</li>
+    <li><strong>Nada coloca árvores sobre o terreno por si.</strong> O núcleo de scatter existe e está testado, mas nenhuma ferramenta do editor nem máscara de terreno o alimenta ainda (fases 1, 2 e 6).</li>
+    <li><strong>A iluminação global é em screen-space para a luz direta.</strong> A luz que ressalta sob uma copa é aproximada até o Photon injetar as luzes reais (<a href="/pt/docs/doppio/graphics-roadmap/">graphics-roadmap.md</a>, fase P-A).</li>
+    <li><strong>Geometria densa.</strong> Um tronco de 100k triângulos com geometria de casca real precisa do renderer de clusters, e ele existe: ligue o <strong>Micromesh</strong> no Mesh Renderer de uma parte opaca colocada (rochas, troncos, rochedos) e ela é desenhada como um corte de clusters escolhido pela GPU com sombras, cores de vértice e sub-meshes (veja <a href="/pt/docs/doppio/micromeshes/">micromeshes.md</a>; 6x menos triângulos em rochas densas, 3x numa floresta densa). Colocar liga-o para partes sólidas de 3 000 triângulos ou mais (a checkbox <strong>Micromesh</strong>), e os cards de folhagem testados por alpha e as partes animadas por vento ficam no caminho instanciado por desenho.</li>
+  </ul>
+</details>
+<h3 id="checklist-de-qualidade-antes-de-colocar-uma-árvore-hero">Checklist de qualidade antes de colocar uma árvore hero<a class="anchor" href="#checklist-de-qualidade-antes-de-colocar-uma-árvore-hero" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Verificação</th>
+<th>Objetivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Triângulos</td>
+<td>40-120 k para uma árvore hero em Detailed, 8-20 k em Balanced, menos de 2 k em Stylized</td>
+</tr>
+<tr>
+<td>Silhueta</td>
+<td>dois ramos nunca paralelos, taper e gnarl visíveis a 30 m</td>
+</tr>
+<tr>
+<td>Casca</td>
+<td>relevo visível com luz rasante, pelo menos duas camadas de cor, sem tiling visível a 5 m</td>
+</tr>
+<tr>
+<td>Copa</td>
+<td>interior escuro, rebordo claro, sol a brilhar através das folhas por trás</td>
+</tr>
+<tr>
+<td>Movimento</td>
+<td>tronco e copa balançam juntos, só as pontas cintilam</td>
+</tr>
+<tr>
+<td>Floresta</td>
+<td>8+ variantes, escala e tint por instância, wetness ou age definidos pelo mundo, não cozinhados</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="9-regenerar-as-imagens">9. Regenerar as imagens<a class="anchor" href="#9-regenerar-as-imagens" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/render-nature-docs.sh       <span class="hljs-comment"># the three preview sheets (software renderer, no engine)</span>
+./scripts/capture-nature-docs.sh      <span class="hljs-comment"># headless screenshots of the tab and the placed scene (needs libcaffeine-capi)</span>
+</code></pre></div>
+<h2 id="regra-de-ouro-todo-o-material-é-um-asset">Regra de ouro: todo o material é um asset<a class="anchor" href="#regra-de-ouro-todo-o-material-é-um-asset" aria-label="Link to this section">#</a></h2>
+<p>Os nós Library Material, Leaf / Petal Texture e Solid Colour (e todos os presets) são apenas
+<strong>moldes</strong>. Aplicar um preset, ou colocar um modelo, escreve a imagem e o <code>.mat</code> de cada material em
+<code>Nature/Materials/</code> no seu projeto e transforma o nó em <strong>Your Material (.mat)</strong> a apontar para
+eles. Nada fica escondido no menu: abra o <code>.mat</code> no separador Material, repinte o PNG, ou
+aponte o nó para outro ficheiro. Um material só é escrito uma vez, por isso as suas edições são mantidas.
+Your Material e Your Texture trazem <em>Shapes across / down</em>, a disposição do atlas da imagem, que
+o nó Leaves lê para saber quantas formas de folha contém.</p>
+<h3 id="abrir-ficheiros-nature-antigos">Abrir ficheiros <code>.nature</code> antigos<a class="anchor" href="#abrir-ficheiros-nature-antigos" aria-label="Link to this section">#</a></h3>
+<p>Os ficheiros guardados antes de os materiais passarem a nós (<code>NATUREGRAPH1</code>) são migrados quando carregam. Cada Part recebe o
+nó de material que a sua escolha antiga significava (biblioteca, textura, cor sólida com a sua cor antiga, o seu <code>.mat</code> ou o seu
+PNG com o seu caminho antigo). O nó Leaves é ligado à textura da sua parte de folhas para ler o atlas a partir dela,
+e o seu tamanho antigo em metros torna-se uma fração da altura da árvore (medida nessa árvore), com fold e droop
+mantidos. Guardar escreve o novo formato (<code>NATUREGRAPH2</code>), que as versões antigas não conseguem abrir. Uma escolha de forma de folha
+de &quot;atlas&quot; numa textura de imagem única não é transportada: a disposição vem agora da textura.</p>
+<h2 id="usar-num-mundo">Usar num mundo<a class="anchor" href="#usar-num-mundo" aria-label="Link to this section">#</a></h2>
+<p>O <a href="/pt/docs/doppio/world-composition/">World Composer</a> coloca receitas de natureza por referência: uma linha <code>class</code> indica uma
+receita <code>*.generator.nature</code> e o composer faz o bake do seu conjunto de variantes, por isso editar a receita muda
+todas as árvores do mundo. Exponha um parâmetro do grafo e uma composição pode controlá-lo a partir do
+terreno com <code>adapt param.&lt;name&gt; &lt;mask&gt;</code>: uma copa que cresce mais perto da água, por exemplo. O texto do grafo
+declara-o com uma linha por parâmetro, <code>expose &lt;name&gt; &lt;node&gt;.&lt;param&gt; [min max]</code> (por exemplo
+<code>expose rough 2.amount 0.1 1.25</code>); sem intervalo aplica-se o do próprio parâmetro, e um grafo sem nada exposto fica
+igual, por isso as receitas antigas e as suas caches de bake continuam válidas. Uma classe com
+<code>unique on</code> é gerada uma vez por instância, para objetos hero.</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/doppio/nature-generator-guide.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/doppio/photoreal-world-roadmap/"><span>Anterior</span><strong>Mundo procedural fotorrealista — validação e roadmap</strong></a><a class="pager-next" href="/pt/docs/doppio/photon-guide/"><span>Seguinte</span><strong>Photon: iluminação global no Doppio</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-como-funciona-um-grafo">1. Como funciona um grafo</a></li><li class="l2"><a href="#2-catálogo-de-nós">2. Catálogo de nós</a></li><li class="l2"><a href="#3-qualidade-de-low-poly-a-alta-fidelidade">3. Qualidade: de low poly a alta fidelidade</a></li><li class="l2"><a href="#4-os-materiais-são-nós-e-são-assets-reais">4. Os materiais são nós, e são assets reais</a></li><li class="l3"><a href="#editar-um-material-de-biblioteca-ou-uma-textura-de-folha">Editar um material de biblioteca ou uma textura de folha</a></li><li class="l3"><a href="#nós-texture-e-material">Nós Texture e Material</a></li><li class="l2"><a href="#4b-superfícies-geradas-um-conjunto-de-texturas-cozinhado-a-partir-do-próprio-modelo">4b. Superfícies geradas: um conjunto de texturas cozinhado a partir do próprio modelo</a></li><li class="l2"><a href="#4c-realismo-casca-folhas-vento-e-translucência">4c. Realismo: casca, folhas, vento e translucência</a></li><li class="l2"><a href="#4d-pastas-de-assets">4d. Pastas de assets</a></li><li class="l2"><a href="#5-colocar-modelos-na-cena">5. Colocar modelos na cena</a></li><li class="l3"><a href="#merge-parts-uma-entidade-um-slot-de-material-por-parte">Merge parts: uma entidade, um slot de material por parte</a></li><li class="l3"><a href="#micromesh-ao-colocar">Micromesh ao colocar</a></li><li class="l3"><a href="#add-to-scatter-plan-de-uma-árvore-a-uma-floresta">Add to scatter plan: de uma árvore a uma floresta</a></li><li class="l2"><a href="#6-ficheiros-scripting-e-agentes">6. Ficheiros, scripting e agentes</a></li><li class="l3"><a href="#variantes-a-partir-de-uma-receita">Variantes a partir de uma receita</a></li><li class="l2"><a href="#7-correções-do-motor-encontradas-ao-construir-isto">7. Correções do motor encontradas ao construir isto</a></li><li class="l2"><a href="#8-limites-e-roadmap">8. Limites e roadmap</a></li><li class="l3"><a href="#folhas-o-que-está-feito-o-que-ainda-falta">Folhas: o que está feito, o que ainda falta</a></li><li class="l2"><a href="#8b-árvores-quase-fotorrealistas-com-o-que-existe-hoje">8b. Árvores quase fotorrealistas com o que existe hoje</a></li><li class="l3"><a href="#a-receita-uma-folhosa-madura-cerca-de-12-m">A receita (uma folhosa madura, cerca de 12 m)</a></li><li class="l3"><a href="#definições-de-iluminação-e-renderização-que-importam">Definições de iluminação e renderização que importam</a></li><li class="l3"><a href="#o-que-ainda-fica-aquém-de-uma-fotografia-de-perto">O que ainda fica aquém de uma fotografia de perto</a></li><li class="l3"><a href="#checklist-de-qualidade-antes-de-colocar-uma-árvore-hero">Checklist de qualidade antes de colocar uma árvore hero</a></li><li class="l2"><a href="#9-regenerar-as-imagens">9. Regenerar as imagens</a></li><li class="l2"><a href="#regra-de-ouro-todo-o-material-é-um-asset">Regra de ouro: todo o material é um asset</a></li><li class="l3"><a href="#abrir-ficheiros-nature-antigos">Abrir ficheiros .nature antigos</a></li><li class="l2"><a href="#usar-num-mundo">Usar num mundo</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

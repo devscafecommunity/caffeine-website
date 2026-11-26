@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Materiais no Doppio: biblioteca procedural, profundidade real e bake · Caffeine</title>
+<meta name="description" content="Um guia prático para criar materiais PBR tileable com a biblioteca de nós procedurais, profundidade e bake de mapas.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Materiais no Doppio: biblioteca procedural, profundidade real e bake · Caffeine">
+<meta property="og:description" content="Um guia prático para criar materiais PBR tileable com a biblioteca de nós procedurais, profundidade e bake de mapas.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/doppio/materials-guide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/doppio/materials-guide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/materials-guide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/doppio/materials-guide/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab active" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/doppio/materials-guide/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/doppio/materials-guide/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Painéis do editor</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/editor/test-automation/">Automação de testes do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-editor/">Editor de cena</a></li><li><a class="nav-link" href="/pt/docs/editor/material-editor/">Editor de materiais</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-gallery/">Galeria de UI do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-migration/">Guia de migração de plugins</a></li><li><a class="nav-link" href="/pt/docs/editor/viewport-toolbar/">HUD e controlos do viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/photon/">Photon — GI híbrido nativo por radiance cascades</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-manager/">Plugin Manager (host legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-sdk/">Plugin SDK (C++ legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-reference/">Referência da UI do Doppio</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/workspace-and-theme/">Workspace, tema e componentes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/doppio/">Geradores &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-roadmap/">Edição de terreno: pincéis, paleta de materiais e vegetação</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-phase-0/">Edição de terreno: relatório da Fase 0</a></li><li><a class="nav-link" href="/pt/docs/doppio/environment-guide/">Environment: nuvens, névoa, chuva e relâmpagos no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/rust-ui/">Frontend Rust UI (Iced)</a></li><li><a class="nav-link" href="/pt/docs/doppio/gizmos-and-markers/">Gizmos e marcadores de cena</a></li><li><a class="nav-link active" href="/pt/docs/doppio/materials-guide/" aria-current="page">Materiais no Doppio: biblioteca procedural, profundidade real e bake</a></li><li><a class="nav-link" href="/pt/docs/doppio/graphics-roadmap/">Melhoria gráfica — Roadmap de Micromeshes e Photon</a></li><li><a class="nav-link" href="/pt/docs/doppio/micromeshes/">Micromeshes: clusters, cortes e o draw na GPU</a></li><li><a class="nav-link" href="/pt/docs/doppio/runtime-modifiers/">Modificadores em tempo de execução para materiais gerados</a></li><li><a class="nav-link" href="/pt/docs/doppio/photoreal-world-roadmap/">Mundo procedural fotorrealista — validação e roadmap</a></li><li><a class="nav-link" href="/pt/docs/doppio/nature-generator-guide/">Nature Generator: rochas, árvores e plantas procedurais, construídas com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/photon-guide/">Photon: iluminação global no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/material-pipeline/">Pipeline de materiais, texturas e geradores — backlog</a></li><li><a class="nav-link" href="/pt/docs/doppio/profiler-guide/">Profiler: para onde vai o tempo de um frame</a></li><li><a class="nav-link" href="/pt/docs/doppio/generator-recipes/">Receitas de geradores (generator.*)</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/headless-testing/">Testes de UI headless para o Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/pt/docs/doppio/texture-generator-guide/">Texture Generator: sprites procedurais, VFX e máscaras empacotadas</a></li><li><a class="nav-link" href="/pt/docs/doppio/water-generator-guide/">Water Generator: corpos de água construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/world-composition/">World Composer: construir um mundo prefab a partir de receitas de geradores</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plugins/compatibility/">Compatibilidade de plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/pt/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/pt/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/pt/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/pt/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Materiais no Doppio: biblioteca procedural, profundidade real e bake</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Estável</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Última atualização: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p class="doc-lede">Um guia prático para criar materiais PBR tileable com a biblioteca de nós procedurais, profundidade e bake de mapas.</p>
+<blockquote>
+<p>À procura de sprites, folhas, chamas ou máscaras de VFX empacotadas em vez de um material PBR? Isso é o
+<strong>Texture Generator</strong>, uma ferramenta separada: veja <a href="/pt/docs/doppio/texture-generator-guide/">texture-generator-guide.md</a>.</p>
+</blockquote>
+<p>Este guia cobre o que precisa para criar materiais PBR realistas e tileable
+<strong>sem descarregar assets de terceiros</strong>: a biblioteca de nós procedurais, a
+biblioteca de presets, o nó Output, a profundidade parallax e como funciona o bake.
+As imagens são renderizadas pelo próprio motor e capturadas em modo headless; os comandos para
+as regenerar estão no fim.</p>
+<h2 id="1-a-biblioteca-procedural">1. A biblioteca procedural<a class="anchor" href="#1-a-biblioteca-procedural" aria-label="Link to this section">#</a></h2>
+<p>O separador Generator é um grafo de nós que faz bake para os mapas do material. Além
+dos nós originais, tem agora <strong>129 operações orientadas a dados</strong> (<code>uikit/procedural/</code>),
+todas com seed, tileable e multithread:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Noise (16)</td>
+<td>Perlin / Simplex-like / Value FBM, Ridged, Billow, Turbulence, Worley variants, Domain-warped, Clouds, Gabor-like</td>
+</tr>
+<tr>
+<td>Natural (17)</td>
+<td>Dirt, Scratches, Cracks, Rust, Moss, Strata, Sand ripples, Wood grain, Marble veins, Leather pores, Brushed metal, Caustics</td>
+</tr>
+<tr>
+<td>Patterns (18)</td>
+<td>Tiles, Hex tiles, Bricks (running bond), Herringbone, Basket weave, Stripes, Rings, Scales, Cobblestones, Planks, Diamond plate, Perforated, Knurl</td>
+</tr>
+<tr>
+<td>Shapes (8)</td>
+<td>Linear / radial / angular / diamond gradients, Circle, Rectangle, Polygon, Star</td>
+</tr>
+<tr>
+<td>Math (25)</td>
+<td>Add, Multiply, Lerp, Remap, Clamp, Power, Smoothstep, Posterize, Gradient Map, Channel Split/Merge…</td>
+</tr>
+<tr>
+<td>Geometry (8)</td>
+<td>Transform 2D, Mirror, Polar, Twirl, Pixelate, Slope Blur, Tile Sampler, Warp</td>
+</tr>
+<tr>
+<td>Height &amp; PBR (14)</td>
+<td>Height-to-Normal, Height Blend, Terrace, Bevel, Curvature, multi-scale AO, Edge Wear, Dust</td>
+</tr>
+<tr>
+<td><strong>Variation (6)</strong></td>
+<td>Noise Variation, Cell Variation, Patch Blend, Tile Shuffle, Wave Function Collapse, Diamond-Square</td>
+</tr>
+<tr>
+<td><strong>Realistic (17)</strong></td>
+<td>Rock Fracture, River Pebbles, Grass Blades, Water Waves, Foam, Bark Fissures, Soil Clumps, Leaf Litter, Lichen, Wet / Puddle Mask, Cavity Grime, Ice, Lava, Asphalt, Carbon Fibre, Paint Chips, Water Droplets</td>
+</tr>
+</tbody>
+</table></div>
+<p>Aparecem na palette de nós agrupados por categoria (com pesquisa) e os seus
+parâmetros recebem automaticamente sliders, seletores de cor e dropdowns no
+painel de propriedades, porque cada op é uma linha de tabela (<code>OpDef</code>).</p>
+<h3 id="biblioteca-de-presets-85-materiais">Biblioteca de presets (85 materiais)<a class="anchor" href="#biblioteca-de-presets-85-materiais" aria-label="Link to this section">#</a></h3>
+<p>O dropdown <strong>Library</strong> no cabeçalho do Generator parte de um grafo pronto
+(um passo com undo; a sua resolução é mantida). Os presets são grafos normais,
+pelo que pode continuar a editá-los. Todos os presets têm variação real de height
+e fazem tiling sem costuras.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/gallery-albedo.png" alt="Todos os presets, cor base" loading="lazy">
+  <figcaption>Todos os presets, cor base</figcaption>
+</figure>
+<p>Os mesmos presets como height maps (branco = superfície, preto = mais fundo) e como
+normal maps:</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/gallery-height.png" alt="Height maps" loading="lazy">
+  <figcaption>Height maps</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/gallery-normal.png" alt="Normal maps" loading="lazy">
+  <figcaption>Normal maps</figcaption>
+</figure>
+<h3 id="biblioteca-realistic-pbr-de-rocha-água-folhagem-solo-e-estruturas-artificiais">Biblioteca Realistic: PBR de rocha, água, folhagem, solo e estruturas artificiais<a class="anchor" href="#biblioteca-realistic-pbr-de-rocha-água-folhagem-solo-e-estruturas-artificiais" aria-label="Link to this section">#</a></h3>
+<p>A categoria <em>Realistic</em> reúne os blocos de construção ao estilo Substance por trás dos presets
+fotorrealistas. Todos fazem tiling, têm seed e vivem em <code>uikit/procedural/realistic.rs</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Op</th>
+<th>What it makes</th>
+<th>Notable outputs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rock Fracture</td>
+<td>facetas angulares, cada uma um plano inclinado com fissuras vincadas</td>
+<td>Colour, Height, Facet id</td>
+</tr>
+<tr>
+<td>River Pebbles</td>
+<td>pedras arredondadas muito juntas, com espaços entre elas</td>
+<td>Colour, Height, Pebble id</td>
+</tr>
+<tr>
+<td>Grass Blades</td>
+<td>lâminas em camadas, afiladas, inclinadas e encaracoladas sobre o solo</td>
+<td>Colour, Height, Blade id</td>
+</tr>
+<tr>
+<td>Water Waves</td>
+<td>soma de ondas direcionais (vetores de onda inteiros, por isso faz tiling) mais ondulações capilares</td>
+<td>Colour, Height</td>
+</tr>
+<tr>
+<td>Foam</td>
+<td>espuma de crista com rendilhado, a partir de qualquer entrada de height ou do seu próprio ruído</td>
+<td>Mask</td>
+</tr>
+<tr>
+<td>Bark Fissures</td>
+<td>placas esticadas na vertical, separadas por fissuras</td>
+<td>Colour, Height</td>
+</tr>
+<tr>
+<td>Soil Clumps</td>
+<td>torrões, migalhas e pequenas pedras</td>
+<td>Colour, Height</td>
+</tr>
+<tr>
+<td>Leaf Litter</td>
+<td>folhas sobrepostas com nervuras, de três a quatro camadas de profundidade</td>
+<td>Colour, Height</td>
+</tr>
+<tr>
+<td>Lichen</td>
+<td>colónias irregulares</td>
+<td>Mask</td>
+</tr>
+<tr>
+<td>Wet / Puddle Mask</td>
+<td>as zonas baixas de uma entrada de height enchem-se de água</td>
+<td>Mask</td>
+</tr>
+<tr>
+<td>Cavity Grime</td>
+<td>sujidade a acumular-se nas frestas de uma entrada de height</td>
+<td>Mask</td>
+</tr>
+<tr>
+<td>Ice, Lava, Asphalt, Carbon Fibre, Paint Chips, Water Droplets</td>
+<td>superfícies de finalidade única</td>
+<td>Lava também produz <strong>Emissive</strong></td>
+</tr>
+</tbody>
+</table></div>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/realistic-albedo.png" alt="Presets Realistic, cor base" loading="lazy">
+  <figcaption>Presets Realistic, cor base</figcaption>
+</figure>
+<p>Renderizado pelo motor sobre um chão com profundidade parallax, um sol real e sombras:</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/realistic-renders.png" alt="Presets Realistic renderizados" loading="lazy">
+  <figcaption>Presets Realistic renderizados</figcaption>
+</figure>
+<p><strong>Camadas de acento.</strong> Um preset pode ter uma terceira camada (musgo, espuma, ferrugem, líquen, humidade...).
+O valor do acento é a máscara: mistura a sua cor sobre a superfície, conduz o roughness
+para um alvo (molhado = brilhante) e acrescenta um pouco de height. Os presets construídos assim são grafos
+normais (nós <code>Lerp</code> controlados pelo acento), pelo que pode reequilibrar ou substituir o acento no
+editor de nós. <code>wear</code> também escala o acento.</p>
+<p>Famílias de presets: <strong>Realistic Rock</strong> (granite cliff, basalt columns, limestone, sandstone,
+mossy boulder, lichen granite, river and wet pebbles, lava flow, frozen lake), <strong>Realistic
+Water</strong> (ocean swell, choppy sea, calm lake, tropical shallows, river rapids, rain puddle,
+droplets on glass, swamp), <strong>Realistic Nature</strong> (lawn, meadow, dry and tall wild grass, pine
+needles, forest floor, autumn leaves), <strong>Realistic Ground</strong> (soil, forest mud, fresh and cracked
+asphalt), <strong>Realistic Wood</strong> (oak, pine and birch bark) e <strong>Realistic Man-made</strong> (carbon fibre,
+chipped red and blue paint, rusty painted panel, mossy brick wall).</p>
+<h3 id="variation-padrões-vivos-que-nunca-se-repetem">Variation: padrões vivos que nunca se repetem<a class="anchor" href="#variation-padrões-vivos-que-nunca-se-repetem" aria-label="Link to this section">#</a></h3>
+<p>Um tile repetido ou um ruído limpo parece mecânico. A classe <strong>Variation</strong> acrescenta aleatoriedade
+controlada para que as superfícies pareçam usadas. Cada op tem seed (uma nova seed é uma nova variação do mesmo
+material), é determinística e mantém os resultados sem costuras sempre que a sua entrada as tem (<code>uikit/procedural/variation.rs</code>).</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/variation-ops.png" alt="Nós Variation aplicados à mesma entrada de tijolo" loading="lazy">
+  <figcaption>Nós Variation aplicados à mesma entrada de tijolo</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Node</th>
+<th>What it does</th>
+<th>Main controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Noise Variation</strong></td>
+<td>o ruído <strong>Perlin</strong> ou <strong>Simplex</strong> desloca o brilho, a tonalidade e a saturação da entrada em manchas grandes e suaves, cada canal com o seu próprio campo de ruído</td>
+<td>noise kind, patch size, octaves, brightness / hue / saturation drift, contrast</td>
+</tr>
+<tr>
+<td><strong>Cell Variation</strong></td>
+<td>cada célula recebe o seu próprio tom aleatório e, opcionalmente, o seu próprio offset na entrada (stochastic tiling). As células são uma grelha, Voronoi, ou <strong>os ids de célula do próprio padrão</strong>: ligue a saída <em>Variation</em> de um padrão de tijolo / pedra / tile a <strong>Cell ID</strong> e cada tijolo varia individualmente</td>
+<td>cells, brightness / hue / saturation variation, texture shift, jitter</td>
+</tr>
+<tr>
+<td><strong>Patch Blend</strong></td>
+<td>mistura duas entradas (A, B) em manchas orgânicas moldadas por ruído Perlin / Simplex: limpo e gasto, molhado e seco, musgo e rocha</td>
+<td>noise kind, patch size, coverage of B, edge softness</td>
+</tr>
+<tr>
+<td><strong>Tile Shuffle</strong></td>
+<td>corta a entrada em células e troca, roda e inverte-as ao acaso</td>
+<td>cells, swap chance, rotate, flip</td>
+</tr>
+<tr>
+<td><strong>Wave Function Collapse</strong></td>
+<td>constrói um novo arranjo, de qualquer tamanho, em que cada vizinhança local já existe numa <em>amostra</em>: tijolos, tiles, runas... veja abaixo</td>
+<td>output cells, sample cells, pattern size (2 or 3), tone levels, symmetry, softness</td>
+</tr>
+<tr>
+<td><strong>Diamond-Square</strong></td>
+<td>o clássico heightfield fractal (nuvens, dunas, relevo de rocha), calculado num toro para fazer tiling</td>
+<td>grid (2^n), roughness (Hurst exponent), contrast, bicubic smoothing</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Wave Function Collapse (modelo de sobreposição).</strong> A amostra (a entrada ligada, ou uma parede de
+tijolo integrada quando nada está ligado) é reduzida a <code>sample x sample</code> células e quantizada em
+<code>levels</code> bandas de tom; cada janela <code>N x N</code> da amostra (opcionalmente invertida / rodada) torna-se um <em>padrão</em>
+com um peso (a frequência com que ocorre). O solver preenche depois uma grelha de saída periódica: colapsa repetidamente
+a célula com menor entropia para um dos seus padrões restantes (escolhido por peso) e
+propaga as consequências aos vizinhos, recomeçando com uma seed derivada em caso de contradição
+(até 14 tentativas, recorrendo depois a um sorteio aleatório dos tons da amostra). Como a saída é
+periódica, <strong>faz tiling</strong>, e o teste <code>wave_function_collapse_only_builds_arrangements_the_sample_allows</code>
+verifica que cada janela do resultado existe na amostra. A saída <em>Value</em> é a banda de tom: ligue-a
+a um Gradient Map para resultados nítidos e recoloríveis.</p>
+<p>Dicas: o WFC precisa de uma amostra com <strong>características robustas</strong> (poucos tons, características com várias células de largura). As linhas
+finas desaparecem quando a amostra é reduzida, pelo que uma linha de argamassa de 1 px se perde; aumente <em>Sample cells</em> (até 32) ou
+engrosse previamente a amostra. Um pattern size de 3 segue a amostra de perto, 2 explora mais. Os padrões são
+limitados a 420 para que o solver se mantenha rápido (cerca de 0,6 s extra num bake de 1024 px).</p>
+<p><strong>Presets Varied.</strong> Sete presets mostram a classe em ação (categoria <code>Varied</code>): <em>Varied Brick Wall</em>,
+<em>Varied Cobblestone</em>, <em>Varied Planks</em>, <em>Varied Hex Tiles</em> (cada tijolo, pedra, tábua ou tile recebe o seu próprio
+tom a partir dos ids de célula do padrão, mais um drift Simplex ao longo da parede), <em>WFC Brick Remix</em>,
+<em>Diamond-Square Badlands</em> e <em>Diamond-Square Moss Rock</em>. São grafos normais, pelo que os nós Variation
+podem ser reequilibrados ou substituídos no editor de nós.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/variation-presets.png" alt="Presets Varied ao lado do Red Brick simples" loading="lazy">
+  <figcaption>Presets Varied ao lado do Red Brick simples</figcaption>
+</figure>
+<h2 id="2-o-nó-output">2. O nó Output<a class="anchor" href="#2-o-nó-output" aria-label="Link to this section">#</a></h2>
+<p>Entradas, por ordem (os grafos mais antigos continuam a funcionar: as novas portas são acrescentadas no fim):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Color, Roughness, Metallic, Height, AO</td>
+<td>como antes</td>
+</tr>
+<tr>
+<td><strong>Emissive</strong></td>
+<td>cor → com bake para <code>&lt;name&gt;_gen_emissive_*.png</code>, define o mapa de emissão do material</td>
+</tr>
+<tr>
+<td><strong>Opacity</strong></td>
+<td>escalar → com bake para o alpha da cor base; o material passa a <em>Cutout</em> se era opaco</td>
+</tr>
+<tr>
+<td><strong>Normal</strong></td>
+<td>normal opcional criada manualmente (OpenGL); prevalece sobre a derivada do height</td>
+</tr>
+</tbody>
+</table></div>
+<p>Opções: <code>auto_height</code> (ativa por omissão: quando <strong>Height</strong> não está ligado, o height
+é derivado da luminância da cor base, para que os heights nunca sejam um plano plano),
+<code>normalize_height</code> (estica para o intervalo completo 0..1) e <code>height_contrast</code>.</p>
+<p>O <strong>Output preview</strong> do gerador tem um seletor de canais para poder ver
+todos os mapas com bake, não apenas a cor:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Height</th>
+<th>Normal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/pt/docs/images/doppio/material/ui/channel-height.png" alt="height channel" loading="lazy"></td>
+<td><img src="/pt/docs/images/doppio/material/ui/channel-normal.png" alt="normal channel" loading="lazy"></td>
+</tr>
+<tr>
+<td><strong>Roughness</strong></td>
+<td><strong>AO</strong></td>
+</tr>
+<tr>
+<td><img src="/pt/docs/images/doppio/material/ui/channel-roughness.png" alt="roughness channel" loading="lazy"></td>
+<td><img src="/pt/docs/images/doppio/material/ui/channel-ao.png" alt="ao channel" loading="lazy"></td>
+</tr>
+</tbody>
+</table></div>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/ui/generator-red-brick.png" alt="Generator com o preset Red Brick" loading="lazy">
+  <figcaption>Generator com o preset Red Brick</figcaption>
+</figure>
+<h2 id="3-profundidade-real-parallax-occlusion-mapping">3. Profundidade real: parallax occlusion mapping<a class="anchor" href="#3-profundidade-real-parallax-occlusion-mapping" aria-label="Link to this section">#</a></h2>
+<p>Antes, um height map só alimentava o normal map, pelo que as superfícies eram iluminadas como relevo
+mas continuavam geometricamente planas. O renderer faz agora <strong>parallax occlusion
+mapping</strong> (POM) no shader PBR: o raio de visão é avançado através do campo de
+height, o UV é deslocado para onde encontra pela primeira vez a superfície, e todas as texturas
+(albedo, normal, ORM, emission) são amostradas aí. Os tijolos ocultam a argamassa,
+as pedras sobrepõem-se às juntas.</p>
+<p>Esquerda: profundidade desligada. Direita: profundidade ligada (mesmos mapas, mesmas luzes).</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/depth-red_brick.png" alt="profundidade do red brick" loading="lazy">
+  <figcaption>profundidade do red brick</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/depth-cobblestone.png" alt="profundidade do cobblestone" loading="lazy">
+  <figcaption>profundidade do cobblestone</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/depth-oak_planks.png" alt="profundidade do oak planks" loading="lazy">
+  <figcaption>profundidade do oak planks</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/depth-diamond_plate.png" alt="profundidade do diamond plate" loading="lazy">
+  <figcaption>profundidade do diamond plate</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/depth-dragon_scales.png" alt="profundidade do dragon scales" loading="lazy">
+  <figcaption>profundidade do dragon scales</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/depth-hex_armour.png" alt="profundidade do hex armour" loading="lazy">
+  <figcaption>profundidade do hex armour</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/depth-rusted_iron.png" alt="profundidade do rusted iron" loading="lazy">
+  <figcaption>profundidade do rusted iron</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/depth-bark.png" alt="profundidade do bark" loading="lazy">
+  <figcaption>profundidade do bark</figcaption>
+</figure>
+<h3 id="como-o-height-é-guardado">Como o height é guardado<a class="anchor" href="#como-o-height-é-guardado" aria-label="Link to this section">#</a></h3>
+<p>O renderer tem 16 samplers de fragmento e o shader PBR já usava todos
+(um limite do SDL GPU), pelo que o height vive no <strong>canal alpha do
+normal map</strong> (<code>1</code> = superfície, <code>0</code> = mais fundo). Sem textura nem sampler extra.</p>
+<ul>
+<li>O <strong>bake do Generator</strong> escreve o normal map com o height no alpha
+e ativa o parallax (<code>height_scale</code> 0.035) quando o height tem relevo. Um valor
+que já tenha ajustado é mantido.</li>
+<li><strong>Height map externo</strong>: no painel Material prima <strong>Pack a height map into
+the normal…</strong>, escolha uma imagem, e o Doppio escreve <code>&lt;material&gt;_height_normal.png</code>
+(height reamostrado para o tamanho da normal) junto ao material. O seu normal map
+original nunca é substituído; se o material ainda não tiver normal, é primeiro
+derivada uma a partir do height.</li>
+</ul>
+<h3 id="controlos">Controlos<a class="anchor" href="#controlos" aria-label="Link to this section">#</a></h3>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/ui/material-panel.png" alt="Painel Material: profundidade parallax" loading="lazy">
+  <figcaption>Painel Material: profundidade parallax</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Setting (<code>.mat</code>)</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Parallax depth</strong> (<code>height_scale</code>)</td>
+<td>profundidade em unidades UV da textura com tiling; 0 = desligado, típico 0.02 – 0.06</td>
+</tr>
+<tr>
+<td><strong>Parallax steps</strong> (<code>parallax_steps</code>)</td>
+<td>máximo de passos do ray-march (4 – 96); o shader usa menos quando se olha de frente</td>
+</tr>
+</tbody>
+</table></div>
+<p>Notas e limites: o efeito precisa de um normal map cujo alpha guarde o height
+(os normal maps externos têm normalmente alpha 255 = plano, pelo que nada acontece até
+empacotar um height); os ângulos rasantes têm o offset limitado para evitar esborratamento; as silhuetas
+dos polígonos e as sombras não são deslocadas (é uma técnica no espaço da textura).
+<code>height_scale</code> e <code>parallax_steps</code> fazem parte da C ABI (versão 3), do
+ficheiro <code>.mat</code> (<code>height_scale</code>, <code>parallax_steps</code>) e da chave da cache da pré-visualização.</p>
+<h2 id="4-bake-repetidamente">4. Bake, repetidamente<a class="anchor" href="#4-bake-repetidamente" aria-label="Link to this section">#</a></h2>
+<p>O bake escreve <code>&lt;material&gt;_gen_*.png</code> sobre os mesmos nomes de ficheiro de cada vez. A
+pré-visualização do material usava apenas o caminho como chave da cache, pelo que um segundo bake parecia
+inalterado. A pré-visualização calcula agora também o hash da data de modificação e do tamanho de cada textura,
+pelo que <strong>cada bake atualiza a pré-visualização</strong> (e qualquer ferramenta que reescreva um mapa no
+próprio sítio também). Coberto por <code>generator_bake_can_run_again_and_stores_height_as_real_depth</code>.</p>
+<p><strong>Porque é que um re-bake ainda podia parecer inalterado.</strong> O hash da pré-visualização estava certo, mas a cache de
+texturas da GPU do motor só atualizava um ficheiro alterado em disco quando a sua contagem de referências era zero.
+A contagem sobe a cada acquire e nunca desce enquanto um mapa está em uso, pelo que o primeiro bake
+ficava no ecrã. A cache recarrega agora sempre que a data de modificação do ficheiro muda (coberto por
+<code>preview_reloads_a_map_rewritten_in_place</code>).</p>
+<p>Os grafos puramente procedurais também têm pré-visualização e bake <strong>sem uma sessão do motor</strong>;
+só os grafos que leem imagens do projeto precisam de uma para as localizar.</p>
+<h2 id="5-a-pré-visualização-do-material-luz-sombras-e-resolução">5. A pré-visualização do material: luz, sombras e resolução<a class="anchor" href="#5-a-pré-visualização-do-material-luz-sombras-e-resolução" aria-label="Link to this section">#</a></h2>
+<p>A esfera de pré-visualização tem agora o seu próprio sol. Por baixo dos controlos de forma / ambiente / exposição:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Light direction</td>
+<td>yaw do sol em torno do objeto (-180..180 graus)</td>
+</tr>
+<tr>
+<td>Light height</td>
+<td>elevação do sol (2..89 graus)</td>
+</tr>
+<tr>
+<td>Light intensity</td>
+<td>brilho do sol</td>
+</tr>
+<tr>
+<td>Shadows</td>
+<td>alterna o shadow map</td>
+</tr>
+</tbody>
+</table></div>
+<p>Os agentes usam <code>set_material_preview_sun</code> (<code>yaw</code>, <code>elevation</code>, <code>intensity</code>, <code>shadows</code>). A pré-visualização
+renderiza a 768 px com a câmara mais próxima, sobre um chão mais claro com um preenchimento suave de céu, para que o relevo
+de um material, a sua sombra projetada e o seu brilho molhado ou seco possam ser avaliados de imediato.
+Com <em>Geometric displacement</em> ativado, a esfera é subdividida e realmente deslocada, e a sua
+silhueta e sombras mostram-no.</p>
+<p><strong>Correção no motor encontrada durante o desenvolvimento.</strong> A passagem de sombras direcionais não tem anexo de profundidade, pelo que
+a última mesh desenhada sobrepunha-se às outras: um chão desenhado depois de uma esfera apagava a
+sombra da esfera. A passagem usa agora <code>BlendMode::Min</code>, que mantém o oclusor mais próximo
+independentemente da ordem de desenho. As caches de GPU a nível de processo (texturas, meshes procedurais, cache de meshes)
+também são libertadas quando uma sessão termina, pelo que uma segunda sessão já não herda handles
+de um dispositivo morto.</p>
+<h2 id="6-escalar-um-objeto-manter-a-densidade-da-textura">6. Escalar um objeto: manter a densidade da textura<a class="anchor" href="#6-escalar-um-objeto-manter-a-densidade-da-textura" aria-label="Link to this section">#</a></h2>
+<p>Os UVs de uma mesh são criados 1:1, pelo que um quad escalado para o dobro do tamanho esticava o seu material para
+o dobro do tamanho também. Os materiais têm agora <strong>Scale UVs with the object</strong> (chave do <code>.mat</code>
+<code>uv_object_scale</code>, <strong>ativa por omissão</strong>, no cartão UV do painel Material):</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/material/uv-object-scale.png" alt="UVs 1:1 versus UVs que seguem a escala, plano escalado 4x" loading="lazy">
+  <figcaption>UVs 1:1 versus UVs que seguem a escala, plano escalado 4x</figcaption>
+</figure>
+<p>Como funciona: o vertex shader mede quanto a matriz do modelo estica as direções da tangente
+(U) e da bitangente (V) da mesh e o fragment shader multiplica o UV com tiling por esse fator.
+Um plano escalado 4x repete a textura 4x, um cubo esticado mantém a sua densidade em todas as faces, e a
+escala 1 nada muda (<code>scaled_objects_keep_their_texture_density_when_uvs_follow_the_scale</code> verifica
+ambos). O mesmo fator é usado pelos shaders de vértice e de sombra do geometric displacement, pelo que o relevo
+se mantém alinhado com a cor.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scale 1</td>
+<td>idêntico ao anterior</td>
+</tr>
+<tr>
+<td>Uniform scale</td>
+<td>a textura repete-se segundo a escala</td>
+</tr>
+<tr>
+<td>Non-uniform scale on a box or plane</td>
+<td>cada face usa o seu próprio estiramento U / V</td>
+</tr>
+<tr>
+<td>Curved mesh with non-uniform scale</td>
+<td>o fator varia suavemente com a direção da tangente, pelo que estiramentos muito fortes podem mostrar uma ligeira alteração de densidade</td>
+</tr>
+<tr>
+<td>Instanced draws (batched vegetation)</td>
+<td>mantêm os UVs originais</td>
+</tr>
+<tr>
+<td>Material preview</td>
+<td>mostra sempre os UVs originais (as suas formas têm tamanhos fixos)</td>
+</tr>
+<tr>
+<td><code>Tiling</code> / <code>Offset</code></td>
+<td>continuam a aplicar-se por cima: o UV final é <code>uv * tiling * objectScale + offset</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Desative-o para materiais cujos UVs já estão em unidades do mundo (um atlas alinhado com o mundo, um decal).
+Os materiais escritos antes de a chave existir comportam-se como os novos (ativo). <code>uv_object_scale</code> faz parte da
+C ABI (versão 6), do ficheiro <code>.mat</code>, da chave da cache da pré-visualização e da consulta <code>material</code> do agente.</p>
+<h2 id="7-regenerar-as-imagens">7. Regenerar as imagens<a class="anchor" href="#7-regenerar-as-imagens" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./rebuild.sh                              <span class="hljs-comment"># engine + Doppio (needs ImageMagick for the sheets)</span>
+./scripts/render-material-gallery.sh      <span class="hljs-comment"># bakes all presets, renders sheets + depth comparisons</span>
+./scripts/render-variation-docs.sh        <span class="hljs-comment"># the Variation node and preset sheets</span>
+./scripts/capture-material-docs.sh        <span class="hljs-comment"># headless UI screenshots (generator, channels, panel)</span>
+doppio/target/release/doppio-material bake-preset <span class="hljs-string">&quot;Red Brick&quot;</span> --out /tmp/brick   <span class="hljs-comment"># one preset to disk</span>
+doppio/target/release/doppio-material bake-graph path/to/material.mgraph --size 2048  <span class="hljs-comment"># time one graph</span>
+</code></pre></div>
+<ul>
+<li>
+<p><code>doppio-material bake-graph &lt;file.mgraph&gt; [--size N] [--out DIR]</code> faz o bake de um
+grafo existente com tempos de progresso por fase; útil quando um bake 2K parece
+bloqueado no editor.</p>
+</li>
+<li>
+<p><code>doppio-material bake-preset &lt;name|--all&gt; --out DIR [--size 512] [--depth 0.04] [--list]</code>
+escreve <code>*_base.png</code>, <code>*_normal.png</code> (height no alpha), <code>*_orm.png</code>, <code>*.mat</code>
+e <code>*_flat.mat</code> (mesmos mapas, profundidade desligada) — utilizáveis em qualquer cena.</p>
+</li>
+<li>
+<p>Os renders de profundidade usam <code>caffeine-render-snapshot</code> com
+<code>SNAP_FLOOR_MAT=&lt;file.mat&gt; SNAP_ONLY_FLOOR=1</code> e a vista predefinida 4.</p>
+</li>
+<li>
+<p>As capturas de ecrã da interface vêm do driver headless (veja
+<a href="/pt/docs/doppio/headless-testing/">headless-testing.md</a>); o flow é
+<code>caffeine-website/captures/flows/capture-material-docs.json</code>.</p>
+</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/doppio/materials-guide.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/doppio/gizmos-and-markers/"><span>Anterior</span><strong>Gizmos e marcadores de cena</strong></a><a class="pager-next" href="/pt/docs/doppio/graphics-roadmap/"><span>Seguinte</span><strong>Melhoria gráfica — Roadmap de Micromeshes e Photon</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-a-biblioteca-procedural">1. A biblioteca procedural</a></li><li class="l3"><a href="#biblioteca-de-presets-85-materiais">Biblioteca de presets (85 materiais)</a></li><li class="l3"><a href="#biblioteca-realistic-pbr-de-rocha-água-folhagem-solo-e-estruturas-artificiais">Biblioteca Realistic: PBR de rocha, água, folhagem, solo e estruturas artificiais</a></li><li class="l3"><a href="#variation-padrões-vivos-que-nunca-se-repetem">Variation: padrões vivos que nunca se repetem</a></li><li class="l2"><a href="#2-o-nó-output">2. O nó Output</a></li><li class="l2"><a href="#3-profundidade-real-parallax-occlusion-mapping">3. Profundidade real: parallax occlusion mapping</a></li><li class="l3"><a href="#como-o-height-é-guardado">Como o height é guardado</a></li><li class="l3"><a href="#controlos">Controlos</a></li><li class="l2"><a href="#4-bake-repetidamente">4. Bake, repetidamente</a></li><li class="l2"><a href="#5-a-pré-visualização-do-material-luz-sombras-e-resolução">5. A pré-visualização do material: luz, sombras e resolução</a></li><li class="l2"><a href="#6-escalar-um-objeto-manter-a-densidade-da-textura">6. Escalar um objeto: manter a densidade da textura</a></li><li class="l2"><a href="#7-regenerar-as-imagens">7. Regenerar as imagens</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

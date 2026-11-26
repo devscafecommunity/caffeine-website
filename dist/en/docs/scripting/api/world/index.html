@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World · Caffeine</title>
+<meta name="description" content="Create and destroy entities, move them, and read or write transforms, 2D physics, sprites and particle emitters. Dryad adds position and scale natives.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="World · Caffeine">
+<meta property="og:description" content="Create and destroy entities, move them, and read or write transforms, 2D physics, sprites and particle emitters. Dryad adds position and scale natives.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/scripting/api/world/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/scripting/api/world/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/scripting/api/world/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab active" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/scripting/api/world/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Scripting"><div class="nav-title">Scripting</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Scripting</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/scripting/runtime-apis/">Lua runtime APIs (core)</a></li><li><a class="nav-link" href="/en/docs/scripting/native-modules/">Runtime native modules</a></li><li><a class="nav-link" href="/en/docs/scripting/scripting/">Scripting</a></li><li><a class="nav-link" href="/en/docs/scripting/api-roadmap/">Scripting API: parity and roadmap</a></li><li class="nav-dir open"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/scripting/api/">API reference</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/scripting/api/animation/">Animation</a></li><li><a class="nav-link" href="/en/docs/scripting/api/assets/">Assets</a></li><li><a class="nav-link" href="/en/docs/scripting/api/audio/">Audio</a></li><li><a class="nav-link" href="/en/docs/scripting/api/component/">Component</a></li><li><a class="nav-link" href="/en/docs/scripting/api/core/">Core</a></li><li><a class="nav-link" href="/en/docs/scripting/api/debug/">Debug</a></li><li><a class="nav-link" href="/en/docs/scripting/api/draw2d/">Draw 2D</a></li><li><a class="nav-link" href="/en/docs/scripting/api/effects/">Effects</a></li><li><a class="nav-link" href="/en/docs/scripting/api/entity/">Entity</a></li><li><a class="nav-link" href="/en/docs/scripting/api/events/">Events</a></li><li><a class="nav-link" href="/en/docs/scripting/api/forwardrender/">Forward render</a></li><li><a class="nav-link" href="/en/docs/scripting/api/gameState/">Game state</a></li><li><a class="nav-link" href="/en/docs/scripting/api/hierarchy/">Hierarchy</a></li><li><a class="nav-link" href="/en/docs/scripting/api/input/">Input</a></li><li><a class="nav-link" href="/en/docs/scripting/api/map/">Map</a></li><li><a class="nav-link" href="/en/docs/scripting/api/math/">Math</a></li><li><a class="nav-link" href="/en/docs/scripting/api/native/">Native modules</a></li><li><a class="nav-link" href="/en/docs/scripting/api/navigation/">Navigation</a></li><li><a class="nav-link" href="/en/docs/scripting/api/particles/">Particles</a></li><li><a class="nav-link" href="/en/docs/scripting/api/physics3d/">Physics 3D</a></li><li><a class="nav-link" href="/en/docs/scripting/api/pick/">Pick</a></li><li><a class="nav-link" href="/en/docs/scripting/api/postprocess/">Post-process</a></li><li><a class="nav-link" href="/en/docs/scripting/api/procedural/">Procedural</a></li><li><a class="nav-link" href="/en/docs/scripting/api/random/">Random</a></li><li><a class="nav-link" href="/en/docs/scripting/api/scene/">Scene</a></li><li><a class="nav-link" href="/en/docs/scripting/api/session/">Session</a></li><li><a class="nav-link" href="/en/docs/scripting/api/time/">Time</a></li><li><a class="nav-link" href="/en/docs/scripting/api/ui/">UI</a></li><li><a class="nav-link active" href="/en/docs/scripting/api/world/" aria-current="page">World</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/api/">Engine API</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/api/headless-engine-api/">Headless Engine API: build scenes and render images without the editor</a></li><li><a class="nav-link" href="/en/docs/api/scripting-components/">Scripting: generic component access</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/scripting/">Scripting</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">World</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Core</span>
+  <span>Last updated: <time datetime="2026-11-19">2026-11-19</time></span>
+  <span>Lua 17 · Dryad 13</span>
+</div>
+<p class="doc-lede">Create and destroy entities, move them, and read or write transforms, 2D physics, sprites and particle emitters. Dryad adds position and scale natives.</p>
+<p><a href="/en/docs/scripting/api/">All namespaces</a></p>
+<p>Namespace: <code>caffeine.world</code> · Dryad prefix: <code>caffeine_world_</code></p>
+<h2 id="create">create<a class="anchor" href="#create" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.create</code> · Dryad: <code>caffeine_world_create</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">create() -&gt; integer
+</code></pre></div>
+<p>Creates an entity named &quot;LuaEntity&quot;.</p>
+<p><strong>Returns:</strong> <code>integer</code>. The new entity id, or 0 when there is no world.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> e = caffeine.world.<span class="hljs-built_in">create</span>()
+</code></pre></div>
+<h2 id="destroy">destroy<a class="anchor" href="#destroy" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.destroy</code> · Dryad: <code>caffeine_world_destroy</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">destroy(entity)
+</code></pre></div>
+<p>Destroys an entity. Does nothing when there is no world.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.destroy(e)
+</code></pre></div>
+<h2 id="hascomponent">hasComponent<a class="anchor" href="#hascomponent" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.hasComponent</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">hasComponent(entity, type) -&gt; boolean
+</code></pre></div>
+<p>Checks one of four built-in component types. &quot;Transform&quot; is also true for a Position3D. For other components use <code>caffeine.component.has</code>.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>type</code></td><td>string</td><td>One of "Transform", "Sprite", "RigidBody2D", "Collider2D".</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. True when the entity has it; false for any other type name.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">if</span> caffeine.world.hasComponent(e, <span class="hljs-string">&#x27;Sprite&#x27;</span>) <span class="hljs-keyword">then</span> <span class="hljs-keyword">end</span>
+</code></pre></div>
+<h2 id="gettransform">getTransform<a class="anchor" href="#gettransform" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.getTransform</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">getTransform(entity) -&gt; table
+</code></pre></div>
+<p>Reads the position of the entity (from Position3D or Transform); rotation and scale come from Transform.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. {x, y, z, rotation, scaleX, scaleY}; defaults 0 and scale 1.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> t = caffeine.world.getTransform(e)
+caffeine.<span class="hljs-built_in">debug</span>.<span class="hljs-built_in">log</span>(t.x .. <span class="hljs-string">&#x27;, &#x27;</span> .. t.y)
+</code></pre></div>
+<h2 id="settransform">setTransform<a class="anchor" href="#settransform" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.setTransform</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setTransform(entity, t)
+</code></pre></div>
+<p>Writes position (and rotation/scale on a Transform). Creates a Transform when the entity has neither Transform nor Position3D.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>t</code></td><td>table</td><td>Fields x, y, z, rotation, scaleX, scaleY; missing fields keep the current value.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.setTransform(e, { x = <span class="hljs-number">1</span>, y = <span class="hljs-number">2</span> })
+</code></pre></div>
+<h2 id="addtransform">addTransform<a class="anchor" href="#addtransform" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.addTransform</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">addTransform(entity, t)
+</code></pre></div>
+<p>Alias of <code>caffeine.world.setTransform</code>.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>t</code></td><td>table</td><td>Same fields as setTransform.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.addTransform(e, { x = <span class="hljs-number">0</span>, y = <span class="hljs-number">0</span> })
+</code></pre></div>
+<h2 id="distanceto">distanceTo<a class="anchor" href="#distanceto" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.distanceTo</code> · Dryad: <code>caffeine_world_distance</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">distanceTo(a, b) -&gt; number
+</code></pre></div>
+<p>Straight-line distance between two entities.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>a</code></td><td>integer</td><td>First entity id.</td></tr>
+<tr><td><code>b</code></td><td>integer</td><td>Second entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Distance in world units; 1e9 when either entity has no position or there is no world.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> d = caffeine.world.distanceTo(e, target)
+</code></pre></div>
+<h2 id="findnearest">findNearest<a class="anchor" href="#findnearest" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.findNearest</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">findNearest(from, maxDist) -&gt; integer
+</code></pre></div>
+<p>Finds the closest other entity that has a Position3D or Transform within maxDist.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>from</code></td><td>integer</td><td>Entity to search around.</td></tr>
+<tr><td><code>maxDist</code></td><td>number</td><td>Search radius; must be greater than 0.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>integer</code>. Id of the nearest other entity with a position, or 0.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> near = caffeine.world.findNearest(e, <span class="hljs-number">10</span>)
+</code></pre></div>
+<h2 id="setyawpitch">setYawPitch<a class="anchor" href="#setyawpitch" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.setYawPitch</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setYawPitch(entity, yaw, pitch)
+</code></pre></div>
+<p>Sets a 3D rotation (Rotation3D quaternion, roll 0). When the entity has a Transform its rotation x/y are also written in degrees.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>yaw</code></td><td>number</td><td>Yaw in radians.</td></tr>
+<tr><td><code>pitch</code></td><td>number</td><td>Pitch in radians.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.setYawPitch(e, caffeine.<span class="hljs-built_in">math</span>.radians(<span class="hljs-number">90</span>), <span class="hljs-number">0</span>)
+</code></pre></div>
+<h2 id="getrigidbody2d">getRigidBody2D<a class="anchor" href="#getrigidbody2d" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.getRigidBody2D</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">getRigidBody2D(entity) -&gt; table
+</code></pre></div>
+<p>Reads the 2D rigid body of an entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. {mass, restitution, friction, linearDamping, isKinematic, lockRotation, velocityX, velocityY}; empty when there is no RigidBody2D.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> rb = caffeine.world.getRigidBody2D(e)
+</code></pre></div>
+<h2 id="setrigidbody2d">setRigidBody2D<a class="anchor" href="#setrigidbody2d" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.setRigidBody2D</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setRigidBody2D(entity, t)
+</code></pre></div>
+<p>Adds a RigidBody2D when missing and writes it. Fields you omit are reset to the defaults listed, except velocityX/velocityY, which keep their value.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>t</code></td><td>table</td><td>Fields mass (1), restitution (0.3), friction (0.5), linearDamping (0), isKinematic (false), lockRotation (true), velocityX, velocityY.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.setRigidBody2D(e, { mass = <span class="hljs-number">2</span>, friction = <span class="hljs-number">0.8</span> })
+</code></pre></div>
+<h2 id="getvelocity">getVelocity<a class="anchor" href="#getvelocity" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.getVelocity</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">getVelocity(entity) -&gt; table
+</code></pre></div>
+<p>Reads the 2D velocity of the rigid body.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. {x, y}; 0 when there is no RigidBody2D.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> v = caffeine.world.getVelocity(e)
+</code></pre></div>
+<h2 id="setvelocity">setVelocity<a class="anchor" href="#setvelocity" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.setVelocity</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setVelocity(entity, v)
+</code></pre></div>
+<p>Sets the 2D velocity (adds a RigidBody2D when missing) and wakes the body.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>v</code></td><td>table</td><td>{x, y}; missing fields keep the current value.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.setVelocity(e, { x = <span class="hljs-number">5</span>, y = <span class="hljs-number">0</span> })
+</code></pre></div>
+<h2 id="getsprite">getSprite<a class="anchor" href="#getsprite" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.getSprite</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">getSprite(entity) -&gt; table
+</code></pre></div>
+<p>Reads the sprite name and frame index.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. {name, frameIndex}; empty when there is no Sprite.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> s = caffeine.world.getSprite(e)
+</code></pre></div>
+<h2 id="setsprite">setSprite<a class="anchor" href="#setsprite" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.setSprite</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">setSprite(entity, t)
+</code></pre></div>
+<p>Adds a Sprite when missing and writes name and frame index.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>t</code></td><td>table</td><td>Fields name (string, default "") and frameIndex (default 0).</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.setSprite(e, { name = <span class="hljs-string">&#x27;hero&#x27;</span>, frameIndex = <span class="hljs-number">2</span> })
+</code></pre></div>
+<h2 id="addsprite">addSprite<a class="anchor" href="#addsprite" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.addSprite</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">addSprite(entity, t)
+</code></pre></div>
+<p>Alias of <code>caffeine.world.setSprite</code>.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>t</code></td><td>table</td><td>Same fields as setSprite.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.addSprite(e, { name = <span class="hljs-string">&#x27;hero&#x27;</span> })
+</code></pre></div>
+<h2 id="addparticleemitter">addParticleEmitter<a class="anchor" href="#addparticleemitter" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.world.addParticleEmitter</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">addParticleEmitter(entity, t)
+</code></pre></div>
+<p>Adds a particle emitter component to the entity (and a Transform when missing).</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>t</code></td><td>table</td><td>Fields maxParticles (100), emissionRate (10), lifetime (2), startSize (1), endSize (0), startColor and endColor ({r,g,b,a} in 0..1).</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.world.addParticleEmitter(e, { emissionRate = <span class="hljs-number">30</span>, lifetime = <span class="hljs-number">1.5</span> })
+</code></pre></div>
+<h2 id="caffeine_world_is_alive">caffeine_world_is_alive<a class="anchor" href="#caffeine_world_is_alive" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_world_is_alive</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_world_is_alive(entity) -&gt; boolean
+</code></pre></div>
+<p>Dryad only: checks that an entity id still refers to a live entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. True when the entity exists.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-keyword">function</span> <span class="hljs-title function_">onUpdate</span>(<span class="hljs-params">entity, dt</span>) {
+  <span class="hljs-keyword">if</span> (<span class="hljs-title function_">caffeine_world_is_alive</span>(entity)) { <span class="hljs-title function_">caffeine_translate</span>(entity, <span class="hljs-number">0</span>, dt, <span class="hljs-number">0</span>); }
+}
+</code></pre></div>
+<h2 id="caffeine_set_position">caffeine_set_position<a class="anchor" href="#caffeine_set_position" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_set_position</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_set_position(entity, x, y, z)
+</code></pre></div>
+<p>Dryad only: sets the position of an entity (Position3D and/or Transform; a Transform is created when it has neither).</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>x</code></td><td>number</td><td>X.</td></tr>
+<tr><td><code>y</code></td><td>number</td><td>Y.</td></tr>
+<tr><td><code>z</code></td><td>number</td><td>Z.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-title function_">caffeine_set_position</span>(entity, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+</code></pre></div>
+<h2 id="caffeine_translate">caffeine_translate<a class="anchor" href="#caffeine_translate" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_translate</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_translate(entity, dx, dy, dz)
+</code></pre></div>
+<p>Dryad only: moves an entity by an offset.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>dx</code></td><td>number</td><td>Offset on X.</td></tr>
+<tr><td><code>dy</code></td><td>number</td><td>Offset on Y.</td></tr>
+<tr><td><code>dz</code></td><td>number</td><td>Offset on Z.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-title function_">caffeine_translate</span>(entity, <span class="hljs-number">1</span> * dt, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+</code></pre></div>
+<h2 id="caffeine_get_position_x">caffeine_get_position_x<a class="anchor" href="#caffeine_get_position_x" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_get_position_x</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_get_position_x(entity) -&gt; number
+</code></pre></div>
+<p>Dryad only: reads the X position of an entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Position on X; 0 when the entity has none.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-keyword">let</span> p = <span class="hljs-title function_">caffeine_get_position_x</span>(entity);
+</code></pre></div>
+<h2 id="caffeine_get_position_y">caffeine_get_position_y<a class="anchor" href="#caffeine_get_position_y" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_get_position_y</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_get_position_y(entity) -&gt; number
+</code></pre></div>
+<p>Dryad only: reads the Y position of an entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Position on Y; 0 when the entity has none.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-keyword">let</span> p = <span class="hljs-title function_">caffeine_get_position_y</span>(entity);
+</code></pre></div>
+<h2 id="caffeine_get_position_z">caffeine_get_position_z<a class="anchor" href="#caffeine_get_position_z" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_get_position_z</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_get_position_z(entity) -&gt; number
+</code></pre></div>
+<p>Dryad only: reads the Z position of an entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Position on Z; 0 when the entity has none.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-keyword">let</span> p = <span class="hljs-title function_">caffeine_get_position_z</span>(entity);
+</code></pre></div>
+<h2 id="caffeine_set_scale">caffeine_set_scale<a class="anchor" href="#caffeine_set_scale" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_set_scale</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_set_scale(entity, x, y, z)
+</code></pre></div>
+<p>Dryad only: sets the scale of an entity (Scale3D or Transform).</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+<tr><td><code>x</code></td><td>number</td><td>Scale on X.</td></tr>
+<tr><td><code>y</code></td><td>number</td><td>Scale on Y.</td></tr>
+<tr><td><code>z</code></td><td>number</td><td>Scale on Z.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-title function_">caffeine_set_scale</span>(entity, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>);
+</code></pre></div>
+<h2 id="caffeine_get_scale_x">caffeine_get_scale_x<a class="anchor" href="#caffeine_get_scale_x" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_get_scale_x</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_get_scale_x(entity) -&gt; number
+</code></pre></div>
+<p>Dryad only: reads the X scale of an entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Scale on X; 1 when the entity has none.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-keyword">let</span> s = <span class="hljs-title function_">caffeine_get_scale_x</span>(entity);
+</code></pre></div>
+<h2 id="caffeine_get_scale_y">caffeine_get_scale_y<a class="anchor" href="#caffeine_get_scale_y" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_get_scale_y</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_get_scale_y(entity) -&gt; number
+</code></pre></div>
+<p>Dryad only: reads the Y scale of an entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Scale on Y; 1 when the entity has none.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-keyword">let</span> s = <span class="hljs-title function_">caffeine_get_scale_y</span>(entity);
+</code></pre></div>
+<h2 id="caffeine_get_scale_z">caffeine_get_scale_z<a class="anchor" href="#caffeine_get_scale_z" aria-label="Link to this section">#</a></h2>
+<p>Lua: not available · Dryad: <code>caffeine_get_scale_z</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">caffeine_get_scale_z(entity) -&gt; number
+</code></pre></div>
+<p>Dryad only: reads the Z scale of an entity.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>entity</code></td><td>integer</td><td>Entity id.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Scale on Z; 1 when the entity has none.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-keyword">let</span> s = <span class="hljs-title function_">caffeine_get_scale_z</span>(entity);
+</code></pre></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/scripting/api/world.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/scripting/api/ui/"><span>Previous</span><strong>UI</strong></a><a class="pager-next" href="/en/docs/api/"><span>Next</span><strong>API Reference</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#create">create</a></li><li class="l2"><a href="#destroy">destroy</a></li><li class="l2"><a href="#hascomponent">hasComponent</a></li><li class="l2"><a href="#gettransform">getTransform</a></li><li class="l2"><a href="#settransform">setTransform</a></li><li class="l2"><a href="#addtransform">addTransform</a></li><li class="l2"><a href="#distanceto">distanceTo</a></li><li class="l2"><a href="#findnearest">findNearest</a></li><li class="l2"><a href="#setyawpitch">setYawPitch</a></li><li class="l2"><a href="#getrigidbody2d">getRigidBody2D</a></li><li class="l2"><a href="#setrigidbody2d">setRigidBody2D</a></li><li class="l2"><a href="#getvelocity">getVelocity</a></li><li class="l2"><a href="#setvelocity">setVelocity</a></li><li class="l2"><a href="#getsprite">getSprite</a></li><li class="l2"><a href="#setsprite">setSprite</a></li><li class="l2"><a href="#addsprite">addSprite</a></li><li class="l2"><a href="#addparticleemitter">addParticleEmitter</a></li><li class="l2"><a href="#caffeine_world_is_alive">caffeine_world_is_alive</a></li><li class="l2"><a href="#caffeine_set_position">caffeine_set_position</a></li><li class="l2"><a href="#caffeine_translate">caffeine_translate</a></li><li class="l2"><a href="#caffeine_get_position_x">caffeine_get_position_x</a></li><li class="l2"><a href="#caffeine_get_position_y">caffeine_get_position_y</a></li><li class="l2"><a href="#caffeine_get_position_z">caffeine_get_position_z</a></li><li class="l2"><a href="#caffeine_set_scale">caffeine_set_scale</a></li><li class="l2"><a href="#caffeine_get_scale_x">caffeine_get_scale_x</a></li><li class="l2"><a href="#caffeine_get_scale_y">caffeine_get_scale_y</a></li><li class="l2"><a href="#caffeine_get_scale_z">caffeine_get_scale_z</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

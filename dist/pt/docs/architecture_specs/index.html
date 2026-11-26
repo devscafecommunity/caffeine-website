@@ -1,0 +1,2104 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🏗️ Architecture Specifications · Caffeine</title>
+<meta name="description" content="Especificação histórica. Este documento registra o design do editor pré-Rust e a arquitetura das Fases 1–6. Não é documentação da API atual; comece no índice da documentação .">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="🏗️ Architecture Specifications · Caffeine">
+<meta property="og:description" content="Especificação histórica. Este documento registra o design do editor pré-Rust e a arquitetura das Fases 1–6. Não é documentação da API atual; comece no índice da documentação .">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/architecture_specs/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/architecture_specs/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/architecture_specs/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/architecture_specs/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab active" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/architecture_specs/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/architecture_specs/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Projeto"><div class="nav-title">Projeto</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Versões</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/pt/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/pt/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Planos</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/2026-10-19-dryad-node-scripts/">Dryad e scripts por nodes</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-forward-pbr-post-session/">Sessão 2026-10-02 — Forward PBR, reflexos, pós-processamento GPU</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-10-02-editor-backlog-phase-b/">Editor backlog — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-viewport-rendering-quality-session/">Sessão 2026-09-22 — Viewport 3D, Qualidade Visual e Performance</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-phong-gpu-handles-session/">Sessão 2026-09-22 — Phong GPU, Handles e Sombras</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap de Sistemas Fundamentais</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — 3D de Alto Volume</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - ANÁLISE COMPLETA &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP⁻¹ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-hot-reload-design/">Hot-Reload de Assets — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/pt/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/pt/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/">Marcos</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/pt/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plans/archive/">Arquivo</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/pt/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Análise</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/pt/docs/HISTORY/">História do desenvolvimento</a></li><li><a class="nav-link active" href="/pt/docs/architecture_specs/" aria-current="page">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/pt/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/pt/docs/MASTER/">Índice master</a></li><li><a class="nav-link" href="/pt/docs/books/">Livros e PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/project/">Projeto</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">🏗️ Architecture Specifications</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<div class="doc-callout doc-callout--warning">
+  <p><strong>Especificação histórica.</strong> Este documento registra o design do editor pré-Rust e a arquitetura das Fases 1–6. Não é documentação da API atual; comece no <a href="/pt/docs/">índice da documentação</a>.</p>
+</div>
+<blockquote>
+<p>⚠️ <strong>Status:</strong> Versão 1.0 — Completo para as Fases 1-6.<br>
+⚠️ Para contexto completo, consulte <a href="/pt/docs/MASTER/"><code>docs/MASTER.md</code></a> §3.</p>
+</blockquote>
+<p>Este documento contém as <strong>especificações técnicas detalhadas</strong> de cada subsistema da Caffeine Engine. Baseado em pesquisa de padrões de engines como <a href="https://github.com/SanderMertens/flecs" rel="noopener" class="ext">flecs</a>, <a href="https://github.com/skypjack/entt" rel="noopener" class="ext">EnTT</a>, e integrações com SDL3.</p>
+<hr>
+<h2 id="-índice-das-especificações">📋 Índice das Especificações<a class="anchor" href="#-índice-das-especificações" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Especificação</th>
+<th>Fase</th>
+<th>Status</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Game Loop</strong></td>
+<td>2</td>
+<td>🔄 Em Progresso</td>
+<td>Loop principal, fixed timestep, estados</td>
+</tr>
+<tr>
+<td><strong>2. Job System</strong></td>
+<td>2</td>
+<td>📅 Planejado</td>
+<td>Thread pool, work-stealing, barreiras</td>
+</tr>
+<tr>
+<td><strong>3. Input System</strong></td>
+<td>2</td>
+<td>📅 Planejado</td>
+<td>Action mapping, polling/event-driven</td>
+</tr>
+<tr>
+<td><strong>4. ECS Core</strong></td>
+<td>4</td>
+<td>📅 Planejado</td>
+<td>Archetype-based, queries, systems</td>
+</tr>
+<tr>
+<td><strong>5. Scene Graph &amp; Serialização</strong></td>
+<td>4</td>
+<td>📅 Planejado</td>
+<td>Hierarquia, prefabs, .caf format</td>
+</tr>
+<tr>
+<td><strong>6. Event Bus</strong></td>
+<td>4</td>
+<td>📅 Planejado</td>
+<td>Pub/sub typed, fila com prioridade</td>
+</tr>
+<tr>
+<td><strong>7. Asset Manager</strong></td>
+<td>3</td>
+<td>📅 Planejado</td>
+<td>Async loading, cache, hot-reload</td>
+</tr>
+<tr>
+<td><strong>8. RHI</strong></td>
+<td>3</td>
+<td>📅 Planejado</td>
+<td>Abstração SDL_GPU, command queue</td>
+</tr>
+<tr>
+<td><strong>9. Batch Renderer</strong></td>
+<td>3</td>
+<td>📅 Planejado</td>
+<td>Sprite batching, texture atlas</td>
+</tr>
+<tr>
+<td><strong>10. Camera System</strong></td>
+<td>3</td>
+<td>📅 Planejado</td>
+<td>Matriz 4×4, orto/perspectiva</td>
+</tr>
+<tr>
+<td><strong>11. Audio System</strong></td>
+<td>4</td>
+<td>📅 Planejado</td>
+<td>SDL3 audio, pooling, spatial</td>
+</tr>
+<tr>
+<td><strong>12. Animation System</strong></td>
+<td>4</td>
+<td>📅 Planejado</td>
+<td>Sprite frames, state machine</td>
+</tr>
+<tr>
+<td><strong>13. Physics (2D)</strong></td>
+<td>4</td>
+<td>📅 Planejado</td>
+<td>AABB, collision, integration ECS</td>
+</tr>
+<tr>
+<td><strong>14. UI System</strong></td>
+<td>5</td>
+<td>📅 Planejado</td>
+<td>Retained mode, ECS integration</td>
+</tr>
+<tr>
+<td><strong>15. Math Library</strong></td>
+<td>1+</td>
+<td>📅 Planejado</td>
+<td>Vec, Mat, Quat, SIMD hints</td>
+</tr>
+<tr>
+<td><strong>16. Debug/Development Tools</strong></td>
+<td>2+</td>
+<td>📅 Planejado</td>
+<td>Logging, profiler, debug draw</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="a-padrões-arquiteturais-transversais">A. Padrões Arquiteturais Transversais<a class="anchor" href="#a-padrões-arquiteturais-transversais" aria-label="Link to this section">#</a></h2>
+<p>Antes de detalharmos cada subsistema, estabelecemos os <strong>padrões compartilhados</strong> que todas as especificações seguem:</p>
+<h3 id="a1-ciclo-de-vida-de-frame">A.1 Ciclo de Vida de Frame<a class="anchor" href="#a1-ciclo-de-vida-de-frame" aria-label="Link to this section">#</a></h3>
+<p>Todo subsistema participa de um ciclo previsível dentro do game loop:</p>
+<ul>
+<li><code>┌─────────────────────────────────────────────────────────────┐</code>
+<ul>
+<li><code>FRAME LIFECYCLE                           │</code></li>
+<li><code>┬──────────────┬───────────────┬────────────────┤</code>
+- <code>beginFrame  │  update/     │  snapshot     │ endFrame      │</code>
+- <code>fixedUpdate │  published    │               │</code>
+- <code>• Limpar    │ • Input      │ • Read-only   │ • Debug data  │</code>
+- <code>transients│   evaluate   │   snapshots   │ • Cleanup      │</code>
+- <code>• Processar │ • Physics    │   disponíveis │ • Stats update │</code>
+- <code>SDL events│ • ECS systems│   para render │               │</code>
+- <code>• Iniciar   │ • Jobs       │               │               │</code>
+- <code>jobs      │ • Asset load │               │               │</code></li>
+<li><code>┴──────────────┴───────────────┴────────────────┘</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="a2-relação-com-ecs">A.2 Relação com ECS<a class="anchor" href="#a2-relação-com-ecs" aria-label="Link to this section">#</a></h3>
+<p><strong>Bom para ECS</strong> (dados de simulação):</p>
+<ul>
+<li>Transform, Velocity, RigidBody, Collider</li>
+<li>Sprite, Animator, AudioEmitter</li>
+<li>Comandos de gameplay (MoveIntent, FireIntent)</li>
+</ul>
+<p><strong>Mau para ECS</strong> (estado global/não-entidade):</p>
+<ul>
+<li>Asset registry, File watchers</li>
+<li>Input device management, Scene transitions</li>
+<li>Log storage, Console state</li>
+</ul>
+<h3 id="a3-relação-com-job-system">A.3 Relação com Job System<a class="anchor" href="#a3-relação-com-job-system" aria-label="Link to this section">#</a></h3>
+<p><strong>Bons candidatos para jobs paralelos:</strong></p>
+<ul>
+<li>Carregamento de assets (I/O + decode)</li>
+<li>Avaliação de animação para muitas entidades</li>
+<li>Broad phase collision detection</li>
+<li>Processamento de debug/profiler</li>
+</ul>
+<p><strong>Maus candidatos:</strong></p>
+<ul>
+<li>SDL event polling</li>
+<li>UI focus mutation</li>
+<li>Scene swap finalization</li>
+<li>Real-time audio callback</li>
+</ul>
+<h3 id="a4-política-de-allocators">A.4 Política de Allocators<a class="anchor" href="#a4-política-de-allocators" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Uso</th>
+<th>Allocator</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scratch por frame</td>
+<td>Linear</td>
+<td>Event lists, contact pairs</td>
+</tr>
+<tr>
+<td>Objetos de tamanho fixo</td>
+<td>Pool</td>
+<td>Voices, emitters, bindings</td>
+</tr>
+<tr>
+<td>Escopos aninhados</td>
+<td>Stack</td>
+<td>Nível de jogo, task scopes</td>
+</tr>
+<tr>
+<td>Longa duração</td>
+<td>Persistent</td>
+<td>Registries, assets, configs</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="a5-regra-de-threading">A.5 Regra de Threading<a class="anchor" href="#a5-regra-de-threading" aria-label="Link to this section">#</a></h3>
+<blockquote>
+<p>&quot;Worker threads processam dados puros e produzem resultados publicáveis; transições de ownership/estado acontecem na main thread a menos que o subsistema defina explicitamente um path de publicação lock-free.&quot;</p>
+</blockquote>
+<hr>
+<h2 id="1-game-loop">1. Game Loop<a class="anchor" href="#1-game-loop" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 2 — O Pulso e a Concorrência<br>
+<strong>Responsável:</strong> Architects</p>
+<h3 id="11-visão-geral">1.1 Visão Geral<a class="anchor" href="#11-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O Game Loop é o coração da engine — o loop que roda do início ao fim do jogo, em cada frame. A Caffeine implementa o padrão <strong>Fixed Timestep com Acumulador</strong>, que desvincula a lógica de física (que precisa de tempo consistente) da renderização (que pode variar).</p>
+<p>Inspirado em <a href="https://gameprogrammingpatterns.com/game-loop.html" rel="noopener" class="ext">Game Programming Patterns — Decoupling Systems</a>.</p>
+<h3 id="12-estados-do-loop">1.2 Estados do Loop<a class="anchor" href="#12-estados-do-loop" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>┌──────────────────────────────────────────────────────────┐</code>
+<ul>
+<li><code>GAME LOOP STATES                       │</code></li>
+<li><code>┬──────────────┬──────────────┬─────────────┤</code>
+- <code>INIT     │   RUNNING    │    PAUSED    │  SHUTDOWN   │</code>
+- <code>- Carregar   │ - Processar  │ - Pausar     │ - Cleanup   │</code>
+- <code>recursos   │   eventos    │   lógica     │   recursos  │</code>
+- <code>- Criar      │ - Update     │ - Manter     │ - Flush     │</code>
+- <code>mundo      │   ECS        │   render     │   logs      │</code>
+- <code>- Inicializ. │ - Renderizar │ - aceitar    │ - Exit      │</code>
+- <code>subsistemas│ - Interpolar │   resume     │   code      │</code></li>
+<li><code>┴──────────────┴──────────────┴─────────────┘</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="13-interface-pública">1.3 Interface Pública<a class="anchor" href="#13-interface-pública" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Core {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Estados possíveis do game loop.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">GameState</span> : u8 {
+    Init,
+    Running,
+    Paused,
+    Shutdown
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Configuração do game loop.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">GameLoopConfig</span> {
+    f64 fixedDeltaTime = <span class="hljs-number">1.0</span> / <span class="hljs-number">60.0</span>;  <span class="hljs-comment">// 60 updates/segundo</span>
+    f64 maxFrameTime   = <span class="hljs-number">0.25</span>;          <span class="hljs-comment">// Clamp para evitar spiral of death</span>
+    u32 targetFPS      = <span class="hljs-number">0</span>;             <span class="hljs-comment">// 0 = unlimited</span>
+    <span class="hljs-type">bool</span> vsync         = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span> interpolation = <span class="hljs-literal">true</span>;          <span class="hljs-comment">// Interpolar renderização</span>
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Game loop principal com fixed timestep.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Ciclo por frame:</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  1. processInput()      — SDL_PollEvent, alimenta Input System</span>
+<span class="hljs-comment">//  2. accumulator += dt    — Acumula tempo desde o último update</span>
+<span class="hljs-comment">//  3. while (accum &gt;= dt)  — Update em fixed steps enquanto accumulator</span>
+<span class="hljs-comment">//     - processEvents()    — Event Bus processa fila</span>
+<span class="hljs-comment">//     - updateSystems()    — ECS systems em ordem de precedência</span>
+<span class="hljs-comment">//     - accumulator -= dt</span>
+<span class="hljs-comment">//  4. interpolate(alpha)   — Calcula valores interpolados para render</span>
+<span class="hljs-comment">//  5. render(alpha)       — Render com valores interpolados</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">GameLoop</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">GameLoop</span><span class="hljs-params">(<span class="hljs-type">const</span> GameLoopConfig&amp; config)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tick</span><span class="hljs-params">(f64 deltaTime)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pause</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resume</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shutdown</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function">GameState <span class="hljs-title">state</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_state; }
+    <span class="hljs-function">f64 <span class="hljs-title">elapsedTime</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f64 <span class="hljs-title">interpolationAlpha</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_alpha; }
+    <span class="hljs-function">u64 <span class="hljs-title">frameCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_frameCount; }
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processInput</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processFixedUpdate</span><span class="hljs-params">(f64 dt)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processInterpolation</span><span class="hljs-params">(f64 alpha)</span></span>;
+
+    GameLoopConfig  m_config;
+    GameState       m_state = GameState::Init;
+    f64              m_accumulator    = <span class="hljs-number">0.0</span>;
+    f64              m_elapsedTime    = <span class="hljs-number">0.0</span>;
+    f64              m_alpha          = <span class="hljs-number">0.0</span>;
+    u64              m_frameCount     = <span class="hljs-number">0</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Core</span>
+</code></pre></div>
+<h3 id="14-spiral-of-death-prevention">1.4 Spiral of Death Prevention<a class="anchor" href="#14-spiral-of-death-prevention" aria-label="Link to this section">#</a></h3>
+<p>Se o loop de update cair para trás (ex: sistema lento), o acumulador cresce indefinidamente:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">m_accumulator = <span class="hljs-built_in">min</span>(m_accumulator, m_config.maxFrameTime);
+<span class="hljs-comment">// Clamp para no máximo 250ms — skip frames se necessário</span>
+</code></pre></div>
+<h3 id="15-decisões-de-design">1.5 Decisões de Design<a class="anchor" href="#15-decisões-de-design" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decisão</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fixed timestep para lógica</td>
+<td>Física determinística, replay de frames, rede</td>
+</tr>
+<tr>
+<td>Acumulador com clamp</td>
+<td>Evita &quot;spiral of death&quot; em sistemas lentos</td>
+</tr>
+<tr>
+<td><code>vsync</code> configurável</td>
+<td>Permite benchmark em loop sem vsync</td>
+</tr>
+<tr>
+<td><code>interpolation</code> configurável</td>
+<td>Debug mais fácil sem interp</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="2-job-system">2. Job System<a class="anchor" href="#2-job-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 2 — O Pulso e a Concorrência<br>
+<strong>Responsável:</strong> Architects</p>
+<h3 id="21-visão-geral">2.1 Visão Geral<a class="anchor" href="#21-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O Job System distribui trabalho pesado (física, IA, animação, carregamento de assets) entre os núcleos da CPU. Cada Job é uma unidade de trabalho leve que uma worker thread executa.</p>
+<p>A Caffeine implementa um <strong>thread pool com work-stealing</strong> — cada worker tem sua própria fila; quando vazia, &quot;rouba&quot; jobs de workers ocupados.</p>
+<p>Baseado em padrões de <a href="https://github.com/jrouwe/JoltPhysics" rel="noopener" class="ext">Jolt Physics Job System</a> e <a href="https://pulsegeek.com/articles/multithreaded-job-systems-in-game-engines/" rel="noopener" class="ext">Multithreaded Job Systems in Game Engines</a>.</p>
+<h3 id="22-interfaces">2.2 Interfaces<a class="anchor" href="#22-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Threading {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Interface base para todos os Jobs.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Jobs devem ser cheap to copy — dados devem ser passados por valor ou</span>
+<span class="hljs-comment">//  via shared_ptr. Nunca alocar no heap dentro de um Job.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">IJob</span> {
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">IJob</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">execute</span><span class="hljs-params">()</span> </span>= <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Job com dados armazenados internamente.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> DataT&gt;
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">JobWithData</span> : IJob {
+    DataT         data;
+    std::function&lt;<span class="hljs-type">void</span>(DataT&amp;)&gt; func;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">execute</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-built_in">func</span>(data); }
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Handle para rastrear e sincronizar Jobs.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">JobHandle</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">JobHandle</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">JobHandle</span><span class="hljs-params">(u32 index, u32 version)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">wait</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isComplete</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    u32 m_index   = u32_max;
+    u32 m_version = u32_max;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Barreira de sincronização — wait() bloqueia até N jobs terminarem.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">JobBarrier</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">JobBarrier</span><span class="hljs-params">(u32 targetCount)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">release</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">wait</span><span class="hljs-params">()</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    std::atomic&lt;u32&gt;        m_count;
+    std::atomic&lt;u32&gt;        m_generation;
+    std::condition_variable m_cv;
+    std::mutex              m_mutex;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Sistema de Jobs principal.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  - Num workers: hardware_concurrency() - 1</span>
+<span class="hljs-comment">//  - Fila por worker: lock-free MPMC queue</span>
+<span class="hljs-comment">//  - Work-stealing: Atomic compare-and-swap nas pontas da deque</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">JobSystem</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">JobSystem</span><span class="hljs-params">(u32 workerCount = <span class="hljs-number">0</span>)</span></span>;
+    ~<span class="hljs-built_in">JobSystem</span>();
+
+    <span class="hljs-function">JobHandle <span class="hljs-title">schedule</span><span class="hljs-params">(std::unique_ptr&lt;IJob&gt; job, JobBarrier* barrier = <span class="hljs-literal">nullptr</span>)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> DataT, <span class="hljs-keyword">typename</span> FuncT&gt;
+    JobHandle <span class="hljs-title">scheduleData</span><span class="hljs-params">(DataT data, FuncT&amp;&amp; func, JobBarrier* barrier = <span class="hljs-literal">nullptr</span>)</span> </span>{
+        <span class="hljs-keyword">auto</span>* job = <span class="hljs-keyword">new</span> JobWithData&lt;DataT&gt;{std::<span class="hljs-built_in">move</span>(data),
+                                            std::forward&lt;FuncT&gt;(func)};
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">schedule</span>(std::<span class="hljs-built_in">unique_ptr</span>&lt;IJob&gt;(job), barrier);
+    }
+
+    <span class="hljs-comment">// Chunk-based parallel for</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> FuncT&gt;
+    JobHandle <span class="hljs-title">scheduleParallelFor</span><span class="hljs-params">(u32 count, FuncT&amp;&amp; func, JobBarrier* barrier = <span class="hljs-literal">nullptr</span>)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">waitAll</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function">u32 <span class="hljs-title">workerCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_workerCount; }
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Stats</span> {
+        u32 activeWorkers;
+        u32 pendingJobs;
+        u32 completedFrames;
+    };
+    <span class="hljs-function">Stats <span class="hljs-title">stats</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    u32                      m_workerCount;
+    std::vector&lt;WorkerThread&gt; m_workers;
+    JobQueue                  m_globalQueue;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Threading</span>
+</code></pre></div>
+<h3 id="23-exemplo-de-uso">2.3 Exemplo de Uso<a class="anchor" href="#23-exemplo-de-uso" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// Física distribuída entre workers</span>
+<span class="hljs-function">JobBarrier <span class="hljs-title">barrier</span><span class="hljs-params">(particleCount / CHUNK_SIZE)</span></span>;
+<span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; particleCount; i += CHUNK_SIZE) {
+    jobSystem.<span class="hljs-built_in">scheduleData</span>(
+        ChunkJob{i, CHUNK_SIZE, dt},
+        [&amp;](<span class="hljs-type">const</span> ChunkJob&amp; j) {
+            <span class="hljs-keyword">for</span> (u32 k = j.start; k &lt; j.start + j.count; ++k) {
+                particles[k].<span class="hljs-built_in">integrate</span>(dt);
+            }
+        },
+        &amp;barrier
+    );
+}
+barrier.<span class="hljs-built_in">wait</span>();  <span class="hljs-comment">// Todos os chunks prontos</span>
+</code></pre></div>
+<h3 id="24-decisões-de-design">2.4 Decisões de Design<a class="anchor" href="#24-decisões-de-design" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decisão</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>std::unique_ptr&lt;IJob&gt;</code></td>
+<td>Ownership claro — sistema é dono do Job</td>
+</tr>
+<tr>
+<td>Work-stealing deque</td>
+<td>Melhora throughput vs fila centralizada</td>
+</tr>
+<tr>
+<td><code>index + version</code> no Handle</td>
+<td>Evita ABA problem sem lock</td>
+</tr>
+<tr>
+<td>Workers = n-1</td>
+<td>Main thread não compete por recursos com workers</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="3-input-system">3. Input System<a class="anchor" href="#3-input-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 2 — O Pulso e a Concorrência<br>
+<strong>Responsável:</strong> Architects</p>
+<h3 id="31-visão-geral">3.1 Visão Geral<a class="anchor" href="#31-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O Input System abstrai dispositivos (teclado, mouse, gamepad) e expõe <strong>ações nomeadas</strong> em vez de scancodes crus. Isso permite remapear controles sem alterar o código do jogo.</p>
+<p>Baseado em pesquisa de padrões action-based input e integração com ECS.</p>
+<h3 id="32-arquitetura">3.2 Arquitetura<a class="anchor" href="#32-arquitetura" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>SDL Events</code></li>
+<li><code>▼</code></li>
+<li><code>InputManager.poll()  ← Gameloop.processInput()</code>
+<ul>
+<li><code>KeyboardState    ──▶ ActionMap  ──▶ ActionState</code></li>
+<li><code>MouseState       ──▶ AxisMap   ──▶ AxisState</code></li>
+<li><code>GamepadState[]   ──▶           ──▶ (fornecido ao ECS)</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="33-interfaces">3.3 Interfaces<a class="anchor" href="#33-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Input {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Códigos de ação pré-definidos.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Action</span> : u16 {
+    None = <span class="hljs-number">0</span>,
+    Jump,
+    Attack,
+    Interact,
+    Pause,
+    MenuUp, MenuDown, MenuLeft, MenuRight,
+    MenuConfirm, MenuBack,
+    CUSTOM_START = <span class="hljs-number">128</span>
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Eixo analógico (mouse, joystick).</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Axis</span> : u8 {
+    None = <span class="hljs-number">0</span>,
+    MoveX,    <span class="hljs-comment">// -1.0 (esquerda) a +1.0 (direita)</span>
+    MoveY,    <span class="hljs-comment">// -1.0 (cima) a +1.0 (baixo)</span>
+    LookX,    <span class="hljs-comment">// Mouse X / Right stick X</span>
+    LookY,    <span class="hljs-comment">// Mouse Y / Right stick Y</span>
+    CUSTOM_START = <span class="hljs-number">64</span>
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Estado de uma ação.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">ActionState</span> {
+    <span class="hljs-type">bool</span> pressed     = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span> justPressed  = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span> justReleased = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Estado de um eixo analógico.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AxisState</span> {
+    f32 value = <span class="hljs-number">0.0f</span>;  <span class="hljs-comment">// -1.0 a +1.0</span>
+    f32 delta = <span class="hljs-number">0.0f</span>;  <span class="hljs-comment">// mudança desde o último frame</span>
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Gerenciador de input.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Ciclo:</span>
+<span class="hljs-comment">//  1. beginFrame() — clear justPressed/justReleased, processa SDL events</span>
+<span class="hljs-comment">//  2. isActionPressed(Action::Jump) — consulta estado</span>
+<span class="hljs-comment">//  3. endFrame() — atualiza história para próximo frame</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">InputManager</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">InputManager</span>();
+    ~<span class="hljs-built_in">InputManager</span>();
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">beginFrame</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">endFrame</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">const</span> ActionState&amp; <span class="hljs-title">actionState</span><span class="hljs-params">(Action a)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">const</span> AxisState&amp; <span class="hljs-title">axisState</span><span class="hljs-params">(Axis a)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function">Vec2 <span class="hljs-title">mousePosition</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Vec2 <span class="hljs-title">mouseDelta</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setMouseRelative</span><span class="hljs-params">(<span class="hljs-type">bool</span> enabled)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bindAction</span><span class="hljs-params">(Action action, std::initializer_list&lt;Binding&gt; bindings)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bindAxis</span><span class="hljs-params">(Axis axis, std::initializer_list&lt;Binding&gt; bindings)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">processSdlEvent</span><span class="hljs-params">(<span class="hljs-type">const</span> SDL_Event&amp; e)</span></span>;
+
+    HashMap&lt;SDL_Scancode, Action&gt; m_keyBindings;
+    HashMap&lt;u32, Action&gt;          m_mouseBindings;
+    HashMap&lt;i32, Action&gt;          m_gamepadBindings;
+    HashMap&lt;i32, Axis&gt;            m_gamepadAxis;
+
+    Array&lt;ActionState, <span class="hljs-number">64</span>&gt; m_actionStates;
+    Array&lt;AxisState, <span class="hljs-number">32</span>&gt;  m_axisStates;
+    Array&lt;<span class="hljs-type">bool</span>, <span class="hljs-number">64</span>&gt;        m_prevActionStates;
+
+    Vec2 m_mousePos;
+    Vec2 m_mouseDelta;
+    <span class="hljs-type">bool</span> m_mouseRelative = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-comment">// Estrutura para binding de input</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Binding</span> {
+    <span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Type</span> { Key, MouseButton, GamepadButton, GamepadAxis } type;
+    u32 code;     <span class="hljs-comment">// scancode, button, ou axis</span>
+    f32 scale = <span class="hljs-number">1.0f</span>;  <span class="hljs-comment">// para gamepad axis</span>
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Input</span>
+</code></pre></div>
+<h3 id="34-componente-ecs-para-input">3.4 Componente ECS para Input<a class="anchor" href="#34-componente-ecs-para-input" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Componente que permite a uma entidade reagir a input.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">PlayerInput</span> {
+    Action moveAction = Action::None;
+    Action jumpAction = Action::None;
+    Axis   moveAxisX  = Axis::MoveX;
+    Axis   moveAxisY  = Axis::MoveY;
+    f32    moveSpeed   = <span class="hljs-number">5.0f</span>;
+    f32    jumpForce   = <span class="hljs-number">10.0f</span>;
+};
+</code></pre></div>
+<h3 id="35-decisões-de-design">3.5 Decisões de Design<a class="anchor" href="#35-decisões-de-design" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decisão</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Action-based, não scancode</td>
+<td>Games portáteis; remapping em runtime</td>
+</tr>
+<tr>
+<td><code>justPressed</code>/<code>justReleased</code></td>
+<td>Elimina polling no update</td>
+</tr>
+<tr>
+<td>Binding map mutável</td>
+<td>Remapping em runtime (menu de opções)</td>
+</tr>
+<tr>
+<td>Mouse relative mode</td>
+<td>Mouse look para câmera sem drift</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="4-ecs-core">4. ECS Core<a class="anchor" href="#4-ecs-core" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 4 — O Cérebro<br>
+<strong>Responsável:</strong> Architects</p>
+<h3 id="41-visão-geral">4.1 Visão Geral<a class="anchor" href="#41-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O ECS (Entity Component System) da Caffeine é <strong>archetype-based</strong> — entidades com o mesmo conjunto de componentes vivem em memória contígua (archetypes). Isso maximiza cache locality e permite SIMD nos systems.</p>
+<p>Inspirado em <a href="https://github.com/SanderMertens/flecs" rel="noopener" class="ext">flecs</a> e <a href="https://github.com/skypjack/entt" rel="noopener" class="ext">EnTT</a>. Ver <a href="https://github.com/skypjack/entt/wiki/EnTT-in-Action" rel="noopener" class="ext">EnTT in Action</a>.</p>
+<h3 id="42-conceitos-fundamentais">4.2 Conceitos Fundamentais<a class="anchor" href="#42-conceitos-fundamentais" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>┌──────────────────────────────────────────────────────────────┐</code>
+<ul>
+<li><code>ECS KEY CONCEPTS                          │</code></li>
+<li><code>ENTITY:  u32 ID único. Não tem dados nem lógica.           │</code></li>
+<li><code>bits: [archetype_index] [entity_index]              │</code></li>
+<li><code>COMPONENT: Struct POD. Sem métodos, sem virtual.             │</code></li>
+<li><code>Ex: Position { f32 x, y; }                       │</code></li>
+<li><code>ARCHETYPE: Grupo de entidades com mesmo ComponentSet.       │</code></li>
+<li><code>Arrays contíguos de cada componente.               │</code></li>
+<li><code>SYSTEM: Função que itera sobre entidades que combinam        │</code></li>
+<li><code>um ComponentQuery. Roda no Job System.                │</code></li>
+<li><code>WORLD: Container que gerencia todas as entidades,            │</code></li>
+<li><code>componentes e archetypes.                             │</code></li>
+<li><code>┘</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="43-interfaces">4.3 Interfaces<a class="anchor" href="#43-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::ECS {
+
+<span class="hljs-comment">// ----------------------------------------------------------------------------</span>
+<span class="hljs-comment">// @brief  Handle para uma entidade.</span>
+<span class="hljs-comment">// ----------------------------------------------------------------------------</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Entity</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Entity</span>() : <span class="hljs-built_in">m_id</span>(u32_max), <span class="hljs-built_in">m_world</span>(<span class="hljs-literal">nullptr</span>) {}
+    <span class="hljs-built_in">Entity</span>(u32 id, World* world) : <span class="hljs-built_in">m_id</span>(id), <span class="hljs-built_in">m_world</span>(world) {}
+
+    <span class="hljs-function">u32 <span class="hljs-title">id</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_id; }
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isValid</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... Args&gt;
+    T&amp; <span class="hljs-title">add</span><span class="hljs-params">(Args&amp;&amp;... args)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">remove</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">bool</span> <span class="hljs-title">has</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    T* <span class="hljs-title">get</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-built_in">isValid</span>(); }
+    <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>==(Entity other) <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> m_id == other.m_id; }
+
+<span class="hljs-keyword">private</span>:
+    u32    m_id;
+    World* m_world;
+};
+
+<span class="hljs-comment">// ----------------------------------------------------------------------------</span>
+<span class="hljs-comment">// @brief  Query — define quais componentes uma entidade deve ter.</span>
+<span class="hljs-comment">// ----------------------------------------------------------------------------</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ComponentQuery</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function">ComponentQuery&amp; <span class="hljs-title">with</span><span class="hljs-params">(<span class="hljs-keyword">auto</span>&amp;&amp;... components)</span></span>;
+    <span class="hljs-function">ComponentQuery&amp; <span class="hljs-title">without</span><span class="hljs-params">(<span class="hljs-keyword">auto</span>&amp;&amp;... components)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Func&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">forEach</span><span class="hljs-params">(World&amp; world, Func&amp;&amp; func)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Func&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">forEachParallel</span><span class="hljs-params">(World&amp; world, Func&amp;&amp; func, JobBarrier* barrier)</span> <span class="hljs-type">const</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Clause</span> {
+        std::vector&lt;ComponentID&gt; includes;
+        std::vector&lt;ComponentID&gt; excludes;
+    };
+    Clause m_clause;
+};
+
+<span class="hljs-comment">// ----------------------------------------------------------------------------</span>
+<span class="hljs-comment">// @brief  System — functor que opera sobre um query.</span>
+<span class="hljs-comment">// ----------------------------------------------------------------------------</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ISystem</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">ISystem</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(World&amp; world, f64 dt)</span> </span>= <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> i32 <span class="hljs-title">priority</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-comment">// ----------------------------------------------------------------------------</span>
+<span class="hljs-comment">// @brief  World — gerenciador principal do ECS.</span>
+<span class="hljs-comment">// ----------------------------------------------------------------------------</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">World</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">World</span>();
+    ~<span class="hljs-built_in">World</span>();
+
+    <span class="hljs-comment">// Entity lifecycle</span>
+    <span class="hljs-function">Entity <span class="hljs-title">create</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name = <span class="hljs-literal">nullptr</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>   <span class="hljs-title">destroy</span><span class="hljs-params">(Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>   <span class="hljs-title">destroyAll</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-comment">// Component access</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-keyword">typename</span>... Args&gt;
+    T&amp; <span class="hljs-title">add</span><span class="hljs-params">(Entity e, Args&amp;&amp;... args)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">remove</span><span class="hljs-params">(Entity e)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">bool</span> <span class="hljs-title">has</span><span class="hljs-params">(Entity e)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    T* <span class="hljs-title">get</span><span class="hljs-params">(Entity e)</span></span>;
+
+    <span class="hljs-comment">// Queries</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Func&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">query</span><span class="hljs-params">(ComponentQuery&amp; q, Func&amp;&amp; func)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-comment">// Systems</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> SystemT, <span class="hljs-keyword">typename</span>... Args&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">registerSystem</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, i32 priority, Args&amp;&amp;... args)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unregisterSystem</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span></span>;
+
+    <span class="hljs-comment">// Frame update</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(f64 dt)</span></span>;
+
+    <span class="hljs-function">u32 <span class="hljs-title">entityCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">u32 <span class="hljs-title">archetypeCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function">Archetype* <span class="hljs-title">getOrCreateArchetype</span><span class="hljs-params">(ComponentSet set)</span></span>;
+
+    Array&lt;Archetype, <span class="hljs-number">256</span>&gt;       m_archetypes;
+    HashMap&lt;ComponentSet, u32&gt;  m_archetypeIndex;
+    u32                           m_entityCount    = <span class="hljs-number">0</span>;
+    u32                           m_archetypeCount = <span class="hljs-number">0</span>;
+    std::vector&lt;Own&lt;ISystem&gt;&gt;    m_systems;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::ECS</span>
+</code></pre></div>
+<h3 id="44-componentes-pré-definidos">4.4 Componentes Pré-definidos<a class="anchor" href="#44-componentes-pré-definidos" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Components {
+
+<span class="hljs-comment">// Transform 2D</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Position2D</span> { f32 x = <span class="hljs-number">0</span>, y = <span class="hljs-number">0</span>; };
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Velocity2D</span>  { f32 x = <span class="hljs-number">0</span>, y = <span class="hljs-number">0</span>; };
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Rotation2D</span>   { f32 angle = <span class="hljs-number">0</span>; };
+
+<span class="hljs-comment">// Sprite</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Sprite</span> {
+    u32   textureId     = u32_max;
+    Vec2  offset       = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>};
+    Vec2  scale        = {<span class="hljs-number">1</span>, <span class="hljs-number">1</span>};
+    f32   rotation     = <span class="hljs-number">0</span>;
+    Color tint         = Color::WHITE;
+    i32   layer       = <span class="hljs-number">0</span>;
+    <span class="hljs-type">bool</span>  flipX        = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span>  flipY        = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-comment">// Rigid Body 2D</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">RigidBody2D</span> {
+    f32 mass        = <span class="hljs-number">1.0f</span>;
+    f32 restitution = <span class="hljs-number">0.5f</span>;
+    f32 friction    = <span class="hljs-number">0.3f</span>;
+    Vec2 acceleration = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>};
+    <span class="hljs-type">bool</span> isKinematic = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-comment">// AABB Collider</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Collider2D</span> {
+    Vec2  size     = {<span class="hljs-number">1</span>, <span class="hljs-number">1</span>};
+    Vec2  offset   = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>};
+    <span class="hljs-type">bool</span>  isStatic = <span class="hljs-literal">false</span>;
+    u32   layer    = <span class="hljs-number">0</span>;
+    <span class="hljs-type">bool</span>  isTrigger = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-comment">// Tag components</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Player</span>     {};
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Enemy</span>      {};
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Projectile</span> {};
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Particle</span>   {};
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Disabled</span>   {};  <span class="hljs-comment">// entidades com isso são puladas</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Destroy</span>   {};  <span class="hljs-comment">// marcada para destruição no fim do frame</span>
+
+<span class="hljs-comment">// Name</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Name</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt; value;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Components</span>
+</code></pre></div>
+<h3 id="45-exemplo-de-uso">4.5 Exemplo de Uso<a class="anchor" href="#45-exemplo-de-uso" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">World world;
+
+Entity player = world.<span class="hljs-built_in">create</span>(<span class="hljs-string">&quot;Player&quot;</span>);
+world.<span class="hljs-built_in">add</span>&lt;Position2D&gt;(player, {<span class="hljs-number">100</span>, <span class="hljs-number">200</span>});
+world.<span class="hljs-built_in">add</span>&lt;Velocity2D&gt;(player, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+world.<span class="hljs-built_in">add</span>&lt;Sprite&gt;(player, { .textureId = playerTex });
+world.<span class="hljs-built_in">add</span>&lt;PlayerInput&gt;(player);
+world.<span class="hljs-built_in">add</span>&lt;RigidBody2D&gt;(player, { .mass = <span class="hljs-number">5.0f</span> });
+world.<span class="hljs-built_in">add</span>&lt;Collider2D&gt;(player, { .size = {<span class="hljs-number">32</span>, <span class="hljs-number">64</span>} });
+
+<span class="hljs-comment">// Queries</span>
+ComponentQuery movementQuery;
+movementQuery.<span class="hljs-built_in">with</span>&lt;Position2D, Velocity2D&gt;();
+movementQuery.<span class="hljs-built_in">without</span>&lt;Disabled, Destroy&gt;();
+
+world.<span class="hljs-built_in">query</span>(movementQuery, [](Position2D&amp; pos, <span class="hljs-type">const</span> Velocity2D&amp; vel, f64 dt) {
+    pos.x += vel.x * dt;
+    pos.y += vel.y * dt;
+});
+
+<span class="hljs-comment">// Systems — registrados em ordem de prioridade</span>
+world.registerSystem&lt;PhysicsSystem&gt;(<span class="hljs-string">&quot;Physics&quot;</span>, <span class="hljs-number">100</span>);
+world.registerSystem&lt;AnimationSystem&gt;(<span class="hljs-string">&quot;Animation&quot;</span>, <span class="hljs-number">200</span>);
+world.registerSystem&lt;RenderSystem&gt;(<span class="hljs-string">&quot;Render&quot;</span>, <span class="hljs-number">300</span>);
+
+<span class="hljs-keyword">while</span> (running) {
+    world.<span class="hljs-built_in">update</span>(fixedDt);
+}
+</code></pre></div>
+<hr>
+<h2 id="5-scene-graph-serialização">5. Scene Graph &amp; Serialização<a class="anchor" href="#5-scene-graph-serialização" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 4 — O Cérebro<br>
+<strong>Responsável:</strong> Architects</p>
+<h3 id="51-visão-geral">5.1 Visão Geral<a class="anchor" href="#51-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O Scene Graph organiza entidades em hierarquia (parent/child) para transformações locais. A serialização permite salvar/carregar cenas em formato binário <code>.caf</code> ou JSON.</p>
+<h3 id="52-interfaces">5.2 Interfaces<a class="anchor" href="#52-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Scene {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Componente de parent/child para hierarquia.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Parent</span> {
+    Entity parent = Entity::INVALID;
+    <span class="hljs-type">bool</span>   dirty = <span class="hljs-literal">true</span>;  <span class="hljs-comment">// world transform precisa recalcular</span>
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Transform global (world space) — calculado a partir de Local.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">WorldTransform</span> {
+    Mat4 matrix = Mat4::<span class="hljs-built_in">identity</span>();
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Serializador para Caffeine Object Notation (.caf).</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Formato:</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  [Header: &quot;CAFF&quot; + version + crc32]</span>
+<span class="hljs-comment">//  [Entity count]</span>
+<span class="hljs-comment">//  [Archetypes]</span>
+<span class="hljs-comment">//  [Entity data (binary)]</span>
+<span class="hljs-comment">//  [Strings table]</span>
+<span class="hljs-comment">//  [Asset references]</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SceneSerializer</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">SceneSerializer</span><span class="hljs-params">(World&amp; world)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">serialize</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">deserialize</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">serializeJson</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">deserializeJson</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    World&amp; m_world;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Gerenciador de cenas.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">SceneManager</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-keyword">enum class</span> <span class="hljs-title class_">TransitionType</span> { None, Fade, Slide, Custom };
+
+    <span class="hljs-function">LoadHandle <span class="hljs-title">loadScene</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path, <span class="hljs-type">bool</span> async = <span class="hljs-literal">false</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">switchScene</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path,
+                     TransitionType trans = TransitionType::None,
+                     f32 duration = <span class="hljs-number">0.0f</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pushScene</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">popScene</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function">World* <span class="hljs-title">activeWorld</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_activeWorld; }
+
+<span class="hljs-keyword">private</span>:
+    World*                        m_activeWorld = <span class="hljs-literal">nullptr</span>;
+    std::vector&lt;Own&lt;World&gt;&gt;       m_sceneStack;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Scene</span>
+</code></pre></div>
+<h3 id="53-caf-format-binary">5.3 CAF Format (Binary)<a class="anchor" href="#53-caf-format-binary" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Offset  Size  Description
+------  ----  -----------
+0       4     Magic: &quot;CAFF&quot; (0x43414646)
+4       2     Version major (u16)
+6       2     Version minor (u16)
+8       4     CRC32 of entire file (except this field)
+12      4     Entity count (u32)
+16      4     Archetype count (u32)
+20      N     Archetype table
+...     ...   Entity data (packed by archetype)
+...     ...   Strings table
+...     ...   Asset reference table
+EOF     4     CRC32 of entire file
+</code></pre></div>
+<hr>
+<h2 id="6-event-bus">6. Event Bus<a class="anchor" href="#6-event-bus" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 4 — O Cérebro<br>
+<strong>Responsável:</strong> Architects</p>
+<h3 id="61-visão-geral">6.1 Visão Geral<a class="anchor" href="#61-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O Event Bus permite comunicação <strong>desacoplada</strong> entre sistemas. Um sistema publica eventos; outros se inscrevem sem conhecer quem publica.</p>
+<h3 id="62-interfaces">6.2 Interfaces<a class="anchor" href="#62-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Events {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Evento base — todos os eventos derivam deste.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Eventos são structs POD com dados relevantes. Ex:</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  struct CollisionEvent {</span>
+<span class="hljs-comment">//      Entity a;</span>
+<span class="hljs-comment">//      Entity b;</span>
+<span class="hljs-comment">//      Vec2 contactPoint;</span>
+<span class="hljs-comment">//      Vec2 normal;</span>
+<span class="hljs-comment">//  };</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">IEvent</span> {
+    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">IEvent</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">virtual</span> u32 <span class="hljs-title">typeId</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>= <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+u32 <span class="hljs-title">eventTypeId</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">static</span> <span class="hljs-type">char</span> unique = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">reinterpret_cast</span>&lt;u32&gt;(&amp;unique);
+}
+
+<span class="hljs-keyword">using</span> EventListener = std::function&lt;<span class="hljs-built_in">void</span>(<span class="hljs-type">const</span> IEvent&amp;)&gt;;
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Barramento de eventos. Padrão pub/sub.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EventBus</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">EventBus</span>();
+    ~<span class="hljs-built_in">EventBus</span>();
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> EventT&gt;
+    ListenerHandle <span class="hljs-title">subscribe</span><span class="hljs-params">(EventListener listener)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unsubscribe</span><span class="hljs-params">(ListenerHandle handle)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> EventT&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">publish</span><span class="hljs-params">(<span class="hljs-type">const</span> EventT&amp; event)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function">u32 <span class="hljs-title">pendingCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">ListenerRecord</span> {
+        ListenerHandle handle;
+        EventListener  callback;
+        <span class="hljs-type">bool</span>           valid = <span class="hljs-literal">true</span>;
+    };
+
+    HashMap&lt;u32, std::vector&lt;ListenerRecord&gt;&gt; m_listeners;
+    std::vector&lt;std::unique_ptr&lt;IEvent&gt;&gt;       m_eventQueue;
+    ListenerHandle                             m_nextHandle = <span class="hljs-number">1</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Events</span>
+</code></pre></div>
+<h3 id="63-eventos-pré-definidos">6.3 Eventos Pré-definidos<a class="anchor" href="#63-eventos-pré-definidos" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Events {
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnEntityCreated</span>    { Entity entity; };
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnEntityDestroyed</span>  { Entity entity; };
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnCollision2D</span> {
+    Entity a, b;
+    Vec2   contactPoint;
+    Vec2   normal;
+    f32    penetration;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnHealthChanged</span> {
+    Entity entity;
+    f32    oldHealth;
+    f32    newHealth;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnDeath</span> {
+    Entity entity;
+    Entity killer;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnLevelLoaded</span> {
+    FixedString&lt;<span class="hljs-number">64</span>&gt; levelName;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Events</span>
+</code></pre></div>
+<hr>
+<h2 id="7-asset-manager">7. Asset Manager<a class="anchor" href="#7-asset-manager" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 3 — O Olho da Engine<br>
+<strong>Responsável:</strong> Artisans</p>
+<h3 id="71-visão-geral">7.1 Visão Geral<a class="anchor" href="#71-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O Asset Manager carrega, cache e fornece assets (texturas, audio, shaders, modelos) de forma transparente. Suporta <strong>async loading</strong> via Job System e <strong>hot-reload</strong> em desenvolvimento.</p>
+<h3 id="72-interfaces">7.2 Interfaces<a class="anchor" href="#72-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">AssetType</span> : u8 {
+    Texture, Audio, Shader, Font, Scene, Mesh, Animation
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">LoadStatus</span> : u8 {
+    Unloaded, Loading, Loaded, Failed
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Handle para um asset carregado.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AssetHandle</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">AssetHandle</span>() = <span class="hljs-keyword">default</span>;
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">AssetHandle</span><span class="hljs-params">(u32 id, AssetManager* manager)</span></span>;
+
+    <span class="hljs-function">T* <span class="hljs-title">get</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isReady</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">hasFailed</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32  <span class="hljs-title">progress</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">T* <span class="hljs-title">wait</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-built_in">isReady</span>(); }
+    T* <span class="hljs-keyword">operator</span>-&gt;() <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> <span class="hljs-built_in">get</span>(); }
+
+<span class="hljs-keyword">private</span>:
+    u32 m_id;
+    AssetManager* m_manager;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Gerenciador de assets.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  - Cache em memória (LRU eviction quando cheio)</span>
+<span class="hljs-comment">//  - Async loading via Job System</span>
+<span class="hljs-comment">//  - Hot-reload em dev mode</span>
+<span class="hljs-comment">//  - Reference counting</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AssetManager</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">AssetManager</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* basePath, u64 cacheSizeMB = <span class="hljs-number">256</span>);
+    ~<span class="hljs-built_in">AssetManager</span>();
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    AssetHandle&lt;T&gt; <span class="hljs-title">loadAsync</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    T* <span class="hljs-title">loadSync</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unload</span><span class="hljs-params">(AssetHandleBase handle)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">collectGarbage</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pollFileChanges</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">CacheStats</span> {
+        u64 totalCachedBytes;
+        u64 maxCacheBytes;
+        u32 textureCount;
+        u32 audioCount;
+    };
+    <span class="hljs-function">CacheStats <span class="hljs-title">stats</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function">Asset* <span class="hljs-title">loadSyncInternal</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path, AssetType type)</span></span>;
+
+    <span class="hljs-type">const</span> <span class="hljs-type">char</span>*        m_basePath;
+    u64                 m_maxCacheBytes;
+
+    HashMap&lt;u64, Asset*&gt; m_textureCache;
+    HashMap&lt;u64, Asset*&gt; m_audioCache;
+    HashMap&lt;u64, Asset*&gt; m_shaderCache;
+    HashMap&lt;u64, u32&gt;    m_refCounts;
+
+    <span class="hljs-type">bool</span> m_watchEnabled = <span class="hljs-literal">false</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<h3 id="73-componente-ecs-para-assets">7.3 Componente ECS para Assets<a class="anchor" href="#73-componente-ecs-para-assets" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Componente que mantém uma referência a um asset.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AssetRef</span> {
+    FixedString&lt;<span class="hljs-number">128</span>&gt; path;
+    AssetHandle&lt;T&gt;   handle;
+    <span class="hljs-type">bool</span>             autoLoad = <span class="hljs-literal">true</span>;
+};
+</code></pre></div>
+<hr>
+<h2 id="8-rhi-rendering-hardware-interface">8. RHI (Rendering Hardware Interface)<a class="anchor" href="#8-rhi-rendering-hardware-interface" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 3 — O Olho da Engine<br>
+<strong>Responsável:</strong> Artisans</p>
+<h3 id="81-visão-geral">8.1 Visão Geral<a class="anchor" href="#81-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O RHI é a camada de abstração sobre o SDL_GPU. A engine nunca chama funções SDL diretamente — todas as chamadas passam por <code>RHI</code>, que gerencia command buffers, swapchains e render targets.</p>
+<h3 id="82-interfaces">8.2 Interfaces<a class="anchor" href="#82-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::RHI {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Inicializa o RHI com contexto SDL_GPU.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">RenderDevice</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">init</span><span class="hljs-params">(SDL_Window* window, <span class="hljs-type">const</span> RenderConfig&amp; config)</span></span>;
+
+    <span class="hljs-function">CommandBuffer* <span class="hljs-title">beginFrame</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>           <span class="hljs-title">endFrame</span><span class="hljs-params">(CommandBuffer* cmd)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>           <span class="hljs-title">present</span><span class="hljs-params">(CommandBuffer* cmd)</span></span>;
+
+    <span class="hljs-function">Texture* <span class="hljs-title">createTexture</span><span class="hljs-params">(<span class="hljs-type">const</span> TextureDesc&amp; desc)</span></span>;
+    <span class="hljs-function">Shader*  <span class="hljs-title">createShader</span><span class="hljs-params">(<span class="hljs-type">const</span> ShaderDesc&amp; desc)</span></span>;
+    <span class="hljs-function">Buffer*  <span class="hljs-title">createBuffer</span><span class="hljs-params">(<span class="hljs-type">const</span> BufferDesc&amp; desc, BufferUsage usage)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>     <span class="hljs-title">destroyTexture</span><span class="hljs-params">(Texture* tex)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>     <span class="hljs-title">destroyShader</span><span class="hljs-params">(Shader* shader)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>     <span class="hljs-title">destroyBuffer</span><span class="hljs-params">(Buffer* buf)</span></span>;
+
+    <span class="hljs-function">GPUTimestamps* <span class="hljs-title">createTimestamps</span><span class="hljs-params">(u32 maxEntries)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    SDL_GPUDevice*    m_device    = <span class="hljs-literal">nullptr</span>;
+    SDL_GPUSwapchain* m_swapchain = <span class="hljs-literal">nullptr</span>;
+    CommandBuffer*     m_cmdBuffers[<span class="hljs-number">3</span>];  <span class="hljs-comment">// triple buffering</span>
+    u32                m_frameIndex = <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Command buffer — commands enfileirados para a GPU.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">CommandBuffer</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">beginRenderPass</span><span class="hljs-params">(<span class="hljs-type">const</span> RenderPassDesc&amp; desc)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">endRenderPass</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bindPipeline</span><span class="hljs-params">(Pipeline* pipeline)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bindVertexBuffer</span><span class="hljs-params">(Buffer* buf, u32 slot = <span class="hljs-number">0</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bindIndexBuffer</span><span class="hljs-params">(Buffer* buf)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bindTexture</span><span class="hljs-params">(Texture* tex, u32 slot)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">draw</span><span class="hljs-params">(u32 vertexCount, u32 firstVertex = <span class="hljs-number">0</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawIndexed</span><span class="hljs-params">(u32 indexCount, u32 firstIndex = <span class="hljs-number">0</span>, i32 vertexOffset = <span class="hljs-number">0</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawInstanced</span><span class="hljs-params">(u32 vertexCount, u32 instanceCount,
+                       u32 firstVertex = <span class="hljs-number">0</span>, u32 firstInstance = <span class="hljs-number">0</span>)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">barrier</span><span class="hljs-params">(<span class="hljs-type">const</span> BarrierDesc&amp; desc)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">writeTimestamp</span><span class="hljs-params">(GPUTimestamps* pool, u32 index)</span></span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Draw command.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">DrawCommand</span> {
+    Pipeline* pipeline = <span class="hljs-literal">nullptr</span>;
+    Buffer*   vertices = <span class="hljs-literal">nullptr</span>;
+    Buffer*   indices = <span class="hljs-literal">nullptr</span>;
+    u32       indexCount = <span class="hljs-number">0</span>;
+    u32       firstIndex = <span class="hljs-number">0</span>;
+    Mat4      transform = Mat4::<span class="hljs-built_in">identity</span>();
+    Vec4      tint = <span class="hljs-built_in">Vec4</span>(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
+    Texture*  texture = <span class="hljs-literal">nullptr</span>;
+    i32       sortKey = <span class="hljs-number">0</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::RHI</span>
+</code></pre></div>
+<hr>
+<h2 id="9-batch-renderer">9. Batch Renderer<a class="anchor" href="#9-batch-renderer" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 3 — O Olho da Engine<br>
+<strong>Responsável:</strong> Artisans</p>
+<h3 id="91-visão-geral">9.1 Visão Geral<a class="anchor" href="#91-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O Batch Renderer agrupamenta milhares de sprites em um único draw call. Em vez de enviar 10.000 draw calls para a GPU, enviamos 1.</p>
+<h3 id="92-interfaces">9.2 Interfaces<a class="anchor" href="#92-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Render {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Sprite — componente visual 2D.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Sprite</span> {
+    FixedString&lt;<span class="hljs-number">128</span>&gt; texturePath;
+    Rect2D           srcRect     = {{<span class="hljs-number">0</span>,<span class="hljs-number">0</span>}, {<span class="hljs-number">0</span>,<span class="hljs-number">0</span>}};
+    Vec2             origin      = {<span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>};
+    Vec2             scale       = {<span class="hljs-number">1</span>, <span class="hljs-number">1</span>};
+    f32              rotation    = <span class="hljs-number">0</span>;
+    Color            tint        = Color::WHITE;
+    i32              layer       = <span class="hljs-number">0</span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Sistema de Batch Rendering para sprites 2D.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Vertex format (24 bytes por vertex):</span>
+<span class="hljs-comment">//  offset 0:  Vec3  position  (12 bytes)</span>
+<span class="hljs-comment">//  offset 12: Vec2  texcoord   (8 bytes)</span>
+<span class="hljs-comment">//  offset 20: Color tint      (4 bytes, packed RGBA8)</span>
+<span class="hljs-comment">//                      TOTAL: 24 bytes (align 4)</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Capacidade:</span>
+<span class="hljs-comment">//  - Max sprites por batch: 32K</span>
+<span class="hljs-comment">//  - Max batches por frame: ilimitado</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">BatchRenderer</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">BatchRenderer</span>(RenderDevice* device);
+    ~<span class="hljs-built_in">BatchRenderer</span>();
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">beginFrame</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">endFrame</span><span class="hljs-params">(CommandBuffer* cmd)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">submitSprite</span><span class="hljs-params">(<span class="hljs-type">const</span> Mat4&amp; worldTransform, <span class="hljs-type">const</span> Sprite&amp; sprite)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">flushCurrentBatch</span><span class="hljs-params">(CommandBuffer* cmd)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setCamera</span><span class="hljs-params">(<span class="hljs-type">const</span> Camera&amp; camera)</span></span>;
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">FrameStats</span> {
+        u32 totalSprites;
+        u32 totalBatches;
+        u32 drawCalls;
+        u32 verticesUploaded;
+    };
+    <span class="hljs-function">FrameStats <span class="hljs-title">lastFrameStats</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_stats; }
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">flushBatch</span><span class="hljs-params">(CommandBuffer* cmd, Batch&amp; batch)</span></span>;
+
+    RenderDevice*  m_device;
+    Camera         m_camera;
+    HashMap&lt;u64, Batch&gt; m_batches;
+    FrameStats     m_stats;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Texture Atlas — agrupa múltiplas texturas em uma só imagem.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">TextureAtlas</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">TextureAtlas</span>(u32 width, u32 height);
+    ~<span class="hljs-built_in">TextureAtlas</span>();
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">add</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, Rect2D region)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pack</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function">Buffer <span class="hljs-title">exportImage</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Vec4 <span class="hljs-title">getUV</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">u32  <span class="hljs-title">usedArea</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Region</span> {
+        FixedString&lt;<span class="hljs-number">64</span>&gt; name;
+        Rect2D          rect;
+    };
+    std::vector&lt;Region&gt; m_regions;
+    u32 m_width, m_height;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Render</span>
+</code></pre></div>
+<hr>
+<h2 id="10-camera-system">10. Camera System<a class="anchor" href="#10-camera-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 3 — O Olho da Engine<br>
+<strong>Responsável:</strong> Artisans</p>
+<h3 id="101-interfaces">10.1 Interfaces<a class="anchor" href="#101-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Render {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Câmera 2D (projeção ortográfica).</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Para 3D futuro: criar Camera3D com projeção perspectiva.</span>
+<span class="hljs-comment">//  A interface será similar, permitindo trocar cameras sem quebrar código.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Camera2D</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Camera2D</span>();
+
+    <span class="hljs-function">Mat4 <span class="hljs-title">viewMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Mat4 <span class="hljs-title">projectionMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Mat4 <span class="hljs-title">viewProjectionMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function">Vec2 <span class="hljs-title">worldToScreen</span><span class="hljs-params">(Vec2 worldPos)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Vec2 <span class="hljs-title">screenToWorld</span><span class="hljs-params">(Vec2 screenPos)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setPosition</span><span class="hljs-params">(Vec2 pos)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setZoom</span><span class="hljs-params">(f32 zoom)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setRotation</span><span class="hljs-params">(f32 degrees)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setViewport</span><span class="hljs-params">(Rect2D viewport)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setAspectRatio</span><span class="hljs-params">(f32 aspect)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">follow</span><span class="hljs-params">(Entity target, f32 smoothing = <span class="hljs-number">0.1f</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shake</span><span class="hljs-params">(Vec2 intensity, f32 duration)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setBounds</span><span class="hljs-params">(Rect2D worldBounds)</span></span>;
+
+    <span class="hljs-function">Vec2   <span class="hljs-title">position</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_position; }
+    <span class="hljs-function">f32    <span class="hljs-title">zoom</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_zoom; }
+    <span class="hljs-function">f32    <span class="hljs-title">rotation</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_rotation; }
+    <span class="hljs-function">Rect2D <span class="hljs-title">viewport</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_viewport; }
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function">Mat4  <span class="hljs-title">calculateViewMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Mat4  <span class="hljs-title">calculateProjectionMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    Vec2   m_position   = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>};
+    f32    m_zoom       = <span class="hljs-number">1.0f</span>;
+    f32    m_rotation   = <span class="hljs-number">0.0f</span>;
+    Rect2D m_viewport   = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1280</span>, <span class="hljs-number">720</span>};
+    f32    m_aspect     = <span class="hljs-number">1280.0f</span> / <span class="hljs-number">720.0f</span>;
+
+    Entity m_followTarget    = Entity::INVALID;
+    f32    m_followSmoothing = <span class="hljs-number">0.1f</span>;
+
+    Vec2   m_shakeIntensity = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>};
+    f32    m_shakeTime      = <span class="hljs-number">0</span>;
+    f32    m_shakeDuration  = <span class="hljs-number">0</span>;
+
+    <span class="hljs-type">bool</span>   m_hasBounds    = <span class="hljs-literal">false</span>;
+    Rect2D m_worldBounds   = {{<span class="hljs-number">0</span>, <span class="hljs-number">0</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>}};
+
+    <span class="hljs-keyword">mutable</span> Mat4 m_cachedViewProj;
+    <span class="hljs-keyword">mutable</span> <span class="hljs-type">bool</span> m_dirty = <span class="hljs-literal">true</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Render</span>
+</code></pre></div>
+<hr>
+<h2 id="11-audio-system">11. Audio System<a class="anchor" href="#11-audio-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 4 — O Cérebro<br>
+<strong>Responsável:</strong> Artisans</p>
+<h3 id="111-visão-geral">11.1 Visão Geral<a class="anchor" href="#111-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>O Audio System usa SDL_AudioStream para streaming de música e pré-carregamento de SFX. Suporta posicionamento 2D (pan, volume baseado em distância).</p>
+<p>Baseado em pesquisa da API SDL3 audio.</p>
+<h3 id="112-interfaces">11.2 Interfaces<a class="anchor" href="#112-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Audio {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Source de áudio — uma instância de som tocando.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AudioSource</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">play</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pause</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">stop</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setVolume</span><span class="hljs-params">(f32 volume)</span></span>;    <span class="hljs-comment">// 0.0 a 1.0</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setPan</span><span class="hljs-params">(f32 pan)</span></span>;          <span class="hljs-comment">// -1.0 (left) a +1.0 (right)</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setPitch</span><span class="hljs-params">(f32 pitch)</span></span>;     <span class="hljs-comment">// 0.5 a 2.0</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setLoop</span><span class="hljs-params">(<span class="hljs-type">bool</span> loop)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isPlaying</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32  <span class="hljs-title">currentTime</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32  <span class="hljs-title">duration</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    SDL_AudioStream* m_stream = <span class="hljs-literal">nullptr</span>;
+    AudioClip*        m_clip   = <span class="hljs-literal">nullptr</span>;
+    f32               m_volume = <span class="hljs-number">1.0f</span>;
+    f32               m_pan    = <span class="hljs-number">0.0f</span>;
+    <span class="hljs-type">bool</span>              m_loop   = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Sistema de áudio.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Usa SDL_AudioStream para streaming de música e pré-carregamento de SFX.</span>
+<span class="hljs-comment">//  Suporta posicionamento 2D (pan, volume baseado em distância).</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Memory:</span>
+<span class="hljs-comment">//  - SFX: carregados inteiros no PoolAllocator (audio buffer)</span>
+<span class="hljs-comment">//  - Música: streaming (buffers parciais, 64KB chunks)</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AudioSystem</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">AudioSystem</span>();
+    ~<span class="hljs-built_in">AudioSystem</span>();
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">init</span><span class="hljs-params">(u32 sfxChannelCount, u32 musicChannelCount)</span></span>;
+
+    <span class="hljs-function">AudioClip* <span class="hljs-title">loadClip</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+    <span class="hljs-function">AudioSource* <span class="hljs-title">playSFX</span><span class="hljs-params">(AudioClip* clip, f32 volume = <span class="hljs-number">1.0f</span>, f32 pan = <span class="hljs-number">0.0f</span>)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">playMusic</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path, f32 volume = <span class="hljs-number">1.0f</span>, <span class="hljs-type">bool</span> loop = <span class="hljs-literal">true</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">stopMusic</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">fadeMusic</span><span class="hljs-params">(f32 fadeOutSecs, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* nextPath, f32 fadeInSecs)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setSourcePosition</span><span class="hljs-params">(AudioSource* source, <span class="hljs-type">const</span> Vec2&amp; worldPos,
+                           <span class="hljs-type">const</span> Vec2&amp; listenerPos)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setListenerPosition</span><span class="hljs-params">(<span class="hljs-type">const</span> Vec2&amp; pos, <span class="hljs-type">const</span> Vec2&amp; forward)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setMasterPause</span><span class="hljs-params">(<span class="hljs-type">bool</span> paused)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setMasterVolume</span><span class="hljs-params">(f32 volume)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(f64 dt)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    SDL_AudioDeviceID m_device;
+    std::vector&lt;Own&lt;AudioSource&gt;&gt; m_sfxPool;
+    AudioSource*                    m_musicSource = <span class="hljs-literal">nullptr</span>;
+    HashMap&lt;u64, Own&lt;AudioClip&gt;&gt;    m_clipCache;
+    Vec2                            m_listenerPos = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>};
+    <span class="hljs-type">bool</span>                            m_masterPaused = <span class="hljs-literal">false</span>;
+    f32                             m_masterVolume = <span class="hljs-number">1.0f</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Audio</span>
+</code></pre></div>
+<hr>
+<h2 id="12-animation-system">12. Animation System<a class="anchor" href="#12-animation-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 4 — O Cérebro<br>
+<strong>Responsável:</strong> Artisans</p>
+<h3 id="121-visão-geral">12.1 Visão Geral<a class="anchor" href="#121-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>Sistema de animação 2D com clipes de sprite e state machine. Futuro: skeletal animation com bone transforms.</p>
+<p>Baseado em pesquisa de padrões de animação em ECS.</p>
+<h3 id="122-interfaces">12.2 Interfaces<a class="anchor" href="#122-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Animation {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Clip de animação — sequência de frames.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AnimationClip</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt;     name;
+    u32                 fps          = <span class="hljs-number">12</span>;
+    std::vector&lt;Rect2D&gt; frames;
+    <span class="hljs-type">bool</span>                loop         = <span class="hljs-literal">true</span>;
+    <span class="hljs-function">f32 <span class="hljs-title">duration</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> (f32)frames.<span class="hljs-built_in">size</span>() / (f32)fps; }
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  State machine de animação.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AnimationState</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt;        name;
+    <span class="hljs-type">const</span> AnimationClip*   clip    = <span class="hljs-literal">nullptr</span>;
+    std::vector&lt;Transition&gt; transitions;
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Transition</span> {
+        FixedString&lt;<span class="hljs-number">32</span>&gt;  toState;
+        std::function&lt;<span class="hljs-type">bool</span>()&gt; condition;
+        f32              blendTime = <span class="hljs-number">0.1f</span>;  <span class="hljs-comment">// crossfade</span>
+    };
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Componente de animação attaché a uma entidade.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Animator</span> {
+    HashMap&lt;FixedString&lt;<span class="hljs-number">32</span>&gt;, AnimationState&gt; states;
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                          currentState;
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                          previousState;
+    f32                                      timeInState   = <span class="hljs-number">0</span>;
+    f32                                      blendWeight   = <span class="hljs-number">1.0f</span>;
+    f32                                      playbackScale = <span class="hljs-number">1.0f</span>;
+    <span class="hljs-type">bool</span>                                     paused        = <span class="hljs-literal">false</span>;
+
+    std::vector&lt;std::pair&lt;u32, FixedString&lt;32&gt;&gt;&gt; events;
+    std::function&lt;<span class="hljs-type">void</span>(<span class="hljs-type">const</span> FixedString&lt;32&gt;&amp;)&gt; onEvent;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Sistema de animação ECS.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AnimationSystem</span> : <span class="hljs-keyword">public</span> ECS::ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(ECS::World&amp; world, f64 dt)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function">i32 <span class="hljs-title">priority</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">200</span>; }
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Animation&quot;</span>; }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">play</span><span class="hljs-params">(ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* stateName, f32 blendTime = <span class="hljs-number">0.1f</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pause</span><span class="hljs-params">(ECS::Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resume</span><span class="hljs-params">(ECS::Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setSpeed</span><span class="hljs-params">(ECS::Entity e, f32 speed)</span></span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Animation</span>
+</code></pre></div>
+<hr>
+<h2 id="13-physics-2d">13. Physics (2D)<a class="anchor" href="#13-physics-2d" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 4 — O Cérebro<br>
+<strong>Responsável:</strong> Artisans</p>
+<h3 id="131-visão-geral">13.1 Visão Geral<a class="anchor" href="#131-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>Sistema de física 2D simples com suporte a:</p>
+<ul>
+<li>Rigid body dynamics (massa, velocidade, força)</li>
+<li>AABB e circle collision detection</li>
+<li>Static e dynamic bodies</li>
+<li>Collision layers e masks</li>
+<li>Simple collision response (restitution + friction)</li>
+</ul>
+<p>Baseado em pesquisa de <a href="https://github.com/google/liquidfun" rel="noopener" class="ext">Box2D/LiquidFun</a>.</p>
+<h3 id="132-interfaces">13.2 Interfaces<a class="anchor" href="#132-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Physics2D {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Sistema de física 2D simples.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  NÃO suporta (para futuro com biblioteca dedicada):</span>
+<span class="hljs-comment">//  - Rotação de rigid bodies</span>
+<span class="hljs-comment">//  - Joints/constraints</span>
+<span class="hljs-comment">//  - Complex shapes (convex hulls)</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Integração com ECS:</span>
+<span class="hljs-comment">//  - Lê RigidBody2D, Collider2D, Position2D, Velocity2D</span>
+<span class="hljs-comment">//  - Escreve Position2D, Velocity2D</span>
+<span class="hljs-comment">//  - Publica OnCollision2D events</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">PhysicsSystem2D</span> : <span class="hljs-keyword">public</span> ECS::ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(ECS::World&amp; world, f64 dt)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function">i32 <span class="hljs-title">priority</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">100</span>; }
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Physics2D&quot;</span>; }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setGravity</span><span class="hljs-params">(Vec2 gravity)</span> </span>{ m_gravity = gravity; }
+    <span class="hljs-function">Vec2 <span class="hljs-title">gravity</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_gravity; }
+
+    <span class="hljs-function"><span class="hljs-type">const</span> RaycastHit* <span class="hljs-title">raycast</span><span class="hljs-params">(Vec2 origin, Vec2 dir, f32 maxDist)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Array&lt;ECS::Entity, 32&gt; <span class="hljs-title">overlapCircle</span><span class="hljs-params">(Vec2 center, f32 radius)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Array&lt;ECS::Entity, 32&gt; <span class="hljs-title">overlapAABB</span><span class="hljs-params">(Rect2D rect)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">applyForce</span><span class="hljs-params">(ECS::Entity e, Vec2 force)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">applyImpulse</span><span class="hljs-params">(ECS::Entity e, Vec2 impulse)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setKinematic</span><span class="hljs-params">(ECS::Entity e, <span class="hljs-type">bool</span> kinematic)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">integrate</span><span class="hljs-params">(ECS::Entity e, f32 dt)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">detectCollision</span><span class="hljs-params">(ECS::Entity a, ECS::Entity b, CollisionManifold* out)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resolveCollision</span><span class="hljs-params">(ECS::Entity a, ECS::Entity b, <span class="hljs-type">const</span> CollisionManifold&amp; m)</span></span>;
+
+    Vec2 m_gravity = {<span class="hljs-number">0</span>, <span class="hljs-number">-9.81f</span> * <span class="hljs-number">60.0f</span>};  <span class="hljs-comment">// pixels/s²</span>
+    HashMap&lt;ECS::Entity, Vec2&gt; m_pendingForces;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Physics2D</span>
+</code></pre></div>
+<hr>
+<h2 id="14-ui-system">14. UI System<a class="anchor" href="#14-ui-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 5 — O Olimpo<br>
+<strong>Responsável:</strong> Full Guild</p>
+<h3 id="141-visão-geral">14.1 Visão Geral<a class="anchor" href="#141-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>Sistema de UI retido (retained mode) — widgets são entidades ECS com componentes de UI. Isso permite que UI seja afetada por ECS systems (ex: HealthBar reflete o valor de <code>Health</code> component).</p>
+<h3 id="142-interfaces">14.2 Interfaces<a class="anchor" href="#142-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::UI {
+
+<span class="hljs-comment">// Layout rect em pixels ou fractions (0-1 do parent)</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">RectTransform</span> {
+    Vec2 anchorMin = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>};
+    Vec2 anchorMax = {<span class="hljs-number">1</span>, <span class="hljs-number">1</span>};
+    Vec2 pivot     = {<span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>};
+    Rect2D offset  = {};
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">UIStyle</span> {
+    Color  backgroundColor = {<span class="hljs-number">0.1f</span>, <span class="hljs-number">0.1f</span>, <span class="hljs-number">0.1f</span>, <span class="hljs-number">0.9f</span>};
+    Color  textColor      = Color::WHITE;
+    Color  borderColor    = {<span class="hljs-number">0.3f</span>, <span class="hljs-number">0.3f</span>, <span class="hljs-number">0.3f</span>, <span class="hljs-number">1.0f</span>};
+    f32    borderWidth    = <span class="hljs-number">1.0f</span>;
+    f32    borderRadius   = <span class="hljs-number">4.0f</span>;
+    Font*  font          = <span class="hljs-literal">nullptr</span>;
+    f32    fontSize       = <span class="hljs-number">16.0f</span>;
+    Vec2   textAlignment  = {<span class="hljs-number">0.5f</span>, <span class="hljs-number">0.5f</span>};
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">UIWidget</span> {
+    <span class="hljs-keyword">enum class</span> <span class="hljs-title class_">Type</span> : u8 { Canvas, Panel, Button, Label,
+                           ProgressBar, Checkbox, Slider };
+    Type        type        = Type::Panel;
+    <span class="hljs-type">bool</span>        visible     = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span>        interactable = <span class="hljs-literal">true</span>;
+    i32         siblingOrder = <span class="hljs-number">0</span>;
+    UIStyle     style;
+    RectTransform transform;
+
+    std::function&lt;<span class="hljs-type">void</span>(ECS::Entity)&gt; onClick;
+    std::function&lt;<span class="hljs-type">void</span>(ECS::Entity)&gt; onHover;
+    std::function&lt;<span class="hljs-type">void</span>(ECS::Entity)&gt; onValueChanged;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Button</span> : UIWidget {
+    FixedString&lt;<span class="hljs-number">64</span>&gt; labelText;
+    Color idleColor    = {<span class="hljs-number">0.2f</span>, <span class="hljs-number">0.2f</span>, <span class="hljs-number">0.2f</span>, <span class="hljs-number">1.0f</span>};
+    Color hoverColor   = {<span class="hljs-number">0.3f</span>, <span class="hljs-number">0.3f</span>, <span class="hljs-number">0.3f</span>, <span class="hljs-number">1.0f</span>};
+    Color pressedColor = {<span class="hljs-number">0.1f</span>, <span class="hljs-number">0.1f</span>, <span class="hljs-number">0.1f</span>, <span class="hljs-number">1.0f</span>};
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Label</span> : UIWidget {
+    FixedString&lt;<span class="hljs-number">256</span>&gt; text;
+    <span class="hljs-type">bool</span>              wordWrap = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">ProgressBar</span> : UIWidget {
+    f32 minValue = <span class="hljs-number">0.0f</span>;
+    f32 maxValue = <span class="hljs-number">100.0f</span>;
+    f32 currentValue = <span class="hljs-number">50.0f</span>;
+    <span class="hljs-type">bool</span> showText = <span class="hljs-literal">true</span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Sistema de UI.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Memory: Widgets alocados no PoolAllocator (tamanho fixo por tipo).</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">UISystem</span> : <span class="hljs-keyword">public</span> ECS::ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(ECS::World&amp; world, f64 dt)</span> <span class="hljs-keyword">override</span></span>;
+    <span class="hljs-function">i32 <span class="hljs-title">priority</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">500</span>; }
+    <span class="hljs-function"><span class="hljs-type">const</span> <span class="hljs-type">char</span>* <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">override</span> </span>{ <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;UI&quot;</span>; }
+
+    <span class="hljs-function">ECS::Entity <span class="hljs-title">createCanvas</span><span class="hljs-params">(ECS::World&amp; world)</span></span>;
+    <span class="hljs-function">ECS::Entity <span class="hljs-title">createButton</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity parent,
+                             <span class="hljs-type">const</span> <span class="hljs-type">char</span>* text, Vec2 pos)</span></span>;
+    <span class="hljs-function">ECS::Entity <span class="hljs-title">createLabel</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity parent,
+                             <span class="hljs-type">const</span> <span class="hljs-type">char</span>* text, Vec2 pos)</span></span>;
+    <span class="hljs-function">ECS::Entity <span class="hljs-title">createProgressBar</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity parent,
+                                   Vec2 pos, Vec2 size)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bindComponent</span><span class="hljs-params">(ECS::Entity widget, ECS::Entity target,
+                        ECS::ComponentID component, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* field)</span></span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::UI</span>
+</code></pre></div>
+<hr>
+<h2 id="15-math-library">15. Math Library<a class="anchor" href="#15-math-library" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 1+ (incremental)<br>
+<strong>Responsável:</strong> Architects</p>
+<h3 id="151-interfaces">15.1 Interfaces<a class="anchor" href="#151-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Math {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Vetor 2D com operadores completos.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Vec2</span> {
+    f32 x, y;
+
+    <span class="hljs-built_in">Vec2</span>() : <span class="hljs-built_in">x</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">y</span>(<span class="hljs-number">0</span>) {}
+    <span class="hljs-built_in">Vec2</span>(f32 x, f32 y) : <span class="hljs-built_in">x</span>(x), <span class="hljs-built_in">y</span>(y) {}
+
+    <span class="hljs-function"><span class="hljs-type">static</span> Vec2 <span class="hljs-title">zero</span><span class="hljs-params">()</span>   </span>{ <span class="hljs-keyword">return</span> {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>}; }
+    <span class="hljs-function"><span class="hljs-type">static</span> Vec2 <span class="hljs-title">one</span><span class="hljs-params">()</span>   </span>{ <span class="hljs-keyword">return</span> {<span class="hljs-number">1</span>, <span class="hljs-number">1</span>}; }
+    <span class="hljs-function"><span class="hljs-type">static</span> Vec2 <span class="hljs-title">up</span><span class="hljs-params">()</span>    </span>{ <span class="hljs-keyword">return</span> {<span class="hljs-number">0</span>, <span class="hljs-number">1</span>}; }
+    <span class="hljs-function"><span class="hljs-type">static</span> Vec2 <span class="hljs-title">right</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> {<span class="hljs-number">1</span>, <span class="hljs-number">0</span>}; }
+
+    <span class="hljs-function">f32    <span class="hljs-title">length</span><span class="hljs-params">()</span>     <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32    <span class="hljs-title">lengthSq</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> x*x + y*y; }
+    <span class="hljs-function">Vec2   <span class="hljs-title">normalized</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32    <span class="hljs-title">dot</span><span class="hljs-params">(Vec2 o)</span>  <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> x*o.x + y*o.y; }
+    <span class="hljs-function">f32    <span class="hljs-title">cross</span><span class="hljs-params">(Vec2 o)</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> x*o.y - y*o.x; }
+
+    Vec2  <span class="hljs-keyword">operator</span>+(Vec2 o) <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> {x+o.x, y+o.y}; }
+    Vec2  <span class="hljs-keyword">operator</span>-(Vec2 o) <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> {x-o.x, y-o.y}; }
+    Vec2  <span class="hljs-keyword">operator</span>*(f32 s)  <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> {x*s, y*s}; }
+    Vec2  <span class="hljs-keyword">operator</span>/(f32 s)  <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> {x/s, y/s}; }
+
+    <span class="hljs-function">Vec2  <span class="hljs-title">xx</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> {x, x}; }
+    <span class="hljs-function">Vec2  <span class="hljs-title">yy</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> {y, y}; }
+    <span class="hljs-function">Vec2  <span class="hljs-title">xy</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> {x, y}; }
+    <span class="hljs-function">Vec2  <span class="hljs-title">yx</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> {y, x}; }
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Vetor 3D.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Vec3</span> {
+    f32 x, y, z;
+
+    <span class="hljs-built_in">Vec3</span>() : <span class="hljs-built_in">x</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">y</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">z</span>(<span class="hljs-number">0</span>) {}
+    <span class="hljs-built_in">Vec3</span>(f32 x, f32 y, f32 z) : <span class="hljs-built_in">x</span>(x), <span class="hljs-built_in">y</span>(y), <span class="hljs-built_in">z</span>(z) {}
+
+    <span class="hljs-function">f32    <span class="hljs-title">length</span><span class="hljs-params">()</span>     <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Vec3   <span class="hljs-title">normalized</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32    <span class="hljs-title">dot</span><span class="hljs-params">(Vec3 o)</span>   <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> x*o.x + y*o.y + z*o.z; }
+    <span class="hljs-function">Vec3   <span class="hljs-title">cross</span><span class="hljs-params">(Vec3 o)</span>  <span class="hljs-type">const</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Vec3 <span class="hljs-title">lerp</span><span class="hljs-params">(Vec3 a, Vec3 b, f32 t)</span></span>;
+
+    Vec3  <span class="hljs-keyword">operator</span>+(Vec3 o) <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> {x+o.x, y+o.y, z+o.z}; }
+    Vec3  <span class="hljs-keyword">operator</span>-(Vec3 o) <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> {x-o.x, y-o.y, z-o.z}; }
+    Vec3  <span class="hljs-keyword">operator</span>*(f32 s)  <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> {x*s, y*s, z*s}; }
+
+    <span class="hljs-function">Vec2  <span class="hljs-title">xy</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> {x, y}; }
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Vetor 4D (SIMD-ready).</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">alignas</span>(<span class="hljs-number">16</span>) Vec4 {
+    f32 x, y, z, w;
+
+    <span class="hljs-built_in">Vec4</span>() : <span class="hljs-built_in">x</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">y</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">z</span>(<span class="hljs-number">0</span>), <span class="hljs-built_in">w</span>(<span class="hljs-number">0</span>) {}
+    <span class="hljs-built_in">Vec4</span>(f32 x, f32 y, f32 z, f32 w) : <span class="hljs-built_in">x</span>(x), <span class="hljs-built_in">y</span>(y), <span class="hljs-built_in">z</span>(z), <span class="hljs-built_in">w</span>(w) {}
+    <span class="hljs-built_in">Vec4</span>(Vec3 v, f32 w) : <span class="hljs-built_in">x</span>(v.x), <span class="hljs-built_in">y</span>(v.y), <span class="hljs-built_in">z</span>(v.z), <span class="hljs-built_in">w</span>(w) {}
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">xyz</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> {x, y, z}; }
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Matriz 4×4 column-major (OpenGL-style).</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">alignas</span>(<span class="hljs-number">16</span>) Mat4 {
+    f32 m[<span class="hljs-number">16</span>];  <span class="hljs-comment">// column-major</span>
+
+    <span class="hljs-built_in">Mat4</span>();
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">identity</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">translate</span><span class="hljs-params">(f32 x, f32 y, f32 z = <span class="hljs-number">0</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">translate</span><span class="hljs-params">(Vec3 t)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">rotateZ</span><span class="hljs-params">(f32 angle)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">rotateY</span><span class="hljs-params">(f32 angle)</span></span>;  <span class="hljs-comment">// Fase 5</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">rotateX</span><span class="hljs-params">(f32 angle)</span></span>;  <span class="hljs-comment">// Fase 5</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">scale</span><span class="hljs-params">(f32 x, f32 y, f32 z = <span class="hljs-number">1.0f</span>)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">scale</span><span class="hljs-params">(Vec3 s)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">ortho</span><span class="hljs-params">(f32 left, f32 right, f32 bottom, f32 top,
+                       f32 near, f32 far)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">perspective</span><span class="hljs-params">(f32 fovY, f32 aspect,
+                             f32 near, f32 far)</span></span>;  <span class="hljs-comment">// Fase 5</span>
+    <span class="hljs-function"><span class="hljs-type">static</span> Mat4 <span class="hljs-title">lookAt</span><span class="hljs-params">(Vec3 eye, Vec3 target, Vec3 up)</span></span>;  <span class="hljs-comment">// Fase 5</span>
+
+    Mat4  <span class="hljs-keyword">operator</span>*(Mat4 o) <span class="hljs-type">const</span>;
+    Vec4  <span class="hljs-keyword">operator</span>*(Vec4 v) <span class="hljs-type">const</span>;
+    <span class="hljs-function">Vec3  <span class="hljs-title">transformPoint</span><span class="hljs-params">(Vec3 p)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Vec3  <span class="hljs-title">transformVector</span><span class="hljs-params">(Vec3 v)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Mat4  <span class="hljs-title">transposed</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Mat4  <span class="hljs-title">inverse</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32   <span class="hljs-title">determinant</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function">f32*        <span class="hljs-title">data</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> m; }
+    <span class="hljs-function"><span class="hljs-type">const</span> f32* <span class="hljs-title">data</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m; }
+    <span class="hljs-function">f32&amp; <span class="hljs-title">at</span><span class="hljs-params">(u32 row, u32 col)</span> </span>{ <span class="hljs-keyword">return</span> m[col * <span class="hljs-number">4</span> + row]; }
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Quaternion para rotações 3D (Fase 5).</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Quat</span> {
+    f32 x, y, z, w;  <span class="hljs-comment">// w = scalar part</span>
+
+    <span class="hljs-function"><span class="hljs-type">static</span> Quat <span class="hljs-title">identity</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>}; }
+    <span class="hljs-function"><span class="hljs-type">static</span> Quat <span class="hljs-title">fromAxisAngle</span><span class="hljs-params">(Vec3 axis, f32 angle)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Quat <span class="hljs-title">fromEuler</span><span class="hljs-params">(f32 pitch, f32 yaw, f32 roll)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Quat <span class="hljs-title">lookAt</span><span class="hljs-params">(Vec3 forward, Vec3 up)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> Quat <span class="hljs-title">slerp</span><span class="hljs-params">(Quat a, Quat b, f32 t)</span></span>;
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">toEuler</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Mat4 <span class="hljs-title">toMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Vec3 <span class="hljs-title">rotate</span><span class="hljs-params">(Vec3 v)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function">f32  <span class="hljs-title">length</span><span class="hljs-params">()</span>     <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Quat <span class="hljs-title">normalized</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">Quat <span class="hljs-title">conjugate</span><span class="hljs-params">()</span>   <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> {-x, -y, -z, w}; }
+    <span class="hljs-function">Quat <span class="hljs-title">inverse</span><span class="hljs-params">()</span>    <span class="hljs-type">const</span></span>;
+
+    Quat  <span class="hljs-keyword">operator</span>*(Quat o) <span class="hljs-type">const</span>;
+    Vec3  <span class="hljs-keyword">operator</span>*(Vec3 v) <span class="hljs-type">const</span> { <span class="hljs-keyword">return</span> <span class="hljs-built_in">rotate</span>(v); }
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Utility functions.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-function">f32 <span class="hljs-title">lerp</span><span class="hljs-params">(f32 a, f32 b, f32 t)</span> </span>{ <span class="hljs-keyword">return</span> a + (b - a) * t; }
+<span class="hljs-function">f32 <span class="hljs-title">clamp</span><span class="hljs-params">(f32 v, f32 min, f32 max)</span></span>;
+<span class="hljs-function">f32 <span class="hljs-title">smoothstep</span><span class="hljs-params">(f32 edge0, f32 edge1, f32 x)</span></span>;
+<span class="hljs-function">f32 <span class="hljs-title">distance</span><span class="hljs-params">(Vec2 a, Vec2 b)</span> </span>{ <span class="hljs-keyword">return</span> (a - b).<span class="hljs-built_in">length</span>(); }
+<span class="hljs-function">f32 <span class="hljs-title">distance</span><span class="hljs-params">(Vec3 a, Vec3 b)</span> </span>{ <span class="hljs-keyword">return</span> (a - b).<span class="hljs-built_in">length</span>(); }
+<span class="hljs-function">f32 <span class="hljs-title">dot</span><span class="hljs-params">(Vec2 a, Vec2 b)</span> </span>{ <span class="hljs-keyword">return</span> a.x*b.x + a.y*b.y; }
+<span class="hljs-function">f32 <span class="hljs-title">dot</span><span class="hljs-params">(Vec3 a, Vec3 b)</span> </span>{ <span class="hljs-keyword">return</span> a.x*b.x + a.y*b.y + a.z*b.z; }
+
+}  <span class="hljs-comment">// namespace Caffeine::Math</span>
+</code></pre></div>
+<hr>
+<h2 id="16-debugdevelopment-tools">16. Debug/Development Tools<a class="anchor" href="#16-debugdevelopment-tools" aria-label="Link to this section">#</a></h2>
+<p><strong>Fase:</strong> 2+<br>
+<strong>Responsável:</strong> All</p>
+<h3 id="161-visão-geral">16.1 Visão Geral<a class="anchor" href="#161-visão-geral" aria-label="Link to this section">#</a></h3>
+<p>Ferramentas de desenvolvimento sempre disponíveis para profiling e debugging.</p>
+<h3 id="162-interfaces">16.2 Interfaces<a class="anchor" href="#162-interfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Debug {
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">LogLevel</span> { Trace, Info, Warn, Error, Fatal };
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Sistema de logging categorizado.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">LogSystem</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">log</span><span class="hljs-params">(LogLevel level, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* category, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* message, ...)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setLevel</span><span class="hljs-params">(LogLevel minLevel)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setCategoryEnabled</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* category, <span class="hljs-type">bool</span> enabled)</span></span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Profiler com markers.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Profiler</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">beginScope</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">endScope</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">ScopeStats</span> {
+        <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name;
+        u64 callCount;
+        f64 totalMs;
+        f64 avgMs;
+        f64 minMs;
+        f64 maxMs;
+    };
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">report</span><span class="hljs-params">(Caffeine::Array&lt;ScopeStats, <span class="hljs-number">256</span>&gt;&amp; out)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">reset</span><span class="hljs-params">()</span></span>;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Debug draw — visualize dados no mundo.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">DebugDraw</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">line</span><span class="hljs-params">(Vec2 a, Vec2 b, Color color)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">rect</span><span class="hljs-params">(Rect2D rect, Color color)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">circle</span><span class="hljs-params">(Vec2 center, f32 radius, Color color)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">text</span><span class="hljs-params">(Vec2 pos, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* text, Color color)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">arrow</span><span class="hljs-params">(Vec2 from, Vec2 to, Color color)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">beginFrame</span><span class="hljs-params">()</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">endFrame</span><span class="hljs-params">(CommandBuffer* cmd, <span class="hljs-type">const</span> Camera&amp; camera)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    std::vector&lt;DebugPrimitive&gt; m_primitives;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Debug</span>
+</code></pre></div>
+<hr>
+<h2 id="b-dependências-entre-sistemas">B. Dependências entre Sistemas<a class="anchor" href="#b-dependências-entre-sistemas" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><code>GameLoop</code>
+<ul>
+<li><code>InputManager.beginFrame()</code></li>
+<li><code>EventBus.dispatch()</code></li>
+<li><code>[Jobs parallelizados]</code>
+<ul>
+<li><code>PhysicsSystem2D     (Job — lê RigidBody, Collider, Position, Velocity)</code></li>
+<li><code>AnimationSystem     (Job — lê Animator, Sprite, escreve Sprite)</code></li>
+<li><code>AssetManager.async  (Job — carrega assets pendentes)</code></li>
+</ul>
+</li>
+<li><code>[Jobs sincronizados]</code>
+<ul>
+<li><code>ECSWorld.update()   (executa todos os systems em ordem)</code></li>
+<li><code>PhysicsSystem2D.priority=100</code></li>
+<li><code>MovementSystem.priority=150</code></li>
+<li><code>AnimationSystem.priority=200</code></li>
+<li><code>UISystem.priority=500</code></li>
+<li><code>RenderSystem.priority=1000</code></li>
+</ul>
+</li>
+<li><code>InputManager.endFrame()</code></li>
+<li><code>AudioSystem.update()</code></li>
+<li><code>BatchRenderer.render()</code></li>
+<li><code>TextureAtlas.getUV()</code></li>
+<li><code>Camera2D.viewProjectionMatrix()</code></li>
+<li><code>RHI.CommandBuffer.drawInstanced()</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="c-critérios-de-sucesso-por-sistema">C. Critérios de Sucesso por Sistema<a class="anchor" href="#c-critérios-de-sucesso-por-sistema" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Sistema</th>
+<th>Critério</th>
+<th>Benchmark</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Game Loop</strong></td>
+<td>Determinístico em 60Hz, sem drift em 1 hora</td>
+<td>3600 frames, deltaTime acumulado = 60.0 ± 0.001</td>
+</tr>
+<tr>
+<td><strong>Job System</strong></td>
+<td>10K Jobs em &lt;10ms, tsan clean</td>
+<td><code>parallelFor(1M, func)</code> em &lt;50ms em 8 cores</td>
+</tr>
+<tr>
+<td><strong>Input</strong></td>
+<td>&lt;1ms de latency em ação</td>
+<td><code>justPressed</code> registrado no mesmo frame</td>
+</tr>
+<tr>
+<td><strong>ECS</strong></td>
+<td>100K entidades, 60fps, &lt;5ms por frame</td>
+<td>ECS benchmark: insert/query/destroy</td>
+</tr>
+<tr>
+<td><strong>Scene Serialization</strong></td>
+<td>Scene com 1K entidades em &lt;100ms</td>
+<td>Serialize + deserialize round-trip &lt;200ms</td>
+</tr>
+<tr>
+<td><strong>Event Bus</strong></td>
+<td>1K eventos/frame sem overhead perceptível</td>
+<td><code>publish()</code> &lt;0.1ms</td>
+</tr>
+<tr>
+<td><strong>Asset Manager</strong></td>
+<td>100 textures (512×512) em &lt;2s (async)</td>
+<td>200MB carregados em background sem freeze</td>
+</tr>
+<tr>
+<td><strong>Batch Renderer</strong></td>
+<td>50K sprites = 1 draw call</td>
+<td>GPU Profiler: &lt;2ms de GPU time</td>
+</tr>
+<tr>
+<td><strong>Camera</strong></td>
+<td>Smooth follow sem jitter</td>
+<td>Camera segue Entity a 60fps sem artifacts</td>
+</tr>
+<tr>
+<td><strong>Audio</strong></td>
+<td>32 SFX simultâneos sem crackle</td>
+<td>Audio pool sem alloc em runtime</td>
+</tr>
+<tr>
+<td><strong>Animation</strong></td>
+<td>60fps em 100 entidades animadas</td>
+<td><code>advanceFrame()</code> &lt;0.1ms</td>
+</tr>
+<tr>
+<td><strong>Physics</strong></td>
+<td>1K rigid bodies, 60fps</td>
+<td>Physics step &lt;3ms</td>
+</tr>
+<tr>
+<td><strong>UI</strong></td>
+<td>50 widgets, 60fps</td>
+<td>UI render &lt;2ms</td>
+</tr>
+<tr>
+<td><strong>Debug Tools</strong></td>
+<td>Log sem impact mensurável</td>
+<td><code>log()</code> &lt;1μs</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="d-escalation-triggers">D. Escalation Triggers<a class="anchor" href="#d-escalation-triggers" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Se...</th>
+<th>Então...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Necessário multi-parâmetro locomotion/aim blending</td>
+<td>Adicionar blend tree layer para animação</td>
+</tr>
+<tr>
+<td>Gameplay precisa de joints, CCD, ou many dynamic stacks</td>
+<td>Integrar biblioteca de física dedicada</td>
+</tr>
+<tr>
+<td>Conteúdo escala e single-scene flow é limitante</td>
+<td>Adicionar additive scenes / world streaming</td>
+</tr>
+<tr>
+<td>Interface de editor é necessária</td>
+<td>Implementar Caffeine Studio IDE (Fase 6)</td>
+</tr>
+<tr>
+<td>Hot reload de assets é essencial</td>
+<td>Expandir Asset Manager com file watcher robusto</td>
+</tr>
+<tr>
+<td>Profiling mostra bottlenecks claros</td>
+<td>Paralelizar com Job System onde apropriado</td>
+</tr>
+</tbody>
+</table></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/architecture_specs.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/HISTORY/"><span>Anterior</span><strong>História do desenvolvimento</strong></a><a class="pager-next" href="/pt/docs/AUDIT_REPORT/"><span>Seguinte</span><strong>Caffeine Engine — Audit Report</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#-índice-das-especificações">📋 Índice das Especificações</a></li><li class="l2"><a href="#a-padrões-arquiteturais-transversais">A. Padrões Arquiteturais Transversais</a></li><li class="l3"><a href="#a1-ciclo-de-vida-de-frame">A.1 Ciclo de Vida de Frame</a></li><li class="l3"><a href="#a2-relação-com-ecs">A.2 Relação com ECS</a></li><li class="l3"><a href="#a3-relação-com-job-system">A.3 Relação com Job System</a></li><li class="l3"><a href="#a4-política-de-allocators">A.4 Política de Allocators</a></li><li class="l3"><a href="#a5-regra-de-threading">A.5 Regra de Threading</a></li><li class="l2"><a href="#1-game-loop">1. Game Loop</a></li><li class="l3"><a href="#11-visão-geral">1.1 Visão Geral</a></li><li class="l3"><a href="#12-estados-do-loop">1.2 Estados do Loop</a></li><li class="l3"><a href="#13-interface-pública">1.3 Interface Pública</a></li><li class="l3"><a href="#14-spiral-of-death-prevention">1.4 Spiral of Death Prevention</a></li><li class="l3"><a href="#15-decisões-de-design">1.5 Decisões de Design</a></li><li class="l2"><a href="#2-job-system">2. Job System</a></li><li class="l3"><a href="#21-visão-geral">2.1 Visão Geral</a></li><li class="l3"><a href="#22-interfaces">2.2 Interfaces</a></li><li class="l3"><a href="#23-exemplo-de-uso">2.3 Exemplo de Uso</a></li><li class="l3"><a href="#24-decisões-de-design">2.4 Decisões de Design</a></li><li class="l2"><a href="#3-input-system">3. Input System</a></li><li class="l3"><a href="#31-visão-geral">3.1 Visão Geral</a></li><li class="l3"><a href="#32-arquitetura">3.2 Arquitetura</a></li><li class="l3"><a href="#33-interfaces">3.3 Interfaces</a></li><li class="l3"><a href="#34-componente-ecs-para-input">3.4 Componente ECS para Input</a></li><li class="l3"><a href="#35-decisões-de-design">3.5 Decisões de Design</a></li><li class="l2"><a href="#4-ecs-core">4. ECS Core</a></li><li class="l3"><a href="#41-visão-geral">4.1 Visão Geral</a></li><li class="l3"><a href="#42-conceitos-fundamentais">4.2 Conceitos Fundamentais</a></li><li class="l3"><a href="#43-interfaces">4.3 Interfaces</a></li><li class="l3"><a href="#44-componentes-pré-definidos">4.4 Componentes Pré-definidos</a></li><li class="l3"><a href="#45-exemplo-de-uso">4.5 Exemplo de Uso</a></li><li class="l2"><a href="#5-scene-graph-serialização">5. Scene Graph &amp; Serialização</a></li><li class="l3"><a href="#51-visão-geral">5.1 Visão Geral</a></li><li class="l3"><a href="#52-interfaces">5.2 Interfaces</a></li><li class="l3"><a href="#53-caf-format-binary">5.3 CAF Format (Binary)</a></li><li class="l2"><a href="#6-event-bus">6. Event Bus</a></li><li class="l3"><a href="#61-visão-geral">6.1 Visão Geral</a></li><li class="l3"><a href="#62-interfaces">6.2 Interfaces</a></li><li class="l3"><a href="#63-eventos-pré-definidos">6.3 Eventos Pré-definidos</a></li><li class="l2"><a href="#7-asset-manager">7. Asset Manager</a></li><li class="l3"><a href="#71-visão-geral">7.1 Visão Geral</a></li><li class="l3"><a href="#72-interfaces">7.2 Interfaces</a></li><li class="l3"><a href="#73-componente-ecs-para-assets">7.3 Componente ECS para Assets</a></li><li class="l2"><a href="#8-rhi-rendering-hardware-interface">8. RHI (Rendering Hardware Interface)</a></li><li class="l3"><a href="#81-visão-geral">8.1 Visão Geral</a></li><li class="l3"><a href="#82-interfaces">8.2 Interfaces</a></li><li class="l2"><a href="#9-batch-renderer">9. Batch Renderer</a></li><li class="l3"><a href="#91-visão-geral">9.1 Visão Geral</a></li><li class="l3"><a href="#92-interfaces">9.2 Interfaces</a></li><li class="l2"><a href="#10-camera-system">10. Camera System</a></li><li class="l3"><a href="#101-interfaces">10.1 Interfaces</a></li><li class="l2"><a href="#11-audio-system">11. Audio System</a></li><li class="l3"><a href="#111-visão-geral">11.1 Visão Geral</a></li><li class="l3"><a href="#112-interfaces">11.2 Interfaces</a></li><li class="l2"><a href="#12-animation-system">12. Animation System</a></li><li class="l3"><a href="#121-visão-geral">12.1 Visão Geral</a></li><li class="l3"><a href="#122-interfaces">12.2 Interfaces</a></li><li class="l2"><a href="#13-physics-2d">13. Physics (2D)</a></li><li class="l3"><a href="#131-visão-geral">13.1 Visão Geral</a></li><li class="l3"><a href="#132-interfaces">13.2 Interfaces</a></li><li class="l2"><a href="#14-ui-system">14. UI System</a></li><li class="l3"><a href="#141-visão-geral">14.1 Visão Geral</a></li><li class="l3"><a href="#142-interfaces">14.2 Interfaces</a></li><li class="l2"><a href="#15-math-library">15. Math Library</a></li><li class="l3"><a href="#151-interfaces">15.1 Interfaces</a></li><li class="l2"><a href="#16-debugdevelopment-tools">16. Debug/Development Tools</a></li><li class="l3"><a href="#161-visão-geral">16.1 Visão Geral</a></li><li class="l3"><a href="#162-interfaces">16.2 Interfaces</a></li><li class="l2"><a href="#b-dependências-entre-sistemas">B. Dependências entre Sistemas</a></li><li class="l2"><a href="#c-critérios-de-sucesso-por-sistema">C. Critérios de Sucesso por Sistema</a></li><li class="l2"><a href="#d-escalation-triggers">D. Escalation Triggers</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

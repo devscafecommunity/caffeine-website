@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Micromeshes: clusters, cuts and the GPU draw · Caffeine</title>
+<meta name="description" content="A mesh is cut into clusters of at most 128 triangles and a hierarchy of simplified levels. Each frame a compute pass picks the coarsest cut whose error is invisible and one draw renders it, now through the lit scene rend">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Micromeshes: clusters, cuts and the GPU draw · Caffeine">
+<meta property="og:description" content="A mesh is cut into clusters of at most 128 triangles and a hierarchy of simplified levels. Each frame a compute pass picks the coarsest cut whose error is invisible and one draw renders it, now through the lit scene rend">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/micromeshes/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/micromeshes/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/micromeshes/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/micromeshes/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link active" href="/en/docs/doppio/micromeshes/" aria-current="page">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Micromeshes: clusters, cuts and the GPU draw</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Engine</span>
+  <span>Last updated: <time datetime="2026-11-21">2026-11-21</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/micromeshes.md"><code>micromeshes.md</code></a></span>
+</div>
+<p class="doc-lede">A mesh is cut into clusters of at most 128 triangles and a hierarchy of simplified levels. Each
+frame a compute pass picks the coarsest cut whose error is invisible and one draw renders it, now through the lit scene
+renderer and its G-buffer. This page shows what exists, with renders from the real GPU path, and what is still missing.</p>
+<p>Micromeshes are our own design (see <a href="/en/docs/doppio/graphics-roadmap/"><code>graphics-roadmap.md</code></a> for the plan and the review of the
+original proposal). Everything on this page is implemented and tested except the items under <em>What is missing</em>.</p>
+<h2 id="1-what-you-are-looking-at">1. What you are looking at<a class="anchor" href="#1-what-you-are-looking-at" aria-label="Link to this section">#</a></h2>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-cuts.png" alt="One rock of 81,920 triangles drawn four times, from the exact cut to a very coarse one; every cluster has its own colour" loading="lazy">
+  <figcaption>One rock of 81 920 triangles, four error budgets. Every colour patch is one cluster (at most 128 triangles). The
+  counts are the clusters that survive the frustum and back-face tests, so the exact cut shows only the half that faces the
+  camera. The coarser cuts use bigger flat clusters made from merged and simplified groups.</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-dolly.gif" alt="The cut coarsening and refining as the camera pulls away and comes back, with a live triangle counter" loading="lazy">
+  <figcaption>The same error budget while the camera pulls away and returns: the GPU picks a coarser cut by itself, and the
+  triangle counter in the corner follows. Frames are rendered by <code>MicromeshGpu</code>: the cull compute pass, then one
+  <code>drawIndexedIndirect</code> over every cluster.</figcaption>
+</figure>
+<h2 id="2-in-the-scene-the-lit-g-buffer-draw">2. In the scene: the lit G-buffer draw<a class="anchor" href="#2-in-the-scene-the-lit-g-buffer-draw" aria-label="Link to this section">#</a></h2>
+<p>Turn on <strong>Micromesh</strong> in a Mesh Renderer (the Inspector shows it with its <strong>Micromesh error (px)</strong>; scripts and scenes see the
+same two fields) and the scene renderer draws that mesh as a cluster cut instead of a plain mesh: same lit shader
+(<code>scene_lit.frag</code>), same G-buffer, so Photon, SSAO and TAA need nothing new.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-scene.gif" alt="A low flight over 81 dense rocks lit by a sun that casts shadows; counters show the triangles drawn against the plain meshes" loading="lazy">
+  <figcaption>The real scene renderer (the lit shader, the G-buffer, the sun's shadow cascades): 81 rocks of 81 408 triangles each, 6.6 million
+  triangles in the scene. With the cut on, between <strong>178 000 and 833 000</strong> triangles are drawn per frame by the camera against
+  <strong>1.1 to 5.9 million</strong> for the plain meshes (<strong>5.3x to 7.1x fewer, 6.2x on average</strong>, at a 1.5 px error), and
+  the shadows come from the cascades' own coarser cut. Rendered by <code>./scripts/render-micromesh-scene-docs.sh</code>.</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-scene.png" alt="The same aerial view of the rock field with plain meshes (left) and with the Micromesh cut (right)" loading="lazy">
+  <figcaption>The same aerial view both ways: 6 594 048 triangles submitted against 610 337 (<strong>10.8x fewer</strong>), and the two
+  pictures differ by <strong>1.5 / 255</strong> on average, sun shadows and shading included (the shadows of the right picture
+  come from the coarser cascade cut).</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Piece</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MeshRendererComponent::micromesh</code>, <code>micromeshPixels</code></td>
+<td>the switch and the error budget in screen pixels (converted to world units per metre with the camera's projection and the view height)</td>
+</tr>
+<tr>
+<td><code>GpuSceneRenderer::micromeshAssetFor</code></td>
+<td>once per mesh asset and geometry revision: welds the vertices that agree on position, normal and UV (meshes are often stored unindexed), builds the hierarchy with the mesh's own normals, UVs and tangents, uploads it</td>
+</tr>
+<tr>
+<td><code>beginMicromeshFrame</code></td>
+<td>once per frame, when the draws are final: groups the entities by mesh asset (every entity of a mesh is one <strong>instance</strong> of it), uploads one matrix buffer per asset and resets the index arena</td>
+</tr>
+<tr>
+<td><code>cullMicromeshView</code></td>
+<td>compute, outside any render pass: <strong>one dispatch chain per asset and view</strong> (the camera first, then each sun cascade) cuts every instance of the mesh at once</td>
+</tr>
+<tr>
+<td><code>micromesh_compact.comp</code></td>
+<td>the same cut, frustum and back-face tests as the per-cluster pass, in four passes (reset, count, reserve, copy): every selected cluster appends its indices to a <strong>shared index arena</strong>, so each instance is <strong>one indexed draw</strong> and memory follows what is visible</td>
+</tr>
+<tr>
+<td><code>scene_micromesh.vert</code>, <code>shadow_micromesh.vert</code></td>
+<td>the scene vertex shader (positions, normals, UVs, tangents and vertex colours in five slots, normals by the inverse transpose) and the positions-only cascade shader; both read the matrix from the instance buffer</td>
+</tr>
+<tr>
+<td><code>caffeine_session_micromesh_stats</code> (C ABI v14)</td>
+<td>draws, selected clusters, selected and source triangles of the last frame (blocking read-back, for tools and tests); <code>CaffeineRenderStats::micromesh_draws</code> is the cheap counter</td>
+</tr>
+</tbody>
+</table></div>
+<p>Details worth knowing:</p>
+<ul>
+<li><strong>Shadows.</strong> The sun's cascades cut the mesh too: the same hierarchy with an error budget of <strong>four shadow texels</strong> (a world
+distance, since a cascade is orthographic, with no back-face test and a frustum test per cascade), drawn by <code>shadow_micromesh.vert</code>
+into the same shadow atlas. Same hierarchy means no cracks; a coarser cut means far fewer triangles in the shadow pass. Point
+and spot shadows still draw the full mesh. <strong>The editor viewport renders without shadow maps by default</strong> (a deliberate
+editor cost choice); <code>ViewportSettings::shadows</code> (C ABI v14, <code>CaffeineViewportSettings::shadows</code>) turns them on, which is
+how the images and tests here are made.</li>
+<li><strong>The arena.</strong> One index buffer serves every mesh and view of a frame, so memory follows what is visible, not what exists: this
+scene asks for 1.8 to 8.2 million indices a frame over its 6 views (the camera and 5 cascades) and the arena settled at
+<strong>32 MB</strong> for 81 rocks, where one full-size index buffer per rock would be 80 MB and grows with the rock count. It starts at
+16 MB and grows by itself (doubling, up to 256 MB) when a counter read-back every 15 frames shows it was too small; a cut that
+does not fit is <strong>not drawn that frame</strong> (<code>overflowed</code> in the stats), so growth shows as a few frames of missing shadows or
+rocks, never as a corrupt draw. The camera is cut first, so it is the last to lose.</li>
+<li><strong>Sub-meshes, scale, colours.</strong> A mesh with several materials gets one hierarchy per sub-mesh, drawn with its material. An OBJ's <code>usemtl</code> groups are
+sub-meshes, and the Mesh Filter's <strong>Material slots</strong> (<code>a.mat;b.mat</code>) give each an authored material: the renderer then makes one draw per slot, so
+a slot can be alpha-tested or have wind (it draws plain) while the others stay Micromeshes.
+A non-uniform scale is handled: errors and bounds use the largest scale (conservative) and the back-face test is skipped for
+such an instance. Vertex colours are carried through the build (averaged at a collapse). This also fixed the plain
+scene shaders, which transformed normals by the model matrix and shaded a stretched mesh wrongly (now the inverse transpose).</li>
+<li><strong>A multi-draw of clusters is not free on the CPU.</strong> SDL3 GPU has no indirect-<em>count</em> draw, so the per-cluster path
+(one indirect draw per cluster, used by the instanced field below) costs encoding time that grows with the cluster count. The
+scene path compacts instead: one draw per instance whatever the cut selects. A test checks the compacted cut keeps exactly the same
+clusters and triangles as the per-cluster one.</li>
+<li><strong>Dense meshes without materials were slow to draw at all.</strong> For a mesh with no material or sibling PNG, <code>resolveMeshAlbedo</code>
+re-read and scanned the whole mesh file for texture names <strong>on every draw of every frame</strong> (4 to 8 ms of CPU per draw). It is
+now remembered until the file's modification time changes (this speeds up any such mesh, Micromesh or not).</li>
+<li><strong>A renderer limit found on the way:</strong> the pipeline description kept only 4 vertex buffers; a fifth was dropped silently
+(the vertex colours read as black). It is 8 now.</li>
+</ul>
+<h3 id="occlusion">Occlusion<a class="anchor" href="#occlusion" aria-label="Link to this section">#</a></h3>
+<p>An instance can also be culled against <strong>what last frame's depth buffer shows</strong>: Mesh Renderer -&gt; <strong>Micromesh occlusion</strong>. Each frame
+the previous depth buffer is reduced to a <strong>farthest-depth pyramid</strong> (<code>MicromeshHzb</code>, <code>micromesh_hzb.comp</code>: one storage buffer, level
+after level, each texel the maximum of the four below it; Photon's Min-Z pyramid keeps the nearest depth, the opposite reduction).
+The camera's compacting cull then projects each cluster's bounding sphere with last frame's matrices, picks the pyramid level where
+its footprint spans at most two texels, and drops the cluster when the sphere's nearest depth is beyond the farthest depth of every
+texel under it. Anything undecidable stays visible: a sphere near or behind the camera, one that reaches past the screen edge.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-occlusion.gif" alt="The camera swings around a wall with rocks behind it; counters show the triangles with occlusion against without" loading="lazy">
+  <figcaption>The camera swings through 1.8 radians around a 10 m wall with 18 dense rocks (45 696 triangles each) behind it and 6 in front. Every
+  frame is drawn twice from the same camera, with occlusion on and off. With it on, the camera's cut keeps between <strong>112 000 and
+  280 000</strong> triangles against <strong>277 000 to 297 000</strong> (<strong>1.5x to 2.5x fewer, 2.1x on average</strong>; 2.2x fewer
+  clusters), and the two pictures differ by <strong>0.11 / 255</strong> on average. Rendered by
+  <code>./scripts/render-micromesh-scene-docs.sh</code>.</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-occlusion.png" alt="The same frame with occlusion on and off: identical pictures, fewer triangles on the left" loading="lazy">
+  <figcaption>The middle of the swing: the wall hides most of the rocks behind it, and the picture is the same with and without the test.</figcaption>
+</figure>
+<p><strong>This is a single-phase test, not the two-phase one of the roadmap.</strong> It uses last frame's picture, so a cluster that was hidden last
+frame and becomes visible this frame (the camera moved, or an occluder moved away) shows <strong>one frame late</strong>. In the swing above that
+costs a few edge pixels: the worst single pixel of a frame differs by up to 250 / 255 (a rock's edge arriving one frame late), while the
+mean difference never exceeds 0.15 / 255. That is why the switch is <strong>off by default</strong> and per instance. A true two-phase test (draw the
+clusters seen last frame, rebuild the pyramid from that depth, test the rest) needs the opaque pass split in two, and is not done. Only
+the camera's cut is tested; shadow cascades are not (their view is the light's). Needs a previous frame of the same view at the same
+size, so the first frame after a resize culls nothing; the pyramid costs a depth read and about 1.3x the depth buffer in memory.</p>
+<h3 id="benchmark">Benchmark<a class="anchor" href="#benchmark" aria-label="Link to this section">#</a></h3>
+<p><code>./scripts/render-micromesh-scene-docs.sh</code> also prints this table (a fixed scene: 81 rocks of 81 408 triangles, a 72-frame flight,
+camera cut at 1.5 px, cascades at four texels, then the same flight with plain instanced meshes). Triangle counts are exact and
+reproducible; the times are <strong>CPU encoding time</strong> (SDL3 GPU has no portable GPU timestamps), so they say nothing about GPU cost.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>per frame</th>
+<th>min</th>
+<th>mean</th>
+<th>max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>triangles, camera cut</td>
+<td>177 990</td>
+<td>551 593</td>
+<td>833 381</td>
+</tr>
+<tr>
+<td>triangles, plain meshes</td>
+<td>1 139 714</td>
+<td>3 516 375</td>
+<td>5 861 378</td>
+</tr>
+<tr>
+<td>fewer triangles (x)</td>
+<td>5.3</td>
+<td>6.2</td>
+<td>7.1</td>
+</tr>
+<tr>
+<td>rocks cut (draws)</td>
+<td>14</td>
+<td>43</td>
+<td>72</td>
+</tr>
+<tr>
+<td>clusters selected</td>
+<td>1 710</td>
+<td>5 457</td>
+<td>8 335</td>
+</tr>
+<tr>
+<td>index arena used (indices, all 6 views)</td>
+<td>1 800 487</td>
+<td>5 303 878</td>
+<td>8 186 050</td>
+</tr>
+<tr>
+<td>CPU encode ms, cut</td>
+<td>6.0</td>
+<td>9.7</td>
+<td>20.7</td>
+</tr>
+<tr>
+<td>CPU encode ms, plain</td>
+<td>4.9</td>
+<td>10.4</td>
+<td>18.8</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="benchmark-set">Benchmark set<a class="anchor" href="#benchmark-set" aria-label="Link to this section">#</a></h3>
+<p><code>./scripts/benchmark-micromesh.sh</code> runs the <strong>reproducible benchmark set</strong>: a dense rock field, a forest of dense trees and a terrain, each
+flown by a fixed 40-frame camera path at 640x360 with the sun's shadows on, through every renderer path that applies. The content is
+generated in code from hashes (no assets; a test checks the OBJ files are byte-identical between runs and their triangle counts fixed),
+so the <strong>triangle and draw counts are exactly the same on every run</strong> (two runs here matched to the last digit). The times are not: <em>wall</em>
+is a whole frame including the read-back of the picture, so it follows the GPU but also the machine (two runs here agreed within about
+5%): compare rows of one run, not numbers between machines. <em>Encode</em> is CPU command-recording time. <code>BENCH_OUT=&lt;dir&gt;</code> keeps the raw
+per-frame numbers (<code>benchmarks.json</code>).</p>
+<p><strong>Rock field</strong>: 81 rocks x 81 408 triangles (6.6 M), a low flight.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>configuration</th>
+<th>triangles (min / median / max)</th>
+<th>draw calls</th>
+<th>wall ms</th>
+<th>encode ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>plain meshes (instanced)</td>
+<td>1 139 714 / 3 215 618 / 5 861 378</td>
+<td>2 / 2 / 2</td>
+<td>15.1 / 23.8 / 40.8</td>
+<td>4.3 / 5.2 / 12.0</td>
+</tr>
+<tr>
+<td>Micromesh</td>
+<td>177 992 / 527 412 / 833 391</td>
+<td>15 / 40 / 73</td>
+<td>8.9 / 13.3 / 19.5</td>
+<td>5.9 / 8.6 / 13.8</td>
+</tr>
+</tbody>
+</table></div>
+<p>6.1x fewer triangles, median wall time 0.56 of the plain's.</p>
+<p><strong>Forest</strong>: 300 trees x 47 808 triangles (a barky trunk and three lumpy crowns, brown and green vertex colours; 14.3 M), a flight between them.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>configuration</th>
+<th>triangles (min / median / max)</th>
+<th>draw calls</th>
+<th>wall ms</th>
+<th>encode ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>plain meshes (instanced)</td>
+<td>908 354 / 5 139 362 / 10 756 802</td>
+<td>2 / 2 / 2</td>
+<td>24.4 / 49.4 / 93.5</td>
+<td>14.8 / 15.5 / 28.1</td>
+</tr>
+<tr>
+<td>Micromesh</td>
+<td>313 828 / 1 570 378 / 2 864 164</td>
+<td>20 / 108 / 226</td>
+<td>23.1 / 37.3 / 58.0</td>
+<td>18.2 / 26.9 / 39.5</td>
+</tr>
+</tbody>
+</table></div>
+<p>3.3x fewer triangles, median wall time 0.75 of the plain's, but <strong>the CPU pays</strong>: median encoding goes from 15.5 to 26.9 ms because
+every tree is its own draw (108 against the two instanced batches). The forest here is opaque; leaf cards with alpha stay on the
+instanced path by design, so a real forest is a mix and this one is the best case for Micromesh.</p>
+<p><strong>Terrain</strong>: an 800 m terrain at two grid sizes, a flight over it. The engine's chunked terrain path only (Micromesh does not draw terrain yet).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>grid</th>
+<th>source triangles</th>
+<th>triangles submitted (min / median / max)</th>
+<th>draw calls</th>
+<th>wall ms</th>
+<th>encode ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>513 x 513</td>
+<td>524 288</td>
+<td>192 512 / 227 328 / 313 344</td>
+<td>94 / 111 / 153</td>
+<td>11.2 / 15.5 / 29.2</td>
+<td>6.1 / 9.6 / 22.1</td>
+</tr>
+<tr>
+<td>1025 x 1025</td>
+<td>2 097 152</td>
+<td>724 992 / 839 680 / 1 173 504</td>
+<td>354 / 410 / 573</td>
+<td>21.3 / 32.5 / 38.7</td>
+<td>12.9 / 22.6 / 28.0</td>
+</tr>
+</tbody>
+</table></div>
+<p>The terrain's chunk LOD already submits 43 % (513) and 40 % (1025) of the source triangles, one draw per visible chunk. Four times the
+triangles cost about twice the frame time. (Writing this benchmark showed that terrain draws were missing from the frame counters, which
+reported 0 triangles and 0 draws for a terrain; they count now.) This is the baseline a terrain cluster path has to beat.</p>
+<p>The viewport HUD shows the same counters live: <code>... · 610.3k tris · 74 draws · 72 micromesh</code> (triangles submitted, draws, and
+how many meshes were drawn as a cut).</p>
+<p>What it does not do yet: skinned meshes (their vertices move every frame, so rest-pose clusters would be wrong: they draw plain, by
+design), alpha-tested or translucent materials and wind-animated foliage (they stay on the instanced path, by design: the roadmap
+keeps foliage there), and point and spot shadows (full mesh). Each instance is still its own draw (instances of one mesh share
+geometry, the dispatch and the arena, not a draw: that would need vertex pulling). The hierarchy is built the first time a mesh is
+seen, about a second for 80 000 triangles; an offline <code>.micromesh</code> section in the <code>.caf</code> is the planned way to not pay it at run time.</p>
+<h2 id="3-instances-in-one-dispatch-a-field-of-rocks">3. Instances in one dispatch: a field of rocks<a class="anchor" href="#3-instances-in-one-dispatch-a-field-of-rocks" aria-label="Link to this section">#</a></h2>
+<p>One hierarchy can be drawn many times. Each instance has an affine transform with a uniform scale, and the cull
+pass decides <strong>per instance</strong>: its own cut (error and distance), its own frustum test and its own back-face test.
+The whole field is <strong>one compute dispatch and one <code>drawIndexedIndirect</code></strong>.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-field.gif" alt="A low flight over a field of 196 rocks; counters show the triangles drawn against the exact mesh" loading="lazy">
+  <figcaption>A flight over 196 instances of the 81 920-triangle rock (16 056 320 triangles in the scene), all through
+  <code>MicromeshGpu</code>. The counters are read back from the draw arguments: between <strong>149 000 and 508 000</strong>
+  triangles are drawn per frame, against <strong>0.6 to 8.0 million</strong> if the exact mesh were drawn with the same
+  frustum and back-face culling (<strong>4x to 16x fewer, 10x on average</strong>, at a 2 px error).</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-field.png" alt="Four views of the rock field: a low flight, a closer view, the field from above, and the same view with one colour per cluster" loading="lazy">
+  <figcaption>The same field in four views. From above, 393 302 triangles are drawn instead of 8 542 464 (<strong>22x fewer</strong>);
+  the bottom right shows the clusters that were picked: near rocks are cut into many small clusters, far ones into a
+  few big flat ones.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MicromeshGpu::setInstances(transforms)</code></td>
+<td>uploads four vec4 per instance (the first three matrix rows, then the scale) as a compute buffer and as a graphics storage buffer</td>
+</tr>
+<tr>
+<td>Cull index</td>
+<td>invocation <code>g = instance * clusterCount + cluster</code>; spheres, errors and the cone axis are brought to world space before the tests</td>
+</tr>
+<tr>
+<td>Draw argument</td>
+<td><code>firstInstance = g</code>; the vertex shader reads <code>instance = g / clusterCount</code>, <code>cluster = g % clusterCount</code> and the matrix from <code>instanceBuffer()</code></td>
+</tr>
+<tr>
+<td><code>readStats()</code></td>
+<td>visible clusters and triangles over every instance (blocking read-back, for tools and tests)</td>
+</tr>
+</tbody>
+</table></div>
+<p>A far instance is cut coarser than a near one even when it is bigger, and an instance behind the camera or far to the
+side contributes no draw at all.</p>
+<h2 id="4-shading-normals">4. Shading normals<a class="anchor" href="#4-shading-normals" aria-label="Link to this section">#</a></h2>
+<p>A cut is only useful if it <em>shades</em> like the exact mesh. The build now carries a <strong>unit shading normal per vertex</strong>:
+smooth, angle-weighted normals for the source vertices, and for every vertex a collapse creates, the normalised sum of
+the two it replaced. The normals are part of the bytes (<code>.micromesh</code> version 2) and <code>MicromeshGpu::drawLit</code> binds them
+as a second vertex buffer (slot 1, <code>Float3</code>).</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-normals.png" alt="Four cuts of the rock drawn with carried normals (top) and with per-triangle facet normals (bottom), with their error against the exact mesh" loading="lazy">
+  <figcaption>The same four cuts (exact, then 23 340, 13 888 and 4 848 triangles), lit with a sun, a highlight and a rim.
+  Top: the normals the build carried. Bottom: per-triangle (facet) normals, what a coarse cut looks like without them.
+  The mean error against the exact render is <strong>1.6, 4.6 and 10.0</strong> (of 255) with carried normals against
+  <strong>2.9, 6.7 and 13.0</strong> with facets, and the facets show every simplified triangle as a hard edge.</figcaption>
+</figure>
+<p>What it does not do: the normals are averaged, so detail below the cut is smoothed away (the rightmost image has lost the
+small bumps). A normal map on the lit pipeline is what puts it back; carrying UVs through the collapses is the next
+attribute.</p>
+<h2 id="5-texture-coordinates">5. Texture coordinates<a class="anchor" href="#5-texture-coordinates" aria-label="Link to this section">#</a></h2>
+<p><code>build(positions, indices, uvs)</code> also carries <strong>texture coordinates</strong>. A vertex a collapse creates takes the UV of the
+closest point of the edge it replaced. <strong>UV seams are never simplified across</strong>: a seam is a boundary of split vertices (an
+edge used by one triangle), and the build already locks every boundary at every level, so both ends of a collapsed edge
+always lie on the same UV island. <code>MicromeshGpu::drawTextured</code> binds the UVs as a third vertex buffer (slot 2, <code>Float2</code>).</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-uv.png" alt="A UV-mapped rock at four cuts: carried normals only, with a bump map evaluated from the UVs, and with a UV checker whose seam is blue" loading="lazy">
+  <figcaption>A latitude / longitude rock with a real seam (81 664 triangles), at four cuts (46 965, 26 352, 18 196 and 10 939
+  triangles; the seam keeps the cuts from going lower). Top: carried normals only. Middle: the same plus a bump map
+  evaluated from the UVs at every pixel (derivative bump mapping, so no tangents are needed). Bottom: a UV checker with the
+  seam in blue. The bump map brings back the detail the averaged normals lose (error against the exact render
+  <strong>1.2, 4.7, 8.7</strong> instead of <strong>12.1, 13.0, 14.9</strong> of 255), and the checker stays put across the
+  seam and every cut (<strong>1.7, 6.5, 11.7</strong>): the texture does not swim when the cut changes.</figcaption>
+</figure>
+<p>The price of locked seams: a mesh with many UV islands simplifies less. This rock has one seam and still stops at about
+11 000 of 82 000 triangles in this view; an atlas with dozens of islands will stop sooner. Measure on your meshes.</p>
+<h2 id="6-how-it-works">6. How it works<a class="anchor" href="#6-how-it-works" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Where</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cluster</td>
+<td><code>micromesh/Micromesh.cpp</code></td>
+<td>triangles sorted along a Morton curve, split into clusters of at most 128 triangles and 128 vertices; each gets a bounding sphere, a back-face cone and a local vertex remap</td>
+</tr>
+<tr>
+<td>Hierarchy</td>
+<td>same</td>
+<td>clusters are grouped (4 at a time), each group is merged, simplified by quadric edge collapse with its <strong>boundary locked</strong>, and split again, up to one root</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>same</td>
+<td>the error of a group is the larger of its collapse error (an RMS distance, in world units) and its children's, plus an epsilon: <strong>strictly</strong> monotonic, with a sphere that contains the children's</td>
+</tr>
+<tr>
+<td>Cut</td>
+<td><code>selectCut</code>, <code>micromesh_cull.comp</code></td>
+<td>a cluster is drawn when its own error is within the budget and its parent's is not (optionally divided by the distance to its sphere, a projected error)</td>
+</tr>
+<tr>
+<td>Cull</td>
+<td><code>micromesh_cull.comp</code></td>
+<td>the same pass tests the frustum and the back-face cone, and writes one indexed-draw argument set per cluster, with <code>indexCount</code> 0 when culled</td>
+</tr>
+<tr>
+<td>Draw</td>
+<td><code>render/MicromeshGpu</code></td>
+<td>one <code>drawIndexedIndirect(args, 0, clusterCount)</code>: the same call every frame, nothing read back, no atomics</td>
+</tr>
+</tbody>
+</table></div>
+<p>Because a group's boundary is locked at every level, and a cluster and its parent are never both selected, <strong>any cut
+tiles the surface without cracks</strong>. This is tested, not assumed: every cut of a sphere and a torus is a closed manifold
+(each edge in exactly two triangles) at twelve thresholds.</p>
+<h2 id="7-using-it">7. Using it<a class="anchor" href="#7-using-it" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">C ABI v12   caffeine_micromesh_build(positions, indices, &amp;stats, &amp;bytes, &amp;size)   -&gt; versioned .micromesh bytes
+C ABI v14   caffeine_session_micromesh_stats(session, &amp;stats)   -&gt; draws, clusters, triangles, source triangles, views,
+                                                                   arena use and capacity, cuts that did not fit
+            CaffeineRenderStats::micromesh_draws, CaffeineViewportSettings::shadows, stats.occlusion
+Inspector   Mesh Renderer -&gt; Micromesh, Micromesh error (px), Micromesh occlusion; the viewport HUD shows tris, draws and micromesh draws
+Rust        Engine::micromesh_build(&amp;positions, &amp;indices) -&gt; MicromeshBake { bytes, clusters, levels, root_clusters, max_error, ... }
+C++ core    Micromesh::build(positions, indices, {normals, uvs, tangents, colors}) / selectCut / serialize / deserialize
+            Render::MicromeshGpu::upload, then either the per-cluster path (setInstances / cull / draw* / readStats)
+            or the scene path (setSceneInstances / cullScene / drawSceneSlot / readSceneView) with a MicromeshArena
+            and, for occlusion, a MicromeshHzb built from the previous depth (MicromeshCullParams::occlusion)
+</code></pre></div>
+<p>The build is <strong>offline</strong> work (a bake): it is deterministic, so the same mesh gives byte-identical output, and it takes
+under a second for a 20 000-triangle mesh. Never call it per frame.</p>
+<p>The agent query <code>render_stats</code> (and <code>Engine::render_stats()</code>, C ABI v13) reports what a frame drew: meshes, culled by the
+frustum, draw calls, instanced draw calls, triangles and CPU pass times.</p>
+<p>Regenerate the images and GIFs of sections 1, 3, 4 and 5 with <code>./scripts/render-micromesh-docs.sh</code> (hidden tests with the tags
+<code>[.micromesh-docs]</code>, <code>[.micromesh-field]</code>, <code>[.micromesh-normals]</code> and <code>[.micromesh-uv]</code> render the frames on the GPU;
+<code>scripts/compose_micromesh_docs.py</code> composes them), and section 2's with <code>./scripts/render-micromesh-scene-docs.sh</code> (an env-gated
+Doppio engine test through the real scene renderer, plus the benchmark table).</p>
+<h2 id="8-what-the-tests-prove">8. What the tests prove<a class="anchor" href="#8-what-the-tests-prove" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>On the CPU</strong> (<code>tests/test_micromesh.cpp</code>): clusters respect the limits, every level is coarser, a closed mesh ends in one
+root, errors only grow toward the root and spheres contain their children's, cuts are crack-free, view-dependent cuts are
+coarser far away, an open mesh keeps its boundary and terminates, back-face cones never hide a facing cluster, rebuilds
+are byte-identical, truncated bytes are refused.</li>
+<li><strong>On the GPU</strong> (<code>tests/test_micromesh_gpu.cpp</code>, <code>tests/test_rhi_indirect.cpp</code>): the cut the compute pass selects <strong>equals the
+CPU's</strong> at four distances and three budgets, the cone filter equals <code>isBackFacing</code>, the frustum test equals the same
+sphere-plane test on the CPU, indirect arguments decide what is drawn, and a compute pass can write them.</li>
+<li><strong>Scene path</strong>: the Doppio engine test <code>micromesh_draw_matches_the_plain_mesh_and_submits_fewer_triangles</code> renders a dense OBJ rock
+on a floor under the sun, with shadow maps on, through the real renderer both ways: the picture (shadow included) stays within a few
+/ 255 of the plain mesh's, the cut keeps about a third of the triangles close up, the camera and at least one cascade were cut
+into one arena with nothing overflowing, <code>micromesh_draws</code> is 1 with the switch on and 0 after switching it off, and the HUD label
+says so. <code>micromesh_handles_non_uniform_scale_submeshes_and_vertex_colours</code> does the same for a stretched rock, a rock with two
+materials and a rock with a vertex colour. <code>[compact]</code> (GPU) checks that the arena's compacted cut keeps exactly the clusters and
+triangles of the per-cluster cut for instances of several scales (one non-uniform), at three cameras and four budgets, for a
+view that is not the first (slot offsets), that the arena holds exactly the cut, and that a cut which does not fit is not drawn and
+is reported. <code>[colors]</code> checks vertex colours survive every level and the bytes.</li>
+<li><strong>Normals</strong> (<code>[normals]</code>): every vertex normal is a unit vector at every level and follows the surface (on a sphere, within
+26 degrees of the radial direction at all 16 levels, including the coarsest), the normals round-trip through the bytes,
+and on the GPU a coarse cut lit with carried normals is within 6/255 of the exact render while facet normals are more than
+twice as far.</li>
+<li><strong>UVs</strong> (<code>[uv]</code>): on a torus with real seams, every UV stays in range, every vertex of every level sits where its UV
+says to within a small multiple of its level's simplification error, no triangle of any cut spans a seam (the widest UV
+jump inside a triangle stays under half the texture), and the UVs round-trip through the bytes. The rock render test
+checks that the bump map and the checker stay close to the exact render at three cuts.</li>
+<li><strong>Occlusion</strong> (<code>[occlusion]</code>, GPU): a wall rendered into a depth buffer, its pyramid built (the corner texel is the sky's 1.0, the
+middle the wall's depth, the top level keeps the farthest), then three instances of the sphere: the one behind the wall is culled, the
+one beside it and the one in front stay. In the Doppio engine, <code>micromesh_occlusion_hides_what_last_frames_depth_shows_behind_a_wall</code>
+puts six rocks on each side of a wall: the camera's cut drops to between a quarter and three quarters of the open one, the cut was
+tested (<code>occlusion</code> in the stats), and the picture stays within 1.5 / 255.</li>
+<li><strong>Instances</strong> (<code>[instances]</code>): with four transforms (scales 0.5 to 2, rotations, distances up to 70 m) every instance's
+GPU cut <strong>equals the CPU cut of the same mesh seen from the camera in that instance's space</strong>, at three error
+budgets; a far instance is cut coarser than a near one; instances behind the camera or beside the frustum draw
+nothing; the cone test equals <code>isBackFacing</code> in each instance's own space, including one turned half a turn; and one
+indirect draw puts two instances where their matrices say (two mirror-image discs with an empty gap).</li>
+</ul>
+<h2 id="9-what-is-missing">9. What is missing<a class="anchor" href="#9-what-is-missing" aria-label="Link to this section">#</a></h2>
+<details>
+  <summary>Not done yet (also in the roadmap)</summary>
+  <ul>
+    <li><strong>Point and spot shadows.</strong> Only the sun's cascades cut; point and spot shadow maps draw the full mesh.</li>
+    <li><strong>One draw per instance.</strong> Batching the instances of a mesh into a single draw needs vertex pulling (the matrix chosen per index range); today they share geometry, the dispatch and the arena but not a draw.</li>
+    <li><strong>By design.</strong> Skinned meshes, alpha-tested or translucent materials and wind foliage draw as plain meshes or stay instanced.</li>
+    <li><strong>Non-uniform scale in the per-cluster path.</strong> The scene path handles it; the per-cluster path (the instanced field) still assumes one scale.</li>
+    <li><strong>Two-phase occlusion.</strong> The single-phase test against last frame's depth is done (above); drawing last frame's visible clusters first, rebuilding the pyramid and testing the rest would remove its one-frame lag at silhouette edges, but needs the opaque pass split in two.</li>
+    <li><strong>Attributes.</strong> Normals, UVs, tangents and vertex colours are carried; one UV set only. The bytes changed with each attribute (now version 5): older files are refused and must be rebuilt.</li>
+    <li><strong>Seam-heavy meshes.</strong> Every UV seam is a locked boundary, so atlases with many islands reduce less.</li>
+    <li><strong>Grouping.</strong> Groups are neighbours on a Morton curve, not an adjacency graph, so a level removes about half of the triangles on compact meshes and less on thin or branching ones; open meshes stop where the locked boundary pins everything.</li>
+    <li><strong>Streaming and the packer.</strong> No page-in/out, and no <code>.micromesh</code> section in <code>.caf</code> or <code>caf-pack</code> command yet.</li>
+    <li><strong>Scale.</strong> Measured on meshes up to 82 k triangles; nothing larger.</li>
+  </ul>
+</details>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/micromeshes.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/materials-guide/"><span>Previous</span><strong>Materials in Doppio: procedural library, real depth and baking</strong></a><a class="pager-next" href="/en/docs/doppio/nature-generator-guide/"><span>Next</span><strong>Nature Generator: procedural rocks, trees and plants, built with nodes</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-what-you-are-looking-at">1. What you are looking at</a></li><li class="l2"><a href="#2-in-the-scene-the-lit-g-buffer-draw">2. In the scene: the lit G-buffer draw</a></li><li class="l3"><a href="#occlusion">Occlusion</a></li><li class="l3"><a href="#benchmark">Benchmark</a></li><li class="l3"><a href="#benchmark-set">Benchmark set</a></li><li class="l2"><a href="#3-instances-in-one-dispatch-a-field-of-rocks">3. Instances in one dispatch: a field of rocks</a></li><li class="l2"><a href="#4-shading-normals">4. Shading normals</a></li><li class="l2"><a href="#5-texture-coordinates">5. Texture coordinates</a></li><li class="l2"><a href="#6-how-it-works">6. How it works</a></li><li class="l2"><a href="#7-using-it">7. Using it</a></li><li class="l2"><a href="#8-what-the-tests-prove">8. What the tests prove</a></li><li class="l2"><a href="#9-what-is-missing">9. What is missing</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

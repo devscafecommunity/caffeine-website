@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Melhoria gráfica — Roadmap de Micromeshes e Photon · Caffeine</title>
+<meta name="description" content="Como levar o renderer de &quot;bom PBR forward com uma GI em espaço de ecrã&quot; a geometria densa e virtualizada ( Micromeshes ) e a iluminação global dinâmica em espaço do mundo ( Photon ), usando apenas o que o SDL3 GPU conseg">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Melhoria gráfica — Roadmap de Micromeshes e Photon · Caffeine">
+<meta property="og:description" content="Como levar o renderer de &quot;bom PBR forward com uma GI em espaço de ecrã&quot; a geometria densa e virtualizada ( Micromeshes ) e a iluminação global dinâmica em espaço do mundo ( Photon ), usando apenas o que o SDL3 GPU conseg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/doppio/graphics-roadmap/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/doppio/graphics-roadmap/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/graphics-roadmap/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/doppio/graphics-roadmap/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab active" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/doppio/graphics-roadmap/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/doppio/graphics-roadmap/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Painéis do editor</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/editor/test-automation/">Automação de testes do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-editor/">Editor de cena</a></li><li><a class="nav-link" href="/pt/docs/editor/material-editor/">Editor de materiais</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-gallery/">Galeria de UI do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-migration/">Guia de migração de plugins</a></li><li><a class="nav-link" href="/pt/docs/editor/viewport-toolbar/">HUD e controlos do viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/photon/">Photon — GI híbrido nativo por radiance cascades</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-manager/">Plugin Manager (host legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-sdk/">Plugin SDK (C++ legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-reference/">Referência da UI do Doppio</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/workspace-and-theme/">Workspace, tema e componentes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/doppio/">Geradores &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-roadmap/">Edição de terreno: pincéis, paleta de materiais e vegetação</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-phase-0/">Edição de terreno: relatório da Fase 0</a></li><li><a class="nav-link" href="/pt/docs/doppio/environment-guide/">Environment: nuvens, névoa, chuva e relâmpagos no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/rust-ui/">Frontend Rust UI (Iced)</a></li><li><a class="nav-link" href="/pt/docs/doppio/gizmos-and-markers/">Gizmos e marcadores de cena</a></li><li><a class="nav-link" href="/pt/docs/doppio/materials-guide/">Materiais no Doppio: biblioteca procedural, profundidade real e bake</a></li><li><a class="nav-link active" href="/pt/docs/doppio/graphics-roadmap/" aria-current="page">Melhoria gráfica — Roadmap de Micromeshes e Photon</a></li><li><a class="nav-link" href="/pt/docs/doppio/micromeshes/">Micromeshes: clusters, cortes e o draw na GPU</a></li><li><a class="nav-link" href="/pt/docs/doppio/runtime-modifiers/">Modificadores em tempo de execução para materiais gerados</a></li><li><a class="nav-link" href="/pt/docs/doppio/photoreal-world-roadmap/">Mundo procedural fotorrealista — validação e roadmap</a></li><li><a class="nav-link" href="/pt/docs/doppio/nature-generator-guide/">Nature Generator: rochas, árvores e plantas procedurais, construídas com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/photon-guide/">Photon: iluminação global no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/material-pipeline/">Pipeline de materiais, texturas e geradores — backlog</a></li><li><a class="nav-link" href="/pt/docs/doppio/profiler-guide/">Profiler: para onde vai o tempo de um frame</a></li><li><a class="nav-link" href="/pt/docs/doppio/generator-recipes/">Receitas de geradores (generator.*)</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/headless-testing/">Testes de UI headless para o Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/pt/docs/doppio/texture-generator-guide/">Texture Generator: sprites procedurais, VFX e máscaras empacotadas</a></li><li><a class="nav-link" href="/pt/docs/doppio/water-generator-guide/">Water Generator: corpos de água construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/world-composition/">World Composer: construir um mundo prefab a partir de receitas de geradores</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plugins/compatibility/">Compatibilidade de plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/pt/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/pt/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/pt/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/pt/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Melhoria gráfica — Roadmap de Micromeshes e Photon</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Referência</span>
+  <span class="doc-badge">Engine</span>
+  <span>Última atualização: <time datetime="2026-11-21">2026-11-21</time></span>
+  <span>Fonte: <a href="https://github.com/devscafecommunity/caffeine/blob/main/graphics-roadmap.md"><code>graphics-roadmap.md</code></a></span>
+</div>
+<p class="doc-lede">Como levar o renderer de "bom PBR forward com uma GI em espaço de ecrã" a geometria densa e
+virtualizada (<strong>Micromeshes</strong>) e a iluminação global dinâmica em espaço do mundo
+(<strong>Photon</strong>), usando apenas o que o SDL3 GPU consegue fazer em Vulkan, D3D12 e Metal.</p>
+<p>Nomes: o sistema de geometria chama-se <strong>Micromeshes</strong> e o sistema de GI <strong>Photon</strong>. Ambos são designs nossos.
+Não se aproveita código, texto de shaders nem disposição de dados de outros engines; a literatura pública (hierarquias de clusters,
+radiance cascades, voxel clipmaps, visibility buffers) é a única referência. Esta página é a companheira gráfica de
+<a href="/pt/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>, que a alimenta com terreno, natureza e
+materiais.</p>
+<blockquote>
+<p><strong>Estado (2026-11-20):</strong> <strong>Os Micromeshes M-0, M-1 e M-2 estão concluídos</strong> (a occlusion é de fase única), testados na GPU e desenhados através do renderer de cena
+real (veja <a href="/pt/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>): draws indiretos e storage buffers no RHI, estatísticas de render e uma leitura no HUD, a hierarquia
+de clusters offline com normais, UVs, tangentes e cores de vértice, o corte na GPU com transformações por instância, o draw iluminado no G-buffer e
+o corte mais grosseiro próprio das cascatas do sol para uma arena de índices partilhada, e um teste de occlusion de fase única contra a profundidade do frame anterior. <strong>Em aberto
+no M-2:</strong> occlusion em duas fases e cortes para sombras de pontos de luz e de focos. <strong>O P-A do Photon está quase feito</strong> (P-A: primeiro o voxelizador conservador, porque a injeção de luz direta não podia ser verificada
+antes dele; depois os vetores de movimento, depois a luz direta real). O trabalho de GPU independente feito entretanto <strong>não</strong> faz parte destas fases:
+sombreamento e vento da vegetação, sombras com alpha test, modificadores de material em execução, água deslocada na GPU e o tempo (nuvens, névoa de altura e chuva; veja os guias de Natureza, de Água e de Environment).
+A base de mundo determinístico partilhada com o roadmap do mundo (<code>core/Hash.hpp</code>, o núcleo de scatter) está concluída.</p>
+<p><strong>O M-0 está completo.</strong> <strong>A seguir, por ordem:</strong> P-A, cujo primeiro item é o voxelizador conservador. As próximas fases dos Micromeshes (M-3 streaming, a
+secção <code>.micromesh</code> no <code>.caf</code>, um caminho de clusters para terreno que supere a linha de base do benchmark) seguem-se quando o pipeline de conteúdo precisar delas.</p>
+</blockquote>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/micromesh/micromesh-cuts.png" alt="Uma rocha desenhada com quatro orçamentos de erro, colorida por cluster" loading="lazy">
+  <figcaption>As fases M-1 e M-2 tal como funcionam hoje: uma rocha, quatro orçamentos de erro, cada cor um cluster (detalhes em
+  <a href="/pt/docs/doppio/micromeshes/">micromeshes.md</a>).</figcaption>
+</figure>
+<h2 id="1-veredito">1. Veredito<a class="anchor" href="#1-veredito" aria-label="Link to this section">#</a></h2>
+<p><strong>Photon: já em curso, terminá-lo.</strong> O engine tem uma GI de radiance cascades em compute, com um campo distante de voxels de quatro níveis
+e feedback de múltiplos bounces (<code>PhotonCascades.hpp</code>). A proposta de &quot;construir uma GI&quot; está em grande parte
+feita; o trabalho que resta é qualidade, validação e os itens de precisão em espaço do mundo que o seu próprio header enumera.</p>
+<p><strong>Micromeshes: construídos e a desenhar na cena, com um limite rígido que os moldou.</strong> A hierarquia de clusters, o corte na GPU com
+transformações por instância, o draw iluminado no G-buffer, as cascatas de sombras, a occlusion e o conjunto de benchmarks existem (<code>micromeshes.md</code>). O SDL3 GPU
+tem draws indiretos, storage buffers e passos de compute, mas <strong>não tem mesh shaders, nem atómicos de 64 bits portáveis, nem draw com contagem indireta</strong>,
+pelo que o corte é compactado numa arena de índices e desenhado com um draw de hardware por instância (grande ganho, baixo risco, como planeado). Um
+rasterizador de software em compute para triângulos sub-pixel continua opcional (M-4), usando atómicos de 32 bits.</p>
+<p><strong>Descartado tal como escrito:</strong> uma GI baseada em SDF (o Photon já usa radiance cascades mais voxels; uma segunda GI
+duplicaria a manutenção), e &quot;triliões de triângulos&quot;. O objetivo realista são <strong>dezenas de milhões de
+triângulos de origem em vista com um custo limitado por frame</strong>, que é o que os clusters entregam.</p>
+<h3 id="onde-estamos-2026-11-20">Onde estamos (2026-11-20)<a class="anchor" href="#onde-estamos-2026-11-20" aria-label="Link to this section">#</a></h3>
+<p>21 itens concluídos, 25 em aberto. <strong>Os Micromeshes estão em grande parte concluídos; o P-A do Photon está quase feito</strong> (cenas de regressão, voxelizador com regiões sujas, luz direta real, ganho do ressalto e painel do Photon feitos), pelo que o próximo
+trabalho real nesta página são os vetores de movimento do P-A (veja a secção 8 para a ordem).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Feito</th>
+<th>Em aberto</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-A Photon: torná-lo correto</td>
+<td>4</td>
+<td>1</td>
+<td>quase feito: cenas de regressão, voxelizador e luz direta real feitos; vetores de movimento em aberto</td>
+</tr>
+<tr>
+<td>P-B Photon: qualidade</td>
+<td>0</td>
+<td>5</td>
+<td>não iniciado</td>
+</tr>
+<tr>
+<td>P-C Photon: escala e custo</td>
+<td>0</td>
+<td>4</td>
+<td>não iniciado</td>
+</tr>
+<tr>
+<td>M-0 RHI e ferramentas</td>
+<td>4</td>
+<td>0</td>
+<td>concluído: draws indiretos, storage buffers, estatísticas, a leitura no HUD, o conjunto de benchmarks (faltam as entradas no Profiler)</td>
+</tr>
+<tr>
+<td>M-1 Construção de clusters</td>
+<td>4</td>
+<td>1</td>
+<td>concluído; a secção <code>.micromesh</code> no <code>.caf</code> e o packer vivem noutro repositório e estão em aberto</td>
+</tr>
+<tr>
+<td>M-2 Cull e draw na GPU</td>
+<td>8</td>
+<td>3</td>
+<td>concluído, exceto a occlusion em duas fases, os cortes para sombras de pontos de luz/focos e a adoção pelo terreno</td>
+</tr>
+<tr>
+<td>M-3 Streaming e memória</td>
+<td>0</td>
+<td>3</td>
+<td>não iniciado</td>
+</tr>
+<tr>
+<td>M-4 Triângulos pequenos</td>
+<td>0</td>
+<td>2</td>
+<td>opcional, não iniciado</td>
+</tr>
+<tr>
+<td>M-5 Integração no editor</td>
+<td>1</td>
+<td>2</td>
+<td>o interruptor no Inspector está feito; painel de estatísticas, vista de debug, exportação dos geradores e capturas do site em aberto</td>
+</tr>
+<tr>
+<td>Itens partilhados (secção 6)</td>
+<td>0</td>
+<td>4</td>
+<td>nenhum iniciado</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="2-o-que-existe-verificado-na-árvore">2. O que existe (verificado na árvore)<a class="anchor" href="#2-o-que-existe-verificado-na-árvore" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Estado</th>
+<th>Onde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Campo próximo da GI</td>
+<td><strong>Feito</strong>: cascatas alinhadas ao mundo K-1..0, trace+merge fundidos, resolve SH-L1</td>
+<td><code>PhotonCascades.cpp</code>, <code>photon_cascade.comp</code></td>
+</tr>
+<tr>
+<td>Campo distante da GI</td>
+<td><strong>Feito (preenchimento de recurso)</strong>: quatro níveis de clipmap 0.25/0.5/1/2 m, probes com SH, consultas de Chebyshev</td>
+<td><code>PhotonCascades.hpp</code>, <code>PhotonFarField.hpp</code></td>
+</tr>
+<tr>
+<td>Multi-bounce</td>
+<td><strong>Feito</strong>: a irradiância anterior realimentada com um limite e histórico reprojetado</td>
+<td>notas P5 do header</td>
+</tr>
+<tr>
+<td>AO pré-calculado</td>
+<td><strong>Feito</strong>: bake de AO por BVH/GPU</td>
+<td><code>PhotonAOBake.cpp</code>, <code>PhotonGpuBake.cpp</code></td>
+</tr>
+<tr>
+<td>Luz direta na GI</td>
+<td><strong>Feito</strong>: o sol, as luzes de ponto e os focos injetados nos voxels, com sombra por marcha no volume de materiais</td>
+<td><code>photon_inject.comp</code></td>
+</tr>
+<tr>
+<td>Voxelização</td>
+<td><strong>Feito</strong>: voxelizador conservador de triângulos com atualização por região suja, terreno, malhas com esqueleto e recortadas; teto de 1M de triângulos; o preenchimento pelo ecrã fica como recurso</td>
+<td><code>photon_voxelize_tri.comp</code>, <code>GpuSceneRenderer::updatePhotonGeometry</code></td>
+</tr>
+<tr>
+<td>Vetores de movimento</td>
+<td><strong>Lacuna</strong>: o histórico reprojeta apenas com a matriz anterior</td>
+<td>P5 do header</td>
+</tr>
+<tr>
+<td>LOD de geometria</td>
+<td><strong>Feito para meshes opacas que optam por ele</strong> (corte de clusters Micromesh); <strong>parcial</strong> para as restantes: 3 LODs de vértices agrupados por mesh, LODs de chunks de terreno, cull de frustum no CPU</td>
+<td><code>micromesh/</code>, <code>MicromeshGpu.cpp</code>, <code>MeshLOD.cpp</code>, <code>TerrainLodSystem.cpp</code></td>
+</tr>
+<tr>
+<td>Occlusion</td>
+<td><strong>Parcial</strong>: oclusores AABB grosseiros no CPU (máx. 16), pirâmide Min-Z para a GI e, para o Micromesh, uma pirâmide de profundidade máxima de fase única da profundidade do frame anterior</td>
+<td><code>CoarseOcclusion.hpp</code>, <code>MinZPyramid.cpp</code>, <code>MicromeshGpu.cpp</code></td>
+</tr>
+<tr>
+<td>Instanciação</td>
+<td><strong>Feito, agrupada no CPU</strong>: lotes de até 256 por chave</td>
+<td><code>InstanceBatch.hpp</code></td>
+</tr>
+<tr>
+<td>Sombras</td>
+<td><strong>Feito</strong>: 4 cascatas direcionais a 2048, mapas de pontos de luz e de focos</td>
+<td><code>GpuDirectionalShadowMap.hpp</code></td>
+</tr>
+<tr>
+<td>Pós-processamento</td>
+<td><strong>Feito</strong>: TAA, ACES, bloom, DOF, SSAO, motion blur, exposição automática</td>
+<td><code>PostProcessStack.cpp</code></td>
+</tr>
+<tr>
+<td>Compute e indirect no RHI</td>
+<td><strong>Feito (M-0)</strong>: draws e dispatch indiretos, storage buffers, buffers de compute de leitura e escrita, capacidades, <code>readBuffer</code></td>
+<td><code>rhi/CommandBuffer.hpp</code>, <code>tests/test_rhi_indirect.cpp</code></td>
+</tr>
+<tr>
+<td>Página do site para o Photon</td>
+<td><strong>Feito</strong>: o guia do Photon e a página do editor</td>
+<td><a href="/pt/docs/doppio/photon-guide/"><code>photon-guide.md</code></a></td>
+</tr>
+<tr>
+<td>Céu, nuvens, névoa, chuva e relâmpagos</td>
+<td><strong>Feito</strong>: componentes refletidos <code>Volumetric Clouds</code> e <code>Weather</code>, névoa exponencial de altura, chuva no espaço do mundo com profundidade e salpicos no passo de composição, rajadas de vento partilhadas pela chuva, folhagem e nuvens, relâmpagos com raio, um clarão que ilumina a cena e o Photon, e eventos de trovão, sombras de nuvens em movimento no chão e no bounce do Photon, silver lining e sun shafts, humidade da cena inteira, sol e luz do céu do Photon que seguem o céu encoberto, o separador Environment</td>
+<td><code>WeatherSystem.hpp</code>, <code>sky.frag</code>, <code>post_composite.frag</code>, <code>photon_inject.comp</code>, <a href="/pt/docs/doppio/environment-guide/"><code>environment-guide.md</code></a></td>
+</tr>
+<tr>
+<td>Profiler e desempenho medido</td>
+<td><strong>Feito</strong>: uma árvore de scopes com tempo real de GPU por passo (<code>CF_GPU_SCOPE</code>), o separador Profiler, C ABI v18; primeira ronda: pesquisas da cache de texturas fora do ciclo de desenho (passo opaco 13.5 para 2.3 ms), probes do Photon limitadas à vista e distribuídas no tempo (25 para 9 ms), marcha para o sol das nuvens mais barata, pesquisas da cache de materiais fora do ciclo de desenho, casters de sombra descartados por cascata, gráficos de frame rate, CPU por core, GPU e memória (C ABI v19)</td>
+<td><code>Profiler.hpp</code>, <code>GpuProfile.hpp</code>, <a href="/pt/docs/doppio/profiler-guide/"><code>profiler-guide.md</code></a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3-análise-da-proposta">3. Análise da proposta<a class="anchor" href="#3-análise-da-proposta" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>&quot;Fazer o cluster em Rust numa thread em segundo plano.&quot;</strong> Lugar errado. O clustering tem de ser um módulo do <strong>núcleo do engine</strong> (<code>src/caffeine/micromesh</code>)
+por trás da C ABI, porque o renderer, o packer de <code>.caf</code> e o runtime (sem
+Rust) precisam todos dele. O editor em Rust apenas dispara um bake e mostra estatísticas. Os geradores produzem meshes normais;
+a construção de clusters é o último passo do pipeline de assets e é guardada em cache, nunca executada durante o jogo.</li>
+<li><strong>&quot;128-256 triângulos por cluster, limites mais erro geométrico.&quot;</strong> Correto. Usar 128 triângulos e no máximo
+128 vértices por cluster, uma esfera delimitadora, um cone de normais para culling de back-face e um <strong>erro de
+simplificação</strong> por grupo de clusters, com o erro do pai nunca menor do que o dos filhos (monótono), de modo a que o
+corte pela hierarquia seja sem fissuras e independente da vista.</li>
+<li><strong>&quot;Compute shaders escolhem clusters visíveis e o detalhe.&quot;</strong> Correto, e é o núcleo: culling em duas fases na GPU
+(primeiro os sobreviventes do frame anterior, depois os restantes contra uma pirâmide Min-Z nova) a escrever um buffer de argumentos
+indiretos. Já temos o código da pirâmide Min-Z da GI para reutilizar.</li>
+<li><strong>&quot;Rasterização por software em compute.&quot;</strong> Apenas para triângulos que cobrem menos de cerca de 4 pixéis, e só depois de o
+caminho de hardware funcionar. Precisa de um visibility buffer com atomic min sobre um valor empacotado. Sem atómicos de 64 bits,
+empacotar 24 bits de profundidade mais 8 bits de id local ao cluster em 32 bits e resolver o resto num segundo passo,
+ou dispensar o caminho por software. Tratá-lo como opcional.</li>
+<li><strong>&quot;Elimina o pop-in de LOD.&quot;</strong> Só com simplificação sem fissuras mais transições com dithering amigáveis para o TAA.
+Não elimina o custo de materiais nem de sombras: as cascatas de sombras têm de usar o mesmo corte de clusters (mais grosseiro).</li>
+<li><strong>&quot;Triliões de polígonos.&quot;</strong> Não. A memória (streaming de dados de clusters) e o custo por pixel limitam-no. Planear
+um orçamento fixo (clusters visíveis, pixéis rasterizados) e medir.</li>
+<li><strong>&quot;Folhagem e alpha.&quot;</strong> A renderização por clusters serve geometria opaca. Folhas e relva com alpha test ficam no
+caminho instanciado (com impostores) até um caminho de clusters com suporte a cutout se justificar.</li>
+<li><strong>GI &quot;via A, SDF&quot;.</strong> Não adotada: o Photon já a cobre com probes mais voxels. O que a ideia do SDF
+acrescenta e nos falta é <strong>occlusion precisa a partir de geometria fora do ecrã e de faces traseiras</strong>, que o voxelizador
+conservador de triângulos (abaixo) fornece dentro do design existente.</li>
+<li><strong>GI &quot;via B, POM GI&quot;.</strong> Apenas como termo de <strong>micro-contacto</strong>: os height maps já dão ao POM
+auto-sombra e um termo de cavidade (<code>material-pipeline.md</code>). Estendê-lo a um pequeno bounce indireto nas cavidades
+é barato e local, mas é uma camada de detalhe sobre o Photon, não uma GI.</li>
+<li><strong>&quot;Filtragem anisotrópica, ACES, sRGB.&quot;</strong> Já incluídos (ACES ajustado, sRGB, cadeias de mips). Só vale a pena verificar a
+definição explícita do sampler anisotrópico.</li>
+</ul>
+<h2 id="4-roadmap-photon-gi">4. Roadmap — Photon (GI)<a class="anchor" href="#4-roadmap-photon-gi" aria-label="Link to this section">#</a></h2>
+<p>Photon primeiro: é o mais perto de estar concluído, beneficia todas as cenas já e os Micromeshes vão precisar dos seus voxels.</p>
+<h3 id="fase-p-a-torná-lo-correto">Fase P-A — Torná-lo correto<a class="anchor" href="#fase-p-a-torná-lo-correto" aria-label="Link to this section">#</a></h3>
+<blockquote>
+<p><strong>Constatação (2026-11-20):</strong> um protótipo injetou o sol no radiance do campo distante (um march de voxels em direção à luz em vez
+de shadow maps, em <code>photon_inject.comp</code>) e foi <strong>revertido</strong>: numa cena de parede e chão vermelhos o resultado foi idêntico com e
+sem ele, porque as cascatas em espaço de ecrã dominam todos os pixéis visíveis e o campo distante apenas preenche o que sai do
+ecrã, onde o preenchimento de voxels por profundidade do ecrã não tem geometria. A luz direta não pode ser testada, e por isso não compensa o seu custo,
+até o voxelizador conservador (terceiro item) fornecer geometria que o ecrã não vê. Ordenar em conformidade. O componente
+de GI Photon está agora refletido (Inspector, cenas, scripts: <code>Photon GI</code>, com <code>Debug view</code>), o que a próxima tentativa exige; note-se
+que o <code>Debug view</code> não alterou a imagem no caminho <code>ComputeC0</code> nesse teste: corrigido (2026-11-21), GI only e Fallback only funcionam agora aí.</p>
+</blockquote>
+<ul>
+<li>[x] Injetar <strong>luz direta real</strong> (sol, pontos de luz, focos) na radiância dos voxels (<code>photon_inject.comp</code>: <code>directLight</code>, com sombra
+marchada pelo volume de materiais, na convenção <code>radiância x N.L</code> do shader forward), com o ambiente de céu escalado pela
+visibilidade do céu de cada face. Teste: uma parede vermelha, uma branca e uma verde atrás da câmara (fora do ecrã) tingem o cubo
+branco que as encara de vermelho, neutro e verde (cerca de 40 em 255, nada sem a parede). Três erros encontrados pelo caminho, todos
+no campo distante: as sondas decodificavam as direções duas vezes (a consulta lia direções diferentes das que as sondas traçaram), as
+cascatas faziam o mesmo, e o <strong>volume de materiais era cycled</strong> (descartado) por cada passo de compute (<code>CommandBuffer::beginComputePass(..., cycle)</code>).
+Este último deixava o preenchimento pelo ecrã apagar os voxels de triângulos a cada frame: uma sala fechada lia 90 em 255 de luz de céu, agora cerca de 15 em média (1 a 3 nos frames mais calmos).</li>
+<li>[ ] Passo de <strong>vetores de movimento</strong> (matrizes por objeto, frame anterior), usado pelo histórico do Photon, pelo TAA e pelo motion
+blur. Remover a lacuna de &quot;sem vetores de movimento&quot;; invalidar o histórico na desoclusão por teste de profundidade/normal.</li>
+<li>[x] <strong>Voxelizador conservador de triângulos</strong> (<code>photon_voxelize_tri.comp</code>, <code>PhotonCascades::updateGeometryVoxels</code>): uma invocação por
+triângulo, teste de eixos separadores triângulo/caixa nos voxels da sua caixa, nos quatro níveis do clipmap; os triângulos opacos da
+cena são reunidos com o seu albedo (<code>GpuSceneRenderer::updatePhotonGeometry</code>, um hash por objeto a cada frame, uma comparação com o conjunto anterior) e um
+nível é limpo e refeito quando a sua origem do clipmap se move ou a geometria muda. <strong>Regiões sujas:</strong> um
+objeto em movimento limpa e revoxeliza só as caixas onde esteve e onde está (no máximo 8, senão os níveis refazem-se por inteiro); o terreno, as malhas com esqueleto (na sua pose) e, a pedido, as recortadas entram no volume; acima de 1 milhão de triângulos o voxelizador pára e o preenchimento pelo ecrã trabalha sozinho, e o painel di-lo. Uma
+superfície com textura conta com a cor média da sua imagem (<code>GpuTextureCache::averageColor</code>). Testes de GPU: <code>test_photon_voxelizer.cpp</code>.
+O preenchimento pelo ecrã fica, como recurso e para o terreno.</li>
+<li>[x] Cenas de regressão headless: Cornell box, luz através de uma porta, fuga por parede fina (módulo <code>photon_gi</code> em <code>windows/main/tests.rs</code>, limiares
+de imagem sobre a diferença entre GI desligado e ligado). Medido em 2026-11-21: a cor passa de uma superfície à outra (um chão branco ganha cerca de +8 de vermelho junto
+à parede vermelha, +6 de verde junto à verde). Uma sala sem abertura tinha fugas: com a câmara dentro dela o interior ficava iluminado como o céu
+aberto (ganhos de 60 a 90 em 255, fosse qual fosse a intensidade do céu); agora está selada (cerca de 15 em média nos frames; cada frame oscilava entre 3 e 25 até as probes terem desvios de amostragem próprios, veja a média temporal no guia do Photon), com o ressalto do sol por uma fresta em 7 a 16 no chão
+do fundo contra cerca de 170 na mancha iluminada, e uma divisória deixa esse ressalto fora do lado de lá (4,3 -&gt; 1,5). O campo distante é consultado a 0,4 m
+da superfície (os voxels da própria superfície têm até 0,5 m de espessura) e a partir da origem do raio, não do seu ponto de saída do ecrã.
+Todos são testes normais.</li>
+<li>[x] <strong>Ganho do ressalto e painel do Photon</strong> (C ABI v17: <code>caffeine_session_photon_stats</code>, <code>caffeine_session_photon_rebuild</code>). O <code>Bounce gain</code> escala o que os voxels guardam: no chão do fundo da sala com fresta
+(só GI, em 255) lê 13 com ganho 0, 18 com 1 e 24 com 4; as cascatas do ecrã escalam com <code>Intensity</code>. O separador <strong>Photon</strong> edita o componente, os interruptores da
+geometria dos voxels e as predefinições, com estatísticas dos voxels ao vivo; veja <a href="/pt/docs/doppio/photon-guide/"><code>photon-guide.md</code></a>.</li>
+</ul>
+<h3 id="fase-p-b-qualidade-e-estabilidade">Fase P-B — Qualidade e estabilidade<a class="anchor" href="#fase-p-b-qualidade-e-estabilidade" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Denoise espaço-temporal sensível às normais do resolve SH; limitar fireflies; métricas de ghosting nos testes.</li>
+<li>[ ] Superfícies emissivas como luzes (os materiais já têm emissive maps).</li>
+<li>[ ] O céu como fonte própria: alimentar o ambiente pré-filtrado (split-sum) ao campo distante do Photon e ao
+IBL especular, uma só fonte de verdade.</li>
+<li>[ ] Reflexos glossy a partir do campo de probes quando o tracing em espaço de ecrã falha (substitui os
+cubemaps de probe por objeto como recurso, para que os reflexos fora do ecrã fiquem estáveis).</li>
+<li>[ ] Recursos de scratch por vista (o header refere uma instância de scratch partilhada); necessário para as
+pré-visualizações do editor e para a vista dividida.</li>
+</ul>
+<h3 id="fase-p-c-escala-e-custo">Fase P-C — Escala e custo<a class="anchor" href="#fase-p-c-escala-e-custo" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Níveis de qualidade com orçamentos de GPU medidos (Eco/Low/Balanced/High) e um regulador de tempo de frame.</li>
+<li>[ ] Far field em clipmap a seguir a câmara com atualizações toroidais; mundos maiores sem picos de repreenchimento.</li>
+<li>[ ] Alimentar o volume de voxels com chunks de terreno e vegetação (do roadmap do mundo) à medida que entram em streaming.</li>
+<li>[ ] Atualizar a página do Photon no site para o estado real e acrescentar os novos parâmetros à UI do editor com <code>UiId</code>s.</li>
+</ul>
+<h2 id="5-roadmap-micromeshes-geometria-virtual">5. Roadmap — Micromeshes (geometria virtual)<a class="anchor" href="#5-roadmap-micromeshes-geometria-virtual" aria-label="Link to this section">#</a></h2>
+<p>Cada fase é entregue sozinha e mantém o caminho antigo como recurso, por trás de uma flag.</p>
+<h3 id="fase-m-0-pré-requisitos-de-rhi-e-ferramentas">Fase M-0 — Pré-requisitos de RHI e ferramentas<a class="anchor" href="#fase-m-0-pré-requisitos-de-rhi-e-ferramentas" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] <code>rhi/CommandBuffer</code> envolve draws indiretos (<code>drawIndirect</code>, <code>drawIndexedIndirect</code>, multi-draw com contagem), dispatch indireto,
+<strong>storage buffers</strong> gráficos para os estágios de vértice e fragmento e passos de compute com <strong>buffers</strong> de storage de
+leitura e escrita; <code>BufferUsage::{Indirect, IndirectWrite, GraphicsStorage, GraphicsStorageWrite}</code>;
+<code>RenderDevice::capabilities()</code> (draw e dispatch indiretos, storage, sem mesh shaders, sem atómicos de 64 bits) e
+<code>readBuffer</code>. Testado na GPU em <code>tests/test_rhi_indirect.cpp</code>: os argumentos indiretos decidem o que é desenhado, e um
+passo de compute escreve os argumentos do draw (uma miniatura do culling na GPU). Os testes são ignorados sem GPU ou <code>glslc</code>.</li>
+<li>[x] Temporizadores de passos no CPU por estágio (gather, shadows, opaque, translucent, total) e contadores (meshes, eliminadas por frustum,
+draw calls, draw calls instanciados, triângulos) em <code>GpuSceneRenderer::lastFrameStats()</code>; C ABI <strong>v11</strong>
+<code>caffeine_session_render_stats</code>, o <code>Engine::render_stats()</code> em Rust e a consulta de agente <code>render_stats</code>.
+O SDL3 GPU não tem timestamps de GPU portáveis, pelo que os tempos são de codificação, não de GPU.</li>
+<li>[x] O HUD do viewport mostra os triângulos, draws e draws Micromesh do último frame (contadores baratos, sem leitura de volta). Ainda em aberto: entradas no Profiler e um painel com os contadores de clusters.</li>
+<li>[x] <strong>O conjunto de benchmarks reproduzível</strong> (<code>./scripts/benchmark-micromesh.sh</code>): um campo denso de rochas, uma floresta de 300 árvores densas e um terreno com dois
+tamanhos de grelha, caminhos de câmara fixos, conteúdo gerado em código (sem assets, idêntico byte a byte em cada execução, testado), todos os caminhos do renderer que se aplicam.
+As contagens de triângulos e de draws reproduzem-se exatamente; o tempo wall é um frame inteiro incluindo a leitura de volta, o tempo de encode o do CPU. Resultados em
+<a href="/pt/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>: o Micromesh desenha 6,1x (rochas) e 3,3x (floresta) menos triângulos e um frame mediano de 0,56 e
+0,75 do instanciado, mas a floresta custa mais CPU (um draw por árvore); a linha de base do terreno é de 0,2 a 0,8 M de triângulos em 100 a
+400 draws. O antigo <code>assets/benchmarks</code> (uma cena não usada de 43 KB) não faz parte dele.</li>
+</ul>
+<h3 id="fase-m-1-construção-de-clusters-offline-núcleo">Fase M-1 — Construção de clusters (offline, núcleo)<a class="anchor" href="#fase-m-1-construção-de-clusters-offline-núcleo" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Módulo <code>micromesh</code> (<code>src/caffeine/micromesh/Micromesh.hpp</code>): clusters de no máximo 128 triângulos e 128 vértices ao longo de uma curva de
+Morton (nossa, mais simples do que uma divisão gulosa por adjacência), cada um com uma esfera delimitadora justa, um cone de normais de back-face e um
+remapeamento local de vértices (um byte por índice).</li>
+<li>[x] <strong>Hierarquia</strong>: os clusters são agrupados (4 de cada vez, alargados quando um grupo não consegue encolher), cada grupo é fundido, simplificado por
+<strong>colapso de arestas com quádricas com a sua fronteira bloqueada</strong> (e arestas não-manifold), e dividido de novo, até uma raiz. O
+erro de um grupo é o maior entre o seu erro de colapso e o dos filhos, mais um epsilon, pelo que é <strong>estritamente</strong> monótono; a sua
+esfera contém as dos filhos. Um corte é &quot;erro próprio &lt;= limiar &lt; erro do pai&quot; (opcionalmente dividido pela distância à
+esfera para um erro projetado).</li>
+<li>[x] Bytes POD versionados: <code>serialize</code> / <code>deserialize</code> (com verificação de limites), reconstruções idênticas byte a byte. C ABI <strong>v12</strong>
+<code>caffeine_micromesh_build</code> (posições, índices, estatísticas, bytes) e o <code>Engine::micromesh_build</code> em Rust, para que os geradores e um
+packer possam fazer bake. <strong>Não feito:</strong> a secção <code>.micromesh</code> dentro do <code>.caf</code> e uma CLI do <code>caf-pack</code> (um repositório submodule separado).</li>
+<li>[x] Testes (<code>tests/test_micromesh.cpp</code>, 9 casos): limites por cluster, cada nível mais grosseiro, uma raiz em meshes fechadas, erros monótonos
+e contenção de esferas, <strong>cada corte de uma esfera e de um toro é fechado e manifold (cada aresta em exatamente dois
+triângulos) em 12 limiares</strong>, cortes dependentes da vista sem fissuras e mais grosseiros ao longe, uma grelha aberta mantém a sua fronteira e
+termina, os cones de back-face nunca escondem um cluster voltado para a câmara, entrada degenerada, reconstruções idênticas byte a byte e a ABI.</li>
+<li>[ ] Limites conhecidos: os grupos são vizinhos numa curva de Morton, não um grafo de adjacência, pelo que um nível remove cerca de metade dos
+triângulos em meshes compactas e menos em meshes finas ou ramificadas; as meshes abertas param onde a sua fronteira bloqueada fixa
+tudo (várias raízes); um colapso escolhe o melhor entre os dois extremos e o ponto médio (sem posição ótima);
+medido em meshes até 82 k triângulos (cerca de um segundo para construir 80 000); as costuras de UV bloqueadas limitam até onde uma mesh com muitas ilhas
+reduz. (Normais, UVs, tangentes e cores de vértice são transportadas agora.)</li>
+</ul>
+<h3 id="fase-m-2-culling-na-gpu-e-draw-por-hardware">Fase M-2 — Culling na GPU e draw por hardware<a class="anchor" href="#fase-m-2-culling-na-gpu-e-draw-por-hardware" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Carregamento para buffers da GPU (<code>render/MicromeshGpu</code>): um storage buffer de registos de clusters (limites, esferas de erro, cone, intervalo de índices),
+um buffer de posições, um buffer de índices com os índices globais de cada cluster e um buffer de argumentos indiretos.</li>
+<li>[x] Transformações por instância: <code>MicromeshGpu::setInstances</code>, índice de cull <code>instance * clusterCount + cluster</code>, corte, frustum
+e cone por instância, um dispatch e um draw indireto para o campo inteiro (196 rochas, 16 M triângulos de origem: 0,15 a 0,5 M desenhados por frame, 10x
+menos do que a mesh exata em média). Imagens e GIF em <a href="/pt/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>. Continua a ser uma hierarquia por objeto e uma escala uniforme por instância.</li>
+<li>[x] Passo de compute 1 (<code>shaders/micromesh_cull.comp</code>): por cluster, o teste de corte (erro próprio dentro do limiar, o do pai não,
+opcionalmente projetado pela distância), teste de frustum e cone de back-face; escreve um conjunto de argumentos de draw indexado por cluster
+com <code>indexCount</code> 0 quando eliminado, pelo que o CPU emite o mesmo <code>drawIndexedIndirect(args, 0, clusterCount)</code> em cada frame
+sem leitura de volta e sem atómicos.</li>
+<li>[x] <strong>Occlusion, fase única</strong>: a cada frame o depth buffer anterior torna-se uma pirâmide de profundidade máxima (<code>MicromeshHzb</code>, um storage
+buffer) e o cull compactante da câmara descarta os clusters cuja esfera está atrás dela (Mesh Renderer -&gt; Micromesh occlusion, desativada
+por omissão). Atrás de uma parede: 1,5x a 2,5x menos triângulos (2,1x em média), diferença de imagem de 0,11 / 255 em média; um cluster que se torna
+visível aparece um frame atrasado nos contornos das silhuetas. Imagens em <a href="/pt/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>.</li>
+<li>[ ] <strong>Occlusion em duas fases</strong> (desenhar os clusters visíveis do frame anterior, reconstruir a pirâmide a partir dessa profundidade, testar os restantes): elimina o
+atraso de um frame; exige dividir o passo opaco em dois.</li>
+<li>[x] O draw indireto funciona na GPU: <code>MicromeshGpu::draw</code> liga os buffers e emite um multi-draw sobre todos os clusters.
+<strong>Testado na GPU</strong> (<code>tests/test_micromesh_gpu.cpp</code>): o corte que o passo de compute seleciona <strong>é igual ao <code>selectCut</code> do CPU</strong>
+a 4 distâncias x 3 limiares, o filtro de cone é igual a <code>isBackFacing</code>, o teste de frustum é igual ao mesmo teste esfera-plano no
+CPU, uma câmara mais afastada escolhe um corte mais grosseiro, e um corte renderizado cobre o disco da esfera (fino e grosseiro por igual).</li>
+<li>[x] Pré-requisito para isso: <strong>normais de sombreamento</strong> transportadas por todos os colapsos e desenhadas com <code>MicromeshGpu::drawLit</code>; um corte grosseiro sombreia
+a 1,6 a 10 / 255 da mesh exata (facetas: 2,9 a 13). Os <strong>UVs</strong> também são transportados (as costuras ficam bloqueadas): um bump map e um checker de UV
+ficam a 1,2 a 11,7 / 255 do render exato ao longo dos cortes. Imagens em <a href="/pt/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>. Tangentes,
+cores de vértice e um segundo conjunto de UVs ainda faltam.</li>
+<li>[x] <strong>Desenhar os clusters visíveis para os alvos existentes do G-buffer através do pipeline da cena</strong> (Photon, SSAO, TAA e pós-processamento continuam
+a funcionar sem alterações): Mesh Renderer -&gt; <strong>Micromesh</strong> (+ erro em px) desenha a mesh como um corte através de <code>scene_lit.frag</code>, um draw
+indexado por instância (o passo de cull compacta o corte: o SDL3 GPU não tem draw com contagem indireta). 81 rochas iluminadas e com sombras: 5,3x a 7,1x
+menos triângulos por frame para a câmara, 10,8x vistas do ar, diferença de imagem de 1,5 / 255. Detalhes, a tabela de benchmark e os
+limites em <a href="/pt/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>. Também corrigido pelo caminho: uma mesh densa sem materiais relia o seu ficheiro em
+cada draw de cada frame (4 a 8 ms de CPU por draw).</li>
+<li>[x] <strong>As cascatas de sombras desenham o seu próprio corte mais grosseiro</strong> (a mesma hierarquia, logo sem fissuras): as cascatas do sol são cortadas a quatro texels de sombra por
+<code>shadow_micromesh.vert</code>, para uma <strong>arena de índices partilhada</strong> que cresce sozinha (32 MB para 81 rochas em vez de um buffer de índices de tamanho completo
+por rocha). As sombras de pontos de luz e de focos ainda desenham a mesh completa. Também: escala não uniforme, uma hierarquia por sub-mesh, cores de vértice
+transportadas. O viewport do editor renderiza sem shadow maps, a menos que <code>ViewportSettings::shadows</code> esteja ativo (C ABI v14).</li>
+<li>[ ] Os shadow maps de pontos de luz e de focos também desenham o seu próprio corte mais grosseiro (só as cascatas do sol o fazem).</li>
+<li>[ ] Tiles de terreno e rochas/troncos da Natureza são os primeiros adotantes; a folhagem fica instanciada. (Rochas e troncos podem optar por ele através do Mesh
+Renderer, e o gerador de Natureza ativa-o para as partes sólidas que coloca (3 000 triângulos ou mais); o terreno não tem caminho de clusters:
+a sua linha de base está no conjunto de benchmarks.)</li>
+</ul>
+<h3 id="fase-m-3-streaming-e-memória">Fase M-3 — Streaming e memória<a class="anchor" href="#fase-m-3-streaming-e-memória" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Carregar e descarregar dados de clusters por páginas, por distância e erro, com um orçamento de memória fixo e uma fila de
+carregamento assíncrona; nunca bloquear um frame.</li>
+<li>[ ] Compressão de geometria (posições quantizadas e normais octaédricas) e uma LRU de páginas.</li>
+<li>[ ] Ligar aos chunks do mundo: as meshes pré-calculadas de um chunk são agrupadas em clusters quando entram em cache pela primeira vez e reutilizadas depois.</li>
+</ul>
+<h3 id="fase-m-4-caminho-de-triângulos-pequenos-opcional-medir-primeiro">Fase M-4 — Caminho de triângulos pequenos (opcional, medir primeiro)<a class="anchor" href="#fase-m-4-caminho-de-triângulos-pequenos-opcional-medir-primeiro" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Rasterizador em compute para clusters cujos triângulos têm menos de ~4 pixéis, a escrever um visibility buffer
+com atómicos de 32 bits e um passo de resolve que obtém os atributos. Condicionar a um ganho medido face ao
+caminho de hardware em cenas densas de rochas/casca de árvore.</li>
+<li>[ ] Resolve de materiais em tiles de ecrã para evitar um passo por material.</li>
+</ul>
+<h3 id="fase-m-5-integração-no-editor">Fase M-5 — Integração no editor<a class="anchor" href="#fase-m-5-integração-no-editor" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Interruptor &quot;Micromesh&quot; no Inspector num Mesh Renderer (a reflexão expõe <code>Micromesh</code> e <code>Micromesh error (px)</code>); ainda em aberto: um painel de estatísticas e uma vista de debug (cores de cluster,
+corte de erro, clusters eliminados), entradas no catálogo de <code>UiId</code> para o interruptor e ações MCP.</li>
+<li>[ ] Os geradores de Natureza, Terreno e Água exportam através da construção de clusters. <strong>A Natureza está feita</strong>: a sua opção <em>Micromesh</em> coloca as partes sólidas de
+3 000 triângulos ou mais com o Micromesh ativo, e <em>Merge parts</em> dá a uma árvore uma só mesh com um slot de material por parte. Terreno e Água estão em aberto.</li>
+<li>[ ] Documentação e capturas headless (vista de debug de clusters) no site.</li>
+</ul>
+<h2 id="6-itens-partilhados">6. Itens partilhados<a class="anchor" href="#6-itens-partilhados" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[ ] <strong>Uma só fonte de visibilidade</strong>: o cull de clusters e a voxelização do Photon leem os mesmos dados de instâncias.</li>
+<li>[ ] <strong>Frame graph leve</strong>: lista explícita de passos com tempos de vida dos recursos para que culling, G-buffer, Photon,
+sombras e pós-processamento fiquem ordenados e a memória seja reutilizada; hoje a ordem é escrita à mão.</li>
+<li>[ ] <strong>Regulador de qualidade</strong>: uma definição mapeia para o nível do Photon, a resolução das sombras, o limiar de erro dos clusters
+e os scalers em execução (resolução, upsampling do TAA).</li>
+<li>[ ] <strong>Cenas de referência</strong> com seeds fixas renderizadas headless e comparadas como baselines visuais.</li>
+</ul>
+<h2 id="7-riscos">7. Riscos<a class="anchor" href="#7-riscos" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risco</th>
+<th>Mitigação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sem mesh shaders nem atómicos de 64 bits no SDL3 GPU</td>
+<td>primeiro draws indiretos por hardware; rasterização por software opcional e de 32 bits</td>
+</tr>
+<tr>
+<td>Fissuras entre grupos de LOD</td>
+<td>fronteiras de grupo bloqueadas, erro monótono, testes que cortam a limiares aleatórios</td>
+</tr>
+<tr>
+<td>Fantasmas no histórico do Photon com objetos em movimento</td>
+<td>vetores de movimento, testes de desoclusão, cenas de regressão</td>
+</tr>
+<tr>
+<td>Custo do voxelizador em geometria dinâmica</td>
+<td>estática pré-calculada uma vez, apenas atualizações por região suja na dinâmica</td>
+</tr>
+<tr>
+<td>Dois caminhos de geometria divergem</td>
+<td>atrás de flag, mesma saída no G-buffer, testes partilhados</td>
+</tr>
+<tr>
+<td>Âmbito</td>
+<td>O P-A do Photon e o M-0/M-1 dos Micromeshes são independentes e podem avançar em paralelo</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="8-ordem-sugerida">8. Ordem sugerida<a class="anchor" href="#8-ordem-sugerida" aria-label="Link to this section">#</a></h2>
+<p>Concluídos: <strong>M-0</strong>, <strong>M-1</strong> e <strong>M-2</strong> (Micromeshes, até à occlusion de fase única). A partir daqui:</p>
+<ol>
+<li><strong>P-A</strong> (Photon correto): primeiro o voxelizador conservador, depois os vetores de movimento, depois a luz direta real e as cenas de regressão.
+Nada do Photon está feito, e todos os itens de Micromesh e de mundo que querem GI esperam por ele.</li>
+<li><strong>M-5</strong>, a parte barata: os geradores de Terreno e de Água a ativarem o Micromesh (a Natureza já ativa), painel de estatísticas e vista de debug, <code>UiId</code>s, capturas do
+site. Também a secção <code>.micromesh</code> no <code>.caf</code> (uma cache para a construção do primeiro frame) e um caminho de clusters para terreno que supere o benchmark.</li>
+<li><strong>P-B</strong>, depois <strong>M-3</strong> (streaming e compressão) ligado aos chunks do mundo do roadmap do mundo.</li>
+<li><strong>P-C</strong>, occlusion em duas fases e cortes para sombras de pontos de luz/focos, e <strong>M-4</strong> só se o profiling o pedir.</li>
+</ol>
+<h2 id="9-relacionado">9. Relacionado<a class="anchor" href="#9-relacionado" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/pt/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>: o que está construído dos Micromeshes, com renders do caminho da GPU.</li>
+<li><a href="/pt/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>: o conteúdo gerado para este renderer.</li>
+<li><a href="/pt/docs/doppio/material-pipeline/"><code>material-pipeline.md</code></a>: POM, displacement e AO derivado de height maps.</li>
+<li><a href="/pt/docs/doppio/nature-generator-guide/"><code>nature-generator-guide.md</code></a>: lacunas de LOD e instanciação da vegetação.</li>
+<li><a href="/pt/docs/doppio/terrain-generator-guide/"><code>terrain-generator-guide.md</code></a>: terrenos em tiles e de grandes dimensões.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/doppio/graphics-roadmap.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/doppio/materials-guide/"><span>Anterior</span><strong>Materiais no Doppio: biblioteca procedural, profundidade real e bake</strong></a><a class="pager-next" href="/pt/docs/doppio/micromeshes/"><span>Seguinte</span><strong>Micromeshes: clusters, cortes e o draw na GPU</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-veredito">1. Veredito</a></li><li class="l3"><a href="#onde-estamos-2026-11-20">Onde estamos (2026-11-20)</a></li><li class="l2"><a href="#2-o-que-existe-verificado-na-árvore">2. O que existe (verificado na árvore)</a></li><li class="l2"><a href="#3-análise-da-proposta">3. Análise da proposta</a></li><li class="l2"><a href="#4-roadmap-photon-gi">4. Roadmap — Photon (GI)</a></li><li class="l3"><a href="#fase-p-a-torná-lo-correto">Fase P-A — Torná-lo correto</a></li><li class="l3"><a href="#fase-p-b-qualidade-e-estabilidade">Fase P-B — Qualidade e estabilidade</a></li><li class="l3"><a href="#fase-p-c-escala-e-custo">Fase P-C — Escala e custo</a></li><li class="l2"><a href="#5-roadmap-micromeshes-geometria-virtual">5. Roadmap — Micromeshes (geometria virtual)</a></li><li class="l3"><a href="#fase-m-0-pré-requisitos-de-rhi-e-ferramentas">Fase M-0 — Pré-requisitos de RHI e ferramentas</a></li><li class="l3"><a href="#fase-m-1-construção-de-clusters-offline-núcleo">Fase M-1 — Construção de clusters (offline, núcleo)</a></li><li class="l3"><a href="#fase-m-2-culling-na-gpu-e-draw-por-hardware">Fase M-2 — Culling na GPU e draw por hardware</a></li><li class="l3"><a href="#fase-m-3-streaming-e-memória">Fase M-3 — Streaming e memória</a></li><li class="l3"><a href="#fase-m-4-caminho-de-triângulos-pequenos-opcional-medir-primeiro">Fase M-4 — Caminho de triângulos pequenos (opcional, medir primeiro)</a></li><li class="l3"><a href="#fase-m-5-integração-no-editor">Fase M-5 — Integração no editor</a></li><li class="l2"><a href="#6-itens-partilhados">6. Itens partilhados</a></li><li class="l2"><a href="#7-riscos">7. Riscos</a></li><li class="l2"><a href="#8-ordem-sugerida">8. Ordem sugerida</a></li><li class="l2"><a href="#9-relacionado">9. Relacionado</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environment: nuvens, névoa, chuva e relâmpagos no Doppio · Caffeine</title>
+<meta name="description" content="Nuvens que sombreiam o chão, névoa de altura, chuva com profundidade, vento e relâmpagos com trovões como um só sistema que concorda com o sol e com o GI do Photon, e o separador Environment que o gere.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Environment: nuvens, névoa, chuva e relâmpagos no Doppio · Caffeine">
+<meta property="og:description" content="Nuvens que sombreiam o chão, névoa de altura, chuva com profundidade, vento e relâmpagos com trovões como um só sistema que concorda com o sol e com o GI do Photon, e o separador Environment que o gere.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/doppio/environment-guide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/doppio/environment-guide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/environment-guide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/doppio/environment-guide/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab active" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/doppio/environment-guide/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/doppio/environment-guide/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Painéis do editor</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/editor/test-automation/">Automação de testes do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-editor/">Editor de cena</a></li><li><a class="nav-link" href="/pt/docs/editor/material-editor/">Editor de materiais</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-gallery/">Galeria de UI do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-migration/">Guia de migração de plugins</a></li><li><a class="nav-link" href="/pt/docs/editor/viewport-toolbar/">HUD e controlos do viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/photon/">Photon — GI híbrido nativo por radiance cascades</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-manager/">Plugin Manager (host legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-sdk/">Plugin SDK (C++ legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-reference/">Referência da UI do Doppio</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/workspace-and-theme/">Workspace, tema e componentes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/doppio/">Geradores &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-roadmap/">Edição de terreno: pincéis, paleta de materiais e vegetação</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-phase-0/">Edição de terreno: relatório da Fase 0</a></li><li><a class="nav-link active" href="/pt/docs/doppio/environment-guide/" aria-current="page">Environment: nuvens, névoa, chuva e relâmpagos no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/rust-ui/">Frontend Rust UI (Iced)</a></li><li><a class="nav-link" href="/pt/docs/doppio/gizmos-and-markers/">Gizmos e marcadores de cena</a></li><li><a class="nav-link" href="/pt/docs/doppio/materials-guide/">Materiais no Doppio: biblioteca procedural, profundidade real e bake</a></li><li><a class="nav-link" href="/pt/docs/doppio/graphics-roadmap/">Melhoria gráfica — Roadmap de Micromeshes e Photon</a></li><li><a class="nav-link" href="/pt/docs/doppio/micromeshes/">Micromeshes: clusters, cortes e o draw na GPU</a></li><li><a class="nav-link" href="/pt/docs/doppio/runtime-modifiers/">Modificadores em tempo de execução para materiais gerados</a></li><li><a class="nav-link" href="/pt/docs/doppio/photoreal-world-roadmap/">Mundo procedural fotorrealista — validação e roadmap</a></li><li><a class="nav-link" href="/pt/docs/doppio/nature-generator-guide/">Nature Generator: rochas, árvores e plantas procedurais, construídas com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/photon-guide/">Photon: iluminação global no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/material-pipeline/">Pipeline de materiais, texturas e geradores — backlog</a></li><li><a class="nav-link" href="/pt/docs/doppio/profiler-guide/">Profiler: para onde vai o tempo de um frame</a></li><li><a class="nav-link" href="/pt/docs/doppio/generator-recipes/">Receitas de geradores (generator.*)</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/headless-testing/">Testes de UI headless para o Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/pt/docs/doppio/texture-generator-guide/">Texture Generator: sprites procedurais, VFX e máscaras empacotadas</a></li><li><a class="nav-link" href="/pt/docs/doppio/water-generator-guide/">Water Generator: corpos de água construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/world-composition/">World Composer: construir um mundo prefab a partir de receitas de geradores</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plugins/compatibility/">Compatibilidade de plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/pt/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/pt/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/pt/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/pt/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Environment: nuvens, névoa, chuva e relâmpagos no Doppio</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Estável</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Última atualização: <time datetime="2026-11-21">2026-11-21</time></span>
+</div>
+<p class="doc-lede">Nuvens que sombreiam o chão, névoa de altura, chuva com profundidade, vento e relâmpagos com trovões como um só sistema que concorda com o sol e com o GI do Photon, e o separador Environment que o gere.</p>
+<p>O tempo da cena vive em dois componentes refletidos numa só entidade: <code>Volumetric Clouds</code> (o céu) e <code>Weather</code> (névoa, chuva
+e a ligação entre tudo). O Doppio edita-os no separador <strong>Environment</strong> (menu View, ao lado do Photon) e no
+Inspector: ambos escrevem os mesmos campos, por isso nunca discordam, e os scripts e os agentes usam os mesmos campos.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/environment/ui/environment-pane.png" alt="O separador Environment com os componentes adicionados" loading="lazy">
+  <figcaption>O separador Environment: predefinições, nuvens, névoa, chuva e a ligação entre elas</figcaption>
+</figure>
+<h2 id="1-o-que-já-existia">1. O que já existia<a class="anchor" href="#1-o-que-já-existia" aria-label="Link to this section">#</a></h2>
+<p>O trabalho de environment reutilizou o que o motor tinha em vez de construir uma segunda cópia:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Antes</th>
+<th>Agora</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nuvens</td>
+<td><code>VolumetricCloudsComponent</code> desenhado pelo <code>sky.frag</code> (ray-marching, procedural, com vento e neblina), serializado mas não refletido e sem UI</td>
+<td>Refletido, editável no separador; campos novos <code>Tint</code>, <code>Darkness</code> e <code>Sky Light</code> acrescentados</td>
+</tr>
+<tr>
+<td>Névoa</td>
+<td>Uma névoa linear de pós-processamento (<code>deferredFog</code>) e a luz volumétrica do passo forward</td>
+<td>Ambas ficam como estão; uma nova <strong>névoa exponencial de altura</strong> no passo de composição, com o céu a esbater-se nela</td>
+</tr>
+<tr>
+<td>Humidade</td>
+<td><code>modWetness</code> por mesh renderer</td>
+<td>Uma humidade da cena inteira somada a essa</td>
+</tr>
+<tr>
+<td>Chuva</td>
+<td>Nada</td>
+<td>Riscos de ecrã em camadas e superfícies molhadas</td>
+</tr>
+<tr>
+<td>Céu do Photon</td>
+<td>Uma cor de céu fixa vezes <code>Sky intensity</code></td>
+<td>A mesma cor vezes um fator do tempo (secção 6)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="2-o-separador-environment">2. O separador Environment<a class="anchor" href="#2-o-separador-environment" aria-label="Link to this section">#</a></h2>
+<p>O separador edita a primeira entidade que tem os componentes de tempo. <strong>Add environment</strong> cria uma numa nova entidade (nuvens ligadas,
+a partir da predefinição <em>Clear sky</em>) quando a cena não tem nenhuma. Cada edição passa pela API de componentes do motor e grava um passo
+de desfazer (um slider é um passo por campo, não por valor); uma predefinição é um passo.</p>
+<p>A paleta <strong>+</strong> da hierarquia (World) também tem uma entrada <strong>Environment</strong>: cria a entidade de environment uma só vez e, quando a
+cena já tem uma, seleciona-a e abre este separador, por isso nunca há uma segunda.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controlo</th>
+<th>Campo</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Preset</strong></td>
+<td></td>
+<td>Off, Clear sky, Cloudy, Fog, Light rain ou Storm: define nuvens, névoa e chuva em conjunto</td>
+</tr>
+<tr>
+<td><strong>Clouds</strong></td>
+<td><code>Volumetric Clouds</code></td>
+<td>Secção 3</td>
+</tr>
+<tr>
+<td><strong>Fog</strong></td>
+<td><code>Weather</code></td>
+<td>Secção 4</td>
+</tr>
+<tr>
+<td><strong>Rain</strong></td>
+<td><code>Weather</code></td>
+<td>Secção 5</td>
+</tr>
+<tr>
+<td><strong>Sky, sun and light</strong></td>
+<td><code>Weather</code></td>
+<td><code>Enabled</code> (interruptor geral) e <code>Link Sky</code> (secção 6)</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3-nuvens">3. Nuvens<a class="anchor" href="#3-nuvens" aria-label="Link to this section">#</a></h2>
+<p>Nuvens volumétricas procedurais entre duas altitudes, calculadas no passo do céu, por isso não custam nada quando o céu está escondido.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controlo</th>
+<th>Campo</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enabled</strong>, <strong>Quality</strong></td>
+<td><code>Enabled</code>, <code>Quality</code></td>
+<td>Off, Low (8 passos), Medium (16) ou High (24)</td>
+</tr>
+<tr>
+<td><strong>Coverage</strong></td>
+<td><code>Coverage</code></td>
+<td>0 é um céu limpo, 1 um céu cheio</td>
+</tr>
+<tr>
+<td><strong>Density</strong></td>
+<td><code>Density</code></td>
+<td>Extinção: finas e leves até espessas</td>
+</tr>
+<tr>
+<td><strong>Base altitude</strong>, <strong>Top altitude</strong></td>
+<td><code>Base Altitude</code>, <code>Top Altitude</code></td>
+<td>Os limites da camada, em metros</td>
+</tr>
+<tr>
+<td><strong>Detail</strong></td>
+<td><code>Detail</code></td>
+<td>Peso das oitavas de alta frequência</td>
+</tr>
+<tr>
+<td><strong>Wind speed</strong>, <strong>Wind dir</strong></td>
+<td><code>Wind Speed</code>, <code>Wind Direction</code></td>
+<td>Deriva, em metros por segundo e graus em torno de +Y</td>
+</tr>
+<tr>
+<td><strong>Sun scatter</strong></td>
+<td><code>Sun Scatter</code></td>
+<td>A força com que o sol as ilumina</td>
+</tr>
+<tr>
+<td><strong>Darkness</strong></td>
+<td><code>Darkness</code></td>
+<td>0 a 1: nuvens mais escuras e pesadas para uma tempestade</td>
+</tr>
+<tr>
+<td><strong>Sky light</strong></td>
+<td><code>Sky Light</code></td>
+<td>A luz que enche o lado na sombra</td>
+</tr>
+<tr>
+<td><strong>Mist</strong>, <strong>Mist height</strong></td>
+<td><code>Mist Density</code>, <code>Mist Height</code></td>
+<td>Neblina junto ao chão no horizonte (acima de 0 também liga a névoa volumétrica do passo forward, uns milissegundos a 720p: as predefinições deixam-na a 0)</td>
+</tr>
+<tr>
+<td><strong>Sun-lit tint</strong></td>
+<td><code>Tint</code></td>
+<td>Cor multiplicada no lado iluminado pelo sol: laranja ao pôr do sol, cinzenta numa tempestade</td>
+</tr>
+<tr>
+<td><strong>Clouds dim the sun</strong></td>
+<td><code>Cast Shadows</code></td>
+<td>A cobertura de nuvens baixa a luz direta (secção 8)</td>
+</tr>
+<tr>
+<td><strong>Shadows on the ground</strong>, <strong>Shadow strength</strong></td>
+<td><code>Ground Shadows</code>, <code>Shadow Strength</code></td>
+<td>Sombras de nuvens em movimento em tudo o que o sol ilumina, e no bounce do Photon (secção 8)</td>
+</tr>
+<tr>
+<td><strong>Silver lining</strong></td>
+<td><code>Silver Lining</code></td>
+<td>Um rebordo brilhante nas pontas finas das nuvens à frente do sol</td>
+</tr>
+<tr>
+<td><strong>Sun shafts</strong></td>
+<td><code>Sun Shafts</code></td>
+<td>Raios através das aberturas das nuvens enquanto o sol está à vista</td>
+</tr>
+</tbody>
+</table></div>
+<p>As nuvens animam com o vento sempre que o céu é desenhado.</p>
+<h2 id="4-névoa">4. Névoa<a class="anchor" href="#4-névoa" aria-label="Link to this section">#</a></h2>
+<p>Névoa exponencial de altura, integrada ao longo de cada raio de visão no passo de composição: <code>density * exp(-falloff * (y - baseHeight))</code> por metro.
+Como usa o buffer de profundidade, cobre todos os objetos, terreno e água, e o céu esbate-se nela perto do horizonte.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controlo</th>
+<th>Campo</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fog</strong></td>
+<td><code>Fog Enabled</code></td>
+<td>O interruptor</td>
+</tr>
+<tr>
+<td><strong>Density</strong></td>
+<td><code>Fog Density</code></td>
+<td>Por metro à altura de base</td>
+</tr>
+<tr>
+<td><strong>Falloff</strong></td>
+<td><code>Fog Height Falloff</code></td>
+<td>A rapidez com que rareia com a altura; 0 é uniforme</td>
+</tr>
+<tr>
+<td><strong>Base height</strong></td>
+<td><code>Fog Base Height</code></td>
+<td>Altura do mundo onde a densidade se aplica</td>
+</tr>
+<tr>
+<td><strong>Start</strong></td>
+<td><code>Fog Start</code></td>
+<td>Metros antes de a névoa começar</td>
+</tr>
+<tr>
+<td><strong>Max opacity</strong></td>
+<td><code>Fog Max Opacity</code></td>
+<td>O máximo que pode esconder</td>
+</tr>
+<tr>
+<td><strong>Sky blend</strong></td>
+<td><code>Fog Sky Blend</code></td>
+<td>0 usa a cor da névoa, 1 usa a cor do próprio céu no horizonte na direção para onde se olha</td>
+</tr>
+<tr>
+<td><strong>Sun glow</strong>, <strong>Glow tight</strong></td>
+<td><code>Fog Sun Scatter</code>, <code>Fog Sun Exponent</code></td>
+<td>O brilho da névoa na direção do sol</td>
+</tr>
+<tr>
+<td><strong>Fog colour</strong></td>
+<td><code>Fog Color</code></td>
+<td>sRGB</td>
+</tr>
+</tbody>
+</table></div>
+<p>Com uma mistura de céu acima de 0 a névoa amostra a mesma textura de céu que o passo do céu desenha, por isso uma neblina no chão combina com o horizonte por trás dela.</p>
+<h2 id="5-chuva">5. Chuva<a class="anchor" href="#5-chuva" aria-label="Link to this section">#</a></h2>
+<p>A chuva continua a ser um só shader de espaço de ecrã, sem partículas nem modelos, mas é calculada no mundo: seis cascas de riscos a cair
+desde 2.5 m até cerca de 60 m à frente da câmara, cada uma uma grelha de células no espaço do mundo. Um risco é uma cápsula inclinada
+com uma cabeça brilhante, fica escondido onde há geometria mais perto do que a sua casca, e uma gota junto à câmara é longa e nítida
+enquanto uma distante é curta e suave. Como as cascas vivem no mundo, mover a câmara dá <strong>paralaxe</strong>: as gotas próximas passam
+a varrer e as distantes ficam suspensas, o que dá profundidade à chuva.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/environment/road-Storm.png" alt="A estrada de teste numa tempestade: chuva com profundidade e salpicos na estrada" loading="lazy">
+  <figcaption>Chuva com profundidade: riscos a várias distâncias, anéis e faíscas onde encontra a estrada</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controlo</th>
+<th>Campo</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Rain</strong></td>
+<td><code>Rain Enabled</code></td>
+<td>O interruptor</td>
+</tr>
+<tr>
+<td><strong>Intensity</strong></td>
+<td><code>Rain Intensity</code></td>
+<td>0 a 1: quantos riscos, e quanto contraste a cena perde</td>
+</tr>
+<tr>
+<td><strong>Wind speed</strong>, <strong>Wind dir</strong></td>
+<td><code>Rain Wind Speed</code>, <code>Rain Wind Direction</code></td>
+<td>A velocidade do vento: toda a grelha inclina-se por ele contra uma velocidade de queda de cerca de 9 m/s</td>
+</tr>
+<tr>
+<td><strong>Drop length</strong></td>
+<td><code>Rain Drop Length</code></td>
+<td>0 a 1</td>
+</tr>
+<tr>
+<td><strong>Fall speed</strong></td>
+<td><code>Rain Speed</code></td>
+<td>Velocidade da animação</td>
+</tr>
+<tr>
+<td><strong>Brightness</strong></td>
+<td><code>Rain Brightness</code></td>
+<td>O brilho de um risco; a cor segue o céu e o nível de luz</td>
+</tr>
+<tr>
+<td><strong>Wetness</strong></td>
+<td><code>Rain Wetness</code></td>
+<td>Quão molhadas ficam as superfícies com a intensidade máxima</td>
+</tr>
+<tr>
+<td><strong>Splashes</strong></td>
+<td><code>Rain Splashes</code></td>
+<td>0 a 1: anéis e faíscas onde a chuva encontra uma superfície virada para cima a menos de cerca de 35 m (a normal é reconstruída a partir do buffer de profundidade, por isso também funciona no terreno)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Superfícies molhadas: a humidade da cena é <code>intensity * wetness</code> e soma-se ao <code>Wetness</code> próprio de cada mesh renderer. O shader iluminado
+escurece o albedo e torna a superfície brilhante, como já fazia para <code>modWetness</code>.</p>
+<h2 id="6-vento">6. Vento<a class="anchor" href="#6-vento" aria-label="Link to this section">#</a></h2>
+<p>Um só vento comanda a cena toda. A sua média é <code>Rain Wind Speed</code> e <code>Rain Wind Direction</code> (as nuvens mantêm a sua própria deriva), e
+ele tem rajadas: uma soma de senos lentos, nunca negativa e sem repetir em minutos, escalada por <strong>Gusts</strong> (<code>Wind Gust</code>, 0 a 1).
+O mesmo fator de rajada inclina a chuva, abana a folhagem e é comunicado pelo motor, por isso tudo se move em conjunto.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controlo</th>
+<th>Campo</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gusts</strong></td>
+<td><code>Wind Gust</code></td>
+<td>0 é um vento constante, 1 oscila entre a calma e cerca do dobro da média</td>
+</tr>
+<tr>
+<td><strong>Foliage sway</strong></td>
+<td><code>Wind Foliage</code></td>
+<td>Multiplica o balanço dos materiais de folhagem por <code>1 + valor * velocidade / 8 * rajada</code>; 0 deixa a folhagem em paz</td>
+</tr>
+<tr>
+<td><strong>Weather sound</strong>, <strong>Volume</strong></td>
+<td><code>Audio Enabled</code>, <code>Audio Volume</code></td>
+<td>Toca a chuva, o vento e o trovão (secção 7); uma predefinição deixa-os como os definiu</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="7-relâmpagos-e-trovões">7. Relâmpagos e trovões<a class="anchor" href="#7-relâmpagos-e-trovões" aria-label="Link to this section">#</a></h2>
+<p>Ligue <strong>Lightning</strong> e o céu fulmina sozinho. Os raios são deterministas: cada minuto é cortado em ranhuras e cada ranhura
+tem um raio cujo momento, direção, distância e força saem de um hash da semente, por isso a mesma semente dá a mesma tempestade e um
+teste consegue prevê-la. Com a ligação ligada, os relâmpagos precisam de um céu encoberto (cobertura de nuvens ou chuva de pelo menos 0.4), pois
+não há relâmpagos num céu limpo.</p>
+<p>O que faz um raio, tudo dentro de um segundo:</p>
+<ul>
+<li><strong>O clarão.</strong> Até três descargas de retorno cintilam, sobre um brilho residual da nuvem. O clarão ilumina a cena como uma luz
+direcional fria vinda de onde o raio caiu (sem sombra própria), por isso também <strong>chega ao Photon</strong>: o bounce pisca com ele.
+Sobe a luz do céu e o céu do Photon, faz a chuva cintilar e ilumina a névoa e as nuvens por dentro.</li>
+<li><strong>O raio.</strong> Uma linha bifurcada da base das nuvens até ao horizonte, no passo do céu, na direção do raio.</li>
+<li><strong>O trovão.</strong> Cada raio levanta um evento que chega depois do tempo de viagem do som (distância / 343 m/s). O Doppio regista-o na
+Console (<em>Thunder, 1.2 km away</em>); o motor não faz som nenhum, ver os limites.</li>
+</ul>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/environment/road-lightning.png" alt="A estrada de teste no pico de um clarão de relâmpago" loading="lazy">
+  <figcaption>Um raio no seu pico: o clarão frio ilumina a estrada, a névoa e a chuva</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controlo</th>
+<th>Campo</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lightning</strong></td>
+<td><code>Lightning Enabled</code></td>
+<td>O interruptor</td>
+</tr>
+<tr>
+<td><strong>Thunder events</strong></td>
+<td><code>Thunder</code></td>
+<td>Se os raios levantam eventos de trovão</td>
+</tr>
+<tr>
+<td><strong>Strikes / min</strong></td>
+<td><code>Lightning Rate</code></td>
+<td>Um raio por ranhura de <code>60 / rate</code> segundos</td>
+</tr>
+<tr>
+<td><strong>Flash</strong></td>
+<td><code>Lightning Intensity</code></td>
+<td>0 a 2: o brilho do clarão</td>
+</tr>
+<tr>
+<td><strong>Nearest</strong>, <strong>Farthest</strong></td>
+<td><code>Lightning Distance Min</code>, <code>Lightning Distance Max</code></td>
+<td>Onde os raios caem, em metros; um raio próximo é mais brilhante e mais alto</td>
+</tr>
+</tbody>
+</table></div>
+<p>O trovão também se <strong>ouve</strong>: com <code>Audio Enabled</code> ligado (o cartão <em>Sound</em>), a sessão toca cada estrondo a partir de ruído, panorâmico para a direção
+do raio e mais baixo com a distância, juntamente com um leito de chuva e um de vento que seguem o tempo (veja o
+<a href="/pt/docs/audio/audio-system/">sistema de áudio</a>). Desligado por omissão, por isso uma cena fica em silêncio até o pedir. Um jogo ou um script que queira o seu
+próprio som pode continuar a consultar <code>caffeine_session_poll_thunder</code> (secção 12).</p>
+<h2 id="8-como-concordam-sol-céu-e-photon">8. Como concordam: sol, céu e Photon<a class="anchor" href="#8-como-concordam-sol-céu-e-photon" aria-label="Link to this section">#</a></h2>
+<p>Com <strong>Link sky, sun and fog</strong> ligado (o predefinido) as secções atuam umas sobre as outras, e sobre a luz:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Quando</th>
+<th>Então</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chove e há nuvens</td>
+<td>A cobertura sobe para pelo menos <code>0.55 + 0.40 * intensity</code>, a densidade cresce até 80% e as nuvens escurecem</td>
+</tr>
+<tr>
+<td>Chove e há névoa</td>
+<td>A densidade da névoa cresce <code>1 + intensity</code> vezes</td>
+</tr>
+<tr>
+<td>O céu está encoberto (cobertura de nuvens, ou chuva)</td>
+<td>A intensidade do sol desce até 80% para todas as etapas que a usam: o shader forward, a iluminação das nuvens, o brilho da névoa e a injeção do Photon</td>
+</tr>
+<tr>
+<td>O céu está encoberto</td>
+<td>A luz do céu a que o Photon recorre, e o ambiente do forward, crescem até 25% e tendem para um cinzento neutro do mesmo brilho</td>
+</tr>
+<tr>
+<td>Névoa espessa</td>
+<td>A luz do céu toma o tom da névoa, mantendo o brilho</td>
+</tr>
+</tbody>
+</table></div>
+<p>O Photon não precisa de nada de novo para isto: o sol chega-lhe pela mesma lista de luzes, e a sua radiância de céu é a cor de céu fixa vezes
+<code>Sky intensity</code>, agora também vezes a escala e o tom do tempo (<code>kPhotonSkyRadiance</code>). Estes fatores dependem só das
+definições, nunca do tempo nem do frame, por isso não acrescentam ruído: a média temporal do Photon e os desvios de amostragem por probe
+continuam a funcionar como antes, e a névoa é aplicada depois do resolve do Photon, por isso também suaviza o que resta de ruído ao longe.</p>
+<p>Com a ligação desligada cada secção atua sozinha, e as nuvens mantêm exatamente os valores do componente.</p>
+<h3 id="nuvens-que-movem-a-luz">Nuvens que movem a luz<a class="anchor" href="#nuvens-que-movem-a-luz" aria-label="Link to this section">#</a></h3>
+<p>Três efeitos ligam as nuvens à iluminação sem cozer nada (ligue-os em <strong>Clouds</strong>; as predefinições ligam-nos):</p>
+<ul>
+<li><strong>Sombras no chão</strong> (<code>Ground Shadows</code>, <code>Shadow Strength</code>). Os shaders forward seguem o raio do sol até à camada de nuvens e
+leem o mesmo ruído do céu a duas alturas dela, por isso a sombra de uma nuvem atravessa o chão, o terreno e todos os objetos que o
+sol ilumina, move-se com o vento e concorda com o que o céu mostra. A injeção do Photon lê a mesma função para cada voxel,
+por isso o <strong>bounce segue a sombra</strong> (o campo próximo já seguia: lê a luz direta do passo forward). Não se acrescenta nenhuma textura:
+o passo forward está no limite de 16 samplers.</li>
+</ul>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/environment/road-Cloudy_shadows.png" alt="A estrada de teste sob sombras de nuvens" loading="lazy">
+  <figcaption><em>Cloudy</em> com as sombras no chão ligadas: o sol é sombreado pela camada de cima (compare com o mesmo céu sem elas)</figcaption>
+</figure>
+<ul>
+<li><strong>Silver lining</strong> (<code>Silver Lining</code>). As pontas finas das nuvens à frente do sol brilham, por dispersão para a frente.</li>
+<li><strong>Sun shafts</strong> (<code>Sun Shafts</code>). Uma recolha radial em espaço de ecrã em direção ao sol: raios pelas aberturas das nuvens, em 14
+passos, e só enquanto o sol está à frente da câmara (olhar para o outro lado não custa nada).</li>
+</ul>
+<h2 id="9-predefinições">9. Predefinições<a class="anchor" href="#9-predefinições" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Predefinição</th>
+<th>Nuvens</th>
+<th>Névoa</th>
+<th>Chuva</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Off</strong></td>
+<td>desligadas</td>
+<td>desligada</td>
+<td>desligada</td>
+</tr>
+<tr>
+<td><strong>Clear sky</strong></td>
+<td>cobertura 0.25</td>
+<td>desligada</td>
+<td>desligada</td>
+</tr>
+<tr>
+<td><strong>Cloudy</strong></td>
+<td>cobertura 0.75, um pouco escuras</td>
+<td>desligada</td>
+<td>desligada</td>
+</tr>
+<tr>
+<td><strong>Fog</strong></td>
+<td>cobertura 0.55</td>
+<td>densidade 0.03, falloff 0.035, mistura de céu 0.7</td>
+<td>desligada</td>
+</tr>
+<tr>
+<td><strong>Light rain</strong></td>
+<td>cobertura 0.8</td>
+<td>fina</td>
+<td>intensidade 0.35</td>
+</tr>
+<tr>
+<td><strong>Storm</strong></td>
+<td>cobertura 0.95, escuras, vento rápido, rajadas 0.7, relâmpagos 9 por minuto</td>
+<td>fina, cinzenta</td>
+<td>intensidade 0.95, vento forte</td>
+</tr>
+</tbody>
+</table></div>
+<p>Toda a predefinição com nuvens liga também as sombras no chão, um silver lining, um pouco de força de sun shafts e o balanço da folhagem.</p>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/environment/road-Clear_sky.png" alt="A estrada de teste com a predefinição Clear sky" loading="lazy">
+  <figcaption>A estrada de regressão, <em>Clear sky</em>: os blocos mantêm o contraste ao longo de toda a estrada</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/environment/road-Fog.png" alt="A estrada de teste com a predefinição Fog" loading="lazy">
+  <figcaption><em>Fog</em>: os blocos distantes esbatem-se na névoa e o céu esbate-se nela no horizonte</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/pt/docs/images/doppio/environment/road-Storm.png" alt="A estrada de teste com a predefinição Storm" loading="lazy">
+  <figcaption><em>Storm</em>: nuvens escuras, um sol encoberto, névoa fina, estrada molhada e chuva inclinada pelo vento</figcaption>
+</figure>
+<h2 id="10-componentes-scripts-e-agentes">10. Componentes, scripts e agentes<a class="anchor" href="#10-componentes-scripts-e-agentes" aria-label="Link to this section">#</a></h2>
+<p>Os dois componentes são refletidos, por isso <code>add_component</code> e <code>set_component_field</code> por nome chegam a todos os campos (o Inspector
+mostra-os também). A struct <code>Weather</code> é serializada como um prefixo bruto e uma cena sem ela renderiza exatamente como antes; os novos
+campos das nuvens são acrescentados, por isso uma cena mais antiga mantém os seus valores por omissão (sem tom, sem escuridão).</p>
+<p>Os agentes (<code>ICED_MCP=1</code>, feature <code>agent</code>) leem a query <code>environment</code> e usam <code>show_environment</code>, <code>environment_add</code>,
+<code>environment_set</code> e <code>environment_preset</code>:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;environment_preset&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Storm&quot;</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;environment_set&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;fog_density&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0.02</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;environment_set&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;args&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;field&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;fog_color&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;value&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">0.5</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.55</span><span class="hljs-punctuation">,</span> <span class="hljs-number">0.6</span><span class="hljs-punctuation">]</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h2 id="11-limites">11. Limites<a class="anchor" href="#11-limites" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>A chuva é um efeito de espaço de ecrã com profundidade no mundo: sem partículas nem colisão, e não conhece telhados (um risco é escondido
+pela geometria à sua frente, mas a chuva cai sobre a câmara dentro de um edifício também). Os salpicos chegam a cerca de 35 m e só em
+superfícies que o buffer de profundidade mostra.</li>
+<li>A humidade não é suavizada no tempo, e não chega ao terreno, que tem o seu próprio shader.</li>
+<li>A névoa e a chuva são desenhadas no passo final, por isso não estão nas imagens que as probes de reflexo e os reflexos planares mostram.</li>
+<li>As sombras das nuvens seguem-se a duas alturas da camada com um ruído suave de três oitavas: são sombras suaves, não arestas nítidas, e não
+sombreiam a luz do céu. Os voxels do Photon leem a mesma função, por isso o bounce é igualmente suave.</li>
+<li>O som do tempo toca na sessão do editor (e onde quer que uma sessão esteja alojada), não no <code>caffeine-runtime</code>, que não usa
+este renderer. É mono e feito de ruído: não segue salas nem telhados (a chuva é igualmente alta dentro de casa), e o trovão
+tem pan mas não tem Doppler nem eco.</li>
+<li>O raio é um efeito de céu: não tem geometria, não projeta sombra e não atinge nada.</li>
+<li>A chuva com a ligação ligada engrossa nuvens existentes; sem componente de nuvens o céu fica como está.</li>
+</ul>
+<h2 id="12-onde-vive-e-como-é-testado">12. Onde vive e como é testado<a class="anchor" href="#12-onde-vive-e-como-é-testado" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Onde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Componentes</td>
+<td><code>src/caffeine/ecs/WeatherComponents.hpp</code> (<code>Weather</code>, serializado como tipo de cena 60), <code>include/caffeine/environment/VolumetricClouds.hpp</code>; ambos refletidos através de <code>scripts/gen-component-reflection.py</code> (ids 128 e 129)</td>
+</tr>
+<tr>
+<td>A ligação</td>
+<td><code>src/caffeine/scene/WeatherSystem.hpp</code>: <code>resolveWeather()</code> é pura, por isso cada regra da secção 8 é um teste unitário; a rajada de vento e os relâmpagos (<code>windGustFactor</code>, <code>lightningStrike</code>, <code>lightningAt</code>, <code>thunderBetween</code>) são também funções puras</td>
+</tr>
+<tr>
+<td>Renderer</td>
+<td><code>GpuSceneRenderer</code> (resolve o tempo uma vez por frame, escala as luzes, o ambiente e o céu do Photon), <code>sky.frag</code> (nuvens, raio, silver lining), <code>scene_lit.frag</code> e <code>terrain_lit.frag</code> (sombras de nuvens), <code>photon_inject.comp</code> (a mesma sombra para o bounce), <code>post_composite.frag</code> (névoa, chuva, sun shafts)</td>
+</tr>
+<tr>
+<td>Painel</td>
+<td><code>uikit/panels/environment.rs</code> (uma tabela de interruptores, números e cores comanda o painel, as predefinições e o agente), <code>windows/main/environment.rs</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>O próprio tempo passa pelos componentes refletidos. A C ABI v19 acrescenta duas chamadas só de leitura para o que se move sozinho:
+<code>caffeine_session_weather_state</code> (o clarão, o raio, a rajada do vento, o relógio dos raios) e <code>caffeine_session_poll_thunder</code>
+(os estrondos que chegaram desde a última chamada), mais <code>caffeine_session_audio_state</code> para o som do tempo (dispositivo, níveis, estrondos).</p>
+<p>Nada disto se move enquanto o editor está parado. A C ABI v21 acrescenta <code>caffeine_session_set_simulating</code>: desligada, um frame desenhado fica parado
+(nuvens, chuva, vento nas folhas, relâmpagos, água e o som da cena não avançam e o dispositivo de som fecha); ligada, cada frame avança-os.
+Uma sessão nova simula, por isso o runtime e os chamadores antigos ficam como estavam; o Doppio desliga-a no arranque e só a liga enquanto o <strong>Play</strong> está ativo, e
+um viewport parado só desenha um frame quando algo mudou (uma edição, a câmara, uma definição), mais alguns enquanto o TAA e o Photon assentam, e nenhum caso contrário.</p>
+<p>Testes:</p>
+<ul>
+<li><code>tests/test_weather.cpp</code>: valores por omissão, as regras da ligação, ida e volta da cena e carga de prefixos antigos, reflexão, a rajada, os raios (a mesma
+semente dá a mesma tempestade, o clarão atinge o pico e desvanece, o trovão chega a distância / 343 s) e o sintetizador de trovão.</li>
+<li><code>tests/test_weather_gpu.cpp</code>: o post stack real numa cena conhecida (precisa de GPU, é saltado sem ela): a névoa esconde a metade
+distante e não a próxima, a distância de início e a opacidade máxima, a chuva acrescenta riscos no céu e nenhum atrás de geometria próxima, um clarão ilumina a chuva
+e a névoa, o vento dobra os riscos, um chão recebe salpicos, e raios saem de um sol HDR só enquanto está à frente.</li>
+<li><code>windows/main/tests.rs</code>, módulo <code>environment_weather</code>: a tabela do painel, as predefinições pelo motor, o desfazer, e
+imagens de uma estrada de blocos: tudo desligado é igual a sem tempo, a névoa perde contraste com a distância, a chuva acrescenta riscos que caem,
+as estradas molhadas escurecem, as nuvens e o seu tom aparecem no céu, um céu encoberto baixa o sol só quando ligado, a luz do céu do Photon fica cinzenta
+sem acrescentar cintilação, as sombras das nuvens escurecem o chão iluminado só quando ligadas, o vento muda a chuva, e uma tempestade pisca a cena e
+levanta trovão depois de o som viajar (e nada com os relâmpagos desligados).</li>
+<li>Fluxos de UI <code>environment-panel.json</code> e <code>environment-scene.json</code>, e o fluxo de captura <code>captures/flows/capture-environment-docs.json</code>
+(corra-o com <code>scripts/capture-environment-docs.sh</code>, que também escreve as imagens que esta página mostra).</li>
+</ul>
+<p>O que convém saber ao escrever um teste como estes:</p>
+<ul>
+<li>O renderer não é bit-exato entre frames parados (oclusão ambiente e dithering): dois frames da mesma cena diferem cerca de
+0.03 níveis em média e até cerca de 10 em pixéis isolados. &quot;Nada muda&quot; mede-se por isso contra esse ruído, não com
+igualdade.</li>
+<li>Uma névoa ligada também dá o seu tom à luz do céu, mesmo com opacidade máxima 0: desligue a ligação para comparar uma névoa que não esconde
+nada com nenhuma névoa.</li>
+<li><code>Mist Density</code> também comanda a névoa volumétrica do passo forward, por isso ponha-o a 0 quando um teste isola o sol.</li>
+<li>Compare imagens com um auxiliar de diferença, não com <code>assert_eq!</code> nos pixéis: uma falha imprime todos os bytes.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/doppio/environment-guide.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/doppio/terrain-editing-phase-0/"><span>Anterior</span><strong>Edição de terreno: relatório da Fase 0</strong></a><a class="pager-next" href="/pt/docs/doppio/rust-ui/"><span>Seguinte</span><strong>Frontend Rust UI (Iced)</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-o-que-já-existia">1. O que já existia</a></li><li class="l2"><a href="#2-o-separador-environment">2. O separador Environment</a></li><li class="l2"><a href="#3-nuvens">3. Nuvens</a></li><li class="l2"><a href="#4-névoa">4. Névoa</a></li><li class="l2"><a href="#5-chuva">5. Chuva</a></li><li class="l2"><a href="#6-vento">6. Vento</a></li><li class="l2"><a href="#7-relâmpagos-e-trovões">7. Relâmpagos e trovões</a></li><li class="l2"><a href="#8-como-concordam-sol-céu-e-photon">8. Como concordam: sol, céu e Photon</a></li><li class="l3"><a href="#nuvens-que-movem-a-luz">Nuvens que movem a luz</a></li><li class="l2"><a href="#9-predefinições">9. Predefinições</a></li><li class="l2"><a href="#10-componentes-scripts-e-agentes">10. Componentes, scripts e agentes</a></li><li class="l2"><a href="#11-limites">11. Limites</a></li><li class="l2"><a href="#12-onde-vive-e-como-é-testado">12. Onde vive e como é testado</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

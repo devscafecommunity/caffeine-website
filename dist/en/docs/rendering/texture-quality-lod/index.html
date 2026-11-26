@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Texture Quality LOD — Distance to Viewers · Caffeine</title>
+<meta name="description" content="How the renderer picks a smaller GPU texture tier for objects far from the active camera, and which settings are wired today.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Texture Quality LOD — Distance to Viewers · Caffeine">
+<meta property="og:description" content="How the renderer picks a smaller GPU texture tier for objects far from the active camera, and which settings are wired today.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/rendering/texture-quality-lod/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/rendering/texture-quality-lod/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/rendering/texture-quality-lod/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/rendering/texture-quality-lod/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link active" href="/en/docs/rendering/texture-quality-lod/" aria-current="page">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/en/docs/audio/volumetric-audio/">Volumetric audio</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Runtime UI (ImGui &amp; in-game HUD)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Asset system</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Texture Quality LOD — Distance to Viewers</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span><strong>Namespace:</strong> `Caffeine::Render`</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/render/TextureQuality.hpp"><code>render/TextureQuality.hpp</code></a></span>
+</div>
+<p class="doc-lede">How the renderer picks a smaller GPU texture tier for objects far from
+the active camera, and which settings are wired today.</p>
+<blockquote>
+<p><strong>Files:</strong> <code>src/caffeine/render/TextureQuality.hpp</code>, <code>GpuTextureCache.hpp</code> / <code>.cpp</code>
+<strong>Status:</strong> implemented (GPU scene renderer, editor and runtime)</p>
+</blockquote>
+<hr>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>The <strong>texture quality LOD system</strong> lowers the resolution of GPU textures according to the
+distance between the object and the active viewers. Textures are not removed — a cache entry
+with smaller dimensions is used instead.</p>
+<p>Goals:</p>
+<ul>
+<li>Less GPU memory in large scenes</li>
+<li>Less texture bandwidth on distant objects</li>
+<li>Full quality near the camera (editor camera, <code>Camera3D</code>, camera preview)</li>
+</ul>
+<hr>
+<h2 id="viewers">Viewers<a class="anchor" href="#viewers" aria-label="Link to this section">#</a></h2>
+<p>The distance used for each draw is the <strong>minimum</strong> between the object position and each
+active viewer; with no explicit list, the render camera position is used:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Context</th>
+<th>Viewers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scene viewport</td>
+<td>Render camera supplied by the caller (<code>GpuSceneRenderOptions::textureQualityViewers</code> when set)</td>
+</tr>
+<tr>
+<td>Camera preview</td>
+<td>The preview camera</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>The active camera</td>
+</tr>
+</tbody>
+</table></div>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-type">const</span> f32 dist = <span class="hljs-built_in">distanceToNearestViewer</span>(worldPos, options.textureQualityViewers);
+<span class="hljs-type">const</span> u32 tier = <span class="hljs-built_in">textureQualityTier</span>(dist, options.textureQuality);
+</code></pre></div>
+<hr>
+<h2 id="quality-curve">Quality curve<a class="anchor" href="#quality-curve" aria-label="Link to this section">#</a></h2>
+<p>Settings live in <code>TextureQualitySettings</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td><code>true</code></td>
+<td>Enables the LOD</td>
+</tr>
+<tr>
+<td><code>fullRadius</code></td>
+<td><code>35.0</code> m</td>
+<td>Within this radius → tier 0 (100%)</td>
+</tr>
+<tr>
+<td><code>falloffDistance</code></td>
+<td><code>100.0</code> m</td>
+<td>Linear decay beyond the radius</td>
+</tr>
+<tr>
+<td><code>minScale</code></td>
+<td><code>0.25</code></td>
+<td>Minimum scale at the falloff limit (1/4 res)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="continuous-scale">Continuous scale<a class="anchor" href="#continuous-scale" aria-label="Link to this section">#</a></h3>
+<pre class="mermaid">flowchart TD
+  distance____fullRadius[&quot;distance &lt;= fullRadius&quot;] --&gt; scale___1_0[&quot;scale = 1.0&quot;]
+  scale___1_0[&quot;scale = 1.0&quot;] --&gt; distance____fullRadius___falloff[&quot;distance &gt;= fullRadius + falloff&quot;]
+  distance____fullRadius___falloff[&quot;distance &gt;= fullRadius + falloff&quot;] --&gt; scale___minScale[&quot;scale = minScale&quot;]
+  scale___minScale[&quot;scale = minScale&quot;] --&gt; entre_os_dois[&quot;between the two&quot;]
+  entre_os_dois[&quot;entre os dois&quot;] --&gt; interpolação_linear[&quot;linear interpolation&quot;]
+</pre>
+<h3 id="discrete-tiers-gpu-cache">Discrete tiers (GPU cache)<a class="anchor" href="#discrete-tiers-gpu-cache" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Approx. scale</th>
+<th>Example (1024² source)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>100%</td>
+<td>1024 × 1024</td>
+</tr>
+<tr>
+<td>1</td>
+<td>50%</td>
+<td>512 × 512</td>
+</tr>
+<tr>
+<td>2</td>
+<td>25%</td>
+<td>256 × 256</td>
+</tr>
+<tr>
+<td>3</td>
+<td>12.5%</td>
+<td>128 × 128 (min. 16 px)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Thresholds in <code>textureQualityTier()</code>: <code>&gt;= 0.75</code> → tier 0, <code>&gt;= 0.375</code> → tier 1,
+<code>&gt;= 0.1875</code> → tier 2, otherwise tier 3.</p>
+<hr>
+<h2 id="gputexturecache">GpuTextureCache<a class="anchor" href="#gputexturecache" aria-label="Link to this section">#</a></h2>
+<p>Each tier is a separate cache entry:</p>
+<pre class="mermaid">flowchart TD
+  textures_albedo_png[&quot;textures/albedo.png&quot;] --&gt; tier_0[&quot;tier 0&quot;]
+  tier_0[&quot;tier 0&quot;] --&gt; textures_albedo_png_q1[&quot;textures/albedo.png#q1&quot;]
+  textures_albedo_png_q1[&quot;textures/albedo.png#q1&quot;] --&gt; tier_1[&quot;tier 1&quot;]
+  tier_1[&quot;tier 1&quot;] --&gt; textures_albedo_png_q2[&quot;textures/albedo.png#q2&quot;]
+  textures_albedo_png_q2[&quot;textures/albedo.png#q2&quot;] --&gt; tier_2[&quot;tier 2&quot;]
+  tier_2[&quot;tier 2&quot;] --&gt; textures_albedo_png_q3[&quot;textures/albedo.png#q3&quot;]
+  textures_albedo_png_q3[&quot;textures/albedo.png#q3&quot;] --&gt; tier_3[&quot;tier 3&quot;]
+</pre>
+<h3 id="api">API<a class="anchor" href="#api" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function">RHI::Texture* <span class="hljs-title">acquire</span><span class="hljs-params">(RHI::RenderDevice* device, <span class="hljs-type">const</span> std::string&amp; path,
+                      <span class="hljs-type">const</span> std::string&amp; projectRoot, u32 qualityTier = <span class="hljs-number">0</span>,
+                      <span class="hljs-type">bool</span> srgb = <span class="hljs-literal">false</span>)</span></span>;
+<span class="hljs-function">RHI::Texture* <span class="hljs-title">acquireFromPixels</span><span class="hljs-params">(RHI::RenderDevice* device, <span class="hljs-type">const</span> std::string&amp; cacheKey,
+                                <span class="hljs-type">const</span> u8* pixels, u32 width, u32 height, <span class="hljs-type">int</span> channels,
+                                u32 qualityTier = <span class="hljs-number">0</span>, <span class="hljs-type">bool</span> srgb = <span class="hljs-literal">false</span>)</span></span>;
+</code></pre></div>
+<p>On upload (<code>loadTexture</code>):</p>
+<ol>
+<li>Decode the original image (tier 0)</li>
+<li><code>downscaleRgba()</code> halves the buffer once per tier</li>
+<li>Upload the reduced dimensions and generate mipmaps</li>
+</ol>
+<p><code>release()</code> and <code>invalidate()</code> walk <strong>every</strong> tier of the path (and both sRGB states);
+<code>releaseAll()</code> clears the cache on device shutdown.</p>
+<hr>
+<h2 id="integration-in-render">Integration in render<a class="anchor" href="#integration-in-render" aria-label="Link to this section">#</a></h2>
+<h3 id="gpuscenerenderoptions">GpuSceneRenderOptions<a class="anchor" href="#gpuscenerenderoptions" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">GpuSceneRenderOptions</span> {
+    <span class="hljs-type">bool</span> wireframeMeshes = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span> enableShadows   = <span class="hljs-literal">true</span>;
+    TextureQualitySettings textureQuality{};
+    std::vector&lt;Vec3&gt;      textureQualityViewers;
+};
+</code></pre></div>
+<h3 id="gpuscenerenderer">GpuSceneRenderer<a class="anchor" href="#gpuscenerenderer" aria-label="Link to this section">#</a></h3>
+<p>In <code>gatherMeshDraws()</code>, each <code>MeshDraw</code> receives <code>viewerDistance</code> (AABB centre or terrain
+chunk centre).</p>
+<p>In <code>resolveMeshAlbedo()</code> and the terrain splat binding:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-type">const</span> u32 tier = <span class="hljs-built_in">textureQualityTier</span>(draw.viewerDistance, options.textureQuality);
+<span class="hljs-keyword">auto</span>* tex = GpuTextureCache::<span class="hljs-built_in">instance</span>().<span class="hljs-built_in">acquire</span>(m_device, path, projectRoot, tier, srgb);
+</code></pre></div>
+<hr>
+<h2 id="settings-and-limits">Settings and limits<a class="anchor" href="#settings-and-limits" aria-label="Link to this section">#</a></h2>
+<p><code>EditorContext</code> still declares <code>textureQualityEnabled</code>, <code>textureQualityRadius</code>,
+<code>textureQualityFalloff</code> and <code>textureQualityMinScale</code>, but no settings panel, preferences file
+or C ABI call reads them. The renderer therefore runs with the <code>TextureQualitySettings</code>
+defaults above; a frontend that wants different values has to fill
+<code>GpuSceneRenderOptions::textureQuality</code> itself.</p>
+<hr>
+<h2 id="flow-diagram">Flow diagram<a class="anchor" href="#flow-diagram" aria-label="Link to this section">#</a></h2>
+<pre class="mermaid">flowchart TD
+  Viewer_positions[&quot;Viewer positions&quot;] --&gt; m[&quot;&quot;]
+  n[&quot;&quot;] --&gt; _[&quot;▼&quot;]
+  distanceToNearestViewer_meshCenter_[&quot;distanceToNearestViewer(meshCenter)&quot;] --&gt; m[&quot;&quot;]
+  textureQualityTier_distance__settings_[&quot;textureQualityTier(distance, settings)&quot;] --&gt; m[&quot;&quot;]
+  GpuTextureCache__acquire_path__tier_[&quot;GpuTextureCache::acquire(path, tier)&quot;] --&gt; m[&quot;&quot;]
+  n[&quot;&quot;] --&gt; __cache_hit[&quot;─ cache hit&quot;]
+  __cache_hit[&quot;─ cache hit&quot;] --&gt; bind_texture_existente[&quot;bind existing texture&quot;]
+  bind_texture_existente[&quot;bind texture existente&quot;] --&gt; __cache_miss[&quot;─ cache miss&quot;]
+  __cache_miss[&quot;─ cache miss&quot;] --&gt; load___downscale___upload_GPU[&quot;load + downscale + upload GPU&quot;]
+</pre>
+<hr>
+<h2 id="limitations">Limitations<a class="anchor" href="#limitations" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No smooth transition</td>
+<td>Tier changes are discrete; there is no blend between resolutions</td>
+</tr>
+<tr>
+<td>Downscale at load</td>
+<td>No separate GPU filter; CPU box filter (<code>downscaleRgba</code>)</td>
+</tr>
+<tr>
+<td>Terrain</td>
+<td>Splat layers use the same tier per chunk</td>
+</tr>
+<tr>
+<td>Normal maps</td>
+<td>Follow the same tier as albedo</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="see-also">See also<a class="anchor" href="#see-also" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/editor/scene-viewport/">Scene viewport</a> — viewers and <code>GpuSceneRenderOptions</code></li>
+<li><a href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22</a> — complete changelog</li>
+<li><a href="/en/docs/assets/asset-manager/">Asset Manager</a> — image loading</li>
+<li><a href="/en/docs/rendering/mesh-lod/">Mesh LOD</a> — geometry LOD, a separate path</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/rendering/texture-quality-lod.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/rendering/shadow-mapping/"><span>Previous</span><strong>Shadow Mapping (GPU)</strong></a><a class="pager-next" href="/en/docs/rendering/volumetric-lighting/"><span>Next</span><strong>Volumetric light</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#overview">Overview</a></li><li class="l2"><a href="#viewers">Viewers</a></li><li class="l2"><a href="#quality-curve">Quality curve</a></li><li class="l3"><a href="#continuous-scale">Continuous scale</a></li><li class="l3"><a href="#discrete-tiers-gpu-cache">Discrete tiers (GPU cache)</a></li><li class="l2"><a href="#gputexturecache">GpuTextureCache</a></li><li class="l3"><a href="#api">API</a></li><li class="l2"><a href="#integration-in-render">Integration in render</a></li><li class="l3"><a href="#gpuscenerenderoptions">GpuSceneRenderOptions</a></li><li class="l3"><a href="#gpuscenerenderer">GpuSceneRenderer</a></li><li class="l2"><a href="#settings-and-limits">Settings and limits</a></li><li class="l2"><a href="#flow-diagram">Flow diagram</a></li><li class="l2"><a href="#limitations">Limitations</a></li><li class="l2"><a href="#see-also">See also</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9",mermaid:"/assets/vendor/mermaid.min.js"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

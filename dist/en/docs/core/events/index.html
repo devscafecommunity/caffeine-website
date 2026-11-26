@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📢 Event Bus · Caffeine</title>
+<meta name="description" content="A typed publish/subscribe bus that lets systems communicate without knowing each other, with immediate delivery on the main thread and a thread-safe deferred queue drained once per frame.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="📢 Event Bus · Caffeine">
+<meta property="og:description" content="A typed publish/subscribe bus that lets systems communicate without knowing each other, with immediate delivery on the main thread and a thread-safe deferred queue drained once per frame.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/core/events/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/core/events/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/core/events/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/core/events/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link active" href="/en/docs/core/events/" aria-current="page">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/en/docs/audio/volumetric-audio/">Volumetric audio</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Runtime UI (ImGui &amp; in-game HUD)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Asset system</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">📢 Event Bus</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Engine</span>
+  <span><strong>Namespace:</strong> <code>Caffeine::Events</code></span>
+  <span><strong>Files:</strong> <code>src/caffeine/events/EventBus.hpp</code>, <code>src/caffeine/events/EventBus.cpp</code>, <code>src/caffeine/events/Events.hpp</code></span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p class="doc-lede">A typed publish/subscribe bus that lets systems communicate
+without knowing each other, with immediate delivery on the main thread and a
+thread-safe deferred queue drained once per frame.</p>
+<hr>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>The Event Bus enables <strong>decoupled</strong> communication between systems. One system
+publishes an event; others subscribe without knowing who publishes it. This
+removes direct dependencies (for example, Physics does not need to know about
+Audio).</p>
+<p><strong>Two delivery modes:</strong></p>
+<ul>
+<li><code>publish&lt;T&gt;()</code> — immediate, calls listeners now (main thread)</li>
+<li><code>publishDeferred&lt;T&gt;()</code> — enqueues for the next <code>dispatch()</code> (thread-safe)</li>
+</ul>
+<hr>
+<h2 id="api">API<a class="anchor" href="#api" aria-label="Link to this section">#</a></h2>
+<h3 id="eventbus"><code>EventBus</code><a class="anchor" href="#eventbus" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Events {
+
+<span class="hljs-keyword">using</span> ListenerHandle = u32;
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EventBus</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-comment">// Subscribes a typed listener. Returns a handle for cancellation.</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    ListenerHandle <span class="hljs-title">subscribe</span><span class="hljs-params">(std::function&lt;<span class="hljs-type">void</span>(<span class="hljs-type">const</span> T&amp;)&gt; callback)</span></span>;
+
+    <span class="hljs-comment">// Removes the listener. No-op for an invalid handle. No dangling pointers.</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unsubscribe</span><span class="hljs-params">(ListenerHandle handle)</span></span>;
+
+    <span class="hljs-comment">// Immediate delivery: calls every listener now (safe snapshot).</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">publish</span><span class="hljs-params">(<span class="hljs-type">const</span> T&amp; event)</span></span>;
+
+    <span class="hljs-comment">// Enqueues the event for the next dispatch(). Thread-safe.</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">void</span> <span class="hljs-title">publishDeferred</span><span class="hljs-params">(T event)</span></span>;
+
+    <span class="hljs-comment">// Drains the deferred queue. Call once per frame from the GameLoop.</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dispatch</span><span class="hljs-params">()</span></span>;
+
+    <span class="hljs-comment">// Number of pending events in the queue.</span>
+    <span class="hljs-function">usize <span class="hljs-title">pendingCount</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-comment">// Removes every listener and empties the queue.</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>;
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Events</span>
+</code></pre></div>
+<h3 id="event-type-id">Event type ID<a class="anchor" href="#event-type-id" aria-label="Link to this section">#</a></h3>
+<p>Each type <code>T</code> receives a unique runtime ID from the address of a local static
+variable — no practical collisions and no manual registration:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Events::Detail {
+
+<span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+u32 <span class="hljs-title">eventTypeId</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-type">static</span> <span class="hljs-type">char</span> s_sentinel = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">static_cast</span>&lt;u32&gt;(<span class="hljs-keyword">reinterpret_cast</span>&lt;<span class="hljs-type">uintptr_t</span>&gt;(&amp;s_sentinel));
+}
+
+} <span class="hljs-comment">// namespace Caffeine::Events::Detail</span>
+</code></pre></div>
+<blockquote>
+<p>Note: the 64-bit address is truncated to <code>u32</code>. A theoretical collision is
+possible but negligible in practice (it would require two statics exactly
+4 GiB apart with the same low 32 bits).</p>
+</blockquote>
+<hr>
+<h2 id="predefined-events">Predefined Events<a class="anchor" href="#predefined-events" aria-label="Link to this section">#</a></h2>
+<p>All live in <code>src/caffeine/events/Events.hpp</code>, namespace <code>Caffeine::Events</code>.</p>
+<h3 id="ecs">ECS<a class="anchor" href="#ecs" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnEntityCreated</span>   { u32 entityId; };
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnEntityDestroyed</span> { u32 entityId; };
+</code></pre></div>
+<h3 id="physics-collision">Physics / Collision<a class="anchor" href="#physics-collision" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnCollision2D</span> {
+    u32  entityA;
+    u32  entityB;
+    Vec2 contactPoint;
+    Vec2 normal;
+    f32  impulse;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnTrigger2D</span> {
+    u32  triggerEntity;
+    u32  otherEntity;
+    <span class="hljs-type">bool</span> entered; <span class="hljs-comment">// true = enter, false = exit</span>
+};
+</code></pre></div>
+<h3 id="combat-stats">Combat / Stats<a class="anchor" href="#combat-stats" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnHealthChanged</span> {
+    u32 entityId;
+    f32 previousHealth;
+    f32 currentHealth;
+    f32 maxHealth;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnDeath</span> {
+    u32 entityId;
+    u32 killerEntityId; <span class="hljs-comment">// 0 = environmental / no killer</span>
+};
+</code></pre></div>
+<h3 id="progression">Progression<a class="anchor" href="#progression" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnScoreChanged</span> {
+    u32 playerId;
+    i32 previousScore;
+    i32 currentScore;
+    i32 delta;
+};
+</code></pre></div>
+<h3 id="scene">Scene<a class="anchor" href="#scene" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnLevelLoaded</span>   { u32 levelId; c8 levelName[<span class="hljs-number">64</span>]; };
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnLevelUnloaded</span> { u32 levelId; };
+</code></pre></div>
+<h3 id="input">Input<a class="anchor" href="#input" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnActionPressed</span>  { u32 actionId; u32 playerId; };
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnActionReleased</span> { u32 actionId; u32 playerId; };
+</code></pre></div>
+<h3 id="map-surfaces">Map surfaces<a class="anchor" href="#map-surfaces" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">OnMapSurfaceChunkRequest</span> {
+    u32 surfaceEntityId = <span class="hljs-number">0</span>;
+    i32 chunkX = <span class="hljs-number">0</span>;
+    i32 chunkY = <span class="hljs-number">0</span>;
+    f32 worldMinX = <span class="hljs-number">0.0f</span>;
+    f32 worldMinY = <span class="hljs-number">0.0f</span>;
+    f32 chunkSize = <span class="hljs-number">0.0f</span>;
+};
+</code></pre></div>
+<hr>
+<h2 id="usage-examples">Usage Examples<a class="anchor" href="#usage-examples" aria-label="Link to this section">#</a></h2>
+<h3 id="basic-setup">Basic setup<a class="anchor" href="#basic-setup" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">Caffeine::Events::EventBus bus;
+
+<span class="hljs-comment">// Subscribe</span>
+Caffeine::Events::ListenerHandle h = bus.<span class="hljs-built_in">subscribe</span>&lt;Caffeine::Events::OnDeath&gt;(
+    [](<span class="hljs-type">const</span> Caffeine::Events::OnDeath&amp; e) {
+        <span class="hljs-keyword">if</span> (e.killerEntityId == <span class="hljs-number">0</span>) {
+            <span class="hljs-comment">// environmental death</span>
+        }
+    });
+
+<span class="hljs-comment">// Publish immediately (main thread)</span>
+bus.<span class="hljs-built_in">publish</span>(Caffeine::Events::OnDeath{ entityId, killerId });
+
+<span class="hljs-comment">// Cancel</span>
+bus.<span class="hljs-built_in">unsubscribe</span>(h);
+</code></pre></div>
+<h3 id="deferred-publication-from-a-worker-thread">Deferred publication (from a worker thread)<a class="anchor" href="#deferred-publication-from-a-worker-thread" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// PhysicsSystem running on a job worker:</span>
+bus.<span class="hljs-built_in">publishDeferred</span>(Caffeine::Events::OnCollision2D{
+    entityA, entityB, contactPoint, normal, impulse
+});
+
+<span class="hljs-comment">// GameLoop, at the start of the fixed update:</span>
+bus.<span class="hljs-built_in">dispatch</span>(); <span class="hljs-comment">// delivers every queued event</span>
+</code></pre></div>
+<h3 id="communication-between-systems-without-coupling">Communication between systems without coupling<a class="anchor" href="#communication-between-systems-without-coupling" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">// AudioSystem (does not know PhysicsSystem)</span>
+bus.<span class="hljs-built_in">subscribe</span>&lt;Caffeine::Events::OnCollision2D&gt;(
+    [&amp;audio](<span class="hljs-type">const</span> Caffeine::Events::OnCollision2D&amp; e) {
+        audio.<span class="hljs-built_in">playSFX</span>(<span class="hljs-string">&quot;impact.caf&quot;</span>);
+    });
+
+<span class="hljs-comment">// ScoreSystem (knows nothing about gameplay internals)</span>
+bus.<span class="hljs-built_in">subscribe</span>&lt;Caffeine::Events::OnDeath&gt;(
+    [&amp;score](<span class="hljs-type">const</span> Caffeine::Events::OnDeath&amp; e) {
+        score.<span class="hljs-built_in">add</span>(<span class="hljs-number">100</span>);
+    });
+
+<span class="hljs-comment">// PhysicsSystem publishes; both receive</span>
+bus.<span class="hljs-built_in">publishDeferred</span>(Caffeine::Events::OnCollision2D{ <span class="hljs-comment">/* ... */</span> });
+</code></pre></div>
+<hr>
+<h2 id="integration-in-the-gameloop">Integration in the GameLoop<a class="anchor" href="#integration-in-the-gameloop" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Frame N:</strong>
+<ul>
+<li><code>InputManager.beginFrame()</code> + injected events + <code>InputManager.endFrame()</code> (if used)</li>
+<li><code>EventBus.dispatch()</code> — delivers deferred events from frame N-1</li>
+<li><code>World.update(fixedDt)</code>
+<ul>
+<li><code>PhysicsSystem → publishDeferred(OnCollision2D)</code></li>
+<li><code>CombatSystem  → publish(OnDeath)</code> (immediate)</li>
+<li><code>...</code></li>
+</ul>
+</li>
+<li><code>render(alpha)</code></li>
+</ul>
+</li>
+<li><strong>Frame N+1:</strong>
+<ul>
+<li><code>EventBus.dispatch()</code> — delivers the <code>OnCollision2D</code> events from frame N</li>
+<li><code>...</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="design-decisions">Design Decisions<a class="anchor" href="#design-decisions" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type-erased <code>void*</code> internally</td>
+<td>Allows <code>std::unordered_map&lt;u32, vector&lt;Record&gt;&gt;</code> without a virtual per type</td>
+</tr>
+<tr>
+<td>Snapshot before iterating in <code>publish()</code></td>
+<td>A listener may call <code>unsubscribe()</code> without invalidating iteration</td>
+</tr>
+<tr>
+<td>Mutex only on the deferred queue</td>
+<td><code>publish()</code> and <code>subscribe()</code> are main-thread only; only <code>publishDeferred()</code> needs a lock</td>
+</tr>
+<tr>
+<td><code>ListenerHandle = u32</code></td>
+<td>No pending pointers; unsubscribe by ID, not by reference</td>
+</tr>
+<tr>
+<td><code>Detail::eventTypeId&lt;T&gt;()</code> via <code>static char</code></td>
+<td>Zero registration cost; unique ID guaranteed by the static address</td>
+</tr>
+<tr>
+<td><code>unsubscribe()</code> with a linear search</td>
+<td>O(types × listeners); acceptable because unsubscribe is rare (not a hot path)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="thread-safety">Thread Safety<a class="anchor" href="#thread-safety" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Thread-safe?</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subscribe()</code></td>
+<td>Main thread only</td>
+<td>Modifies <code>m_listeners</code> without a lock</td>
+</tr>
+<tr>
+<td><code>unsubscribe()</code></td>
+<td>Main thread only</td>
+<td>Modifies <code>m_listeners</code> without a lock</td>
+</tr>
+<tr>
+<td><code>publish()</code></td>
+<td>Main thread only</td>
+<td>Reads <code>m_listeners</code> without a lock</td>
+</tr>
+<tr>
+<td><code>publishDeferred()</code></td>
+<td>✅ Any thread</td>
+<td>Protected by <code>m_queueMutex</code></td>
+</tr>
+<tr>
+<td><code>dispatch()</code></td>
+<td>Main thread only</td>
+<td>Swaps the queue under the lock, then dispatches without it</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="acceptance-criteria">Acceptance Criteria<a class="anchor" href="#acceptance-criteria" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1K events/frame without noticeable overhead</td>
+<td>✅ 1000× <code>publish()</code> = <strong>0.085ms</strong> total</td>
+</tr>
+<tr>
+<td><code>publish()</code> &lt; 0.1ms (hot path)</td>
+<td>✅ <strong>0.086µs</strong>/call (10K reps, Release)</td>
+</tr>
+<tr>
+<td><code>publishDeferred</code> thread-safe</td>
+<td>✅ 8 threads × 125 events = 1000/1000 without a race</td>
+</tr>
+<tr>
+<td>Deferred events delivered on the next <code>dispatch()</code></td>
+<td>✅ Zero delivered before, all afterwards</td>
+</tr>
+<tr>
+<td>Zero live listeners after <code>unsubscribe</code></td>
+<td>✅ 0 callbacks after unsubscribe (immediate and deferred)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="tests">Tests<a class="anchor" href="#tests" aria-label="Link to this section">#</a></h2>
+<p><code>tests/test_eventbus.cpp</code> — 18 test cases, 39 assertions:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>subscribe + immediate publish</td>
+<td>Base flow</td>
+</tr>
+<tr>
+<td>Multiple listeners on the same type</td>
+<td>Fan-out</td>
+</tr>
+<tr>
+<td>unsubscribe removes the listener</td>
+<td>Correct cancellation</td>
+</tr>
+<tr>
+<td>Invalid unsubscribe handle</td>
+<td>Safe no-op</td>
+</tr>
+<tr>
+<td>Isolated event types</td>
+<td>No cross-talk</td>
+</tr>
+<tr>
+<td>publish with no listeners</td>
+<td>Safe no-op</td>
+</tr>
+<tr>
+<td>publishDeferred does not deliver immediately</td>
+<td>Queue behaviour</td>
+</tr>
+<tr>
+<td>dispatch delivers everything</td>
+<td>Guaranteed delivery</td>
+</tr>
+<tr>
+<td>dispatch empties the queue</td>
+<td>Post-dispatch state</td>
+</tr>
+<tr>
+<td>Deferred delivery order</td>
+<td>FIFO preserved</td>
+</tr>
+<tr>
+<td>clear removes listeners and queue</td>
+<td>Full reset</td>
+</tr>
+<tr>
+<td>Unique handles per subscription</td>
+<td>IDs do not collide</td>
+</tr>
+<tr>
+<td>Selective unsubscribe among several</td>
+<td>Surgical precision</td>
+</tr>
+<tr>
+<td>Deferred with mixed types</td>
+<td>Multi-type queue</td>
+</tr>
+<tr>
+<td>Predefined <code>OnEntityCreated</code></td>
+<td>ECS event</td>
+</tr>
+<tr>
+<td>Predefined <code>OnDeath</code></td>
+<td>Combat event</td>
+</tr>
+<tr>
+<td>Predefined <code>OnScoreChanged</code> + dispatch</td>
+<td>Progression event</td>
+</tr>
+<tr>
+<td>8 threads × 125 <code>publishDeferred</code></td>
+<td>Thread safety</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="dependencies">Dependencies<a class="anchor" href="#dependencies" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Upstream:</strong> <code>Caffeine::Core::Types</code>, <code>src/caffeine/math/Vec2.hpp</code></li>
+<li><strong>Downstream (real use in code):</strong> <code>PhysicsSystem2D</code> (<code>src/caffeine/physics</code>) publishes collisions;
+<code>ScriptEngine</code> (<code>src/caffeine/script</code>) exposes <code>on</code> / <code>emit</code> to Lua; <code>UISystem</code> (<code>src/caffeine/ui</code>)
+and <code>SceneEditor</code> (<code>doppio-archived/src/doppio/editor/</code>) consume events</li>
+<li><strong>Related docs:</strong> <a href="/en/docs/physics/physics-2d/">Physics 2D</a>, <a href="/en/docs/audio/audio-system/">Audio</a>,
+<a href="/en/docs/runtime-ui/game-ui/">Game UI</a>, <a href="/en/docs/core/game-loop/">GameLoop</a> (calls <code>dispatch()</code>)</li>
+</ul>
+<hr>
+<h2 id="-related-topics">🔗 Related Topics<a class="anchor" href="#-related-topics" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="">Concurrency &amp; Runtime</a></td>
+<td>Event Bus in the context of the Game Loop</td>
+</tr>
+<tr>
+<td><a href="">Game Systems</a></td>
+<td>Events connect gameplay systems</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="references">References<a class="anchor" href="#references" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/architecture_specs/"><code>docs/architecture_specs.md</code></a> — §6 Event Bus</li>
+<li><a href="/en/docs/physics/physics-2d/"><code>../physics/physics-2d.md</code></a> — publishes <code>OnCollision2D</code></li>
+<li><a href="/en/docs/core/game-loop/"><code>core/game-loop.md</code></a> — calls <code>eventBus.dispatch()</code></li>
+<li><a href="">Transversal Topic Index</a></li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/core/events.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/core/game-loop/"><span>Previous</span><strong>🎬 Game Loop</strong></a><a class="pager-next" href="/en/docs/core/types/"><span>Next</span><strong>Core Module</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#overview">Overview</a></li><li class="l2"><a href="#api">API</a></li><li class="l3"><a href="#eventbus">EventBus</a></li><li class="l3"><a href="#event-type-id">Event type ID</a></li><li class="l2"><a href="#predefined-events">Predefined Events</a></li><li class="l3"><a href="#ecs">ECS</a></li><li class="l3"><a href="#physics-collision">Physics / Collision</a></li><li class="l3"><a href="#combat-stats">Combat / Stats</a></li><li class="l3"><a href="#progression">Progression</a></li><li class="l3"><a href="#scene">Scene</a></li><li class="l3"><a href="#input">Input</a></li><li class="l3"><a href="#map-surfaces">Map surfaces</a></li><li class="l2"><a href="#usage-examples">Usage Examples</a></li><li class="l3"><a href="#basic-setup">Basic setup</a></li><li class="l3"><a href="#deferred-publication-from-a-worker-thread">Deferred publication (from a worker thread)</a></li><li class="l3"><a href="#communication-between-systems-without-coupling">Communication between systems without coupling</a></li><li class="l2"><a href="#integration-in-the-gameloop">Integration in the GameLoop</a></li><li class="l2"><a href="#design-decisions">Design Decisions</a></li><li class="l2"><a href="#thread-safety">Thread Safety</a></li><li class="l2"><a href="#acceptance-criteria">Acceptance Criteria</a></li><li class="l2"><a href="#tests">Tests</a></li><li class="l2"><a href="#dependencies">Dependencies</a></li><li class="l2"><a href="#-related-topics">🔗 Related Topics</a></li><li class="l2"><a href="#references">References</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

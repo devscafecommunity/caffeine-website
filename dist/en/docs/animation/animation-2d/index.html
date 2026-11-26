@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎬 Animation System · Caffeine</title>
+<meta name="description" content="Sprite-sheet animation driven by an Animator state machine: clips, parameters, transitions with crossfades, layers and frame events.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="🎬 Animation System · Caffeine">
+<meta property="og:description" content="Sprite-sheet animation driven by an Animator state machine: clips, parameters, transitions with crossfades, layers and frame events.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/animation/animation-2d/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/animation/animation-2d/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/animation/animation-2d/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/animation/animation-2d/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/en/docs/audio/volumetric-audio/">Volumetric audio</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/en/docs/animation/animation-2d/" aria-current="page">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Runtime UI (ImGui &amp; in-game HUD)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Asset system</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">🎬 Animation System</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Engine</span>
+  <span><strong>Namespace:</strong> <code>Caffeine::Animation</code></span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/animation/AnimationSystem.hpp"><code>animation/AnimationSystem.hpp</code></a></span>
+</div>
+<p class="doc-lede">Sprite-sheet animation driven by an <code>Animator</code> state
+machine: clips, parameters, transitions with crossfades, layers and frame events.</p>
+<hr>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p><code>AnimationSystem</code> advances every entity that has both <code>Animator</code> and <code>ECS::Sprite</code>:</p>
+<ul>
+<li>It evaluates transitions for the current state (and for every extra animator layer).</li>
+<li>It advances <code>timeInState</code> with the state speed and the animator's <code>playbackScale</code>.</li>
+<li>It computes the sprite frame from the clip's <code>fps</code> and writes <code>Sprite::frameIndex</code>.</li>
+<li>It fires <code>frameEvents</code> callbacks for the current frame.</li>
+</ul>
+<p>Entities with an <code>Animator</code> but no <code>Sprite</code> are treated as skeletal characters; the
+skeletal path is documented in <a href="/en/docs/animation/skeletal-animation/"><code>animation/skeletal-animation.md</code></a>.</p>
+<hr>
+<h2 id="api">API<a class="anchor" href="#api" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Animation {
+
+<span class="hljs-comment">// The state machine (formerly `Animator`). One per entity.</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">PhaseShift</span> : PhaseShiftStateMachine {
+    std::vector&lt;PhaseShiftLayer&gt;      layers;
+    std::vector&lt;PhaseShiftParameter&gt;  parameters;
+    std::vector&lt;AnimationClip&gt;        embeddedClips;
+    f32  playbackScale = <span class="hljs-number">1.0f</span>;
+    <span class="hljs-type">bool</span> paused        = <span class="hljs-literal">false</span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addParameter</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, ParameterType type)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setFloat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, f32 value)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setSmoothing</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, f32 smoothTime)</span></span>;  <span class="hljs-comment">// critically damped spring, 0 = off</span>
+    <span class="hljs-function">f32  <span class="hljs-title">getSmoothedFloat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AnimationClip</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt;        name;
+    u32                    fps    = <span class="hljs-number">12</span>;
+    std::vector&lt;FrameRect&gt; frames;
+    <span class="hljs-type">bool</span>                   loop   = <span class="hljs-literal">true</span>;
+    <span class="hljs-function">f32 <span class="hljs-title">duration</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;          <span class="hljs-comment">// frames.size() / fps, or 0</span>
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">ParameterType</span> : u8 { Bool, Float, Int, Trigger };
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AnimatorParameter</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt; name;
+    ParameterType   type = ParameterType::Bool;
+    <span class="hljs-keyword">union</span> { <span class="hljs-type">bool</span> boolValue; f32 floatValue; i32 intValue; };
+    <span class="hljs-type">bool</span> triggered = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">ConditionOperator</span> : u8 {
+    Equals, NotEquals, Greater, Less, GreaterOrEqual, LessOrEqual
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">TransitionCondition</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt;   parameterName;
+    ConditionOperator op = ConditionOperator::Equals;
+    <span class="hljs-keyword">union</span> { <span class="hljs-type">bool</span> boolValue; f32 floatValue; i32 intValue; };
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">KeyInterp</span> : u8 { Linear, Constant, EaseIn, EaseOut, EaseInOut, Custom };
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">KeyCurve</span> {
+    KeyInterp mode = KeyInterp::Linear;
+    f32 x1 = <span class="hljs-number">0.33f</span>, y1 = <span class="hljs-number">0.33f</span>, x2 = <span class="hljs-number">0.67f</span>, y2 = <span class="hljs-number">0.67f</span>;
+};
+
+<span class="hljs-comment">// Transition target that leaves through Exit and re-enters at the default state.</span>
+<span class="hljs-keyword">inline</span> <span class="hljs-keyword">constexpr</span> <span class="hljs-type">const</span> <span class="hljs-type">char</span>* kAnimatorExitState = <span class="hljs-string">&quot;Exit&quot;</span>;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AnimationTransition</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                  toState;
+    std::vector&lt;TransitionCondition&gt; conditions;   <span class="hljs-comment">// all must match</span>
+    f32                              blendTime   = <span class="hljs-number">0.1f</span>;
+    <span class="hljs-type">bool</span>                             hasExitTime = <span class="hljs-literal">false</span>;
+    f32                              exitTime    = <span class="hljs-number">1.0f</span>;  <span class="hljs-comment">// normalized</span>
+    f32                              offset      = <span class="hljs-number">0.0f</span>;  <span class="hljs-comment">// normalized start</span>
+    KeyCurve                         blendCurve;
+    std::function&lt;<span class="hljs-type">bool</span>()&gt;            legacyCondition;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AnimationState</span> {
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                  name;
+    <span class="hljs-type">const</span> AnimationClip*             clip  = <span class="hljs-literal">nullptr</span>;
+    f32                              speed = <span class="hljs-number">1.0f</span>;
+    std::vector&lt;AnimationTransition&gt; transitions;
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                  motion;     <span class="hljs-comment">// skeletal clip name</span>
+    f32                              editorX = <span class="hljs-number">0.0f</span>, editorY = <span class="hljs-number">0.0f</span>;
+    <span class="hljs-type">bool</span>                             hasEditorPosition = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AnimatorStateMachine</span> {
+    HashMap&lt;FixedString&lt;<span class="hljs-number">32</span>&gt;, AnimationState&gt; states;
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                          currentState;
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                          previousState;
+    FixedString&lt;<span class="hljs-number">32</span>&gt;                          defaultState;
+    f32                                      timeInState = <span class="hljs-number">0.0f</span>;
+    std::vector&lt;AnimationTransition&gt;         anyStateTransitions;
+
+    FixedString&lt;<span class="hljs-number">32</span>&gt; fadeFromState;
+    f32             fadeFromTime = <span class="hljs-number">0.0f</span>;
+    f32             fadeElapsed  = <span class="hljs-number">0.0f</span>;
+    f32             fadeDuration = <span class="hljs-number">0.0f</span>;
+    KeyCurve        fadeCurve;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">fading</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+};
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">LayerBlendMode</span> : u8 { Override, Additive };
+
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">BodyMask</span> : u32 {
+    Root = <span class="hljs-number">1u</span> &lt;&lt; <span class="hljs-number">0</span>, Body = <span class="hljs-number">1u</span> &lt;&lt; <span class="hljs-number">1</span>, Head = <span class="hljs-number">1u</span> &lt;&lt; <span class="hljs-number">2</span>,
+    LeftArm = <span class="hljs-number">1u</span> &lt;&lt; <span class="hljs-number">3</span>, RightArm = <span class="hljs-number">1u</span> &lt;&lt; <span class="hljs-number">4</span>,
+    LeftLeg = <span class="hljs-number">1u</span> &lt;&lt; <span class="hljs-number">5</span>, RightLeg = <span class="hljs-number">1u</span> &lt;&lt; <span class="hljs-number">6</span>,
+    All = <span class="hljs-number">0x7Fu</span>
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AnimatorLayer</span> : AnimatorStateMachine {
+    FixedString&lt;<span class="hljs-number">32</span>&gt; name;
+    FixedString&lt;<span class="hljs-number">32</span>&gt; parentGroup;
+    <span class="hljs-type">bool</span>            isGroup  = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span>            muted    = <span class="hljs-literal">false</span>;
+    <span class="hljs-type">bool</span>            expanded = <span class="hljs-literal">true</span>;
+    f32             weight   = <span class="hljs-number">1.0f</span>;
+    LayerBlendMode  blend    = LayerBlendMode::Override;
+    u32             mask     = <span class="hljs-keyword">static_cast</span>&lt;u32&gt;(BodyMask::All);
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Animator</span> : AnimatorStateMachine {
+    std::vector&lt;AnimationClip&gt;                   embeddedClips;
+    std::vector&lt;AnimatorLayer&gt;                   layers;
+    f32                                          blendWeight   = <span class="hljs-number">1.0f</span>;
+    f32                                          playbackScale = <span class="hljs-number">1.0f</span>;
+    <span class="hljs-type">bool</span>                                         paused        = <span class="hljs-literal">false</span>;
+    std::vector&lt;AnimatorParameter&gt;               parameters;
+    std::vector&lt;std::pair&lt;u32, FixedString&lt;32&gt;&gt;&gt; frameEvents;
+    std::function&lt;<span class="hljs-type">void</span>(<span class="hljs-type">const</span> FixedString&lt;32&gt;&amp;)&gt;  onFrameEvent;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addParameter</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, ParameterType type)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setBool</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, <span class="hljs-type">bool</span> value)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setFloat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, f32 value)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setInt</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, i32 value)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setTrigger</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">getBool</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32  <span class="hljs-title">getFloat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">i32  <span class="hljs-title">getInt</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+};
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AnimationSystem</span> : <span class="hljs-keyword">public</span> ECS::ISystem {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onUpdate</span><span class="hljs-params">(ECS::World&amp; world, f32 dt)</span> <span class="hljs-keyword">override</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">stepStateMachine</span><span class="hljs-params">(Animator&amp; anim, f32 dt, f32 stateDuration)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">stepStateMachine</span><span class="hljs-params">(Animator&amp; anim, f32 dt, <span class="hljs-type">const</span> StateDurationFn&amp; durationOf)</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">play</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* stateName)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">pause</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">resume</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setSpeed</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, f32 speed)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isPlaying</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* stateName)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addParameter</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, ParameterType type)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setBool</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, <span class="hljs-type">bool</span> value)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setFloat</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, f32 value)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setInt</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, i32 value)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setTrigger</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">getBool</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">f32  <span class="hljs-title">getFloat</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">i32  <span class="hljs-title">getInt</span><span class="hljs-params">(ECS::World&amp; world, ECS::Entity e, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name)</span> <span class="hljs-type">const</span></span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::Animation</span>
+</code></pre></div>
+<p><code>AnimationTransition</code> supports both models: named parameters in <code>conditions</code>, and the
+older <code>std::function&lt;bool()&gt;</code> in <code>legacyCondition</code>. A transition with no conditions and
+<code>hasExitTime = true</code> fires on normalized time alone.</p>
+<hr>
+<h2 id="state-machine-visual">State Machine Visual<a class="anchor" href="#state-machine-visual" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">idle ──[MoveX != 0]──► walk ──[MoveX == 0]──► idle
+  │
+  ├──[Jump trigger]──► jump_rise ──[exit 1.0]──► jump_fall
+  │                                              │
+  │                                              └──[exit 1.0]──► idle
+  └──[Attack trigger]──► attack_1 ──[exit 1.0]──► attack_2 ──[exit 1.0]──► idle
+</code></pre></div>
+<p><code>anyStateTransitions</code> are checked before the current state's own transitions, which is
+useful for hit reactions and death.</p>
+<hr>
+<h2 id="smoothing-and-transitions">Smoothing and Transitions<a class="anchor" href="#smoothing-and-transitions" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">AnimationClip idleClip;
+idleClip.name = <span class="hljs-string">&quot;idle&quot;</span>;
+idleClip.fps  = <span class="hljs-number">8</span>;
+idleClip.frames = { {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">64</span>, <span class="hljs-number">64</span>}, {<span class="hljs-number">64</span>, <span class="hljs-number">0</span>, <span class="hljs-number">64</span>, <span class="hljs-number">64</span>} };
+idleClip.loop = <span class="hljs-literal">true</span>;
+
+AnimationClip walkClip;
+walkClip.name = <span class="hljs-string">&quot;walk&quot;</span>;
+walkClip.fps  = <span class="hljs-number">12</span>;
+walkClip.frames = { {<span class="hljs-number">128</span>, <span class="hljs-number">0</span>, <span class="hljs-number">64</span>, <span class="hljs-number">64</span>}, {<span class="hljs-number">192</span>, <span class="hljs-number">0</span>, <span class="hljs-number">64</span>, <span class="hljs-number">64</span>},
+                    {<span class="hljs-number">256</span>, <span class="hljs-number">0</span>, <span class="hljs-number">64</span>, <span class="hljs-number">64</span>}, {<span class="hljs-number">320</span>, <span class="hljs-number">0</span>, <span class="hljs-number">64</span>, <span class="hljs-number">64</span>} };
+walkClip.loop = <span class="hljs-literal">true</span>;
+
+<span class="hljs-comment">// Build the Animator in place; add returns a reference.</span>
+Animator&amp; anim = world.<span class="hljs-built_in">add</span>&lt;Animator&gt;(player);
+anim.defaultState = <span class="hljs-string">&quot;idle&quot;</span>;
+
+AnimationState idleState;
+idleState.name = <span class="hljs-string">&quot;idle&quot;</span>;
+idleState.clip = &amp;idleClip;
+idleState.transitions.<span class="hljs-built_in">push_back</span>({
+    .toState = <span class="hljs-string">&quot;walk&quot;</span>,
+    .conditions = { { <span class="hljs-string">&quot;MoveX&quot;</span>, ConditionOperator::NotEquals, { .floatValue = <span class="hljs-number">0.0f</span> } } },
+    .blendTime = <span class="hljs-number">0.15f</span>
+});
+
+AnimationState walkState;
+walkState.name = <span class="hljs-string">&quot;walk&quot;</span>;
+walkState.clip = &amp;walkClip;
+walkState.transitions.<span class="hljs-built_in">push_back</span>({
+    .toState = <span class="hljs-string">&quot;idle&quot;</span>,
+    .conditions = { { <span class="hljs-string">&quot;MoveX&quot;</span>, ConditionOperator::Equals, { .floatValue = <span class="hljs-number">0.0f</span> } } },
+    .blendTime = <span class="hljs-number">0.15f</span>
+});
+
+anim.states.<span class="hljs-built_in">set</span>(<span class="hljs-built_in">FixedString</span>&lt;<span class="hljs-number">32</span>&gt;(<span class="hljs-string">&quot;idle&quot;</span>), idleState);
+anim.states.<span class="hljs-built_in">set</span>(<span class="hljs-built_in">FixedString</span>&lt;<span class="hljs-number">32</span>&gt;(<span class="hljs-string">&quot;walk&quot;</span>), walkState);
+anim.<span class="hljs-built_in">addParameter</span>(<span class="hljs-string">&quot;MoveX&quot;</span>, ParameterType::Float);
+
+<span class="hljs-comment">// Drive the parameter from gameplay code.</span>
+AnimationSystem animSys;
+animSys.<span class="hljs-built_in">setFloat</span>(world, player, <span class="hljs-string">&quot;MoveX&quot;</span>, input.<span class="hljs-built_in">axisValue</span>(Axis::MoveX));
+
+<span class="hljs-comment">// Fire a gameplay event when the attack clip reaches frame 3.</span>
+world.<span class="hljs-built_in">get</span>&lt;Animator&gt;(player)-&gt;frameEvents.<span class="hljs-built_in">push_back</span>({<span class="hljs-number">3u</span>, <span class="hljs-built_in">FixedString</span>&lt;<span class="hljs-number">32</span>&gt;(<span class="hljs-string">&quot;attack_hit&quot;</span>)});
+world.<span class="hljs-built_in">get</span>&lt;Animator&gt;(player)-&gt;onFrameEvent = [](<span class="hljs-type">const</span> FixedString&lt;<span class="hljs-number">32</span>&gt;&amp; evt) {
+    <span class="hljs-keyword">if</span> (evt == <span class="hljs-built_in">FixedString</span>&lt;<span class="hljs-number">32</span>&gt;(<span class="hljs-string">&quot;attack_hit&quot;</span>)) <span class="hljs-built_in">damageEnemiesInRange</span>();
+};
+
+<span class="hljs-comment">// The host calls onUpdate once per frame.</span>
+animSys.<span class="hljs-built_in">onUpdate</span>(world, dt);
+</code></pre></div>
+<p>Clips referenced by <code>AnimationState::clip</code> must outlive the animator. Scenes loaded
+from disk store their clips in <code>Animator::embeddedClips</code> and point states at those
+entries.</p>
+<hr>
+<h2 id="design-decisions">Design Decisions<a class="anchor" href="#design-decisions" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>State machine</td>
+<td>Animation logic stays separate from gameplay logic</td>
+</tr>
+<tr>
+<td>Named parameters and conditions</td>
+<td>Serializable and editable in the timeline, unlike raw lambdas</td>
+</tr>
+<tr>
+<td><code>legacyCondition</code></td>
+<td>Keeps older C++ setups working without rebuilding their graphs</td>
+</tr>
+<tr>
+<td><code>blendTime</code> per transition</td>
+<td>Crossfade is the default; <code>0</code> switches instantly</td>
+</tr>
+<tr>
+<td>Exit time and offset</td>
+<td>Normalized clip time is independent of clip length</td>
+</tr>
+<tr>
+<td>Frame events</td>
+<td>Gameplay can react to a specific sprite frame</td>
+</tr>
+<tr>
+<td>Extra layers and body masks</td>
+<td>Additive/override layers for upper-body actions and skeletal masks</td>
+</tr>
+<tr>
+<td>No priority field</td>
+<td>The host calls <code>onUpdate</code>; registration order is processing order</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="acceptance-criteria">Acceptance Criteria<a class="anchor" href="#acceptance-criteria" aria-label="Link to this section">#</a></h2>
+<p><code>tests/test_animation.cpp</code> covers:</p>
+<ul>
+<li>[x] Clip duration for zero frames, zero fps and normal clips</li>
+<li>[x] Transition and state defaults</li>
+<li>[x] Entities without <code>Sprite</code> or <code>Animator</code> are skipped without crashing</li>
+<li>[x] Paused animators do not advance time</li>
+<li>[x] Looping clips wrap and non-looping clips clamp at the last frame</li>
+<li>[x] Transitions fire only when their conditions match</li>
+<li>[x] Frame events fire on the correct frame</li>
+<li>[x] <code>play</code>, <code>pause</code>, <code>resume</code>, <code>setSpeed</code> and <code>isPlaying</code></li>
+</ul>
+<p>The suite does not assert a fixed frame budget; profile your own animation count.</p>
+<hr>
+<h2 id="dependencies">Dependencies<a class="anchor" href="#dependencies" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Upstream:</strong> <a href="/en/docs/ecs/core/">ECS Core</a>, <a href="/en/docs/assets/asset-manager/">Asset Manager</a></li>
+<li><strong>Downstream:</strong> <a href="/en/docs/animation/skeletal-animation/">Skeletal Animation</a>, sprite rendering</li>
+</ul>
+<hr>
+<h2 id="-related-topics">🔗 Related Topics<a class="anchor" href="#-related-topics" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/en/docs/ecs/core/">ECS Core</a></td>
+<td><code>World</code>, <code>Entity</code> and queries used by the system</td>
+</tr>
+<tr>
+<td><a href="/en/docs/rendering/rhi/">Rendering &amp; Pipeline</a></td>
+<td>How animated sprites reach the renderer</td>
+</tr>
+<tr>
+<td><a href="/en/docs/animation/skeletal-animation/">Skeletal Animation</a></td>
+<td>3D bones, imported clips and skinning</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="references">References<a class="anchor" href="#references" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/animation/AnimationComponents.hpp" rel="noopener" class="ext"><code>src/caffeine/animation/AnimationComponents.hpp</code></a> — clips, states and the animator</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/animation/AnimationSystem.hpp" rel="noopener" class="ext"><code>src/caffeine/animation/AnimationSystem.hpp</code></a> — update and transition logic</li>
+<li><a href="https://github.com/devscafecommunity/caffeine/blob/main/tests/test_animation.cpp" rel="noopener" class="ext"><code>tests/test_animation.cpp</code></a> — behaviour suite</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/animation/animation-2d.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/audio/volumetric-audio/"><span>Previous</span><strong>Volumetric audio</strong></a><a class="pager-next" href="/en/docs/animation/skeletal-animation/"><span>Next</span><strong>🦴 Skeletal Animation</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#overview">Overview</a></li><li class="l2"><a href="#api">API</a></li><li class="l2"><a href="#state-machine-visual">State Machine Visual</a></li><li class="l2"><a href="#smoothing-and-transitions">Smoothing and Transitions</a></li><li class="l2"><a href="#design-decisions">Design Decisions</a></li><li class="l2"><a href="#acceptance-criteria">Acceptance Criteria</a></li><li class="l2"><a href="#dependencies">Dependencies</a></li><li class="l2"><a href="#-related-topics">🔗 Related Topics</a></li><li class="l2"><a href="#references">References</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

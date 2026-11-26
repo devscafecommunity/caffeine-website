@@ -225,3 +225,10 @@ needs an engine change and is on the list.
 A graph saved before the material was required has no Water Material node. It gets the default one wired
 into the Output when it loads, so it builds again; apply or place to turn it into the project's `.mat`.
 Graphs saved with *Your Water Material* keep their `.mat` path (stored with the graph, spaces escaped).
+
+## Using it in a world
+
+In the [World Composer](world-composition.md) a `water` line names a `*.generator.water` recipe and says where the
+water is: `follow flow min 0.8` for a river along the terrain's flow mask (with `carve <metres>` to dig its bed) or
+`fill basins level 0.18` for a lake in the basins under a normalised level. The composer then writes the
+`water_distance` mask, so classes can grow reeds only at the bank.

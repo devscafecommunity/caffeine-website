@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scene Viewport Fix &amp; Entity Type System Expansion · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Scene Viewport Fix &amp; Entity Type System Expansion · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/" aria-current="page">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Scene Viewport Fix &amp; Entity Type System Expansion</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Fix empty Scene Viewport by adding grid rendering and expand entity type system with Camera, Light, and Mesh components for professional game editor.</p>
+<p><strong>Architecture:</strong></p>
+<ol>
+<li>Add grid drawing to SceneViewport using ImGui drawing lists</li>
+<li>Create camera component system (Camera2D, Camera3D)</li>
+<li>Create light component system (Directional, Point, Spot)</li>
+<li>Create mesh renderer component</li>
+<li>Add entity type selector in Hierarchy panel context menu</li>
+<li>Maintain compatibility with existing 2D entity system</li>
+</ol>
+<p><strong>Tech Stack:</strong> C++20, ECS (caffeine-core), ImGui, RHI (SDL3 optional)</p>
+<hr>
+<h2 id="task-1-add-grid-drawing-to-scene-viewport">Task 1: Add Grid Drawing to Scene Viewport<a class="anchor" href="#task-1-add-grid-drawing-to-scene-viewport" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> (add grid drawing function)</li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/SceneViewport.hpp</code> (add grid drawing method)</li>
+</ul>
+<p><strong>Step 1: Add grid drawing method declaration</strong></p>
+<p>In <code>doppio-archived/src/doppio/editor/SceneViewport.hpp</code> , add to private methods:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">ifdef</span> CF_HAS_IMGUI</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">drawGrid</span><span class="hljs-params">(ImDrawList* drawList, ImVec2 origin, ImVec2 viewportSize, <span class="hljs-type">const</span> EditorContext&amp; ctx)</span></span>;
+<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span>
+</code></pre></div>
+<p><strong>Step 2: Implement grid drawing function</strong></p>
+<p>In <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> , after the <code>drawGizmo</code> function, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">SceneViewport::drawGrid</span><span class="hljs-params">(ImDrawList* drawList, ImVec2 origin, ImVec2 viewportSize, <span class="hljs-type">const</span> EditorContext&amp; ctx)</span> </span>{
+    <span class="hljs-keyword">if</span> (!m_config.grid) <span class="hljs-keyword">return</span>;
+    
+    f32 gridSpacing = m_config.gridSpacing;
+    f32 scale = ctx.viewportZoom * <span class="hljs-number">50.0f</span>;
+    f32 scaledSpacing = gridSpacing * scale;
+    
+    f32 centerX = origin.x + viewportSize.x * <span class="hljs-number">0.5f</span>;
+    f32 centerY = origin.y + viewportSize.y * <span class="hljs-number">0.5f</span>;
+    f32 offsetX = ctx.viewportPanX * scale;
+    f32 offsetY = ctx.viewportPanY * scale;
+    
+    ImU32 gridColor = <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">100</span>, <span class="hljs-number">100</span>, <span class="hljs-number">120</span>, <span class="hljs-number">80</span>);
+    ImU32 axisColor = <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">200</span>, <span class="hljs-number">100</span>, <span class="hljs-number">100</span>, <span class="hljs-number">150</span>);
+    
+    <span class="hljs-keyword">if</span> (scaledSpacing &lt; <span class="hljs-number">2.0f</span>) <span class="hljs-keyword">return</span>;
+    
+    f32 startX = centerX - <span class="hljs-built_in">fmod</span>(centerX - offsetX - origin.x, scaledSpacing) - scaledSpacing;
+    f32 startY = centerY - <span class="hljs-built_in">fmod</span>(centerY - offsetY - origin.y, scaledSpacing) - scaledSpacing;
+    
+    <span class="hljs-keyword">for</span> (f32 x = startX; x &lt; origin.x + viewportSize.x + scaledSpacing * <span class="hljs-number">2</span>; x += scaledSpacing) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(x - centerX) &lt; <span class="hljs-number">2.0f</span>) {
+            drawList-&gt;<span class="hljs-built_in">AddLine</span>(<span class="hljs-built_in">ImVec2</span>(x, origin.y), <span class="hljs-built_in">ImVec2</span>(x, origin.y + viewportSize.y), axisColor, <span class="hljs-number">1.5f</span>);
+        } <span class="hljs-keyword">else</span> {
+            drawList-&gt;<span class="hljs-built_in">AddLine</span>(<span class="hljs-built_in">ImVec2</span>(x, origin.y), <span class="hljs-built_in">ImVec2</span>(x, origin.y + viewportSize.y), gridColor, <span class="hljs-number">0.5f</span>);
+        }
+    }
+    
+    <span class="hljs-keyword">for</span> (f32 y = startY; y &lt; origin.y + viewportSize.y + scaledSpacing * <span class="hljs-number">2</span>; y += scaledSpacing) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(y - centerY) &lt; <span class="hljs-number">2.0f</span>) {
+            drawList-&gt;<span class="hljs-built_in">AddLine</span>(<span class="hljs-built_in">ImVec2</span>(origin.x, y), <span class="hljs-built_in">ImVec2</span>(origin.x + viewportSize.x, y), axisColor, <span class="hljs-number">1.5f</span>);
+        } <span class="hljs-keyword">else</span> {
+            drawList-&gt;<span class="hljs-built_in">AddLine</span>(<span class="hljs-built_in">ImVec2</span>(origin.x, y), <span class="hljs-built_in">ImVec2</span>(origin.x + viewportSize.x, y), gridColor, <span class="hljs-number">0.5f</span>);
+        }
+    }
+    
+    drawList-&gt;<span class="hljs-built_in">AddCircle</span>(<span class="hljs-built_in">ImVec2</span>(centerX, centerY), <span class="hljs-number">8.0f</span>, <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">255</span>, <span class="hljs-number">200</span>, <span class="hljs-number">0</span>, <span class="hljs-number">200</span>), <span class="hljs-number">12</span>, <span class="hljs-number">2.0f</span>);
+}
+</code></pre></div>
+<p><strong>Step 3: Call grid drawing in render method</strong></p>
+<p>In <code>doppio-archived/src/doppio/editor/SceneViewport.cpp</code> , in the <code>render()</code> function after line 142 where gizmo text is drawn, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-built_in">drawGrid</span>(drawList, origin, viewportSize, ctx);
+</code></pre></div>
+<p>Full context (around line 142):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">if</span> (m_config.grid) {
+    <span class="hljs-type">char</span> modeStr[<span class="hljs-number">16</span>];
+    <span class="hljs-comment">// ... existing code ...</span>
+    drawList-&gt;<span class="hljs-built_in">AddText</span>(<span class="hljs-built_in">ImVec2</span>(origin.x + <span class="hljs-number">8</span>, origin.y + <span class="hljs-number">8</span>), <span class="hljs-built_in">IM_COL32</span>(<span class="hljs-number">200</span>, <span class="hljs-number">200</span>, <span class="hljs-number">200</span>, <span class="hljs-number">200</span>), buf);
+}
+
+<span class="hljs-built_in">drawGrid</span>(drawList, origin, viewportSize, ctx);  <span class="hljs-comment">// ADD THIS LINE</span>
+
+<span class="hljs-keyword">if</span> (ctx.selectedEntity.<span class="hljs-built_in">isValid</span>() &amp;&amp; hovered) {
+    <span class="hljs-built_in">drawGizmo</span>(world, ctx, origin, viewportSize);
+}
+</code></pre></div>
+<p><strong>Step 4: Verify compilation</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; cmake .. &amp;&amp; make -j4 2&gt;&amp;1 | grep -E <span class="hljs-string">&quot;error:|Built target doppio&quot;</span>
+</code></pre></div>
+<p>Expected: No errors, &quot;Built target doppio&quot; appears</p>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine &amp;&amp; git add src/editor/SceneViewport.hpp src/editor/SceneViewport.cpp &amp;&amp; git commit -m <span class="hljs-string">&quot;feat: add grid rendering to Scene Viewport
+
+- Implement drawGrid() method for ImGui grid overlay
+- Grid respects zoom and pan transformations
+- Center axis highlighted in different color
+- Grid spacing configurable via SceneViewport::Config&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-2-create-camera-component-system">Task 2: Create Camera Component System<a class="anchor" href="#task-2-create-camera-component-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/ecs/CameraComponents.hpp</code></li>
+<li>Modify: <code>src/caffeine/ecs/Components.hpp</code> (add include)</li>
+</ul>
+<p><strong>Step 1: Create Camera components header</strong></p>
+<p>Create <code>src/caffeine/ecs/CameraComponents.hpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;math/Vec3.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;math/Vec4.hpp&quot;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::ECS {
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Camera2D</span> {
+    f32 zoom = <span class="hljs-number">1.0f</span>;
+    f32 nearClip = <span class="hljs-number">0.1f</span>;
+    f32 farClip = <span class="hljs-number">1000.0f</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Camera3D</span> {
+    f32 fov = <span class="hljs-number">60.0f</span>;
+    f32 nearClip = <span class="hljs-number">0.1f</span>;
+    f32 farClip = <span class="hljs-number">1000.0f</span>;
+    f32 aspectRatio = <span class="hljs-number">16.0f</span> / <span class="hljs-number">9.0f</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">CameraActive</span> {
+    <span class="hljs-type">bool</span> is2D = <span class="hljs-literal">true</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::ECS</span>
+</code></pre></div>
+<p><strong>Step 2: Include in Components.hpp</strong></p>
+<p>At the end of <code>src/caffeine/ecs/Components.hpp</code> before the closing namespace, add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/CameraComponents.hpp&quot;</span></span>
+</code></pre></div>
+<p><strong>Step 3: Verify it compiles</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j4 2&gt;&amp;1 | grep -E <span class="hljs-string">&quot;error:|CameraComponents&quot;</span>
+</code></pre></div>
+<p>Expected: No errors</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine &amp;&amp; git add src/ecs/CameraComponents.hpp src/ecs/Components.hpp &amp;&amp; git commit -m <span class="hljs-string">&quot;feat: add Camera2D and Camera3D components
+
+- Camera2D: zoom-based orthographic camera
+- Camera3D: FOV-based perspective camera
+- CameraActive: marker for active camera
+- Both include near/far clip planes&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-3-create-light-component-system">Task 3: Create Light Component System<a class="anchor" href="#task-3-create-light-component-system" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/ecs/LightComponents.hpp</code></li>
+<li>Modify: <code>src/caffeine/ecs/Components.hpp</code> (add include)</li>
+</ul>
+<p><strong>Step 1: Create Light components header</strong></p>
+<p>Create <code>src/caffeine/ecs/LightComponents.hpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;math/Vec3.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;math/Vec4.hpp&quot;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::ECS {
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Light</span> {
+    Vec4 color = <span class="hljs-built_in">Vec4</span>(<span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>);
+    f32 intensity = <span class="hljs-number">1.0f</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">DirectionalLight</span> {
+    f32 shadowDistance = <span class="hljs-number">100.0f</span>;
+    <span class="hljs-type">bool</span> castShadows = <span class="hljs-literal">true</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">PointLight</span> {
+    f32 radius = <span class="hljs-number">10.0f</span>;
+    <span class="hljs-type">bool</span> castShadows = <span class="hljs-literal">false</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">SpotLight</span> {
+    f32 radius = <span class="hljs-number">10.0f</span>;
+    f32 angle = <span class="hljs-number">45.0f</span>;
+    <span class="hljs-type">bool</span> castShadows = <span class="hljs-literal">false</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::ECS</span>
+</code></pre></div>
+<p><strong>Step 2: Include in Components.hpp</strong></p>
+<p>At the end of <code>src/caffeine/ecs/Components.hpp</code> , add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/LightComponents.hpp&quot;</span></span>
+</code></pre></div>
+<p><strong>Step 3: Verify compilation</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j4 2&gt;&amp;1 | grep -E <span class="hljs-string">&quot;error:|LightComponents&quot;</span>
+</code></pre></div>
+<p>Expected: No errors</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine &amp;&amp; git add src/ecs/LightComponents.hpp src/ecs/Components.hpp &amp;&amp; git commit -m <span class="hljs-string">&quot;feat: add Light components (Directional, Point, Spot)
+
+- Light base component with color and intensity
+- DirectionalLight: shadow distance and casting control
+- PointLight: radius-based attenuation
+- SpotLight: angle and radius for cone lighting&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-4-create-mesh-renderer-component">Task 4: Create Mesh Renderer Component<a class="anchor" href="#task-4-create-mesh-renderer-component" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/ecs/MeshComponents.hpp</code></li>
+<li>Modify: <code>src/caffeine/ecs/Components.hpp</code> (add include)</li>
+</ul>
+<p><strong>Step 1: Create Mesh components header</strong></p>
+<p>Create <code>src/caffeine/ecs/MeshComponents.hpp</code> :</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;core/Types.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::ECS {
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">MeshRenderer</span> {
+    std::string meshPath;
+    std::string materialPath;
+    <span class="hljs-type">bool</span> castShadows = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span> receiveShadows = <span class="hljs-literal">true</span>;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">SkinnedMeshRenderer</span> {
+    std::string meshPath;
+    std::string materialPath;
+    std::string skeletonPath;
+    <span class="hljs-type">bool</span> castShadows = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span> receiveShadows = <span class="hljs-literal">true</span>;
+};
+
+}  <span class="hljs-comment">// namespace Caffeine::ECS</span>
+</code></pre></div>
+<p><strong>Step 2: Include in Components.hpp</strong></p>
+<p>At the end of <code>src/caffeine/ecs/Components.hpp</code> , add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ecs/MeshComponents.hpp&quot;</span></span>
+</code></pre></div>
+<p><strong>Step 3: Verify compilation</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j4 2&gt;&amp;1 | grep -E <span class="hljs-string">&quot;error:|MeshComponents&quot;</span>
+</code></pre></div>
+<p>Expected: No errors</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine &amp;&amp; git add src/ecs/MeshComponents.hpp src/ecs/Components.hpp &amp;&amp; git commit -m <span class="hljs-string">&quot;feat: add MeshRenderer components
+
+- MeshRenderer: static mesh with material
+- SkinnedMeshRenderer: animated mesh with skeleton
+- Both support shadow casting and receiving&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-5-add-entity-type-selector-to-hierarchy-panel">Task 5: Add Entity Type Selector to Hierarchy Panel<a class="anchor" href="#task-5-add-entity-type-selector-to-hierarchy-panel" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>doppio-archived/src/doppio/editor/HierarchyPanel.cpp</code> (expand entity creation menu)</li>
+<li>Modify: <code>doppio-archived/src/doppio/editor/HierarchyPanel.hpp</code> (add helper methods)</li>
+</ul>
+<p><strong>Step 1: Add helper methods to header</strong></p>
+<p>In <code>doppio-archived/src/doppio/editor/HierarchyPanel.hpp</code> , add to private section:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">private</span>:
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">createEntityWithType</span><span class="hljs-params">(ECS::World&amp; world, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* componentType)</span></span>;
+</code></pre></div>
+<p><strong>Step 2: Implement helper in cpp</strong></p>
+<p>In <code>doppio-archived/src/doppio/editor/HierarchyPanel.cpp</code> , add before the <code>onImGuiRender()</code> function:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HierarchyPanel::createEntityWithType</span><span class="hljs-params">(ECS::World&amp; world, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* componentType)</span> </span>{
+    m_context-&gt;<span class="hljs-built_in">beginUndo</span>(EditorCommand::AddEntity, u32_max, world);
+    ECS::Entity e = world.<span class="hljs-built_in">create</span>();
+    <span class="hljs-built_in">setEntityName</span>(world, e, name);
+    
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(componentType, <span class="hljs-string">&quot;Camera2D&quot;</span>) == <span class="hljs-number">0</span>) {
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Camera2D&gt;(e);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(componentType, <span class="hljs-string">&quot;Camera3D&quot;</span>) == <span class="hljs-number">0</span>) {
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Camera3D&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Position3D&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Rotation3D&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Scale3D&gt;(e);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(componentType, <span class="hljs-string">&quot;DirectionalLight&quot;</span>) == <span class="hljs-number">0</span>) {
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Light&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::DirectionalLight&gt;(e);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(componentType, <span class="hljs-string">&quot;PointLight&quot;</span>) == <span class="hljs-number">0</span>) {
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Light&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::PointLight&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Position3D&gt;(e);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(componentType, <span class="hljs-string">&quot;SpotLight&quot;</span>) == <span class="hljs-number">0</span>) {
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Light&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::SpotLight&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Position3D&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Rotation3D&gt;(e);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(componentType, <span class="hljs-string">&quot;MeshRenderer&quot;</span>) == <span class="hljs-number">0</span>) {
+        world.<span class="hljs-built_in">add</span>&lt;ECS::MeshRenderer&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Position3D&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Rotation3D&gt;(e);
+        world.<span class="hljs-built_in">add</span>&lt;ECS::Scale3D&gt;(e);
+    }
+    
+    m_context-&gt;selectedEntity = e;
+    m_context-&gt;<span class="hljs-built_in">endUndo</span>(world);
+}
+</code></pre></div>
+<p><strong>Step 3: Update renderEmptyContextMenu</strong></p>
+<p>In <code>renderEmptyContextMenu()</code> , replace the simple menu with:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HierarchyPanel::renderEmptyContextMenu</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginPopupContextWindow</span>(<span class="hljs-string">&quot;context_menu&quot;</span>, ImGuiPopupFlags_MouseButtonRight)) {
+        <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">BeginMenu</span>(<span class="hljs-string">&quot;Create Entity&quot;</span>)) {
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Empty Entity&quot;</span>)) {
+                m_context-&gt;<span class="hljs-built_in">beginUndo</span>(EditorCommand::AddEntity, u32_max, *m_world);
+                ECS::Entity e = m_world-&gt;<span class="hljs-built_in">create</span>();
+                <span class="hljs-built_in">setEntityName</span>(*m_world, e, <span class="hljs-string">&quot;New Entity&quot;</span>);
+                m_context-&gt;selectedEntity = e;
+                m_context-&gt;<span class="hljs-built_in">endUndo</span>(*m_world);
+            }
+            ImGui::<span class="hljs-built_in">Separator</span>();
+            ImGui::<span class="hljs-built_in">TextDisabled</span>(<span class="hljs-string">&quot;Camera&quot;</span>);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Camera 2D&quot;</span>)) {
+                <span class="hljs-built_in">createEntityWithType</span>(*m_world, <span class="hljs-string">&quot;Camera 2D&quot;</span>, <span class="hljs-string">&quot;Camera2D&quot;</span>);
+            }
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Camera 3D&quot;</span>)) {
+                <span class="hljs-built_in">createEntityWithType</span>(*m_world, <span class="hljs-string">&quot;Camera 3D&quot;</span>, <span class="hljs-string">&quot;Camera3D&quot;</span>);
+            }
+            ImGui::<span class="hljs-built_in">Separator</span>();
+            ImGui::<span class="hljs-built_in">TextDisabled</span>(<span class="hljs-string">&quot;Lights&quot;</span>);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Directional Light&quot;</span>)) {
+                <span class="hljs-built_in">createEntityWithType</span>(*m_world, <span class="hljs-string">&quot;Directional Light&quot;</span>, <span class="hljs-string">&quot;DirectionalLight&quot;</span>);
+            }
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Point Light&quot;</span>)) {
+                <span class="hljs-built_in">createEntityWithType</span>(*m_world, <span class="hljs-string">&quot;Point Light&quot;</span>, <span class="hljs-string">&quot;PointLight&quot;</span>);
+            }
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Spot Light&quot;</span>)) {
+                <span class="hljs-built_in">createEntityWithType</span>(*m_world, <span class="hljs-string">&quot;Spot Light&quot;</span>, <span class="hljs-string">&quot;SpotLight&quot;</span>);
+            }
+            ImGui::<span class="hljs-built_in">Separator</span>();
+            ImGui::<span class="hljs-built_in">TextDisabled</span>(<span class="hljs-string">&quot;Rendering&quot;</span>);
+            <span class="hljs-keyword">if</span> (ImGui::<span class="hljs-built_in">MenuItem</span>(<span class="hljs-string">&quot;Mesh Renderer&quot;</span>)) {
+                <span class="hljs-built_in">createEntityWithType</span>(*m_world, <span class="hljs-string">&quot;Mesh Renderer&quot;</span>, <span class="hljs-string">&quot;MeshRenderer&quot;</span>);
+            }
+            ImGui::<span class="hljs-built_in">EndMenu</span>();
+        }
+        ImGui::<span class="hljs-built_in">EndPopup</span>();
+    }
+}
+</code></pre></div>
+<p><strong>Step 4: Verify compilation</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; cmake .. &amp;&amp; make -j4 2&gt;&amp;1 | grep -E <span class="hljs-string">&quot;error:|undefined reference&quot;</span> | <span class="hljs-built_in">head</span> -20
+</code></pre></div>
+<p>Expected: No errors</p>
+<p><strong>Step 5: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine &amp;&amp; git add src/editor/HierarchyPanel.hpp src/editor/HierarchyPanel.cpp &amp;&amp; git commit -m <span class="hljs-string">&quot;feat: add entity type selector to Hierarchy panel
+
+- Context menu now shows &#x27;Create Entity&#x27; submenu
+- Options: Empty, Camera 2D/3D, Directional/Point/Spot Light, Mesh Renderer
+- Each type auto-populates required components
+- 3D entities get Position3D, Rotation3D, Scale3D
+- Lights get Light component plus type-specific components&quot;</span>
+</code></pre></div>
+<hr>
+<h2 id="task-6-final-verification-and-testing">Task 6: Final Verification and Testing<a class="anchor" href="#task-6-final-verification-and-testing" aria-label="Link to this section">#</a></h2>
+<p><strong>Files:</strong></p>
+<ul>
+<li>No new files</li>
+</ul>
+<p><strong>Step 1: Full rebuild</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; cmake .. &amp;&amp; make clean &amp;&amp; make -j4 2&gt;&amp;1 | <span class="hljs-built_in">tail</span> -20
+</code></pre></div>
+<p>Expected: All targets build successfully, zero errors</p>
+<p><strong>Step 2: Launch doppio and verify viewport</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; ./doppio
+</code></pre></div>
+<p>Expected:</p>
+<ul>
+<li>Scene Viewport shows grid with axis lines</li>
+<li>Grid responds to zoom (mouse wheel)</li>
+<li>Grid responds to pan (middle mouse drag)</li>
+<li>Right-click in Hierarchy → &quot;Create Entity&quot; menu appearances</li>
+<li>Can create Camera 2D, Camera 3D, Lights, Mesh Renderer</li>
+</ul>
+<p><strong>Step 3: Test entity creation</strong></p>
+<p>In doppio:</p>
+<ol>
+<li>Right-click in Hierarchy panel</li>
+<li>Hover &quot;Create Entity&quot;</li>
+<li>Click &quot;Camera 3D&quot;</li>
+<li>Verify new entity appears in Hierarchy with &quot;Camera 3D&quot; name</li>
+<li>Select it → Inspector should show Camera3D and 3D transform components</li>
+</ol>
+<p><strong>Step 4: Commit verification</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine &amp;&amp; git <span class="hljs-built_in">log</span> --oneline | <span class="hljs-built_in">head</span> -10
+</code></pre></div>
+<p>Expected: All 6 commits visible</p>
+<p><strong>Step 5: Final comprehensive test</strong></p>
+<p>Run:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> /home/pedro/repo/caffeine/build &amp;&amp; make -j4 2&gt;&amp;1 | grep -c <span class="hljs-string">&quot;Built target&quot;</span>
+</code></pre></div>
+<p>Expected: All targets built (doppio, caffeine-core, CaffeineTest, DoppioTest)</p>
+<hr>
+<h2 id="verification-checklist">Verification Checklist<a class="anchor" href="#verification-checklist" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[ ] Grid visible in Scene Viewport</li>
+<li>[ ] Grid zooms with mouse wheel</li>
+<li>[ ] Grid pans with middle mouse drag</li>
+<li>[ ] Entity creation menu accessible via right-click in Hierarchy</li>
+<li>[ ] Can create Camera 2D entity</li>
+<li>[ ] Can create Camera 3D entity (with 3D transforms)</li>
+<li>[ ] Can create Directional Light</li>
+<li>[ ] Can create Point Light</li>
+<li>[ ] Can create Spot Light</li>
+<li>[ ] Can create Mesh Renderer</li>
+<li>[ ] All new components appear in Inspector when entity selected</li>
+<li>[ ] No compilation errors</li>
+<li>[ ] No linker errors</li>
+<li>[ ] doppio executable runs without crashes</li>
+</ul>
+<hr>
+<h2 id="execution-strategy">Execution Strategy<a class="anchor" href="#execution-strategy" aria-label="Link to this section">#</a></h2>
+<p>This plan has 6 tasks, each taking 2-5 minutes:</p>
+<ol>
+<li>Grid rendering (SceneViewport)</li>
+<li>Camera components</li>
+<li>Light components</li>
+<li>Mesh components</li>
+<li>Entity type selector UI</li>
+<li>Verification</li>
+</ol>
+<p><strong>Estimated total time:</strong> 30-45 minutes</p>
+<p>All tasks are independent compilation-wise (no circular dependencies) and should be committed individually.</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-17-scene-viewport-and-entity-types.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/"><span>Previous</span><strong>Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</strong></a><a class="pager-next" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/"><span>Next</span><strong>Caffeine Ecosystem Three-Phase Implementation Plan</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#task-1-add-grid-drawing-to-scene-viewport">Task 1: Add Grid Drawing to Scene Viewport</a></li><li class="l2"><a href="#task-2-create-camera-component-system">Task 2: Create Camera Component System</a></li><li class="l2"><a href="#task-3-create-light-component-system">Task 3: Create Light Component System</a></li><li class="l2"><a href="#task-4-create-mesh-renderer-component">Task 4: Create Mesh Renderer Component</a></li><li class="l2"><a href="#task-5-add-entity-type-selector-to-hierarchy-panel">Task 5: Add Entity Type Selector to Hierarchy Panel</a></li><li class="l2"><a href="#task-6-final-verification-and-testing">Task 6: Final Verification and Testing</a></li><li class="l2"><a href="#verification-checklist">Verification Checklist</a></li><li class="l2"><a href="#execution-strategy">Execution Strategy</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

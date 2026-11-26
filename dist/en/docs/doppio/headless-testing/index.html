@@ -1,0 +1,1534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Headless UI testing for Doppio (doppio-headless) · Caffeine</title>
+<meta name="description" content="Drive the real Doppio editor UI without opening a window: click, drag, type, press shortcuts, read the screen, take screenshots and record GIF or MP4. One binary, one JSON protocol, no SDK.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Headless UI testing for Doppio (doppio-headless) · Caffeine">
+<meta property="og:description" content="Drive the real Doppio editor UI without opening a window: click, drag, type, press shortcuts, read the screen, take screenshots and record GIF or MP4. One binary, one JSON protocol, no SDK.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/headless-testing/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/headless-testing/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/headless-testing/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/headless-testing/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link active" href="/en/docs/doppio/headless-testing/" aria-current="page">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Headless UI testing for Doppio (doppio-headless)</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span class="doc-badge">Tooling</span>
+  <span>Last verified: <time datetime="2026-11-20">2026-11-20</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/crates/ui/src/windows/main/headless/"><code>windows/main/headless/</code></a></span>
+</div>
+<p class="doc-lede">Drive the real Doppio editor UI without opening a window: click,
+drag, type, press shortcuts, read the screen, take screenshots and record GIF or
+MP4. One binary, one JSON protocol, no SDK.</p>
+<p><video class="doc-video" autoplay loop muted playsinline width="960"
+       poster="/en/docs/images/doppio/editor/workspace-scene.png">
+<source src="/en/docs/images/doppio/editor/doppio-tour.mp4" type="video/mp4">
+<a href="/en/docs/images/doppio/editor/doppio-tour.gif">Watch the interaction (GIF)</a>
+</video></p>
+<p class="doc-caption">Recorded by <code>doppio-headless</code> itself: open the Scene
+and View menus, then select a hierarchy row. The same script can produce a GIF, MP4
+or WebM for a guide or a pull request.</p>
+<p>Built so that <em>any</em> agent, model, CI job or human can use it the same way; there is
+no MCP server, SDK or special client to install.</p>
+<h2 id="why-this-exists">Why this exists<a class="anchor" href="#why-this-exists" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Headless</strong></td>
+<td>Nothing opens. Screenshots are rendered off-screen (GPU or CPU). Agents never have to look at a real desktop, which also avoids capturing unrelated windows.</td>
+</tr>
+<tr>
+<td><strong>Human-like</strong></td>
+<td>Pointer actions glide in small steps, rest a frame on the target, press, hold, release. Typing is one key at a time. Shortcuts travel the same path as in the live app. Hover, focus, drags and double clicks behave like a person's hand would make them.</td>
+</tr>
+<tr>
+<td><strong>Agnostic</strong></td>
+<td>One binary, one JSON protocol, <code>stdin</code>/<code>stdout</code>/exit codes. Works from a shell, a script, CI, Cursor, Claude Code, Codex, a plain <code>bash</code> loop…</td>
+</tr>
+<tr>
+<td><strong>Standardised</strong></td>
+<td>One action vocabulary, one target syntax, one result shape, one place that defines them (<code>reference.rs</code>), from which validation, JSON Schema and this reference are generated.</td>
+</tr>
+<tr>
+<td><strong>Verifiable</strong></td>
+<td><code>expect</code> assertions, JSON <code>state</code> snapshots, annotated screenshots and baseline comparison turn &quot;it looks right&quot; into a pass/fail result.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="quick-start">Quick start<a class="anchor" href="#quick-start" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-comment"># 1. See what is on screen (ids you can target):</span>
+./scripts/doppio-headless.sh widgets --size 1440x800
+
+<span class="hljs-comment"># 2. Run a flow and read the report:</span>
+./scripts/doppio-headless.sh run doppio/tests/ui-flows/menus-and-hover.json --format text
+
+<span class="hljs-comment"># 3. Take an annotated screenshot (every catalogued widget numbered + legend):</span>
+./scripts/doppio-headless.sh screenshot --annotate --name home --out /tmp/shots
+</code></pre></div>
+<p><code>scripts/doppio-headless.sh</code> is a thin wrapper around
+<code>cargo run -p doppio-ui --features headless --bin doppio-headless --</code>. All
+arguments are passed through, so everything below also works with the raw
+<code>cargo run</code> form or with the built binary at
+<code>doppio/target/&lt;profile&gt;/doppio-headless</code>.</p>
+<p>Minimal script:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;open the Scene menu and close it&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;fixture&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;entities&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">1280</span><span class="hljs-punctuation">,</span> <span class="hljs-number">720</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;steps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;click&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.menu.scene&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;expect&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;state&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;/menu&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Scene&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;exists&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;text:Add Entity&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;screenshot&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;scene-menu&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;annotate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;key&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Escape&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;expect&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;state&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;/menu&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h2 id="how-it-works">How it works<a class="anchor" href="#how-it-works" aria-label="Link to this section">#</a></h2>
+<p>The driver owns a real <code>App</code> (the same state, <code>update</code> and <code>view</code> the editor
+runs) plus one headless renderer, and repeats the live app's frame loop:</p>
+<ol>
+<li>the event goes through the widget tree (<code>UserInterface::update</code>), with the
+<strong>widget state tree kept between steps</strong> (focus, scroll offsets, canvas
+drags survive from one step to the next);</li>
+<li>messages published by widgets are applied with <code>App::update</code>;</li>
+<li>events no widget captured also go through the <strong>same mapping the live
+subscriptions use</strong> (<code>keyboard_event_message</code>, <code>global_event_message</code>: shortcuts,
+fly keys, pointer release, file drop);</li>
+<li>each step ends with idle frames (a redraw plus the 16 ms <code>ViewportTick</code>),
+and the view is rebuilt from the new state before the next event.</li>
+</ol>
+<h3 id="what-is-and-is-not-simulated">What is and is not simulated<a class="anchor" href="#what-is-and-is-not-simulated" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>✅ Real widgets, layout, hover/press/focus, drags, double clicks, wheel,
+keyboard, text input, shortcuts, file drops, resize, the app's tick.</li>
+<li>✅ Menus, dialogs, wizard, docking guides, tabs, trees, scrollables, canvases.</li>
+<li>⚠️ <strong>Fixtures, not an engine.</strong> The session starts from a fixture
+(<code>entities</code> or <code>empty</code>) with no <code>libcaffeine-capi</code>, so the 3D viewport shows
+&quot;Waiting for the engine viewport…&quot;. Everything in the editor chrome is real.
+Use the <code>assets</code> / <code>asset_root</code> / <code>components</code> options to give the Assets
+panel, the asset wizard and the Add Behaviour picker something to work on.</li>
+<li>⚠️ Fonts are the bundled <em>Fira Sans</em>, so pixels differ from a desktop
+with other system fonts. Baselines are therefore only valid for headless runs.</li>
+<li>❌ OS-native dialogs, clipboard from other apps, multiple windows.</li>
+</ul>
+<h2 id="command-line">Command line<a class="anchor" href="#command-line" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">doppio-headless run &lt;script.json|dir|-&gt;...   run scripts, print the report (JSON)
+doppio-headless session                      JSON step per line in, result per line out
+doppio-headless widgets                      list widgets of the first frame
+doppio-headless screenshot                   render the starting fixture
+doppio-headless catalog | actions | schema | docs
+</code></pre></div>
+<p>Options (<code>run</code>, <code>session</code>, <code>widgets</code>, <code>screenshot</code>):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Meaning</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--out &lt;dir&gt;</code></td>
+<td>Where screenshots/artifacts are written</td>
+<td><code>doppio-headless-out</code></td>
+</tr>
+<tr>
+<td><code>--size &lt;WxH&gt;</code></td>
+<td>Window size, logical pixels</td>
+<td><code>1600x900</code></td>
+</tr>
+<tr>
+<td><code>--fixture &lt;name&gt;</code></td>
+<td><code>entities</code>, <code>empty</code> or <code>material</code> (new material, Generator tab open)</td>
+<td><code>entities</code></td>
+</tr>
+<tr>
+<td><code>--asset-root &lt;dir|temp&gt;</code></td>
+<td>Folder the asset wizard writes to (<code>temp</code> = scratch dir deleted on exit)</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>--baselines &lt;dir&gt;</code></td>
+<td>Baseline images for <code>screenshot.baseline</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>--update-baselines</code></td>
+<td>Create/refresh baselines instead of failing</td>
+<td>off</td>
+</tr>
+<tr>
+<td><code>--format json|text</code></td>
+<td>Report format for <code>run</code></td>
+<td><code>json</code></td>
+</tr>
+<tr>
+<td><code>--name</code>, <code>--annotate</code></td>
+<td><code>screenshot</code> command only</td>
+<td><code>shot</code>, off</td>
+</tr>
+</tbody>
+</table></div>
+<p>A script's own <code>fixture</code>, <code>size</code>, <code>assets</code> and <code>asset_root</code> override the
+options (which are defaults). Passing a <strong>folder</strong> to <code>run</code> runs every
+<code>*.json</code> in it, each with its own artifact sub-folder.</p>
+<p><strong>Exit codes:</strong> <code>0</code> everything passed · <code>1</code> a step or assertion failed ·
+<code>2</code> usage error, unreadable file or invalid script JSON.
+<strong>Streams:</strong> reports go to stdout, diagnostics to stderr.</p>
+<p><code>ICED_TEST_BACKEND=tiny-skia</code> forces the CPU renderer (CI without a GPU).</p>
+<h3 id="machine-readable-helpers">Machine-readable helpers<a class="anchor" href="#machine-readable-helpers" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>doppio-headless actions</code> — the action reference as JSON.</li>
+<li><code>doppio-headless schema</code> — JSON Schema (draft-07) of a script; point an
+editor or validator at it.</li>
+<li><code>doppio-headless catalog</code> — every catalogued widget id with kind and
+description (the same catalogue <code>uikit/id.rs</code> maintains for the UI).</li>
+<li><code>doppio-headless docs</code> — the Markdown reference at the end of this file.</li>
+</ul>
+<h2 id="scripts">Scripts<a class="anchor" href="#scripts" aria-label="Link to this section">#</a></h2>
+<p>A script is a JSON object:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;optional title&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;description&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;optional&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;fixture&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;entities&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">1440</span><span class="hljs-punctuation">,</span> <span class="hljs-number">800</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;assets&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;rock.png&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;path&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Textures/rock.png&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+             <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Textures&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;path&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Textures&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;directory&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;asset_root&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;temp&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;components&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Mesh Renderer&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;fields&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Mesh&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;Material&quot;</span><span class="hljs-punctuation">]</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;preset&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Red Brick&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;steps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;…&quot;</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre></div>
+<p>Every step is an object with an <code>action</code> and its parameters, plus the common
+<code>label</code> (free text echoed in the result) and <code>continue_on_error</code>.
+Unknown actions or parameters are <strong>rejected with the list of valid ones</strong>
+(<code>unknown parameter &quot;tagret&quot; for &quot;click&quot;; expected: target, …</code>) so typos never
+pass silently. By default a script stops at the first failing step.</p>
+<h3 id="targets">Targets<a class="anchor" href="#targets" aria-label="Link to this section">#</a></h3>
+<p>A target says <em>what to act on</em>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Example</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id:&lt;ui id&gt;</code></td>
+<td><code>id:editor.menu.scene</code></td>
+<td><strong>Preferred.</strong> Stable, hierarchical ids from the UI catalogue.</td>
+</tr>
+<tr>
+<td><code>text:&lt;text&gt;</code></td>
+<td><code>text:Add Entity</code></td>
+<td>Visible label or text-input value; exact match first, then &quot;contains&quot;.</td>
+</tr>
+<tr>
+<td><code>point:&lt;x&gt;,&lt;y&gt;</code></td>
+<td><code>point:640,360</code></td>
+<td>Window coordinates in logical pixels.</td>
+</tr>
+<tr>
+<td>object</td>
+<td><code>{ &quot;id&quot;: &quot;…&quot; }</code>, <code>{ &quot;text&quot;: &quot;…&quot; }</code>, <code>{ &quot;point&quot;: [x, y] }</code></td>
+<td>Same thing as JSON.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A bare string is accepted as shorthand (<code>&quot;assets.wizard&quot;</code> is an id,
+<code>&quot;Create&quot;</code> is text) but the prefixes are canonical — use them in committed flows.
+<code>nth</code> (0-based) picks among several matches and <code>offset: [dx, dy]</code> shifts the
+click point from the centre of the widget.</p>
+<p>Dynamic ids follow the pattern of their catalogue entry:
+<code>hierarchy.list.entity_row.&lt;n&gt;</code>, <code>assets.grid.asset_card.&lt;n&gt;</code>,
+<code>editor.pane.tab.&lt;page&gt;</code>, <code>editor.pane.maximize.&lt;Pane(n)&gt;</code> (the pane ids appear in
+<code>state</code>)…</p>
+<h3 id="results">Results<a class="anchor" href="#results" aria-label="Link to this section">#</a></h3>
+<p>Every step produces:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;index&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;click&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;label&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;open the wizard&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;ok&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;elapsed_ms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">45</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;frame&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">12</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;data&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;point&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">234.25</span><span class="hljs-punctuation">,</span> <span class="hljs-number">548.3</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;messages&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;Wizard(Open(Create))&quot;</span><span class="hljs-punctuation">]</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;error&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;hint&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span>
+<span class="hljs-punctuation">}</span>
+</code></pre></div>
+<ul>
+<li><code>data</code> is action specific (see the reference). Pointer/keyboard actions list
+the <code>messages</code> they caused — the quickest way to see <em>why</em> something did or
+did not happen.</li>
+<li>On failure <code>error</code> says what went wrong and <code>hint</code> suggests the fix
+(<code>did you mean id:editor.menu.scene?</code>, <code>the widget is clipped: maximise the pane</code>).</li>
+</ul>
+<p><code>run</code> wraps the steps in <code>{ &quot;protocol&quot;, &quot;script&quot;, &quot;ok&quot;, &quot;passed&quot;, &quot;failed&quot;, &quot;out_dir&quot;, &quot;artifacts&quot;, &quot;steps&quot; }</code>. <code>--format text</code> prints the same as a short
+human summary.</p>
+<h2 id="human-simulation-precisely">Human simulation, precisely<a class="anchor" href="#human-simulation-precisely" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>What is produced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>move</code></td>
+<td>cursor moves from the previous position in <code>steps</code> (6) increments, then one idle frame. The first move enters the window from slightly outside the target.</td>
+</tr>
+<tr>
+<td><code>click</code></td>
+<td>modifiers down → glide → idle frame (the hand rests) → press → release → idle frame. Two <em>separate</em> clicks on the same spot are ≥ 330 ms apart so they never count as an accidental double click; <code>count: 2</code> / <code>double_click</code> produce a real one.</td>
+</tr>
+<tr>
+<td><code>drag</code></td>
+<td>glide to <code>from</code>, press, <code>steps</code> (8) pointer samples with an idle frame between each (so canvases/overlays repaint like a real drag), release. <code>hold: true</code> keeps the button down; finish with <code>mouse_up</code>.</td>
+</tr>
+<tr>
+<td><code>scroll</code></td>
+<td>glide, then a wheel event in lines.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>optional click on <code>target</code> to focus it, then <strong>one key at a time</strong> (press/release per character, app updated between keys).</td>
+</tr>
+<tr>
+<td><code>key</code></td>
+<td>modifiers → key down → key up. Shortcuts (<code>ctrl+z</code>, <code>ctrl+shift+n</code>, <code>Escape</code>, <code>F5</code>, <code>g</code>, <code>1</code>…) reach the app through the same subscription mapping as live.</td>
+</tr>
+<tr>
+<td><code>key_down</code> / <code>key_up</code></td>
+<td>hold keys such as <code>w</code> (fly camera) or <code>shift</code> (boost).</td>
+</tr>
+<tr>
+<td><code>wait</code></td>
+<td>idle frames (<code>frames</code>) or simulated milliseconds (<code>ms</code>, 16 ms/frame). <code>real_time: true</code> also sleeps (for background jobs like <code>caf-pack</code>).</td>
+</tr>
+<tr>
+<td><code>file_drop</code></td>
+<td>an OS file-drop event.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Because the widget state tree persists, a text field stays focused between
+steps, scroll offsets stay where you left them, and a canvas keeps its drag
+state — exactly what an agent needs for multi-step interactions.</p>
+<h2 id="discovering-the-ui-read-this-agents">Discovering the UI (read this, agents)<a class="anchor" href="#discovering-the-ui-read-this-agents" aria-label="Link to this section">#</a></h2>
+<p>You never have to guess ids. In order of preference:</p>
+<ol>
+<li><strong><code>widgets</code></strong> — what is on screen <em>now</em>:
+<code>{ &quot;action&quot;: &quot;widgets&quot;, &quot;prefix&quot;: &quot;assets.&quot; }</code> →
+<code>[{ &quot;id&quot;: &quot;assets.toolbar.new&quot;, &quot;kind&quot;: &quot;container&quot;, &quot;bounds&quot;: [x,y,w,h], &quot;text&quot;: null }, …]</code>.
+Add <code>&quot;with_text&quot;: true</code> to also see anonymous labels for <code>text:</code> targets.</li>
+<li><strong><code>find</code></strong> — does <em>this</em> target exist, where, and is it visible?</li>
+<li><strong><code>state</code></strong> — the app state as JSON (see below). Cheaper than a screenshot.</li>
+<li><strong><code>screenshot</code> with <code>annotate: true</code></strong> — numbered boxes and a legend of
+<code>id — description</code> for each catalogued widget; look at the picture once,
+then act by id.</li>
+<li><strong><code>catalog</code></strong> — the full list of catalogued ids (not tied to what is open).</li>
+</ol>
+<p>If an id is missing, the thing is probably not open: click the tab, open the
+menu or wizard first, or <code>resize</code> the window if it is clipped.</p>
+<h3 id="the-state-snapshot">The <code>state</code> snapshot<a class="anchor" href="#the-state-snapshot" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>panes[]</code></td>
+<td><code>{ id, pages[], active, maximized }</code> for every pane (pane ids like <code>Pane(3)</code> match <code>editor.pane.maximize.Pane(3)</code>)</td>
+</tr>
+<tr>
+<td><code>entities[]</code>, <code>selected</code>, <code>selected_index</code></td>
+<td>scene entities (id, name, position, rotation, scale, parent) and selection</td>
+</tr>
+<tr>
+<td><code>menu</code>, <code>hierarchy_menu</code></td>
+<td>open menu name / context-menu row</td>
+</tr>
+<tr>
+<td><code>tab_drag</code>, <code>dock_hover</code></td>
+<td>tab drag in progress (<code>dragging</code> is true once the tab left its header) and the docking guide under the cursor</td>
+</tr>
+<tr>
+<td><code>assets</code></td>
+<td><code>directory</code>, <code>count</code>, <code>selected</code>, <code>search</code>, <code>view_mode</code>, <code>tree_open</code>, <code>tree_collapsed</code></td>
+</tr>
+<tr>
+<td><code>wizard</code></td>
+<td><code>open</code>, <code>tab</code>, <code>template</code>, <code>name</code>, <code>sources</code>, <code>packing</code>, <code>status { text, ok }</code></td>
+</tr>
+<tr>
+<td><code>project</code>, <code>material</code>, <code>texture_set</code>, <code>script</code>, <code>viewport</code></td>
+<td>what is open in each editor</td>
+</tr>
+<tr>
+<td><code>console</code></td>
+<td><code>count</code> and the <code>last</code> 10 entries <code>{ level, text }</code></td>
+</tr>
+<tr>
+<td><code>window</code>, <code>pointer</code>, <code>frame</code></td>
+<td>window size, pointer position, frames run</td>
+</tr>
+</tbody>
+</table></div>
+<p>Use JSON pointers: <code>{ &quot;action&quot;: &quot;state&quot;, &quot;path&quot;: &quot;/assets/directory&quot; }</code>.</p>
+<h2 id="assertions">Assertions<a class="anchor" href="#assertions" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;expect&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;exists&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;id:assets.wizard&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;text:Create&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;missing&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:assets.toolbar.nope&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;visible&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.pane.tab.console&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;shows&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Waiting for the engine viewport…&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:inspector.entity.name&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;equals&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Entity 1&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;state&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;/wizard/open&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;/assets/tree_collapsed&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;contains&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Textures&quot;</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;count&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;prefix&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;assets.grid.asset_card.&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;at_least&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<p>Every given field must hold. Put a <code>label</code> on assertions so failures read well
+in the report.</p>
+<h2 id="screenshots">Screenshots<a class="anchor" href="#screenshots" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;screenshot&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;wizard&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:assets.wizard&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;annotate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;id:assets.wizard.create.name&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;id:assets.wizard.create.confirm&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;scale&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;baseline&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;wizard-create&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<ul>
+<li>Files are <code>&lt;out&gt;/&lt;NNN&gt;-&lt;name&gt;.png</code> (NNN counts up so nothing is overwritten);
+the result gives <code>path</code>, <code>width</code>, <code>height</code> and a content <code>hash</code>.</li>
+<li><code>target</code> crops to a widget (+ <code>padding</code>); <code>scale</code> raises the pixel density.</li>
+<li><code>annotate: true</code> numbers every <em>catalogued</em> widget (one box per id, no
+pane-sized frames) and appends the legend <code>n. id — description</code>; or pass a
+list of targets to label exactly those.</li>
+<li><strong>Baselines</strong>: with <code>--baselines &lt;dir&gt;</code>, <code>baseline</code> compares against
+<code>&lt;dir&gt;/&lt;name&gt;.png</code>. First run (or <code>--update-baselines</code>) writes it; later
+mismatches beyond <code>tolerance</code> (fraction of pixels, default 0.0005) fail the
+step and save a <code>*.diff.png</code> with differing pixels in red.</li>
+</ul>
+<h2 id="flows-regression-tests">Flows (regression tests)<a class="anchor" href="#flows-regression-tests" aria-label="Link to this section">#</a></h2>
+<p>Flows are scripts committed under <code>doppio/tests/ui-flows/*.json</code>. The Rust test
+<code>every_shipped_flow_passes</code> runs all of them on every <code>cargo test</code>, and
+<code>scripts/check-rust-ui.sh</code> does too. To add one: copy a flow, change the steps,
+run it with <code>--format text</code>, commit it. Shipped flows cover the asset wizard, docking, generator libraries, inspector sections, menus and hover, the texture
+generator and gizmo snapping (<code>gizmo-snapping.json</code>). A good flow</p>
+<ul>
+<li>names the behaviour in <code>name</code>/<code>description</code> (and the bug it guards, if any);</li>
+<li>starts from a fixture and only uses ids/texts a user could see;</li>
+<li>asserts with <code>expect</code> after each meaningful action (not only at the end);</li>
+<li>keeps screenshots as <em>artifacts</em> (not baselines) unless the visuals are the point.</li>
+</ul>
+<h2 id="recipes-for-agents">Recipes for agents<a class="anchor" href="#recipes-for-agents" aria-label="Link to this section">#</a></h2>
+<p><strong>Verify a UI change you just made</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/doppio-headless.sh run doppio/tests/ui-flows --format text      <span class="hljs-comment"># all flows</span>
+./scripts/doppio-headless.sh screenshot --annotate --name after --out /tmp/after
+</code></pre></div>
+<p>Then read <code>/tmp/after/001-after.png</code>.</p>
+<p><strong>Reproduce a bug as a user would</strong>: write the clicks as a script, run it with
+<code>--format text</code>, and read the <code>messages</code> of the failing step.</p>
+<p><strong>Interactive exploration without any framework</strong> — a persistent session over
+pipes (one JSON step per line, one JSON result per line):</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">mkfifo</span> /tmp/dh.in
+./scripts/doppio-headless.sh session --out /tmp/dh &lt; /tmp/dh.in &amp;
+<span class="hljs-built_in">exec</span> 3&gt;/tmp/dh.in
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;{&quot;action&quot;:&quot;widgets&quot;,&quot;prefix&quot;:&quot;editor.menu&quot;}&#x27;</span>        &gt;&amp;3
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;{&quot;action&quot;:&quot;click&quot;,&quot;target&quot;:&quot;id:editor.menu.scene&quot;}&#x27;</span> &gt;&amp;3
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;{&quot;action&quot;:&quot;screenshot&quot;,&quot;name&quot;:&quot;menu&quot;}&#x27;</span>              &gt;&amp;3
+<span class="hljs-built_in">echo</span> <span class="hljs-string">&#x27;{&quot;action&quot;:&quot;quit&quot;}&#x27;</span>                                  &gt;&amp;3
+</code></pre></div>
+<div class="code-block" data-lang="python"><div class="code-head"><span class="code-lang">python</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-python"><span class="hljs-keyword">import</span> json, subprocess
+p = subprocess.Popen([<span class="hljs-string">&quot;scripts/doppio-headless.sh&quot;</span>, <span class="hljs-string">&quot;session&quot;</span>], text=<span class="hljs-literal">True</span>,
+                     stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+<span class="hljs-built_in">print</span>(p.stdout.readline())                      <span class="hljs-comment"># {&quot;event&quot;:&quot;ready&quot;,...}</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">step</span>(<span class="hljs-params">**s</span>):
+    p.stdin.write(json.dumps(s) + <span class="hljs-string">&quot;\n&quot;</span>); p.stdin.flush()
+    <span class="hljs-keyword">return</span> json.loads(p.stdout.readline())
+<span class="hljs-keyword">assert</span> step(action=<span class="hljs-string">&quot;click&quot;</span>, target=<span class="hljs-string">&quot;id:editor.menu.scene&quot;</span>)[<span class="hljs-string">&quot;ok&quot;</span>]
+<span class="hljs-built_in">print</span>(step(action=<span class="hljs-string">&quot;state&quot;</span>, path=<span class="hljs-string">&quot;/menu&quot;</span>)[<span class="hljs-string">&quot;data&quot;</span>])   <span class="hljs-comment"># &quot;Scene&quot;</span>
+</code></pre></div>
+<h2 id="documentation-captures">Documentation captures<a class="anchor" href="#documentation-captures" aria-label="Link to this section">#</a></h2>
+<p>The docs use this driver instead of desktop screenshots. Capture flows live in
+<code>caffeine-website/captures/flows/capture-*.json</code>; the shell wrappers only strip the numeric prefix
+so image names stay stable:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/capture-editor-docs.sh    <span class="hljs-comment"># workspace, panes, menus, generators</span>
+./scripts/capture-editor-tour.sh    <span class="hljs-comment"># short MP4/GIF tour (ffmpeg for GIF)</span>
+./scripts/capture-material-docs.sh
+./scripts/capture-nature-docs.sh
+./scripts/capture-terrain-docs.sh
+./scripts/capture-texture-docs.sh
+./scripts/capture-water-docs.sh
+./scripts/capture-gizmo-docs.sh
+</code></pre></div>
+<p>A capture flow is a normal flow plus <code>screenshot</code> steps:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;screenshot&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;pane-inspector&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.pane.inspector&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;padding&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">4</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<p>Use <code>target</code> to crop to a pane, <code>padding</code> to breathe, <code>scale: 2</code> for retina-like
+detail and <code>annotate</code> when the point is to teach ids. Keep captures as artifacts,
+not baselines, unless the visuals are the regression.</p>
+<p>For motion, record the flow itself:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;steps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;record_start&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;tour&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;format&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;mp4&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;fps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">12</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;width&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">960</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;click&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.menu.scene&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;wait&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;ms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">700</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;real_time&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;key&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Escape&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;record_stop&quot;</span> <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<p><code>format</code> accepts <code>gif</code>, <code>mp4</code> and <code>webm</code>. A GIF is the most portable fallback;
+MP4 is smaller and sharper for modern pages. Use <code>width</code> to keep the file small and
+<code>keep_frames</code> only when you need the intermediate PNGs.</p>
+<p>The UI reference is generated separately:
+<code>./scripts/generate-doppio-ui-docs.sh --publish</code> captures every catalogued widget
+from <code>ui-captions.json</code>. Never hand-edit <code>editor/ui-reference.md</code>.</p>
+<h2 id="extending-the-driver">Extending the driver<a class="anchor" href="#extending-the-driver" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>New action</strong>: add its <code>ActionDoc</code> in <code>headless/reference.rs</code> (parameters,
+returns, example), handle it in <code>Driver::execute</code>, add a test in
+<code>headless/tests.rs</code>, then refresh this file's reference
+(<code>./scripts/doppio-headless.sh docs</code>, paste between the markers — a test
+fails if they drift apart).</li>
+<li><strong>New state key</strong>: add it to <code>headless/state.rs</code> and the table above.</li>
+<li><strong>New widget</strong>: give it a <code>UiId</code> + catalogue entry (<code>uikit/id.rs</code>) as the
+project rules require — that automatically makes it targetable, listed by
+<code>widgets</code> and annotatable.</li>
+<li>Keep the protocol additive; bump <code>PROTOCOL_VERSION</code> on breaking changes.</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting<a class="anchor" href="#troubleshooting" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>could not create a headless renderer</code></td>
+<td><code>ICED_TEST_BACKEND=tiny-skia</code></td>
+</tr>
+<tr>
+<td><code>no widget matches id:…</code></td>
+<td>read the <code>hint</code>; run <code>widgets</code>; open the tab/menu/dialog that owns it</td>
+</tr>
+<tr>
+<td><code>the widget exists but is clipped</code></td>
+<td><code>resize</code>, maximise the pane, or scroll its container</td>
+</tr>
+<tr>
+<td>Click did nothing</td>
+<td>read <code>data.messages</code>; was a modal/overlay above it? Is the target the container instead of the button text? Try <code>text:</code></td>
+</tr>
+<tr>
+<td>Two clicks became a double click</td>
+<td>use one <code>click</code> per intent; the driver already spaces separate clicks</td>
+</tr>
+<tr>
+<td>Baseline mismatch only on another machine</td>
+<td>fonts/AA differ; raise <code>tolerance</code> or regenerate baselines there</td>
+</tr>
+<tr>
+<td>Typing lands nowhere</td>
+<td>pass <code>target</code> to <code>type</code> so the field is clicked (focused) first</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="reference">Reference<a class="anchor" href="#reference" aria-label="Link to this section">#</a></h2>
+<h3 id="recording-gifs-and-videos-ffmpeg">Recording GIFs and videos (ffmpeg)<a class="anchor" href="#recording-gifs-and-videos-ffmpeg" aria-label="Link to this section">#</a></h3>
+<p><code>record_start</code> / <code>record_stop</code> capture the window (or one widget) while a script runs and let <strong>ffmpeg</strong>
+encode a <strong>GIF, MP4 or WebM</strong>. A frame is taken after every step that changes something (so a click is
+visible) and every few frames during a <code>wait</code>; with <code>real_time: true</code> the wait plays at normal speed, so
+<code>{ &quot;action&quot;: &quot;wait&quot;, &quot;ms&quot;: 2000, &quot;real_time&quot;: true }</code> is about two seconds of video. <code>fps</code> is both the capture
+and the playback rate. ffmpeg must be on the <code>PATH</code> (or set <code>FFMPEG</code> to its path); without it the step fails
+with a hint and the frames are kept. A recording left open at the end of a script is finished automatically.</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;steps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;record_start&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;orbit&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;format&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;mp4&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;fps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.pane.terrain_generator&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;click&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:terraingen.preset&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;wait&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;ms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2000</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;real_time&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;record_stop&quot;</span> <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<p>The result of <code>record_stop</code> reports <code>path</code>, <code>frames</code>, <code>seconds</code> and <code>bytes</code>. Use <code>width</code> for a smaller file,
+<code>scale</code> for a sharper capture and <code>keep_frames</code> to keep the PNGs.</p>
+<p>The sections below are generated from <code>headless/reference.rs</code>.</p>
+<!-- BEGIN GENERATED REFERENCE -->
+<h3 id="pointer">Pointer<a class="anchor" href="#pointer" aria-label="Link to this section">#</a></h3>
+<h4 id="move"><code>move</code><a class="anchor" href="#move" aria-label="Link to this section">#</a></h4>
+<p>Moves the pointer to a target in several small steps (hover).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>yes</td>
+<td>What to act on: <code>id:&lt;ui id&gt;</code>, <code>text:&lt;visible text&gt;</code> or <code>point:&lt;x&gt;,&lt;y&gt;</code> (see Targets).</td>
+</tr>
+<tr>
+<td><code>nth</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>0-based index when several widgets match the target (default 0).</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td><code>[x, y]</code></td>
+<td>no</td>
+<td>Logical pixels added to the target's centre, e.g. to hit a corner.</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Intermediate pointer positions emitted while moving, like a real hand (default 6).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;point&quot;: [x, y] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;move&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.menu.scene&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="click"><code>click</code><a class="anchor" href="#click" aria-label="Link to this section">#</a></h4>
+<p>Moves to the target, presses and releases a mouse button.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>yes</td>
+<td>What to act on: <code>id:&lt;ui id&gt;</code>, <code>text:&lt;visible text&gt;</code> or <code>point:&lt;x&gt;,&lt;y&gt;</code> (see Targets).</td>
+</tr>
+<tr>
+<td><code>nth</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>0-based index when several widgets match the target (default 0).</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td><code>[x, y]</code></td>
+<td>no</td>
+<td>Logical pixels added to the target's centre, e.g. to hit a corner.</td>
+</tr>
+<tr>
+<td><code>button</code></td>
+<td><code>&quot;left&quot; | &quot;right&quot; | &quot;middle&quot;</code></td>
+<td>no</td>
+<td>Mouse button (default left).</td>
+</tr>
+<tr>
+<td><code>modifiers</code></td>
+<td><code>[&quot;ctrl&quot; | &quot;shift&quot; | &quot;alt&quot; | &quot;cmd&quot;]</code></td>
+<td>no</td>
+<td>Modifier keys held during the action.</td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>1 = click, 2 = double click, 3 = triple (default 1).</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Intermediate pointer positions emitted while moving, like a real hand (default 6).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;point&quot;: [x, y], &quot;messages&quot;: [&quot;…&quot;] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;click&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:assets.toolbar.new&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="double_click"><code>double_click</code><a class="anchor" href="#double_click" aria-label="Link to this section">#</a></h4>
+<p>Shorthand for <code>click</code> with <code>count: 2</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>yes</td>
+<td>What to act on: <code>id:&lt;ui id&gt;</code>, <code>text:&lt;visible text&gt;</code> or <code>point:&lt;x&gt;,&lt;y&gt;</code> (see Targets).</td>
+</tr>
+<tr>
+<td><code>nth</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>0-based index when several widgets match the target (default 0).</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td><code>[x, y]</code></td>
+<td>no</td>
+<td>Logical pixels added to the target's centre, e.g. to hit a corner.</td>
+</tr>
+<tr>
+<td><code>button</code></td>
+<td><code>&quot;left&quot; | &quot;right&quot; | &quot;middle&quot;</code></td>
+<td>no</td>
+<td>Mouse button (default left).</td>
+</tr>
+<tr>
+<td><code>modifiers</code></td>
+<td><code>[&quot;ctrl&quot; | &quot;shift&quot; | &quot;alt&quot; | &quot;cmd&quot;]</code></td>
+<td>no</td>
+<td>Modifier keys held during the action.</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Intermediate pointer positions emitted while moving, like a real hand (default 6).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>as </code>click``</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;double_click&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;text:Textures&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="right_click"><code>right_click</code><a class="anchor" href="#right_click" aria-label="Link to this section">#</a></h4>
+<p>Shorthand for <code>click</code> with <code>button: &quot;right&quot;</code> (context menus).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>yes</td>
+<td>What to act on: <code>id:&lt;ui id&gt;</code>, <code>text:&lt;visible text&gt;</code> or <code>point:&lt;x&gt;,&lt;y&gt;</code> (see Targets).</td>
+</tr>
+<tr>
+<td><code>nth</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>0-based index when several widgets match the target (default 0).</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td><code>[x, y]</code></td>
+<td>no</td>
+<td>Logical pixels added to the target's centre, e.g. to hit a corner.</td>
+</tr>
+<tr>
+<td><code>modifiers</code></td>
+<td><code>[&quot;ctrl&quot; | &quot;shift&quot; | &quot;alt&quot; | &quot;cmd&quot;]</code></td>
+<td>no</td>
+<td>Modifier keys held during the action.</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Intermediate pointer positions emitted while moving, like a real hand (default 6).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>as </code>click``</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;right_click&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:hierarchy.list.entity_row.0&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="drag"><code>drag</code><a class="anchor" href="#drag" aria-label="Link to this section">#</a></h4>
+<p>Presses on <code>from</code>, moves in small steps and releases on <code>to</code> (or by an offset).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>from</code></td>
+<td><code>target</code></td>
+<td>yes</td>
+<td>Where the drag starts.</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td><code>target</code></td>
+<td>no</td>
+<td>Where the drag ends. One of <code>to</code> / <code>by</code> is required.</td>
+</tr>
+<tr>
+<td><code>by</code></td>
+<td><code>[dx, dy]</code></td>
+<td>no</td>
+<td>Relative drag distance in logical pixels.</td>
+</tr>
+<tr>
+<td><code>button</code></td>
+<td><code>&quot;left&quot; | &quot;right&quot; | &quot;middle&quot;</code></td>
+<td>no</td>
+<td>Mouse button (default left).</td>
+</tr>
+<tr>
+<td><code>modifiers</code></td>
+<td><code>[&quot;ctrl&quot; | &quot;shift&quot; | &quot;alt&quot; | &quot;cmd&quot;]</code></td>
+<td>no</td>
+<td>Modifier keys held during the action.</td>
+</tr>
+<tr>
+<td><code>steps</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Intermediate pointer positions emitted while moving, like a real hand (default 6).</td>
+</tr>
+<tr>
+<td><code>hold</code></td>
+<td><code>bool</code></td>
+<td>no</td>
+<td>Do not release at the end (finish later with <code>mouse_up</code>). Default false.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;from&quot;: [x, y], &quot;to&quot;: [x, y], &quot;messages&quot;: [&quot;…&quot;] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;drag&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;from&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.pane.tab.console&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;to&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;point:900,300&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="scroll"><code>scroll</code><a class="anchor" href="#scroll" aria-label="Link to this section">#</a></h4>
+<p>Moves to the target and turns the mouse wheel.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>no</td>
+<td>Where to act; omit to act at the current pointer position.</td>
+</tr>
+<tr>
+<td><code>dy</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Wheel lines vertically; positive scrolls up/zooms in (default 0).</td>
+</tr>
+<tr>
+<td><code>dx</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Wheel lines horizontally (default 0).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;point&quot;: [x, y] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;scroll&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.viewport.surface&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;dy&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="mouse_down"><code>mouse_down</code><a class="anchor" href="#mouse_down" aria-label="Link to this section">#</a></h4>
+<p>Low-level: presses a mouse button at the current pointer position.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>button</code></td>
+<td><code>&quot;left&quot; | &quot;right&quot; | &quot;middle&quot;</code></td>
+<td>no</td>
+<td>Mouse button (default left).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{}</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;mouse_down&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="mouse_up"><code>mouse_up</code><a class="anchor" href="#mouse_up" aria-label="Link to this section">#</a></h4>
+<p>Low-level: releases a mouse button at the current pointer position.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>button</code></td>
+<td><code>&quot;left&quot; | &quot;right&quot; | &quot;middle&quot;</code></td>
+<td>no</td>
+<td>Mouse button (default left).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{}</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;mouse_up&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h3 id="keyboard">Keyboard<a class="anchor" href="#keyboard" aria-label="Link to this section">#</a></h3>
+<h4 id="type"><code>type</code><a class="anchor" href="#type" aria-label="Link to this section">#</a></h4>
+<p>Types text one character at a time. With <code>target</code>, clicks it first to focus it.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td><code>string</code></td>
+<td>yes</td>
+<td>The characters to type.</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>no</td>
+<td>Where to act; omit to act at the current pointer position.</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td><code>bool</code></td>
+<td>no</td>
+<td>Select all (ctrl+a) and delete before typing.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;messages&quot;: [&quot;…&quot;] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;type&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:assets.wizard.create.name&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;text&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Props&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="key"><code>key</code><a class="anchor" href="#key" aria-label="Link to this section">#</a></h4>
+<p>Taps a key or chord such as <code>Enter</code>, <code>Escape</code>, <code>F5</code>, <code>ctrl+z</code>, <code>ctrl+shift+n</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>yes</td>
+<td>Key name (enter, escape, tab, space, backspace, delete, up/down/left/right, home, end, pageup, pagedown, f1-f12, or one character), optionally prefixed by <code>ctrl+</code>, <code>shift+</code>, <code>alt+</code>, <code>cmd+</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;messages&quot;: [&quot;…&quot;] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;key&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ctrl+z&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="key_down"><code>key_down</code><a class="anchor" href="#key_down" aria-label="Link to this section">#</a></h4>
+<p>Presses a key and keeps it held (fly camera keys, shift boost). Release with <code>key_up</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>yes</td>
+<td>Same syntax as <code>key</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{}</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;key_down&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;w&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="key_up"><code>key_up</code><a class="anchor" href="#key_up" aria-label="Link to this section">#</a></h4>
+<p>Releases a key held by <code>key_down</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>key</code></td>
+<td><code>string</code></td>
+<td>yes</td>
+<td>Same syntax as <code>key</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{}</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;key_up&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;key&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;w&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h3 id="time">Time<a class="anchor" href="#time" aria-label="Link to this section">#</a></h3>
+<h4 id="wait"><code>wait</code><a class="anchor" href="#wait" aria-label="Link to this section">#</a></h4>
+<p>Lets the app run: delivers redraws and the 16 ms viewport tick.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>frames</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Number of frames to run (default 1).</td>
+</tr>
+<tr>
+<td><code>ms</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Alternative to <code>frames</code>: milliseconds of simulated time (16 ms per frame).</td>
+</tr>
+<tr>
+<td><code>real_time</code></td>
+<td><code>bool</code></td>
+<td>no</td>
+<td>Also sleep for that long (for background jobs such as caf-pack). Default false.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;frames&quot;: n }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;wait&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;ms&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">200</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="resize"><code>resize</code><a class="anchor" href="#resize" aria-label="Link to this section">#</a></h4>
+<p>Resizes the virtual window (logical pixels).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>size</code></td>
+<td><code>[w, h]</code></td>
+<td>yes</td>
+<td>New window size.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;size&quot;: [w, h] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;resize&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;size&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-number">1280</span><span class="hljs-punctuation">,</span> <span class="hljs-number">720</span><span class="hljs-punctuation">]</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="file_drop"><code>file_drop</code><a class="anchor" href="#file_drop" aria-label="Link to this section">#</a></h4>
+<p>Drops a file from the OS onto the window.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>yes</td>
+<td>Absolute path of the dropped file or folder.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;messages&quot;: [&quot;…&quot;] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;file_drop&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;path&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/tmp/rock.png&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h3 id="query">Query<a class="anchor" href="#query" aria-label="Link to this section">#</a></h3>
+<h4 id="find"><code>find</code><a class="anchor" href="#find" aria-label="Link to this section">#</a></h4>
+<p>Looks a target up without touching it.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>yes</td>
+<td>What to act on: <code>id:&lt;ui id&gt;</code>, <code>text:&lt;visible text&gt;</code> or <code>point:&lt;x&gt;,&lt;y&gt;</code> (see Targets).</td>
+</tr>
+<tr>
+<td><code>nth</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>0-based index when several widgets match the target (default 0).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;found&quot;: bool, &quot;id&quot;: …, &quot;kind&quot;: …, &quot;bounds&quot;: [x,y,w,h], &quot;visible_bounds&quot;: …, &quot;text&quot;: …, &quot;matches&quot;: n }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;find&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.pane.viewport&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="widgets"><code>widgets</code><a class="anchor" href="#widgets" aria-label="Link to this section">#</a></h4>
+<p>Lists the widgets of the current frame (discovery: what can I click?).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prefix</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td>Only ids that start with this (e.g. <code>assets.</code>).</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td>Only this kind: container, text, text_input, focusable, scrollable, custom.</td>
+</tr>
+<tr>
+<td><code>visible_only</code></td>
+<td><code>bool</code></td>
+<td>no</td>
+<td>Skip widgets that are clipped away (default true).</td>
+</tr>
+<tr>
+<td><code>with_text</code></td>
+<td><code>bool</code></td>
+<td>no</td>
+<td>Include anonymous text widgets so you can target <code>text:</code> (default false).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;count&quot;: n, &quot;widgets&quot;: [{ &quot;id&quot;, &quot;kind&quot;, &quot;bounds&quot;, &quot;text&quot; }] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;widgets&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;prefix&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;assets.&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="text"><code>text</code><a class="anchor" href="#text" aria-label="Link to this section">#</a></h4>
+<p>Reads the text of a text widget or the value of a text input.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>yes</td>
+<td>What to act on: <code>id:&lt;ui id&gt;</code>, <code>text:&lt;visible text&gt;</code> or <code>point:&lt;x&gt;,&lt;y&gt;</code> (see Targets).</td>
+</tr>
+<tr>
+<td><code>nth</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>0-based index when several widgets match the target (default 0).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;text&quot;: &quot;…&quot; }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;text&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:inspector.entity.name&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="state"><code>state</code><a class="anchor" href="#state" aria-label="Link to this section">#</a></h4>
+<p>Returns the app state as JSON (panes, selection, menus, wizard, console…).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td>JSON pointer into the state, e.g. <code>/panes/0/pages</code>. Omit for everything.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>the state (or the selected part)</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;state&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;path&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/menu&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="log"><code>log</code><a class="anchor" href="#log" aria-label="Link to this section">#</a></h4>
+<p>Returns the last console entries.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>last</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>How many entries (default 10).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;entries&quot;: [{ &quot;level&quot;, &quot;text&quot; }] }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;log&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;last&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h3 id="capture">Capture<a class="anchor" href="#capture" aria-label="Link to this section">#</a></h3>
+<h4 id="screenshot"><code>screenshot</code><a class="anchor" href="#screenshot" aria-label="Link to this section">#</a></h4>
+<p>Renders the window (or one widget) to a PNG, optionally annotated or compared with a baseline.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td>File stem (default <code>shot</code>). Files are <code>&lt;out&gt;/&lt;NNN&gt;-&lt;name&gt;.png</code>.</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>no</td>
+<td>Crop to this widget; omit for the whole window.</td>
+</tr>
+<tr>
+<td><code>padding</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Logical pixels added around a cropped target (default 8).</td>
+</tr>
+<tr>
+<td><code>annotate</code></td>
+<td><code>bool | [target]</code></td>
+<td>no</td>
+<td>Draw numbered boxes with a legend. <code>true</code> = every visible widget that has a catalogued id; or a list of targets.</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Pixel density (default 1; use 2 for retina-like detail).</td>
+</tr>
+<tr>
+<td><code>baseline</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td>Compare with <code>&lt;baselines&gt;/&lt;baseline&gt;.png</code>; a mismatch fails the step. Create/refresh with <code>--update-baselines</code>.</td>
+</tr>
+<tr>
+<td><code>tolerance</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Allowed fraction of differing pixels (default 0.0005).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;path&quot;, &quot;width&quot;, &quot;height&quot;, &quot;hash&quot;, &quot;baseline&quot;: { &quot;status&quot;, &quot;diff_ratio&quot; } }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;screenshot&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;assets-wizard&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:assets.wizard&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;annotate&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="record_start"><code>record_start</code><a class="anchor" href="#record_start" aria-label="Link to this section">#</a></h4>
+<p>Starts recording the window (or one widget). Frames are taken after every step that changes something and every few frames during <code>wait</code>; <code>record_stop</code> turns them into a GIF, MP4 or WebM with ffmpeg.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td>File stem of the result (default <code>recording</code>): <code>&lt;out&gt;/&lt;name&gt;.&lt;format&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td><code>gif</code> (default), <code>mp4</code> or <code>webm</code>.</td>
+</tr>
+<tr>
+<td><code>fps</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Capture and playback rate, 1-60 (default 15). A <code>wait</code> of 2000 ms with <code>real_time</code> is about two seconds of video.</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>target</code></td>
+<td>no</td>
+<td>Record only this widget; omit for the whole window.</td>
+</tr>
+<tr>
+<td><code>padding</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Logical pixels around a target (default 8).</td>
+</tr>
+<tr>
+<td><code>scale</code></td>
+<td><code>number</code></td>
+<td>no</td>
+<td>Capture pixel density, 0.25-3 (default 1).</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td><code>int</code></td>
+<td>no</td>
+<td>Output width in pixels (height keeps the aspect); omit to keep the captured size.</td>
+</tr>
+<tr>
+<td><code>keep_frames</code></td>
+<td><code>bool</code></td>
+<td>no</td>
+<td>Keep the PNG frames (their folder is returned) instead of deleting them.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;recording&quot;: true, &quot;fps&quot; }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;record_start&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;orbit&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;format&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;mp4&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;fps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:editor.pane.viewport&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h4 id="record_stop"><code>record_stop</code><a class="anchor" href="#record_stop" aria-label="Link to this section">#</a></h4>
+<p>Stops the recording and encodes it with ffmpeg (the FFMPEG environment variable overrides the program path). A recording still open when the script ends is finished automatically.</p>
+<p>Returns: <code>{ &quot;path&quot;, &quot;format&quot;, &quot;frames&quot;, &quot;fps&quot;, &quot;seconds&quot;, &quot;bytes&quot; }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;record_stop&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h3 id="assert">Assert<a class="anchor" href="#assert" aria-label="Link to this section">#</a></h3>
+<h4 id="expect"><code>expect</code><a class="anchor" href="#expect" aria-label="Link to this section">#</a></h4>
+<p>Asserts conditions on the current frame/state; every given field must hold.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exists</code></td>
+<td><code>target | [target]</code></td>
+<td>no</td>
+<td>These targets are on screen.</td>
+</tr>
+<tr>
+<td><code>missing</code></td>
+<td><code>target | [target]</code></td>
+<td>no</td>
+<td>These targets are not on screen.</td>
+</tr>
+<tr>
+<td><code>visible</code></td>
+<td><code>target | [target]</code></td>
+<td>no</td>
+<td>These targets exist and are not clipped away.</td>
+</tr>
+<tr>
+<td><code>shows</code></td>
+<td><code>string | [string]</code></td>
+<td>no</td>
+<td>These exact texts are on screen.</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>{ target, equals?, contains? }</code></td>
+<td>no</td>
+<td>Text of a widget equals / contains a string.</td>
+</tr>
+<tr>
+<td><code>state</code></td>
+<td><code>{ &quot;/json/pointer&quot;: value }</code></td>
+<td>no</td>
+<td>Values in the <code>state</code> JSON (deep equality). Use <code>{ &quot;contains&quot;: … }</code> for arrays/strings.</td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td><code>{ prefix, equals?, at_least? }</code></td>
+<td>no</td>
+<td>Number of visible widgets whose id starts with <code>prefix</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;checked&quot;: n }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;expect&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;exists&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;id:assets.wizard&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;state&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;/wizard/open&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span> <span class="hljs-punctuation">}</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h3 id="session">Session<a class="anchor" href="#session" aria-label="Link to this section">#</a></h3>
+<h4 id="reset"><code>reset</code><a class="anchor" href="#reset" aria-label="Link to this section">#</a></h4>
+<p>Starts over with a fresh app (new fixture, window size and assets).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fixture</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td><code>empty</code>, <code>entities</code>, <code>material</code>, <code>texture</code>, <code>scene3d</code> (an engine-backed scene with lights, a camera and meshes; needs libcaffeine-capi) <code>nature</code> (the same, filled with generated rocks, trees and plants) <code>water</code> (the Water Generator tab in front) <code>terrain</code> (the Terrain Generator tab in front) <code>world</code> (the World Composer tab on a scratch project: a hills terrain, two rock recipes and <code>World/Valley.generator.world</code>; needs libcaffeine-capi) or <code>world_showcase</code> (the same tab on <code>World/Highlands.generator.world</code>: hills round a valley, a river, a lake, oaks and pines, boulders, shrubs and grass; Build makes a few thousand instances, Frame points the Viewport at them). Default <code>entities</code>.</td>
+</tr>
+<tr>
+<td><code>size</code></td>
+<td><code>[w, h]</code></td>
+<td>no</td>
+<td>Window size.</td>
+</tr>
+<tr>
+<td><code>assets</code></td>
+<td><code>[{ name, path, kind, directory? }]</code></td>
+<td>no</td>
+<td>Asset list shown in the Assets panel.</td>
+</tr>
+<tr>
+<td><code>asset_root</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td>Folder the asset wizard writes to; <code>temp</code> creates a scratch directory.</td>
+</tr>
+<tr>
+<td><code>preset</code></td>
+<td><code>string</code></td>
+<td>no</td>
+<td>Library preset applied to the Material Generator (fixture <code>material</code>, e.g. <code>Red Brick</code>) to the Texture Generator (fixture <code>texture</code>, e.g. <code>Torch Flame</code>) to the Nature Generator (fixture <code>nature</code>, e.g. <code>Pine</code>) to the Water Generator (fixture <code>water</code>, e.g. <code>Storm</code>) or to the Terrain Generator (fixture <code>terrain</code>, e.g. <code>Badlands</code>).</td>
+</tr>
+<tr>
+<td><code>components</code></td>
+<td><code>[{ name, fields? }]</code></td>
+<td>no</td>
+<td>Engine component types the fixture pretends to have (for Add Behaviour).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Returns: <code>{ &quot;asset_root&quot;: … }</code></p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;action&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;reset&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;fixture&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;entities&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;asset_root&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;temp&quot;</span> <span class="hljs-punctuation">}</span>
+</code></pre></div>
+<!-- END GENERATED REFERENCE -->
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/headless-testing.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/graphics-roadmap/"><span>Previous</span><strong>Graphics improvement — Micromeshes and Photon roadmap</strong></a><a class="pager-next" href="/en/docs/doppio/material-pipeline/"><span>Next</span><strong>Material, texture and generator pipeline — backlog</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#why-this-exists">Why this exists</a></li><li class="l2"><a href="#quick-start">Quick start</a></li><li class="l2"><a href="#how-it-works">How it works</a></li><li class="l3"><a href="#what-is-and-is-not-simulated">What is and is not simulated</a></li><li class="l2"><a href="#command-line">Command line</a></li><li class="l3"><a href="#machine-readable-helpers">Machine-readable helpers</a></li><li class="l2"><a href="#scripts">Scripts</a></li><li class="l3"><a href="#targets">Targets</a></li><li class="l3"><a href="#results">Results</a></li><li class="l2"><a href="#human-simulation-precisely">Human simulation, precisely</a></li><li class="l2"><a href="#discovering-the-ui-read-this-agents">Discovering the UI (read this, agents)</a></li><li class="l3"><a href="#the-state-snapshot">The state snapshot</a></li><li class="l2"><a href="#assertions">Assertions</a></li><li class="l2"><a href="#screenshots">Screenshots</a></li><li class="l2"><a href="#flows-regression-tests">Flows (regression tests)</a></li><li class="l2"><a href="#recipes-for-agents">Recipes for agents</a></li><li class="l2"><a href="#documentation-captures">Documentation captures</a></li><li class="l2"><a href="#extending-the-driver">Extending the driver</a></li><li class="l2"><a href="#troubleshooting">Troubleshooting</a></li><li class="l2"><a href="#reference">Reference</a></li><li class="l3"><a href="#recording-gifs-and-videos-ffmpeg">Recording GIFs and videos (ffmpeg)</a></li><li class="l3"><a href="#pointer">Pointer</a></li><li class="l3"><a href="#keyboard">Keyboard</a></li><li class="l3"><a href="#time">Time</a></li><li class="l3"><a href="#query">Query</a></li><li class="l3"><a href="#capture">Capture</a></li><li class="l3"><a href="#assert">Assert</a></li><li class="l3"><a href="#session">Session</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

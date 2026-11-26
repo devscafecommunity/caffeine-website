@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terrain System · Caffeine</title>
+<meta name="description" content="The editable heightfield: chunked mesh and LOD, splat painting, coarse collision, the native Terrain Editor and the .cterrain format.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Terrain System · Caffeine">
+<meta property="og:description" content="The editable heightfield: chunked mesh and LOD, splat painting, coarse collision, the native Terrain Editor and the .cterrain format.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/terrain/terrain-system/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/terrain/terrain-system/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/terrain/terrain-system/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab active" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/terrain/terrain-system/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Engine"><div class="nav-title">Engine</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Architecture</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/architecture/cafpack/">Cafpack — Unified Asset Layer</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Core</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/en/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/en/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/en/docs/core/types/">Core Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/ecs/">ECS and scenes</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/en/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/en/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Math</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/en/docs/math/vectors/">Math Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memory</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/memory/memory-model/">🧠 Memory Model — Allocator Specification</a></li><li><a class="nav-link" href="/en/docs/memory/containers/">Containers Module</a></li><li><a class="nav-link" href="/en/docs/memory/allocators/">Memory Module</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Physics</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/en/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/en/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Rendering</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/en/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/en/docs/rendering/overlay-2d-rhi/">2D vector overlays (RHI path)</a></li><li><a class="nav-link" href="/en/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/en/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/en/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/en/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/en/docs/rendering/materials-phong/">Materials in the 3D forward pass</a></li><li><a class="nav-link" href="/en/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/en/docs/rendering/reflections/">Reflections</a></li><li><a class="nav-link" href="/en/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/en/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/en/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/en/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terrain</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/en/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link active" href="/en/docs/terrain/terrain-system/" aria-current="page">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Audio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/en/docs/audio/volumetric-audio/">Volumetric audio</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/animation/animation-2d/">🎬 Animation System</a></li><li><a class="nav-link" href="/en/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Input</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Runtime UI (ImGui &amp; in-game HUD)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/ui-kit/">Composable UI kit</a></li><li><a class="nav-link" href="/en/docs/runtime-ui/editor-ui/">ImGui host (runtime and legacy plugins)</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Debugging</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/en/docs/debug/testing/">Testing</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/performance/">Performance</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/performance/editor-viewport-performance/">Performance — Viewport &amp; GPU Scene Editor</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concurrency</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Asset system</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/assets/caf-format/">📄 Format .caf — Caffeine Asset Format</a></li><li><a class="nav-link" href="/en/docs/assets/asset-manager/">📦 Asset Manager</a></li><li><a class="nav-link" href="/en/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/en/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/en/docs/assets/vegetation-kit/">Vegetation Kit</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/engine/">Engine</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Terrain System</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span><strong>Namespace:</strong> `Caffeine::Terrain`, `Caffeine::ECS::TerrainComponent`</span>
+  <span><strong>Files:</strong> `src/caffeine/terrain/`, `src/caffeine/ecs/TerrainComponents.hpp`</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/ecs/TerrainComponents.hpp"><code>ecs/TerrainComponents.hpp</code></a></span>
+</div>
+<p class="doc-lede">The editable heightfield: chunked mesh and LOD, splat painting, coarse
+collision, the native Terrain Editor and the <code>.cterrain</code> format.</p>
+<blockquote>
+<p><strong>Procedural generation:</strong> the Doppio Terrain Generator (C ABI v8); the legacy
+<code>terrain_plugin</code> is documented in <a href="/en/docs/terrain/terrain-plugin/"><code>terrain-plugin.md</code></a></p>
+</blockquote>
+<hr>
+<h2 id="overview">Overview<a class="anchor" href="#overview" aria-label="Link to this section">#</a></h2>
+<p>Terrain in Caffeine is an editable <strong>heightfield</strong>: data in <code>TerrainHeightmap</code>, rendering via
+<code>TerrainMeshBuilder</code> + per-chunk LOD, splat painting in <code>TerrainSplatmap</code>. The engine <strong>does
+not</strong> ship procedural generation in the core. Doppio's <strong>Terrain</strong> tab builds heightfields
+with a node graph and places them through the C ABI v8; the legacy <code>terrain_plugin</code> remains
+for the C++ host.</p>
+<p><strong>Separation of responsibilities:</strong> the Terrain Editor, sculpt/paint tools and <code>.cterrain</code> I/O
+are native engine features. Procedural generation lives in Doppio's Terrain tab; the
+legacy <code>terrain_plugin</code> keeps the C++ host version.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Core</strong></td>
+<td>Heightmap, mesh, LOD, coarse collision, sculpt/paint, <code>.cterrain</code></td>
+</tr>
+<tr>
+<td><strong>Terrain Editor (native)</strong></td>
+<td>Sculpt, splat paint, undo and <code>.cterrain</code> import/export</td>
+</tr>
+<tr>
+<td><strong>Terrain Generator (Doppio tab)</strong></td>
+<td>Presets, node graph, splat layers, Place in scene</td>
+</tr>
+<tr>
+<td><strong>terrain_plugin (legacy)</strong></td>
+<td>Node.js algorithm and heightmap import for the C++ host</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="terraincomponent">TerrainComponent<a class="anchor" href="#terraincomponent" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">TerrainComponent</span> {
+    u32 resolutionX = <span class="hljs-number">257</span>;
+    u32 resolutionZ = <span class="hljs-number">257</span>;
+    u32 splatResolutionScale = <span class="hljs-number">2</span>;          <span class="hljs-comment">// splatmap is coarser than the heightmap</span>
+    f32 worldSizeX = WorldUnits::kDefaultTerrainSizeM; <span class="hljs-comment">// metres (1 u = 1 m)</span>
+    f32 worldSizeZ = WorldUnits::kDefaultTerrainSizeM;
+    f32 maxHeight = WorldUnits::kDefaultTerrainHeightM;
+
+    u32 dataRevision = <span class="hljs-number">1</span>;                  <span class="hljs-comment">// bumped when heights/splat change</span>
+    u32 meshRevision = <span class="hljs-number">0</span>;
+    u32 splatRevision = <span class="hljs-number">1</span>;
+    <span class="hljs-type">bool</span> castShadows = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">bool</span> receiveShadows = <span class="hljs-literal">true</span>;
+
+    <span class="hljs-type">char</span> texturePath[<span class="hljs-number">256</span>];                 <span class="hljs-comment">// default ground albedo</span>
+    <span class="hljs-type">char</span> normalMapPath[<span class="hljs-number">256</span>];               <span class="hljs-comment">// triplanar normal map (GPU)</span>
+    f32  textureTileSize = <span class="hljs-number">8.0f</span>;
+    f32  shininess = <span class="hljs-number">16.0f</span>;                <span class="hljs-comment">// legacy; terrain shading has no specular</span>
+    Vec3 tint{<span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>, <span class="hljs-number">1.0f</span>};           <span class="hljs-comment">// multiplies the sampled albedo</span>
+
+    <span class="hljs-type">bool</span> useSplatmap = <span class="hljs-literal">true</span>;
+    <span class="hljs-type">char</span> splatLayerPaths[<span class="hljs-number">4</span>][<span class="hljs-number">256</span>];          <span class="hljs-comment">// Grass, Rock, Sand, Dirt defaults</span>
+    f32  splatTileSize = <span class="hljs-number">8.0f</span>;
+
+    <span class="hljs-type">bool</span> useChunks = <span class="hljs-literal">true</span>;
+    u32 chunkVertexCount = <span class="hljs-number">33</span>;
+    u32 maxLodLevels = <span class="hljs-number">2</span>;
+    <span class="hljs-type">bool</span> frustumCull = <span class="hljs-literal">true</span>;
+    f32 lodDistanceScale = <span class="hljs-number">520.0f</span>;
+    f32 lodHysteresis = <span class="hljs-number">0.25f</span>;
+
+    u32 collisionSampleStep = <span class="hljs-number">4</span>;           <span class="hljs-comment">// 4 = ~16x fewer triangles</span>
+    <span class="hljs-type">bool</span> buildCollisionMesh = <span class="hljs-literal">true</span>;
+
+    <span class="hljs-type">char</span> terrainDataPath[<span class="hljs-number">256</span>];             <span class="hljs-comment">// .cterrain path in the project</span>
+};
+</code></pre></div>
+<p>The internal heightmap stores <strong>normalised</strong> values <code>[0, 1]</code>. In the mesh, <code>y = sample * maxHeight</code>.</p>
+<hr>
+<h2 id="data-pipeline">Data pipeline<a class="anchor" href="#data-pipeline" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><code>TerrainComponent (ECS)</code></li>
+<li><code>▼</code></li>
+<li><code>TerrainCache::initializeEntity / syncEntity</code>
+<ul>
+<li><code>TerrainHeightmap (CPU, editable)</code></li>
+<li><code>TerrainSplatmap (4 layers)</code></li>
+<li><code>Mesh3D render (TerrainMeshBuilder + tangents)</code></li>
+<li><code>Mesh3D collision (TerrainCollisionMeshBuilder, decimated)</code></li>
+<li><code>TerrainChunk[] (LOD + frustum cull)</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="terrainmeshbuilder">TerrainMeshBuilder<a class="anchor" href="#terrainmeshbuilder" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Generates vertices with the heightmap normal (<code>sampleNormalBilinear</code>).</li>
+<li>UVs tiled according to <code>textureTileSize</code> / <code>splatTileSize</code>.</li>
+<li><strong>Tangents</strong> calculated per triangle (base for normal mapping).</li>
+</ul>
+<h3 id="collision">Collision<a class="anchor" href="#collision" aria-label="Link to this section">#</a></h3>
+<p><code>TerrainCollisionMeshBuilder</code> reuses <code>buildRegion</code> with <code>collisionSampleStep</code> (for example 4 →
+~16× fewer triangles). Access it through <code>TerrainCache::collisionMeshFor(entity)</code>.</p>
+<hr>
+<h2 id="editor">Editor<a class="anchor" href="#editor" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inspector → Terrain</strong></td>
+<td>Resolution, size, LOD, splat, collision, Normal Map, Shininess</td>
+</tr>
+<tr>
+<td><strong>Terrain Editor (native)</strong></td>
+<td>Sculpt (raise/lower/smooth/flatten/noise), splat paint, import/export <code>.cterrain</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="native-terrain-editor">Native Terrain Editor<a class="anchor" href="#native-terrain-editor" aria-label="Link to this section">#</a></h3>
+<figure class="doc-figure">
+  <img src="/en/docs/images/captures/terrain-native.png" alt="Terrain with natural ground textures" loading="lazy">
+  <figcaption>Terrain with natural ground textures</figcaption>
+</figure>
+<p>Open it from <strong>View → Terrain Editor</strong>, the command palette (<strong>Terrain Editor</strong>),
+or the <strong>Open Terrain Editor</strong> button in the Toolbox while a Terrain entity is
+selected.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Raise / Lower</strong></td>
+<td>Adds or removes height with a smooth falloff</td>
+</tr>
+<tr>
+<td><strong>Smooth</strong></td>
+<td>Averages the local neighbourhood</td>
+</tr>
+<tr>
+<td><strong>Flatten</strong></td>
+<td>Flattens to the height under the first click of the stroke</td>
+</tr>
+<tr>
+<td><strong>Noise</strong></td>
+<td>Adds deterministic detail</td>
+</tr>
+<tr>
+<td><strong>Splat paint</strong></td>
+<td>Paints Grass, Rock, Sand or Dirt weights</td>
+</tr>
+<tr>
+<td><strong>Reset default textures</strong></td>
+<td>Restores the default paths and the Grass layer</td>
+</tr>
+<tr>
+<td><strong>Data tab</strong></td>
+<td>Edits the <code>.cterrain</code> path and imports/exports the file</td>
+</tr>
+</tbody>
+</table></div>
+<p>Fast strokes are interpolated between frames instead of stamping only once per
+frame. Undo/redo snapshots include the heightmap and splatmap, so <strong>Ctrl+Z</strong>
+restores terrain edits instead of resetting the terrain to flat.</p>
+<p>New terrains start with the <strong>Grass</strong> layer and natural 1k ground textures
+from <code>assets/hdr-assets-texture</code> (dirt/rock/moss, rocks, dirt and mud). The
+Inspector <strong>Tint</strong> colour multiplies the sampled albedo.</p>
+<p>Scenes authored before this default stored an unpainted terrain as the old
+<strong>Light</strong> layer. Loading such a <code>.cterrain</code> migrates the uniform Light splatmap
+to Grass and upgrades the untouched Kenney prototype paths to the natural ground
+set automatically.</p>
+<p>Procedural generation: panel <strong>Terrain Generator</strong> (plugin). The plugin does not
+own sculpting or painting.</p>
+<hr>
+<h2 id="gpu-rendering">GPU rendering<a class="anchor" href="#gpu-rendering" aria-label="Link to this section">#</a></h2>
+<p>With <code>CF_HAS_SDL3</code>, terrain uses <code>terrain_lit.frag</code>:</p>
+<ul>
+<li>Lambert diffuse plus sky IBL; the surface is a rough dielectric, with no specular lobe.</li>
+<li>Normal map <strong>triplanar</strong> via the terrain GPU texture cache (sampler slot 5).</li>
+<li>Directional shadows (slots 6–7), point cubemaps (slots 8–9) and spot maps (slots 10–11).</li>
+<li>Splat map on slot 0, the four layers on slots 1–4.</li>
+<li><code>castShadows</code> / <code>receiveShadows</code> are read in <code>GpuSceneRenderer::gatherMeshDraws</code>.</li>
+</ul>
+<p>See <a href="/en/docs/rendering/materials-phong/"><code>rendering/materials-phong.md</code></a> and
+<a href="/en/docs/rendering/shadow-mapping/"><code>rendering/shadow-mapping.md</code></a>.</p>
+<hr>
+<h2 id="serialization">Serialization<a class="anchor" href="#serialization" aria-label="Link to this section">#</a></h2>
+<p><code>SceneSerializer</code> writes <code>TerrainComponent</code> into the scene blob (terrain blob version <strong>11</strong>).
+Version 9 added <code>collisionSampleStep</code> and <code>buildCollisionMesh</code>; version 10 added
+<code>normalMapPath</code> and <code>shininess</code>; version 11 added <code>tint</code>. Legacy generation fields (v2–v8) are
+read and discarded for compatibility. Heavy height/splat data live in the <code>.cterrain</code>
+referenced by <code>terrainDataPath</code>.</p>
+<hr>
+<h2 id="useful-api">Useful API<a class="anchor" href="#useful-api" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp">TerrainCache&amp; cache = TerrainCache::<span class="hljs-built_in">instance</span>();
+cache.<span class="hljs-built_in">initializeEntity</span>(world, entity);
+cache.<span class="hljs-built_in">heightmapFor</span>(entity)-&gt;<span class="hljs-built_in">setNormalized</span>(x, z, h);
+cache.<span class="hljs-built_in">syncEntity</span>(world, entity);
+
+Terrain::importHeightmapFile(world, entity, path, worldSizeX, worldSizeZ);
+</code></pre></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/terrain/terrain-system.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/terrain/terrain-plugin/"><span>Previous</span><strong>Terrain Generator Plugin</strong></a><a class="pager-next" href="/en/docs/audio/audio-system/"><span>Next</span><strong>🎵 Audio System</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#overview">Overview</a></li><li class="l2"><a href="#terraincomponent">TerrainComponent</a></li><li class="l2"><a href="#data-pipeline">Data pipeline</a></li><li class="l3"><a href="#terrainmeshbuilder">TerrainMeshBuilder</a></li><li class="l3"><a href="#collision">Collision</a></li><li class="l2"><a href="#editor">Editor</a></li><li class="l3"><a href="#native-terrain-editor">Native Terrain Editor</a></li><li class="l2"><a href="#gpu-rendering">GPU rendering</a></li><li class="l2"><a href="#serialization">Serialization</a></li><li class="l2"><a href="#useful-api">Useful API</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

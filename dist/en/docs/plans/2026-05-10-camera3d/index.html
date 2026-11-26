@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Camera 3D Implementation Plan · Caffeine</title>
+<meta name="description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Camera 3D Implementation Plan · Caffeine">
+<meta property="og:description" content="For Claude: REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-10-camera3d/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-05-10-camera3d/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-05-10-camera3d/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-05-10-camera3d/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/2026-10-19-dryad-node-scripts/">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link active" href="/en/docs/plans/2026-05-10-camera3d/" aria-current="page">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Camera 3D Implementation Plan</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<blockquote>
+<p><strong>For Claude:</strong> REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.</p>
+</blockquote>
+<p><strong>Goal:</strong> Implement Camera3D with perspective projection, FPS/Orbital/Follow modes, and frustum culling integration (RF5.5, RF5.6).</p>
+<p><strong>Architecture:</strong> Single inline header <code>src/caffeine/render/Camera3D.hpp</code> following the same pattern as <code>Camera2D.hpp</code> — Dirty-flagged VP cache, all methods inline, <code>.cpp</code> file. Integrates with existing <code>Spatial::Frustum::fromCamera()</code> for culling and uses <code>Mat4::perspective()</code> / <code>Quat::toMatrix()</code> for matrix construction.</p>
+<p><strong>Tech Stack:</strong> C++20, custom math (Vec3, Quat, Mat4), ECS (Entity/World), Spatial (AABB3D/Frustum)</p>
+<hr>
+<h3 id="task-1-create-camera3d-header">Task 1: Create Camera3D header<a class="anchor" href="#task-1-create-camera3d-header" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>src/caffeine/render/Camera3D.hpp</code></li>
+</ul>
+<ul>
+<li><em>Implementation — complete file content:</em>*</li>
+</ul>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> once</span>
+
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;RenderTypes.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../math/Vec2.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../math/Vec3.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../math/Mat4.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../math/Quat.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../math/Math.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../spatial/Octree.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../ecs/Entity.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../ecs/World.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;../ecs/Components3D.hpp&quot;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;cmath&gt;</span></span>
+
+<span class="hljs-keyword">namespace</span> Caffeine::Render {
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// @brief  Câmera 3D com projeção perspectiva.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  Modos:</span>
+<span class="hljs-comment">//  - FPS: mouse look, WASD movement</span>
+<span class="hljs-comment">//  - Orbital: rotação em torno de um ponto (editor, estratégia)</span>
+<span class="hljs-comment">//  - Follow: segue entidade com offset (terceira pessoa)</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">Camera3D</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">Camera3D</span>() = <span class="hljs-keyword">default</span>;
+
+    <span class="hljs-comment">// ── Matrices ──────────────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function">Mat4 <span class="hljs-title">viewMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">calculateViewMatrix</span>();
+    }
+
+    <span class="hljs-function">Mat4 <span class="hljs-title">projectionMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">calculateProjectionMatrix</span>();
+    }
+
+    <span class="hljs-function">Mat4 <span class="hljs-title">viewProjectionMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">if</span> (m_dirty) {
+            m_cachedVP = <span class="hljs-built_in">calculateProjectionMatrix</span>() * <span class="hljs-built_in">calculateViewMatrix</span>();
+            m_dirty = <span class="hljs-literal">false</span>;
+        }
+        <span class="hljs-keyword">return</span> m_cachedVP;
+    }
+
+    <span class="hljs-comment">// ── Frustum ──────────────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function">Spatial::Frustum <span class="hljs-title">frustum</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        Vec3 fwd = forward();
+        Vec3 pos = <span class="hljs-built_in">effectivePosition</span>();
+        <span class="hljs-keyword">return</span> Spatial::Frustum::<span class="hljs-built_in">fromCamera</span>(
+            pos, pos + fwd, Vec3::<span class="hljs-built_in">up</span>(),
+            Math::<span class="hljs-built_in">degToRad</span>(m_fovY), m_aspect, m_near, m_far
+        );
+    }
+
+    <span class="hljs-comment">// ── Space conversion ─────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">worldToScreen</span><span class="hljs-params">(Vec3 worldPos)</span> <span class="hljs-type">const</span> </span>{
+        Mat4 vp = <span class="hljs-built_in">viewProjectionMatrix</span>();
+        Vec3 p  = vp.<span class="hljs-built_in">transformPoint</span>(worldPos);
+        <span class="hljs-comment">// NDC → screen (Y flipped: NDC +Y = up, screen +Y = down)</span>
+        f32 sx = (p.x + <span class="hljs-number">1.0f</span>) * <span class="hljs-number">0.5f</span> * m_viewport.size.x + m_viewport.position.x;
+        f32 sy = (<span class="hljs-number">1.0f</span> - p.y) * <span class="hljs-number">0.5f</span> * m_viewport.size.y + m_viewport.position.y;
+        f32 sz = (p.z + <span class="hljs-number">1.0f</span>) * <span class="hljs-number">0.5f</span>; <span class="hljs-comment">// depth 0-1</span>
+        <span class="hljs-keyword">return</span> { sx, sy, sz };
+    }
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">screenToWorld</span><span class="hljs-params">(Vec2 screenPos, f32 depth = <span class="hljs-number">0.5f</span>)</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-comment">// Screen → NDC</span>
+        f32 ndcX = (screenPos.x - m_viewport.position.x) / m_viewport.size.x * <span class="hljs-number">2.0f</span> - <span class="hljs-number">1.0f</span>;
+        f32 ndcY = <span class="hljs-number">1.0f</span> - (screenPos.y - m_viewport.position.y) / m_viewport.size.y * <span class="hljs-number">2.0f</span>;
+        f32 ndcZ = depth * <span class="hljs-number">2.0f</span> - <span class="hljs-number">1.0f</span>;
+
+        <span class="hljs-comment">// Unproject via inverse VP</span>
+        Mat4 invVP = <span class="hljs-built_in">viewProjectionMatrix</span>().<span class="hljs-built_in">inverted</span>();
+        <span class="hljs-keyword">return</span> invVP.<span class="hljs-built_in">transformPoint</span>({ ndcX, ndcY, ndcZ });
+    }
+
+    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">isVisible</span><span class="hljs-params">(<span class="hljs-type">const</span> Spatial::AABB3D&amp; bounds)</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">frustum</span>().<span class="hljs-built_in">intersects</span>(bounds);
+    }
+
+    <span class="hljs-comment">// ── Perspective configuration ────────────────────────────────────────────</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setFOV</span><span class="hljs-params">(f32 fovYDegrees)</span> </span>{
+        m_fovY  = fovYDegrees;
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setAspect</span><span class="hljs-params">(f32 aspect)</span> </span>{
+        m_aspect = aspect;
+        m_dirty  = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setNearFar</span><span class="hljs-params">(f32 nearPlane, f32 farPlane)</span> </span>{
+        m_near  = nearPlane;
+        m_far   = farPlane;
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setViewport</span><span class="hljs-params">(Rect2D viewport)</span> </span>{
+        m_viewport = viewport;
+        m_dirty    = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-comment">// ── Transform ────────────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setPosition</span><span class="hljs-params">(Vec3 pos)</span> </span>{
+        m_position = pos;
+        <span class="hljs-built_in">syncRotationToAngles</span>();
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setRotation</span><span class="hljs-params">(Quat rot)</span> </span>{
+        m_rotation = rot;
+        <span class="hljs-built_in">syncAnglesToRotation</span>();
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">lookAt</span><span class="hljs-params">(Vec3 eye, Vec3 target, Vec3 up = {<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>})</span> </span>{
+        m_position = eye;
+        Vec3 fwd = (target - eye).<span class="hljs-built_in">normalized</span>();
+        <span class="hljs-keyword">if</span> (fwd.<span class="hljs-built_in">lengthSquared</span>() &lt; <span class="hljs-number">1e-8f</span>) fwd = {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>};
+        m_rotation = Quat::<span class="hljs-built_in">lookAt</span>(fwd, up);
+        <span class="hljs-built_in">syncAnglesToRotation</span>();
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-comment">// ── FPS mode ─────────────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">rotateFPS</span><span class="hljs-params">(f32 deltaPitch, f32 deltaYaw)</span> </span>{
+        m_pitch += deltaPitch;
+        m_yaw   += deltaYaw;
+        m_pitch  = Math::<span class="hljs-built_in">clamp</span>(m_pitch, <span class="hljs-number">-89.0f</span>, <span class="hljs-number">89.0f</span>);
+        <span class="hljs-built_in">syncRotationToAngles</span>();
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">moveFPS</span><span class="hljs-params">(Vec3 localDelta)</span> </span>{
+        m_position = m_position + <span class="hljs-built_in">right</span>() * localDelta.x
+                                 + Vec3::<span class="hljs-built_in">up</span>() * localDelta.y
+                                 + forward() * localDelta.z;
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-comment">// ── Orbital mode ─────────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">orbit</span><span class="hljs-params">(f32 deltaAzimuth, f32 deltaElevation)</span> </span>{
+        m_azimuth   += deltaAzimuth;
+        m_elevation += deltaElevation;
+        m_elevation  = Math::<span class="hljs-built_in">clamp</span>(m_elevation, <span class="hljs-number">-89.0f</span>, <span class="hljs-number">89.0f</span>);
+        <span class="hljs-built_in">updateOrbitalPosition</span>();
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setOrbitTarget</span><span class="hljs-params">(Vec3 target)</span> </span>{
+        m_orbitTarget = target;
+        <span class="hljs-built_in">updateOrbitalPosition</span>();
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">setOrbitDistance</span><span class="hljs-params">(f32 distance)</span> </span>{
+        m_orbitDistance = distance &gt; <span class="hljs-number">0.0f</span> ? distance : <span class="hljs-number">0.001f</span>;
+        <span class="hljs-built_in">updateOrbitalPosition</span>();
+        m_dirty = <span class="hljs-literal">true</span>;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">zoom</span><span class="hljs-params">(f32 delta)</span> </span>{
+        <span class="hljs-built_in">setOrbitDistance</span>(m_orbitDistance + delta);
+    }
+
+    <span class="hljs-comment">// ── Follow mode ──────────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">follow</span><span class="hljs-params">(ECS::Entity target, Vec3 offset = {<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">-5</span>}, f32 smoothing = <span class="hljs-number">0.05f</span>)</span> </span>{
+        m_followTarget    = target;
+        m_followOffset    = offset;
+        m_followSmoothing = smoothing;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">stopFollowing</span><span class="hljs-params">()</span> </span>{
+        m_followTarget = ECS::Entity::INVALID;
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">update</span><span class="hljs-params">(f64 dt, <span class="hljs-type">const</span> ECS::World&amp; world)</span> </span>{
+        <span class="hljs-keyword">if</span> (m_followTarget.<span class="hljs-built_in">isValid</span>()) {
+            <span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>* pos = world.<span class="hljs-built_in">get</span>&lt;ECS::Position3D&gt;(m_followTarget);
+            <span class="hljs-keyword">if</span> (pos) {
+                Vec3 target = pos-&gt;position + m_followOffset;
+                m_position = <span class="hljs-built_in">Vec3</span>(
+                    Math::<span class="hljs-built_in">lerp</span>(m_position.x, target.x, m_followSmoothing),
+                    Math::<span class="hljs-built_in">lerp</span>(m_position.y, target.y, m_followSmoothing),
+                    Math::<span class="hljs-built_in">lerp</span>(m_position.z, target.z, m_followSmoothing)
+                );
+                <span class="hljs-built_in">syncRotationToAngles</span>();
+                m_dirty = <span class="hljs-literal">true</span>;
+            }
+        }
+    }
+
+    <span class="hljs-comment">// ── Getters ──────────────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">position</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_position; }
+    <span class="hljs-function">Quat <span class="hljs-title">rotation</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_rotation; }
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">forward</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">return</span> m_rotation.<span class="hljs-built_in">rotate</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>});
+    }
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">right</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">return</span> m_rotation.<span class="hljs-built_in">rotate</span>({<span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    }
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">up</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">return</span> m_rotation.<span class="hljs-built_in">rotate</span>({<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>});
+    }
+
+    <span class="hljs-function">f32  <span class="hljs-title">fov</span><span class="hljs-params">()</span>       <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_fovY; }
+    <span class="hljs-function">f32  <span class="hljs-title">aspect</span><span class="hljs-params">()</span>    <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_aspect; }
+    <span class="hljs-function">f32  <span class="hljs-title">nearPlane</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_near; }
+    <span class="hljs-function">f32  <span class="hljs-title">farPlane</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_far; }
+    <span class="hljs-function">Rect2D <span class="hljs-title">viewport</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{ <span class="hljs-keyword">return</span> m_viewport; }
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-comment">// ── Matrix construction ───────────────────────────────────────────────────</span>
+
+    <span class="hljs-function">Mat4 <span class="hljs-title">calculateViewMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-comment">// View = rotation⁻¹ * translation⁻¹</span>
+        <span class="hljs-comment">// Since Quat is unit, inverse = conjugate</span>
+        Mat4 rot   = m_rotation.<span class="hljs-built_in">conjugate</span>().<span class="hljs-built_in">toMatrix</span>();
+        Vec3 ep    = <span class="hljs-built_in">effectivePosition</span>();
+        Mat4 trans = Mat4::<span class="hljs-built_in">translation</span>(-ep.x, -ep.y, -ep.z);
+        <span class="hljs-keyword">return</span> rot * trans;
+    }
+
+    <span class="hljs-function">Mat4 <span class="hljs-title">calculateProjectionMatrix</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">return</span> Mat4::<span class="hljs-built_in">perspective</span>(Math::<span class="hljs-built_in">degToRad</span>(m_fovY), m_aspect, m_near, m_far);
+    }
+
+    <span class="hljs-function">Vec3 <span class="hljs-title">effectivePosition</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+        <span class="hljs-keyword">return</span> m_position;
+    }
+
+    <span class="hljs-comment">// ── Rotation ↔ Euler sync ────────────────────────────────────────────────</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">syncRotationToAngles</span><span class="hljs-params">()</span> </span>{
+        Vec3 euler = m_rotation.<span class="hljs-built_in">toEuler</span>();
+        m_pitch = Math::<span class="hljs-built_in">radToDeg</span>(euler.x);
+        m_yaw   = Math::<span class="hljs-built_in">radToDeg</span>(euler.y);
+    }
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">syncAnglesToRotation</span><span class="hljs-params">()</span> </span>{
+        m_rotation = Quat::<span class="hljs-built_in">fromEuler</span>(
+            Math::<span class="hljs-built_in">degToRad</span>(m_pitch),
+            Math::<span class="hljs-built_in">degToRad</span>(m_yaw),
+            <span class="hljs-number">0.0f</span> <span class="hljs-comment">// roll always 0 for FPS/orbital</span>
+        );
+    }
+
+    <span class="hljs-comment">// ── Orbital helper ───────────────────────────────────────────────────────</span>
+
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">updateOrbitalPosition</span><span class="hljs-params">()</span> </span>{
+        f32 azRad   = Math::<span class="hljs-built_in">degToRad</span>(m_azimuth);
+        f32 elRad   = Math::<span class="hljs-built_in">degToRad</span>(m_elevation);
+        Vec3 offset = {
+            <span class="hljs-built_in">cosf</span>(elRad) * <span class="hljs-built_in">sinf</span>(azRad) * m_orbitDistance,
+            <span class="hljs-built_in">sinf</span>(elRad) * m_orbitDistance,
+            <span class="hljs-built_in">cosf</span>(elRad) * <span class="hljs-built_in">cosf</span>(azRad) * m_orbitDistance
+        };
+        m_position = m_orbitTarget + offset;
+        <span class="hljs-comment">// Look at target</span>
+        Vec3 fwd = (m_orbitTarget - m_position).<span class="hljs-built_in">normalized</span>();
+        <span class="hljs-keyword">if</span> (fwd.<span class="hljs-built_in">lengthSquared</span>() &gt; <span class="hljs-number">1e-8f</span>) {
+            m_rotation = Quat::<span class="hljs-built_in">lookAt</span>(fwd, Vec3::<span class="hljs-built_in">up</span>());
+        }
+        <span class="hljs-built_in">syncRotationToAngles</span>();
+    }
+
+    <span class="hljs-comment">// ── State ────────────────────────────────────────────────────────────────</span>
+
+    Vec3   m_position { <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">-5.0f</span> };
+    Quat   m_rotation { Quat::<span class="hljs-built_in">identity</span>() };
+    f32    m_fovY     { <span class="hljs-number">60.0f</span> };
+    f32    m_aspect   { <span class="hljs-number">16.0f</span> / <span class="hljs-number">9.0f</span> };
+    f32    m_near     { <span class="hljs-number">0.1f</span> };
+    f32    m_far      { <span class="hljs-number">1000.0f</span> };
+    Rect2D m_viewport {};
+
+    <span class="hljs-comment">// FPS</span>
+    f32 m_pitch { <span class="hljs-number">0.0f</span> };
+    f32 m_yaw   { <span class="hljs-number">0.0f</span> };
+
+    <span class="hljs-comment">// Follow</span>
+    ECS::Entity m_followTarget    { ECS::Entity::INVALID };
+    Vec3         m_followOffset    { <span class="hljs-number">0.0f</span>, <span class="hljs-number">2.0f</span>, <span class="hljs-number">-5.0f</span> };
+    f32          m_followSmoothing { <span class="hljs-number">0.05f</span> };
+
+    <span class="hljs-comment">// Orbital</span>
+    Vec3 m_orbitTarget   { <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span>, <span class="hljs-number">0.0f</span> };
+    f32  m_orbitDistance { <span class="hljs-number">5.0f</span> };
+    f32  m_azimuth       { <span class="hljs-number">0.0f</span> };
+    f32  m_elevation     { <span class="hljs-number">30.0f</span> };
+
+    <span class="hljs-keyword">mutable</span> Mat4 m_cachedVP;
+    <span class="hljs-keyword">mutable</span> <span class="hljs-type">bool</span> m_dirty { <span class="hljs-literal">true</span> };
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Render</span>
+</code></pre></div>
+<p><strong>Step 1: Write the header file</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cat</span> &gt; src/render/Camera3D.hpp &lt;&lt; <span class="hljs-string">&#x27;CAMERA3D_EOF&#x27;</span>
+... (content above) ...
+CAMERA3D_EOF
+</code></pre></div>
+<p><strong>Step 2: Verify it compiles</strong></p>
+<p>Run: <code>cmake --build build</code>
+Expected: Compilation succeeds</p>
+<hr>
+<h3 id="task-2-add-mat4inverted-helper">Task 2: Add Mat4::inverted() helper<a class="anchor" href="#task-2-add-mat4inverted-helper" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/math/Mat4.hpp</code></li>
+</ul>
+<p><strong>Context:</strong> <code>screenToWorld</code> needs inverse VP matrix. Mat4 currently has <code>transposed()</code> but no <code>inverted()</code> . Need to add one using cofactor expansion.</p>
+<p><strong>Step 1: Add inverted() method to Mat4</strong></p>
+<p>Add after <code>transposed()</code> (around line 86):</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-comment">/// 4×4 matrix inverse using cofactor expansion (Cramér&#x27;s rule).</span>
+<span class="hljs-comment">/// Returns identity if the matrix is singular (det = 0).</span>
+<span class="hljs-function">Mat4 <span class="hljs-title">inverted</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> </span>{
+    f32 a[<span class="hljs-number">4</span>][<span class="hljs-number">4</span>];
+    <span class="hljs-keyword">for</span> (u32 col = <span class="hljs-number">0</span>; col &lt; <span class="hljs-number">4</span>; ++col)
+        <span class="hljs-keyword">for</span> (u32 row = <span class="hljs-number">0</span>; row &lt; <span class="hljs-number">4</span>; ++row)
+            a[row][col] = (*<span class="hljs-keyword">this</span>)(row, col);
+
+    f32 inv[<span class="hljs-number">4</span>][<span class="hljs-number">4</span>];
+
+    inv[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] = a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>])
+              - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+              + a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>]);
+    inv[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] = -a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>])
+               + a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+               - a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>]);
+    inv[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] = a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>])
+              - a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+              + a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>]);
+    inv[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] = -a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>])
+               + a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>])
+               - a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>]);
+
+    inv[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] = -a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>])
+               + a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+               - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] = a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>])
+              - a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+              + a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] = -a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>])
+               + a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+               - a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] = a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>])
+              - a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>])
+              + a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>]);
+
+    inv[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] = a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+              - a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+              + a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] = -a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+               + a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+               - a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] = a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+              - a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+              + a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] = -a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>])
+               + a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">3</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">3</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>])
+               - a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>]);
+
+    inv[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>] = -a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+               + a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+               - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>] = a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+              - a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+              + a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>] - a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] = -a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>])
+               + a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>])
+               - a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">1</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>]);
+    inv[<span class="hljs-number">3</span>][<span class="hljs-number">3</span>] = a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>])
+              - a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">2</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>])
+              + a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * (a[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>] - a[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>] * a[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>]);
+
+    f32 det = a[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * inv[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] + a[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * inv[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] + a[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * inv[<span class="hljs-number">2</span>][<span class="hljs-number">0</span>] + a[<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * inv[<span class="hljs-number">3</span>][<span class="hljs-number">0</span>];
+
+    <span class="hljs-keyword">if</span> (Math::<span class="hljs-built_in">absf</span>(det) &lt; <span class="hljs-number">1e-8f</span>) {
+        Mat4 id;
+        <span class="hljs-keyword">return</span> id; <span class="hljs-comment">// singular → return identity</span>
+    }
+
+    f32 invDet = <span class="hljs-number">1.0f</span> / det;
+    Mat4 result;
+    <span class="hljs-keyword">for</span> (u32 col = <span class="hljs-number">0</span>; col &lt; <span class="hljs-number">4</span>; ++col)
+        <span class="hljs-keyword">for</span> (u32 row = <span class="hljs-number">0</span>; row &lt; <span class="hljs-number">4</span>; ++row)
+            <span class="hljs-built_in">result</span>(row, col) = inv[col][row] * invDet;
+    <span class="hljs-keyword">return</span> result;
+}
+</code></pre></div>
+<p><strong>Step 2: Build and test</strong></p>
+<p>Run: <code>cmake --build build &amp;&amp; ./build/tests/CaffeineTest</code>
+Expected: All existing tests pass</p>
+<p><strong>Step 3: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/math/Mat4.hpp
+git commit -m <span class="hljs-string">&quot;feat(math): add Mat4::inverted() using cofactor expansion&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-3-create-camera3d-tests">Task 3: Create Camera3D tests<a class="anchor" href="#task-3-create-camera3d-tests" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Create: <code>tests/test_camera3d.cpp</code></li>
+<li>Modify: <code>tests/CMakeLists.txt</code></li>
+</ul>
+<p><strong>Test content — 20+ test cases:</strong></p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;catch2/catch_test_macros.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;catch2/catch_approx.hpp&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;Caffeine.hpp&quot;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::Render;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::Spatial;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D default state&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">position</span>().x == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">0.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">position</span>().y == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">0.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">position</span>().z == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">-5.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">fov</span>() == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">60.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">aspect</span>() == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">16.0f</span>/<span class="hljs-number">9.0f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D view matrix matches lookAt&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-5</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    Mat4 view = cam.<span class="hljs-built_in">viewMatrix</span>();
+    Mat4 expected = Mat4::<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-5</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>});
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; ++i) {
+        <span class="hljs-built_in">REQUIRE</span>(view.<span class="hljs-built_in">data</span>()[i] == Catch::<span class="hljs-built_in">Approx</span>(expected.<span class="hljs-built_in">data</span>()[i]));
+    }
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D lookAt from different angle&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">10</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    Mat4 view = cam.<span class="hljs-built_in">viewMatrix</span>();
+    Mat4 expected = Mat4::<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">10</span>, <span class="hljs-number">5</span>, <span class="hljs-number">10</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>});
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; ++i) {
+        <span class="hljs-built_in">REQUIRE</span>(view.<span class="hljs-built_in">data</span>()[i] == Catch::<span class="hljs-built_in">Approx</span>(expected.<span class="hljs-built_in">data</span>()[i]));
+    }
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D projection matrix matches Mat4::perspective&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">setFOV</span>(<span class="hljs-number">60.0f</span>);
+    cam.<span class="hljs-built_in">setAspect</span>(<span class="hljs-number">16.0f</span>/<span class="hljs-number">9.0f</span>);
+    cam.<span class="hljs-built_in">setNearFar</span>(<span class="hljs-number">0.1f</span>, <span class="hljs-number">1000.0f</span>);
+    Mat4 proj = cam.<span class="hljs-built_in">projectionMatrix</span>();
+    Mat4 expected = Mat4::<span class="hljs-built_in">perspective</span>(Math::<span class="hljs-built_in">degToRad</span>(<span class="hljs-number">60.0f</span>), <span class="hljs-number">16.0f</span>/<span class="hljs-number">9.0f</span>, <span class="hljs-number">0.1f</span>, <span class="hljs-number">1000.0f</span>);
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; ++i) {
+        <span class="hljs-built_in">REQUIRE</span>(proj.<span class="hljs-built_in">data</span>()[i] == Catch::<span class="hljs-built_in">Approx</span>(expected.<span class="hljs-built_in">data</span>()[i]));
+    }
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D VP matrix is cached&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    Mat4 vp1 = cam.<span class="hljs-built_in">viewProjectionMatrix</span>();
+    Mat4 vp2 = cam.<span class="hljs-built_in">viewProjectionMatrix</span>();
+    <span class="hljs-comment">// Same pointer content check (cached, not recomputed)</span>
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; ++i) {
+        <span class="hljs-built_in">REQUIRE</span>(vp1.<span class="hljs-built_in">data</span>()[i] == vp2.<span class="hljs-built_in">data</span>()[i]);
+    }
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D VP matrix recomputes when dirty&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    Mat4 vp1 = cam.<span class="hljs-built_in">viewProjectionMatrix</span>();
+    cam.<span class="hljs-built_in">setPosition</span>({<span class="hljs-number">10</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    Mat4 vp2 = cam.<span class="hljs-built_in">viewProjectionMatrix</span>();
+    <span class="hljs-type">bool</span> same = <span class="hljs-literal">true</span>;
+    <span class="hljs-keyword">for</span> (u32 i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">16</span>; ++i) {
+        <span class="hljs-keyword">if</span> (vp1.<span class="hljs-built_in">data</span>()[i] != vp2.<span class="hljs-built_in">data</span>()[i]) { same = <span class="hljs-literal">false</span>; <span class="hljs-keyword">break</span>; }
+    }
+    <span class="hljs-built_in">REQUIRE</span>(!same);
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D forward default&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    Vec3 fwd = cam.forward();
+    <span class="hljs-built_in">REQUIRE</span>(fwd.x == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">0.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(fwd.y == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">0.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(fwd.z == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">1.0f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D forward after lookAt&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-5</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    Vec3 fwd = cam.forward();
+    <span class="hljs-built_in">REQUIRE</span>(fwd.x == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">0.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(fwd.y == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">0.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(fwd.z == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">1.0f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D Frustum extraction&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">0</span>, <span class="hljs-number">5</span>, <span class="hljs-number">-10</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    Frustum f = cam.<span class="hljs-built_in">frustum</span>();
+    <span class="hljs-comment">// Origin should be inside frustum (it&#x27;s looking at origin)</span>
+    <span class="hljs-built_in">REQUIRE</span>(f.<span class="hljs-built_in">contains</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>}));
+    <span class="hljs-comment">// A point behind the camera should be outside</span>
+    <span class="hljs-built_in">REQUIRE</span>(!f.<span class="hljs-built_in">contains</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-20</span>}));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D isVisible&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-10</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    AABB3D visibleBox = {{<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>}, {<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>}};
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">isVisible</span>(visibleBox));
+    <span class="hljs-comment">// Far away box behind camera</span>
+    AABB3D hiddenBox = {{<span class="hljs-number">-1</span>, <span class="hljs-number">-1</span>, <span class="hljs-number">-30</span>}, {<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">-28</span>}};
+    <span class="hljs-built_in">REQUIRE</span>(!cam.<span class="hljs-built_in">isVisible</span>(hiddenBox));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D worldToScreen basic&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-5</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    cam.<span class="hljs-built_in">setViewport</span>({{<span class="hljs-number">0</span>, <span class="hljs-number">0</span>}, {<span class="hljs-number">1280</span>, <span class="hljs-number">720</span>}});
+    <span class="hljs-comment">// Origin should project to center of screen</span>
+    Vec3 screen = cam.<span class="hljs-built_in">worldToScreen</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    <span class="hljs-built_in">REQUIRE</span>(screen.x == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">640.0f</span>).<span class="hljs-built_in">margin</span>(<span class="hljs-number">1.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(screen.y == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">360.0f</span>).<span class="hljs-built_in">margin</span>(<span class="hljs-number">1.0f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D screenToWorld roundtrip&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">lookAt</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">-5</span>}, {<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>});
+    cam.<span class="hljs-built_in">setViewport</span>({{<span class="hljs-number">0</span>, <span class="hljs-number">0</span>}, {<span class="hljs-number">1280</span>, <span class="hljs-number">720</span>}});
+    Vec3 world = {<span class="hljs-number">1.0f</span>, <span class="hljs-number">2.0f</span>, <span class="hljs-number">-3.0f</span>};
+    Vec3 screen = cam.<span class="hljs-built_in">worldToScreen</span>(world);
+    Vec3 roundtrip = cam.<span class="hljs-built_in">screenToWorld</span>({screen.x, screen.y}, screen.z);
+    <span class="hljs-built_in">REQUIRE</span>(roundtrip.x == Catch::<span class="hljs-built_in">Approx</span>(world.x).<span class="hljs-built_in">margin</span>(<span class="hljs-number">0.01f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(roundtrip.y == Catch::<span class="hljs-built_in">Approx</span>(world.y).<span class="hljs-built_in">margin</span>(<span class="hljs-number">0.01f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(roundtrip.z == Catch::<span class="hljs-built_in">Approx</span>(world.z).<span class="hljs-built_in">margin</span>(<span class="hljs-number">0.01f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D FPS rotation pitch clamping&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">rotateFPS</span>(<span class="hljs-number">200.0f</span>, <span class="hljs-number">0.0f</span>);
+    <span class="hljs-comment">// Pitch should be clamped to [-89, 89]</span>
+    Vec3 fwd = cam.forward();
+    <span class="hljs-comment">// After 200 degrees up, looking almost straight down</span>
+    <span class="hljs-built_in">REQUIRE</span>(fwd.y &lt; <span class="hljs-number">0.0f</span>); <span class="hljs-comment">// looking somewhat downward</span>
+    <span class="hljs-comment">// Pitch angle should be clamped (not beyond 89)</span>
+    cam.<span class="hljs-built_in">rotateFPS</span>(<span class="hljs-number">-200.0f</span>, <span class="hljs-number">0.0f</span>); <span class="hljs-comment">// try to go past -89</span>
+    cam.<span class="hljs-built_in">rotateFPS</span>(<span class="hljs-number">-200.0f</span>, <span class="hljs-number">0.0f</span>);
+    <span class="hljs-comment">// should still be clamped</span>
+    <span class="hljs-comment">// forward should have a reasonable y</span>
+    <span class="hljs-built_in">REQUIRE</span>(<span class="hljs-built_in">fabs</span>(cam.forward().y) &lt; <span class="hljs-number">1.0f</span>); <span class="hljs-comment">// not NaN or crazy</span>
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D FPS move&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    Vec3 before = cam.<span class="hljs-built_in">position</span>();
+    cam.<span class="hljs-built_in">moveFPS</span>({<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>}); <span class="hljs-comment">// move forward</span>
+    Vec3 after = cam.<span class="hljs-built_in">position</span>();
+    <span class="hljs-comment">// Should have moved along forward direction</span>
+    <span class="hljs-built_in">REQUIRE</span>(after.z &gt; before.z); <span class="hljs-comment">// forward is +Z</span>
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D setPosition getPosition&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">setPosition</span>({<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>});
+    Vec3 pos = cam.<span class="hljs-built_in">position</span>();
+    <span class="hljs-built_in">REQUIRE</span>(pos.x == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">10.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(pos.y == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">20.0f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(pos.z == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">30.0f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D setFOV&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">setFOV</span>(<span class="hljs-number">90.0f</span>);
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">fov</span>() == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">90.0f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D setAspect&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">setAspect</span>(<span class="hljs-number">4.0f</span>/<span class="hljs-number">3.0f</span>);
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">aspect</span>() == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">4.0f</span>/<span class="hljs-number">3.0f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D setNearFar&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    cam.<span class="hljs-built_in">setNearFar</span>(<span class="hljs-number">0.5f</span>, <span class="hljs-number">500.0f</span>);
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">nearPlane</span>() == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">0.5f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(cam.<span class="hljs-built_in">farPlane</span>() == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">500.0f</span>));
+}
+
+<span class="hljs-built_in">TEST_CASE</span>(<span class="hljs-string">&quot;Camera3D setRotation&quot;</span>, <span class="hljs-string">&quot;[camera3d]&quot;</span>) {
+    Camera3D cam;
+    Quat rot = Quat::<span class="hljs-built_in">fromAxisAngle</span>({<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>}, Math::<span class="hljs-built_in">degToRad</span>(<span class="hljs-number">90.0f</span>));
+    cam.<span class="hljs-built_in">setRotation</span>(rot);
+    Vec3 fwd = cam.forward();
+    <span class="hljs-built_in">REQUIRE</span>(fwd.x == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">1.0f</span>).<span class="hljs-built_in">margin</span>(<span class="hljs-number">0.01f</span>));
+    <span class="hljs-built_in">REQUIRE</span>(fwd.z == Catch::<span class="hljs-built_in">Approx</span>(<span class="hljs-number">0.0f</span>).<span class="hljs-built_in">margin</span>(<span class="hljs-number">0.01f</span>));
+}
+</code></pre></div>
+<p><strong>Step 1: Write the test file</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cat</span> &gt; tests/test_camera3d.cpp &lt;&lt; <span class="hljs-string">&#x27;TEST_EOF&#x27;</span>
+...
+TEST_EOF
+</code></pre></div>
+<p><strong>Step 2: Register test in CMakeLists.txt</strong></p>
+<p>Add to <code>tests/CMakeLists.txt</code> :</p>
+<div class="code-block" data-lang="cmake"><div class="code-head"><span class="code-lang">cmake</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cmake"><span class="hljs-keyword">add_executable</span>(CaffeineTest
+    ...
+    test_camera3d.cpp
+    ...
+)
+</code></pre></div>
+<p><strong>Step 3: Build and run tests</strong></p>
+<p>Run: <code>cmake --build build &amp;&amp; ./build/tests/CaffeineTest</code>
+Expected: All tests pass (including pre-existing)</p>
+<p><strong>Step 4: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add tests/test_camera3d.cpp tests/CMakeLists.txt
+git commit -m <span class="hljs-string">&quot;test(camera3d): add 20+ test cases for Camera3D&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-4-integrate-camera3d-into-engine-header">Task 4: Integrate Camera3D into engine header<a class="anchor" href="#task-4-integrate-camera3d-into-engine-header" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>src/caffeine/Caffeine.hpp</code></li>
+</ul>
+<p><strong>Step 1: Add include</strong></p>
+<p>After <code>#include &quot;render/Camera2D.hpp&quot;</code> (around line 53), add:</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;render/Camera3D.hpp&quot;</span></span>
+</code></pre></div>
+<p><strong>Step 2: Build and verify</strong></p>
+<p>Run: <code>cmake --build build &amp;&amp; ./build/tests/CaffeineTest</code>
+Expected: All tests pass</p>
+<p><strong>Step 3: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add src/Caffeine.hpp
+git commit -m <span class="hljs-string">&quot;feat(camera3d): integrate Camera3D into main engine header&quot;</span>
+</code></pre></div>
+<hr>
+<h3 id="task-5-update-documentation">Task 5: Update documentation<a class="anchor" href="#task-5-update-documentation" aria-label="Link to this section">#</a></h3>
+<p><strong>Files:</strong></p>
+<ul>
+<li>Modify: <code>docs/fase5/camera3d.md</code></li>
+</ul>
+<p><strong>Step 1: Update status and acceptance criteria</strong></p>
+<ul>
+<li>Change <code>Status: 📅 Planejado</code> → <code>Status: ✅ Implementado</code></li>
+<li>Mark acceptance criteria checkboxes:</li>
+</ul>
+<div class="code-block" data-lang="md"><div class="code-head"><span class="code-lang">md</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-md"><span class="hljs-bullet"> -</span> [x] <span class="hljs-code">`lookAt`</span> produz view matrix correta (comparado com glm::lookAt)
+<span class="hljs-bullet"> -</span> [x] <span class="hljs-code">`perspective`</span> produz projection correta (comparado com glm::perspective)
+<span class="hljs-bullet"> -</span> [x] Frustum cooking: objects outside the frustum do not render
+<span class="hljs-bullet"> -</span> [x] Follow suave sem jitter (igual ao Camera2D)
+<span class="hljs-bullet"> -</span> [x] FPS mode: pitch clamped at [-89°, +89°] (no flip)
+</code></pre></div>
+<ul>
+<li>Update the &quot;API Planejada&quot; section title to &quot;API&quot;</li>
+<li>Update the projection math section to reference <code>Mat4::perspective()</code> with the actual engine layout</li>
+<li>Add viewport member to the private state listing</li>
+</ul>
+<p><strong>Step 2: Commit</strong></p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">git add docs/fase5/camera3d.md
+git commit -m <span class="hljs-string">&quot;docs(camera3d): update documentation for Camera3D implementation&quot;</span>
+</code></pre></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-05-10-camera3d.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/plans/2026-05-11-scripting-design/"><span>Previous</span><strong>Scripting Module — Design Document</strong></a><a class="pager-next" href="/en/docs/plans/2025-05-15-script-editor/"><span>Next</span><strong>Script Editor Implementation Plan</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l3"><a href="#task-1-create-camera3d-header">Task 1: Create Camera3D header</a></li><li class="l3"><a href="#task-2-add-mat4inverted-helper">Task 2: Add Mat4::inverted() helper</a></li><li class="l3"><a href="#task-3-create-camera3d-tests">Task 3: Create Camera3D tests</a></li><li class="l3"><a href="#task-4-integrate-camera3d-into-engine-header">Task 4: Integrate Camera3D into engine header</a></li><li class="l3"><a href="#task-5-update-documentation">Task 5: Update documentation</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

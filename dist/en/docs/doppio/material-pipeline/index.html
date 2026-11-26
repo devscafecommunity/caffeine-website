@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Material, texture and generator pipeline — backlog · Caffeine</title>
+<meta name="description" content="The living checklist for materials, textures, map baking, node generators and texture sets, kept current so the next change starts from the real foundation instead of the history.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Material, texture and generator pipeline — backlog · Caffeine">
+<meta property="og:description" content="The living checklist for materials, textures, map baking, node generators and texture sets, kept current so the next change starts from the real foundation instead of the history.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/material-pipeline/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/material-pipeline/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/material-pipeline/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/material-pipeline/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link active" href="/en/docs/doppio/material-pipeline/" aria-current="page">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Material, texture and generator pipeline — backlog</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last updated: <time datetime="2026-11-20">2026-11-20</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/material-pipeline.md"><code>material-pipeline.md</code></a></span>
+</div>
+<p class="doc-lede">The living checklist for materials, textures, map baking,
+node generators and texture sets, kept current so the next change starts from the
+real foundation instead of the history.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/material/ui/generator-red-brick.png" alt="Material Generator baking a red brick graph into a PBR material" loading="lazy">
+  <figcaption>The atomic graph baked to base colour, height, roughness, metallic, AO and packed maps, then assigned to the selected material.</figcaption>
+</figure>
+<p>Living checklist for the Doppio material stack. Update the checkboxes as work
+lands; keep the <strong>current foundation</strong> section accurate so a future agent can
+continue without re-reading the whole history.</p>
+<p>Clean-room rule: MaterialCraft, TextureCraft and MistyEngine under
+<code>reference/</code> are read for public behaviour, formats and UI conventions only.
+Do not copy source, shader text, node definitions or bundled assets.</p>
+<h2 id="current-foundation-done">Current foundation (done)<a class="anchor" href="#current-foundation-done" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] <code>.mat</code> PBR assets: full <code>MaterialSurface</code>, presets, load/save, assign to
+Mesh Filter, Inspector slot, undoable scene assignment.</li>
+<li>[x] Engine sphere preview (<code>MaterialPreviewRenderer</code>) through the C ABI with
+orbit drag and throttled refresh.</li>
+<li>[x] Texture map utilities: normal from height (OpenGL/DirectX), AO from
+height, roughness/metallic from albedo, ORM, Unity HDRP mask, Unity
+metallic-smoothness. DirectX normals are flipped by the shader.</li>
+<li>[x] Material Studio: surface/maps/UV/advanced cards, texture picker, map
+baker, generated-map assignment.</li>
+<li>[x] Assets: texture/material/mesh/scene filter, search, image thumbnails and
+material albedo swatches.</li>
+<li>[x] Reusable <code>node_canvas</code> component: graph-space nodes, typed ports, cubic
+wires, drag, pan, zoom, selection and connect events.</li>
+<li>[x] Atomic material graph: Color, Image, Noise (value/Perlin), Voronoi,
+Checker, Bricks, Gradient, Blend, Levels, Curve, HSL, Threshold, Blur,
+Warp, Value, Luminance, Dot and Output (Color/Roughness/Metallic/Height/
+AO). Typed colour/scalar ports, blend masks and 13 blend modes.</li>
+<li>[x] Bake graph → base colour, height, roughness, metallic, AO, normal and
+packed maps; save and assign to the selected entity automatically.</li>
+<li>[x] Background worker bake with progress/cancel; the UI keeps the last
+result and never blocks the viewport. The Generator also runs a debounced
+low-resolution live bake of the Output node after every graph edit.</li>
+<li>[x] 8/16-bit generated maps and a channel-packing editor (ORM, Unity HDRP,
+Unity metallic-smoothness, custom R/G/B/A sources).</li>
+<li>[x] Per-material <code>&lt;name&gt;.mgraph</code> sidecar (versioned <code>CAFMGRAPH2</code> text, reads
+<code>CAFMGRAPH1</code>) with nodes, links, parameters, positions and resolution.</li>
+<li>[x] MCP queries/actions and <code>material-smoke</code> / <code>material-generator-smoke</code>.</li>
+</ul>
+<h2 id="phase-1-complete-the-generator-foundation">Phase 1 — Complete the generator foundation<a class="anchor" href="#phase-1-complete-the-generator-foundation" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] Graph history, wire selection/delete/reconnect, reroute dots, palette
+search, 16-unit snapping, copy/paste, fit-to-graph, undo/redo MCP actions,
+Rust tests and the <code>material-generator-smoke</code> flow.</li>
+</ul>
+<h3 id="undoredo-for-graph-edits-done">Undo/redo for graph edits — done<a class="anchor" href="#undoredo-for-graph-edits-done" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Add a graph history stack per material (snapshots or reversible
+commands). <code>MaterialGraph</code> is <code>Clone</code>, so snapshots are the simplest
+first step; keep them small and cap memory.</li>
+<li>[x] Coalesce continuous edits with a stable key: <code>generator:move:&lt;node&gt;</code>,
+<code>generator:param:&lt;node&gt;:&lt;param&gt;</code>, so a drag is one step.</li>
+<li>[x] Cover Add/Delete node, Connect/disconnect, Move, every parameter, output
+assignment, resolution and graph load/clear.</li>
+<li>[x] <code>Ctrl+Z</code> / <code>Ctrl+Shift+Z</code> and <code>Ctrl+Y</code> while the Generator pane is
+focused; header Undo/Redo buttons remain available.</li>
+<li>[x] MCP <code>generator_undo</code> / <code>generator_redo</code> plus <code>can_undo</code>, <code>undo_name</code>,
+<code>can_redo</code>, <code>redo_name</code> in the <code>generator</code> query.</li>
+<li>[x] Tests: add→undo, connect→undo/redo, coalesced drag, delete link, dot,
+copy/paste and scene-shortcut routing.</li>
+</ul>
+<h3 id="wire-editing-first-pass-done">Wire editing — first pass done<a class="anchor" href="#wire-editing-first-pass-done" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Hit-test cubic wires (sample the bézier; ~5 px tolerance) and keep a
+separate wire-selection state from node selection.</li>
+<li>[x] Delete/Backspace removes a selected wire in one history step; right-click
+a wire and the properties-panel Delete link button do the same. Dragging a
+connected input detaches its source for reconnection.</li>
+<li>[x] Add a <strong>reroute dot</strong> node: one input/one output, pass-through; insert on
+double-click of a wire or with <code>insert_generator_dot</code>.</li>
+<li>[ ] Wire context menu and source swap of exactly two wires.</li>
+<li>[ ] Hover highlight + pointer feedback; canvas redraws only on changes.</li>
+<li>[x] Tests for wire hit distance, single-input replacement, cycle rejection,
+reroute round-trip and undo.</li>
+</ul>
+<h3 id="canvas-polish-first-pass-done">Canvas polish — first pass done<a class="anchor" href="#canvas-polish-first-pass-done" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Snap node placement to a 16-unit grid; toggle in the canvas toolbox.</li>
+<li>[x] Search field filters the node palette by node name or category; the
+palette is grouped by category in the shared tree view with collapsible
+groups. A Space/Tab modal search remains a future refinement.</li>
+<li>[x] Copy/paste the selected node (toolbox buttons and MCP); internal-link
+duplication/duplicate-selection is still pending.</li>
+<li>[ ] Optional frames/comments; keep them out of the first undo milestone.</li>
+<li>[x] Fit-to-graph (&quot;Fit&quot; button / <code>fit_generator</code>).</li>
+<li>[x] Node cards show a live 72 px thumbnail (96 px evaluated) of their own evaluated output,
+computed in the debounced background preview worker; errors simply omit
+that thumbnail and never block editing.</li>
+</ul>
+<h2 id="phase-2-materialcraft-style-node-library">Phase 2 — MaterialCraft-style node library<a class="anchor" href="#phase-2-materialcraft-style-node-library" aria-label="Link to this section">#</a></h2>
+<h3 id="image-and-texture-nodes">Image and texture nodes<a class="anchor" href="#image-and-texture-nodes" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Project texture node: pick an image asset, sample UV, expose tiling and
+offset; reuse the texture picker and engine path resolver.</li>
+<li>[x] Image sampler node with nearest/linear and clamp/repeat.</li>
+<li>[x] UV projection choices: UV, planar, tri-planar (synthetic spherical
+domain until mesh-space UVs are available), cylindrical and spherical.</li>
+<li>[x] Normal-map input node and normal blend (whiteout/linear) for
+height/normal combinations.</li>
+<li>[x] Image decoding runs on the bake worker; decode errors abort with a
+message. A 4K resolution warning remains.</li>
+</ul>
+<h3 id="more-atomic-generatorsfilters">More atomic generators/filters<a class="anchor" href="#more-atomic-generatorsfilters" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Voronoi/cells with distance and cell-colour outputs.</li>
+<li>[x] Perlin and value noise with octaves, persistence and lacunarity;
+simplex/Worley variants and anisotropic scale/rotation remain.</li>
+<li>[x] Curve, levels (brightness/contrast/gamma/invert), HSL, blur and warp.</li>
+<li>[x] Sharpen, emboss and directional blur.</li>
+<li>[x] Threshold/soft mask, distance, edge-detect and cavity/curvature masks;
+dirt-like masks remain.</li>
+<li>[x] Blend additions: overlay variants, soft light/hard light, subtract,
+difference, darken/lighten, colour dodge/burn; per-channel alpha remains.</li>
+<li>[x] Scalar constants and a value node, typed colour/scalar ports; arithmetic
+nodes remain.</li>
+<li>[ ] Function/group nodes only after the atomic graph is stable; do not add a
+scripting VM in this phase.</li>
+</ul>
+<h3 id="bake-and-output">Bake and output<a class="anchor" href="#bake-and-output" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Bake on a worker thread with progress/cancel; the UI keeps the last
+result. Never freeze the viewport while cooking.</li>
+<li>[x] 16-bit generated maps plus 8-bit PNG defaults; float cook remains.</li>
+<li>[x] Channel-packing editor: destination R/G/B/A ← AO, roughness, metallic,
+height, smoothness, base luminance or constants; built-in ORM, Unity
+HDRP and Unity metallic-smoothness presets plus custom channels, saved
+user presets in <code>~/.config/caffeine/packing-presets.txt</code>.</li>
+<li>[x] AO derived from the height map and scene-geometry AO through Photon
+(<code>caffeine_session_bake_ao</code>, Material → AO from scene); displacement
+height bake remains.</li>
+<li>[x] Graph outputs generate base, normal, roughness, metallic, AO and height
+maps and pack them for the material; emissive/opacity outputs remain.</li>
+</ul>
+<h2 id="phase-3-materialcraft-interoperability">Phase 3 — MaterialCraft interoperability<a class="anchor" href="#phase-3-materialcraft-interoperability" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] Import <code>.mcmat</code>: manifest, cooked maps, parameters and <code>source.sbs</code> → a
+Doppio <code>.mat</code>, map files, <code>.sbs</code> source and <code>.mgraph</code> sidecar.</li>
+<li>[x] Parse SBS XML <code>compNode</code> graphs (known filter mapping for color, noise,
+voronoi, checker, bricks, gradient, blend, levels, HSL, threshold, blur,
+sharpen, emboss, directional blur, warp, edge/cavity/distance masks,
+normal blend, image/normal-map nodes and outputs).</li>
+<li>[x] Preserve unknown filters and unsupported graph outputs as
+<code>NodeKind::Unknown</code> placeholders; keep all links and report warnings in
+the generator status/log.</li>
+<li>[x] Portable <code>.mcmat</code> export first: baked maps + manifest + minimal
+<code>source.sbs</code>, with node/link round-trip validation before writing.</li>
+<li>[ ] Full native SBS export parity. The current writer emits the Doppio subset
+and validates it against our own reader; do not claim Substance parity.</li>
+<li>[x] Headless <code>doppio-material</code> CLI (<code>import</code>, <code>import-sbs</code>, <code>export</code>,
+<code>bake-graph</code>, <code>inspect</code>) and MCP <code>import_materialcraft</code> /
+<code>export_materialcraft</code> actions using the same engine-backed helpers.
+<code>bake-graph &lt;file.mgraph&gt; [--size N] [--out DIR]</code> prints per-stage timing
+and is the quickest way to reproduce a slow bake outside the editor.</li>
+</ul>
+<h3 id="explicit-node-mapping">Explicit node mapping<a class="anchor" href="#explicit-node-mapping" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>SBS filter</th>
+<th>Doppio node</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uniformcolor</code> / <code>solidcolor</code></td>
+<td>Color</td>
+<td>colour parameter</td>
+</tr>
+<tr>
+<td><code>noise</code>, <code>perlin_noise</code>, <code>fractal_*</code></td>
+<td>Noise</td>
+<td>value/Perlin, scale, octaves, seed</td>
+</tr>
+<tr>
+<td><code>voronoi</code></td>
+<td>Voronoi</td>
+<td>scale, jitter, seed, mode</td>
+</tr>
+<tr>
+<td><code>checker</code> / <code>checkerboard</code></td>
+<td>Checker</td>
+<td>scale and two colours</td>
+</tr>
+<tr>
+<td><code>bricks</code> / <code>brick</code></td>
+<td>Bricks</td>
+<td>rows, columns, mortar, colours</td>
+</tr>
+<tr>
+<td><code>gradient*</code></td>
+<td>Gradient</td>
+<td>angle and two colours</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>Blend</td>
+<td>destination/source inputs, opacity, blending mode</td>
+</tr>
+<tr>
+<td><code>normal_blend</code></td>
+<td>Normal Blend</td>
+<td>whiteout/linear</td>
+</tr>
+<tr>
+<td><code>levels</code>, <code>hsl</code>, <code>threshold</code>/<code>mask</code></td>
+<td>Levels, HSL, Threshold</td>
+<td>matching parameters</td>
+</tr>
+<tr>
+<td><code>blur</code>, <code>sharpen</code>, <code>emboss</code>, <code>directional_blur</code>, <code>warp</code></td>
+<td>corresponding filter node</td>
+<td>radius/intensity mapped heuristically</td>
+</tr>
+<tr>
+<td><code>edge_detect</code>, <code>curvature</code>/<code>cavity</code>, <code>distance</code></td>
+<td>Edge/Cavity/Distance Mask</td>
+<td>strength/threshold/radius</td>
+</tr>
+<tr>
+<td><code>image</code> / <code>normalmap</code></td>
+<td>Image / Normal Map</td>
+<td>path, projection, tiling, offset, filter, wrap</td>
+</tr>
+<tr>
+<td><code>value</code>, <code>luminance</code>, <code>curve</code>, <code>dot</code></td>
+<td>Value, Luminance, Curve, Dot</td>
+<td>constants/utilities</td>
+</tr>
+<tr>
+<td>output bridge</td>
+<td>Output</td>
+<td>usage selects Color/Roughness/Metallic/Height/AO port</td>
+</tr>
+<tr>
+<td>anything else</td>
+<td><strong>Unknown placeholder</strong></td>
+<td>links and port order preserved, warning reported</td>
+</tr>
+</tbody>
+</table></div>
+<p>Known-name parameters that cannot be represented keep the node as a placeholder
+rather than silently dropping data. The native SBS writer covers this table and
+is validated by importing its own output; it is not advertised as full
+Substance Designer parity.</p>
+<h2 id="phase-4-texturecraft-style-texture-sets-and-painting">Phase 4 — TextureCraft-style texture sets and painting<a class="anchor" href="#phase-4-texturecraft-style-texture-sets-and-painting" aria-label="Link to this section">#</a></h2>
+<p>This is a separate pipeline from material graphs. Do not pretend the material
+map baker is a texture painter. The texture-set foundation below is implemented
+in <code>uikit/texture_set.rs</code>, <code>uikit/panels/texture_set.rs</code> and
+<code>uikit/components/uv_canvas.rs</code>; the unchecked items are the remaining painter
+depth.</p>
+<ul>
+<li>[x] Texture sets with UDIM tiles (1001–1010), channel definitions and
+per-tile RGBA resources.</li>
+<li>[x] Layer stack: paint/fill layers, visibility, opacity, 13 blend modes,
+reorder/delete and per-layer tile masks. Folder layers and thumbnails
+remain.</li>
+<li>[x] 2D UV painting canvas, channel selection and a 3D paint mode that
+ray-picks the selected mesh and paints at the hit UV. Pressure/stylus
+input, stamp masks, projection painting and seam handling remain.</li>
+<li>[x] Mesh-map bakes: AO/curvature from height, scene-AO import through
+Photon, and world-normal, world-position and object-ID bakes from the
+selected mesh UVs. Thickness and bent-normal bakes remain.</li>
+<li>[x] Built-in export presets (separate maps, glTF ORM, Unity HDRP mask) and a
+CLI <code>texset-export</code>; user-defined output templates remain.</li>
+<li>[x] Undo/redo from per-tile snapshots and the <code>.texset</code> project format
+(ZIP manifest + PNG tiles/masks).</li>
+<li>[ ] Integration: dropped texture becomes a material; generated maps can be
+used by the map baker and Generator image nodes.</li>
+</ul>
+<h2 id="phase-5-material-rendering-and-asset-polish">Phase 5 — Material rendering and asset polish<a class="anchor" href="#phase-5-material-rendering-and-asset-polish" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] Preview shapes Sphere/Cube/Plane and an HDRI environment + exposure
+controls, rendered at 512 px with contain-fit framing; sphere remains the
+fast default.</li>
+<li>[x] Async material preview with begin/poll readback and no UI stall. The
+synchronous C ABI entry point remains for tools/tests.</li>
+<li>[x] Engine thumbnail decode (<code>caffeine_texture_load_thumbnail</code>) as the
+primary asset/material thumbnail path, with the Iced loader as fallback;
+cache entries are invalidated by file modification stamp. The GPU texture
+cache also hot-reloads a file whose stamp changed even while the scene or
+preview still holds the old pointer, retiring that texture instead of
+destroying it in use.</li>
+<li>[x] Apply saves dirty baked materials before assignment and creates a cube
+preview mesh on empty entities, so masks/bricks reach the <code>.mat</code> file.</li>
+<li>[x] Material picker in the Inspector with a searchable <code>.mat</code> list; internal
+asset drag/drop assigns materials/textures, and OS file drops work too.</li>
+<li>[ ] Drag presets into the generator canvas and reorder material maps.</li>
+<li>[x] glTF/OBJ material import: base color, metallic-roughness, normal,
+occlusion, emission, alpha and glTF UV transform into <code>.mat</code> + <code>.mgraph</code>.</li>
+<li>[x] Material preview overlays: DirectX/OpenGL, alpha mode, map presence and
+per-map resolution/missing-file badges.</li>
+<li>[x] C ABI version bumped to <strong>2</strong> with <code>caffeine_capi_version()</code> and a status
+bar badge; C API tests cover it.</li>
+<li>[x] <strong>Foliage</strong> (C ABI <strong>9</strong>): <code>wind_strength</code> (sway per metre of height above the object's origin),
+<code>wind_speed</code>, <code>wind_flutter</code> and <code>translucency</code> in the <code>.mat</code>, the C ABI, the Material panel and the
+renderer. Wind is a vertex offset applied identically in the colour, instanced and shadow vertex
+shaders (shadows sway with the leaves); translucency adds light through thin surfaces on the face
+turned away from the sun. See the Nature guide for the numbers the generator writes.</li>
+</ul>
+<h2 id="procedural-library-and-presets-no-third-party-assets-needed">Procedural library and presets (no third-party assets needed)<a class="anchor" href="#procedural-library-and-presets-no-third-party-assets-needed" aria-label="Link to this section">#</a></h2>
+<p>User guide with rendered images: <a href="/en/docs/doppio/materials-guide/">materials-guide.md</a>.</p>
+<ul>
+<li>[x] <code>uikit/procedural/</code>: ~123 data-driven, tileable, seeded, multi-threaded
+ops (<code>NodeKind::Proc</code>) — Noise 16, Natural 17, Patterns 18, Shapes 8,
+Math 25, Geometry 8, Height &amp; PBR 14, <strong>Realistic 17</strong> (<code>realistic.rs</code>). Each op is one <code>OpDef</code> row (ports,
+<code>ParamSpec</code>s, colours, <code>eval</code>); the palette, properties panel, <code>.mgraph</code>
+(<code>proc &lt;id&gt; …</code>) and MaterialCraft (<code>doppio_proc</code>) are generated from it.</li>
+<li>[x] Output node: Emissive / Opacity / Normal inputs appended after
+Color..AO, plus <code>auto_height</code> (height from base luminance when Height is
+unconnected), <code>normalize_height</code> and <code>height_contrast</code>, so height is never
+a flat plane. <code>BakedMaterial</code> gained <code>emissive(16)</code>, <code>has_emissive</code>,
+<code>opacity(16)</code>, <code>has_opacity</code>, <code>normal</code>.</li>
+<li>[x] <code>uikit/material_library.rs</code>: 78 parameterisable presets (Stone, Brick,
+Concrete, Ground, Wood, Metal, Fabric, Organic, Sci-fi, Misc and the Realistic
+Rock/Water/Nature/Ground/Wood/Man-made families with optional accent layers
+and emissive wiring), picked from
+the generator header <strong>Library</strong> dropdown (one undoable step, resolution
+kept). Tests bake every preset at 64² and check base variance, height
+std-dev &gt; 0.02, determinism and <code>.mgraph</code> round trip.</li>
+<li>[x] Output preview channel switcher (Base, Normal, Height, Roughness, Metal,
+AO, Emissive, Opacity). Each node card shows a live 72 px thumbnail (96 px evaluated) of its
+own evaluated output, refreshed with the same debounced worker pass.</li>
+<li>[x] <strong>Reseed</strong> button in the generator header: every seeded node (Noise, Voronoi, Warp and every procedural op with a <code>seed</code>
+parameter) gets a new seed derived from the graph; one undo step, deterministic for a given graph.</li>
+<li>[ ] Preset scale / wear are not yet exposed in the UI.</li>
+</ul>
+<p>World-scale plan (seed, scatter, streaming): <a href="/en/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>.</p>
+<h2 id="definition-of-done-for-the-base-is-complete">Definition of done for &quot;the base is complete&quot;<a class="anchor" href="#definition-of-done-for-the-base-is-complete" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Generator graph edit undo/redo and wire editing never lose work.</li>
+<li>A material and its graph survive save/reopen, and a graph bake is
+reproducible byte-for-byte at the same resolution.</li>
+<li>MaterialCraft import covers the node set we expose; unsupported data is
+reported, not dropped.</li>
+<li>Texture sets/painting have their own project format and undo; material maps
+can consume their exports.</li>
+<li>The preview and asset browser work without blocking the UI thread.</li>
+<li><code>check-rust-ui.sh</code>, Rust tests, <code>[capi]</code>/<code>[material]</code>, and every MCP smoke
+pass; docs and UI captions are regenerated.</li>
+</ul>
+<h2 id="depth-bake-and-height-packing">Depth, bake and height packing<a class="anchor" href="#depth-bake-and-height-packing" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] Parallax occlusion mapping in <code>scene_lit.frag</code>; height in the normal map's
+alpha (16-sampler limit); <code>MaterialSurface::heightScale/parallaxSteps</code>,
+<code>.mat</code> keys, C ABI v3, Rust <code>Material</code>, Material panel sliders. The
+ray-march moves toward the camera for recessed texels (alpha 1 = surface,
+0 = deepest), so pits read as depth instead of inverted peaks. POM
+self-shadowing applies to directional, point and spot lights; the height
+cavity also attenuates direct, ambient, IBL and reflected light, so the
+relief does not flatten into plastic when the sun is not grazing. Direct
+specular uses D<em>V</em>F without the extra PI factor that blew out highlights.</li>
+<li>[x] Generator bake size is selectable at 128/256/512/1024/2048 px. 2048 is
+the safe max; 4K needs a tiled/parallel evaluator (the current CPU memo
+peaks above practical memory at 4096×4096 with 16-bit maps).</li>
+<li>[x] Bake progress counts reachable nodes only and names the finalisation
+stages (<code>Packing maps</code>, <code>Baking occlusion</code>, <code>Writing maps</code>, <code>Done</code>). The
+automatic AO uses a separable box blur (O(pixels), not O(pixels ×
+radius)), so 2K bakes finish in seconds instead of appearing stuck.</li>
+<li>[x] Generator bake packs height into the normal alpha and enables depth;
+authored Normal / Emissive / Opacity outputs are written and wired.</li>
+<li>[x] Preview cache key includes texture file stamps, and a re-bake which
+rewrites the same PNG paths now reloads those GPU textures in place
+(<code>doppio/crates/engine/tests/material_preview.rs</code>).</li>
+<li>[x] <strong>Pack a height map into the normal…</strong> (external height images).</li>
+<li>[x] Parallax self-shadowing (<code>parallaxSelfShadow</code>) and a derivative-based UV frame
+(fixes the oblique/sheared look caused by non-u-aligned procedural tangents).</li>
+<li>[x] Geometric displacement: <code>displacement_mode geometric</code>, <code>displacement_scale</code> (m),
+<code>mesh_subdivisions</code> in the <code>.mat</code>; the mesh is midpoint-subdivided
+(<code>assets/MeshSubdivide.hpp</code>) and <code>scene_displace.vert</code> / <code>shadow_displace.vert</code> push
+vertices along normals by the normal-map alpha through the vertex-stage sampler
+(set 0, so the 16 fragment samplers are untouched). Normals are rebuilt by finite
+differences and the shadow pass uses the same formula, so relief casts real shadows.
+C ABI version 4. Material panel: &quot;Geometric displacement&quot; checkbox + depth + subdivisions.</li>
+<li>[x] Material preview: sun direction/height/intensity and a Shadows toggle (C ABI v5,
+<code>caffeine_session_set_material_preview_light</code>, agent action <code>set_material_preview_sun</code>),
+768 px render, closer camera, brighter floor, sky fill.</li>
+<li>[x] Shadow pass is order independent (<code>BlendMode::Min</code>); stale shadow maps are cleared when
+shadows are off; POM self-shadow multiplies with the shadow-map term.</li>
+<li>[x] Cross-session fix: process-wide GPU texture cache, procedural meshes and mesh cache are
+released on session shutdown (the device is leaked on purpose).</li>
+<li>[x] Re-bake fix: <code>GpuTextureCache</code> reloads a file rewritten in place (stamp changed) even
+while its ref count is non-zero.</li>
+<li>[x] UVs follow the object's scale (<code>uv_object_scale</code>, on by default; C ABI v6): the vertex
+shaders measure the model matrix's stretch along the tangent / bitangent and the fragment and
+displacement shaders multiply the tiled UV by it, so a scaled quad keeps its texture density.
+Instanced draws and the material preview keep the authored UVs. Material panel checkbox.</li>
+<li>[x] <strong>Variation</strong> node class (<code>procedural/variation.rs</code>, 6 ops): Noise Variation (Perlin / Simplex),
+Cell Variation (grid, Voronoi or a pattern's own cell ids), Patch Blend, Tile Shuffle, Wave
+Function Collapse (overlapping model, periodic output) and Diamond-Square (toroidal). Seven
+<code>Varied</code> presets use them; also in the Texture Generator (two <code>Procedural</code> presets).</li>
+<li>[ ] Variation: simple-tiled WFC with an explicit tile set and adjacency rules; WFC constraints
+(fixed cells, region masks); Diamond-Square with an erosion pass.</li>
+<li>[ ] Expand culling bounds by the displacement depth; distance-adaptive subdivision.</li>
+<li>[x] Preset seed in the UI (the <strong>Reseed</strong> button); scale and wear remain.</li>
+</ul>
+<h2 id="texture-generator-separate-tool-see-texture-generator-guidemd">Texture Generator (separate tool, see <code>texture-generator-guide.md</code>)<a class="anchor" href="#texture-generator-separate-tool-see-texture-generator-guidemd" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] Its own pane, <code>.texgraph</code> file (<code>CAFTEXGRAPH1</code>), <code>Texture Output</code> node (Colour + alpha, or
+packed R/G/B/A), palette and presets; the material and texture loaders refuse each other's
+files, and the material palette hides the VFX &amp; Shapes ops.</li>
+<li>[x] 10 VFX &amp; Shapes ops (leaf, feather, droplet, shockwave ring, flame, smoke puff, sparks,
+radial burst, soft glow, colour ramp) and 16 presets.</li>
+<li>[x] Preview over a checkerboard with Colour / Alpha / R / G / B views.</li>
+<li>[x] PNG export (8 and 16 bit, straight alpha) and flipbook sheets that loop every <code>phase</code>
+parameter; <code>doppio-material bake-texture</code>; agent query <code>texture_generator</code> and actions.</li>
+<li>[ ] Float / EXR output for heightmaps and LUTs.</li>
+<li>[ ] Image-reader node and seamless (tiled) export mode in the Texture Generator.</li>
+<li>[ ] Preset seed / colour variation in the UI; more presets (decals, runes, scratches, stylised
+clouds).</li>
+</ul>
+<h2 id="nature-generator-separate-tool-see-nature-generator-guidemd">Nature Generator (separate tool, see <code>nature-generator-guide.md</code>)<a class="anchor" href="#nature-generator-separate-tool-see-nature-generator-guidemd" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] Recipe-driven rocks (icosphere + noise + cut planes), trees (recursive tubes, broadleaf /
+conifer / dead) and plants (grass, fern, bush, flower); stylised / balanced / detailed quality.</li>
+<li>[x] Software 3D preview, <code>.obj</code> export (one file per part) and <code>.nature</code> recipes, <strong>Place in scene</strong> as a
+group with one entity per part and baked materials (library presets, Texture Generator cards).</li>
+<li>[x] Engine fix: <code>propagateTransforms</code> no longer crashes on children without a world matrix.</li>
+<li>[x] Wind (vertex sway + leaf flutter, also in the shadow pass), leaf translucency, generated bark sets,
+leaf-card normal maps and crown-interior shading (see the guide, section 4c).</li>
+<li>[x] <strong>Run-time modifiers</strong> (C ABI <strong>10</strong>): tint, wetness, snow, age on the material and on the Mesh Renderer, applied in
+<code>scene_lit.frag</code> without re-baking; see <code>runtime-modifiers.md</code>.</li>
+<li>[x] Alpha-tested shadows for cut-out cards, per-vertex colour (occlusion tint + painted flutter weight, read
+from OBJ <code>v x y z r g b a</code> into a second vertex stream) and GPU-instanced scatter placement.</li>
+<li>[ ] Material slots per submesh (ABI), LOD / impostors, <code>.glb</code> writer.</li>
+<li>[x] Seeded, cached variants of a nature recipe (<code>doppio-material variants</code>, <code>uikit/recipe_ref.rs</code>).</li>
+<li>[ ] Scatter over terrain and biomes (belongs to the terrain generator).</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/material-pipeline.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/headless-testing/"><span>Previous</span><strong>Headless UI testing for Doppio (doppio-headless)</strong></a><a class="pager-next" href="/en/docs/doppio/materials-guide/"><span>Next</span><strong>Materials in Doppio: procedural library, real depth and baking</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#current-foundation-done">Current foundation (done)</a></li><li class="l2"><a href="#phase-1-complete-the-generator-foundation">Phase 1 — Complete the generator foundation</a></li><li class="l3"><a href="#undoredo-for-graph-edits-done">Undo/redo for graph edits — done</a></li><li class="l3"><a href="#wire-editing-first-pass-done">Wire editing — first pass done</a></li><li class="l3"><a href="#canvas-polish-first-pass-done">Canvas polish — first pass done</a></li><li class="l2"><a href="#phase-2-materialcraft-style-node-library">Phase 2 — MaterialCraft-style node library</a></li><li class="l3"><a href="#image-and-texture-nodes">Image and texture nodes</a></li><li class="l3"><a href="#more-atomic-generatorsfilters">More atomic generators/filters</a></li><li class="l3"><a href="#bake-and-output">Bake and output</a></li><li class="l2"><a href="#phase-3-materialcraft-interoperability">Phase 3 — MaterialCraft interoperability</a></li><li class="l3"><a href="#explicit-node-mapping">Explicit node mapping</a></li><li class="l2"><a href="#phase-4-texturecraft-style-texture-sets-and-painting">Phase 4 — TextureCraft-style texture sets and painting</a></li><li class="l2"><a href="#phase-5-material-rendering-and-asset-polish">Phase 5 — Material rendering and asset polish</a></li><li class="l2"><a href="#procedural-library-and-presets-no-third-party-assets-needed">Procedural library and presets (no third-party assets needed)</a></li><li class="l2"><a href="#definition-of-done-for-the-base-is-complete">Definition of done for &quot;the base is complete&quot;</a></li><li class="l2"><a href="#depth-bake-and-height-packing">Depth, bake and height packing</a></li><li class="l2"><a href="#texture-generator-separate-tool-see-texture-generator-guidemd">Texture Generator (separate tool, see texture-generator-guide.md)</a></li><li class="l2"><a href="#nature-generator-separate-tool-see-nature-generator-guidemd">Nature Generator (separate tool, see nature-generator-guide.md)</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

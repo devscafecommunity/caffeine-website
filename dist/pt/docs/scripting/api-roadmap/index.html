@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API de scripting: paridade e roadmap · Caffeine</title>
+<meta name="description" content="Uma superfície de scripting, duas linguagens: o que Lua e Dryad fazem hoje, o que foi adicionado nesta passagem e o plano ordenado para crescer a API sem deixar as duas divergir.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="API de scripting: paridade e roadmap · Caffeine">
+<meta property="og:description" content="Uma superfície de scripting, duas linguagens: o que Lua e Dryad fazem hoje, o que foi adicionado nesta passagem e o plano ordenado para crescer a API sem deixar as duas divergir.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/scripting/api-roadmap/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/scripting/api-roadmap/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/scripting/api-roadmap/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/scripting/api-roadmap/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Doppio</a><a class="tab active" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/scripting/api-roadmap/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/scripting/api-roadmap/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Scripting"><div class="nav-title">Scripting</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Scripting</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/pt/docs/scripting/api-roadmap/" aria-current="page">API de scripting: paridade e roadmap</a></li><li><a class="nav-link" href="/pt/docs/scripting/runtime-apis/">Lua runtime APIs (core)</a></li><li><a class="nav-link" href="/pt/docs/scripting/native-modules/">Runtime native modules</a></li><li><a class="nav-link" href="/pt/docs/scripting/scripting/">Scripting</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/scripting/api/">Referência da API</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/scripting/api/random/">Aleatório</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/animation/">Animação</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/audio/">Áudio</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/scene/">Cena</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/component/">Componente</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/debug/">Depuração</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/draw2d/">Desenho 2D</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/effects/">Efeitos</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/entity/">Entidade</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/input/">Entrada</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/gameState/">Estado de jogo</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/events/">Eventos</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/physics3d/">Física 3D</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/hierarchy/">Hierarquia</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/ui/">Interface</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/map/">Mapa</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/math/">Matemática</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/native/">Módulos nativos</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/world/">Mundo</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/navigation/">Navegação</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/core/">Núcleo</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/particles/">Partículas</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/postprocess/">Pós-processamento</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/procedural/">Procedural</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/assets/">Recursos</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/forwardrender/">Render forward</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/pick/">Seleção</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/session/">Sessão</a></li><li><a class="nav-link" href="/pt/docs/scripting/api/time/">Tempo</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/api/">API do motor</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/api/headless-engine-api/">API do motor sem editor: criar cenas e renderizar imagens</a></li><li><a class="nav-link" href="/pt/docs/api/scripting-components/">Scripting: acesso genérico a componentes</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/scripting/">Scripting</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">API de scripting: paridade e roadmap</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span>Última atualização: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/tree/main/src/caffeine/script"><code>src/caffeine/script</code></a></span>
+</div>
+<p class="doc-lede">Uma superfície de scripting, duas linguagens: o que Lua e Dryad fazem hoje, o que foi adicionado
+nesta passagem e o plano ordenado para crescer a API sem deixar as duas divergir.</p>
+<h2 id="1-regras-de-desenho">1. Regras de desenho<a class="anchor" href="#1-regras-de-desenho" aria-label="Link to this section">#</a></h2>
+<ol>
+<li><strong>Um nome, um significado.</strong> Cada capacidade existe nas duas linguagens com nomes paralelos:
+Lua <code>caffeine.&lt;área&gt;.&lt;verbo&gt;</code>, Dryad <code>caffeine_&lt;área&gt;_&lt;verbo&gt;</code>. As tabelas de nomes (teclas, eixos e ações)
+são C++ partilhado (<code>ScriptInputNames.hpp</code>), por isso ambas aceitam as mesmas strings.</li>
+<li><strong>Bindings finos.</strong> A lógica vive nos módulos do engine; um binding valida argumentos, chama-a e regista
+erros. Os natives nunca falham com um id inválido, sem mundo ou com um nome desconhecido.</li>
+<li><strong>Reflexão primeiro.</strong> Os dados de componentes passam por <code>caffeine.component</code> / <code>caffeine_component_*</code>,
+guiados pelo registo de reflexão, por isso novos componentes ficam scriptáveis sem novos bindings.</li>
+<li><strong>As mensagens continuam o único caminho de mutação do editor.</strong> Os scripts atuam no mundo de jogo, não no estado do editor.</li>
+<li><strong>Uma funcionalidade está pronta quando tem teste nas duas linguagens</strong> (<code>tests/test_script.cpp</code>, <code>tests/test_dryad_host.cpp</code>).</li>
+</ol>
+<h2 id="2-matriz-de-paridade">2. Matriz de paridade<a class="anchor" href="#2-matriz-de-paridade" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Lua</th>
+<th>Dryad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lifecycle <code>onCreate</code>, <code>onUpdate</code>, <code>onFixedUpdate</code></td>
+<td>sim</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>onDestroy</code>, <code>onCollision</code>, <code>onPostProcess</code></td>
+<td>sim</td>
+<td><strong>não</strong></td>
+</tr>
+<tr>
+<td>Position and scale</td>
+<td>sim</td>
+<td>sim (<code>caffeine_get/set_position</code>, scale, <code>translate</code>)</td>
+</tr>
+<tr>
+<td>Generic components (reflection)</td>
+<td>sim</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Time (<code>delta</code>, <code>time</code>, <code>fixedDelta</code>, scale, pause, frame)</td>
+<td>sim</td>
+<td><strong>novo</strong> (<code>caffeine_time_*</code>)</td>
+</tr>
+<tr>
+<td>Input (keys, axes, actions, mouse)</td>
+<td>sim</td>
+<td><strong>novo</strong> (<code>caffeine_input_*</code>)</td>
+</tr>
+<tr>
+<td>World create, destroy, alive, distance</td>
+<td>parcial</td>
+<td><strong>novo</strong> (<code>caffeine_world_*</code>)</td>
+</tr>
+<tr>
+<td>Math: 2D and 3D vectors, scalar helpers</td>
+<td><strong>new 3D</strong></td>
+<td>Dryad stdlib</td>
+</tr>
+<tr>
+<td>Events, UI, draw2d, picking, assets, native modules</td>
+<td>sim</td>
+<td>não</td>
+</tr>
+<tr>
+<td>Post-process, animation, effects, navigation</td>
+<td>sim</td>
+<td>não</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3-adicionado-nesta-passagem">3. Adicionado nesta passagem<a class="anchor" href="#3-adicionado-nesta-passagem" aria-label="Link to this section">#</a></h2>
+<h3 id="natives-do-dryad">Natives do Dryad<a class="anchor" href="#natives-do-dryad" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Native</th>
+<th>Devolve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>caffeine_time_delta()</code>, <code>_unscaled_delta()</code>, <code>_total()</code>, <code>_fixed_delta()</code>, <code>_scale()</code>, <code>_frame()</code></td>
+<td>segundos / escala / número do frame</td>
+</tr>
+<tr>
+<td><code>caffeine_time_set_scale(s)</code>, <code>caffeine_time_paused()</code>, <code>caffeine_time_set_paused(b)</code></td>
+<td>controlo do tempo</td>
+</tr>
+<tr>
+<td><code>caffeine_input_key_down(name)</code></td>
+<td>bool</td>
+</tr>
+<tr>
+<td><code>caffeine_input_axis(name)</code></td>
+<td>-1..1 (<code>Horizontal</code>, <code>Vertical</code>, <code>LookX</code>, <code>LookY</code>)</td>
+</tr>
+<tr>
+<td><code>caffeine_input_action_down(name)</code>, <code>_action_pressed(name)</code></td>
+<td>bool (premida, acabou de premir)</td>
+</tr>
+<tr>
+<td><code>caffeine_input_mouse_x()</code>, <code>_y()</code>, <code>_dx()</code>, <code>_dy()</code>, <code>_mouse_down(button)</code></td>
+<td>posição, delta, 1/2/3</td>
+</tr>
+<tr>
+<td><code>caffeine_world_create([name])</code>, <code>_destroy(e)</code>, <code>_is_alive(e)</code>, <code>_distance(a, b)</code></td>
+<td>id, nada, bool, metros (1e9 se desconhecido)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="lua-math-caffeinemath">Lua math (<code>caffeine.math</code>)<a class="anchor" href="#lua-math-caffeinemath" aria-label="Link to this section">#</a></h3>
+<p><code>vec2</code>, <code>vec3</code>, <code>add</code>, <code>sub</code>, <code>mul</code>, <code>scale</code>, <code>dot</code>, <code>cross</code>, <code>length</code>, <code>lengthSquared</code>, <code>distance</code>,
+<code>normalize</code>, <code>lerpVec</code>, <code>clamp</code>, <code>clamp01</code>, <code>lerp</code>, <code>inverseLerp</code>, <code>remap</code>, <code>smoothstep</code>, <code>approach</code>, <code>sign</code>,
+<code>radians</code>, <code>degrees</code>, <code>pi</code>, <code>epsilon</code>. As funções de vetor aceitam <code>{x, y}</code> ou <code>{x, y, z}</code>; o resultado só tem <code>z</code>
+quando um operando o tem, por isso os scripts 2D existentes não mudam.</p>
+<h2 id="3b-o-componente-script">3b. O componente Script<a class="anchor" href="#3b-o-componente-script" aria-label="Link to this section">#</a></h2>
+<p>O <code>ScriptComponent</code> já não é só um caminho. Campos (todos no Inspector por reflexão e guardados na cena;
+cenas antigas carregam com os valores por omissão):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Omissão</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Script</code></td>
+<td>vazio</td>
+<td>caminho <code>.lua</code> ou <code>.dyd</code>, relativo ao projeto</td>
+</tr>
+<tr>
+<td><code>Enabled</code></td>
+<td>ligado</td>
+<td>um script desativado é ignorado por completo: sem <code>onCreate</code>, sem updates</td>
+</tr>
+<tr>
+<td><code>Order</code></td>
+<td>0</td>
+<td>o menor corre primeiro no frame; empates mantêm a ordem das entidades (estável)</td>
+</tr>
+<tr>
+<td><code>Properties</code></td>
+<td>vazio</td>
+<td>overrides por entidade das variáveis expostas do script, ex.: <code>speed=4.5; god=true; label=hi</code> (Lua e Dryad)</td>
+</tr>
+<tr>
+<td><code>Isolated</code></td>
+<td>desligado</td>
+<td>Lua: esta entidade corre a sua própria cópia do script, com globais privadas</td>
+</tr>
+</tbody>
+</table></div>
+<p>As entradas de <code>Properties</code> separam-se com <code>;</code> ou nova linha. O valor é booleano para <code>true</code>/<code>false</code>, número
+quando converte por inteiro e texto caso contrário; entradas malformadas são ignoradas. São aplicadas
+antes de cada hook dessa entidade. Limites: sem <code>Isolated</code>, o estado Lua é partilhado por ficheiro, por isso
+os overrides definem entradas, não dão globais privadas; o estado Dryad é sempre partilhado por ficheiro. As cópias
+isoladas ainda não são libertadas quando a entidade é destruída.</p>
+<h3 id="agrupar-scripts">Agrupar scripts<a class="anchor" href="#agrupar-scripts" aria-label="Link to this section">#</a></h3>
+<p>Os scripts classificam-se em grupos e subgrupos, de duas formas (<code>ScriptCatalog.hpp</code>):</p>
+<ol>
+<li><strong>Etiquetas no cabeçalho</strong>, nas primeiras 40 linhas, após <code>--</code>, <code>//</code> ou <code>#</code>:
+<code>@group Gameplay/Combat/Melee</code>, <code>@name Sword swing</code>, <code>@description ...</code>, <code>@tags weapon, player</code>.</li>
+<li><strong>Pastas</strong>: sem <code>@group</code>, <code>scripts/Gameplay/AI/patrol.lua</code> fica no grupo <code>Gameplay/AI</code>.</li>
+</ol>
+<p><code>scanScripts(projectRoot)</code> lê todos os <code>.lua</code> e <code>.dyd</code> em <code>scripts/</code>; <code>buildScriptTree</code> devolve uma árvore
+ordenada (<code>find(&quot;Gameplay/Combat&quot;)</code>, <code>totalScripts()</code>), com os soltos em <strong>Ungrouped</strong>. Ainda não está ligado ao
+painel Assets nem ao seletor de componentes; ver o roadmap.</p>
+<h2 id="3c-cobertura-o-que-o-engine-tem-e-os-scripts-não-alcançam">3c. Cobertura: o que o engine tem e os scripts não alcançam<a class="anchor" href="#3c-cobertura-o-que-o-engine-tem-e-os-scripts-não-alcançam" aria-label="Link to this section">#</a></h2>
+<p>O registo documenta agora todos os bindings (<strong>232 funções, 29 namespaces</strong>, ver a
+<a href="/pt/docs/scripting/api/">Referência da API</a>). Comparada com os módulos do engine, a superfície scriptável ainda não tem:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Módulo do engine</th>
+<th>Scripts hoje</th>
+<th>Em falta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Física 3D (<code>PhysicsWorld3D</code>)</td>
+<td><code>caffeine.physics3d</code>: raycast, forças, impulso, velocidade, gravidade</td>
+<td>consultas de overlap e callbacks de colisão/trigger. O runtime passa a correr o <code>PhysicsSystem3D</code> (antes não corria)</td>
+</tr>
+<tr>
+<td>Áudio (<code>AudioSystem</code>)</td>
+<td><code>caffeine.audio</code>: play de WAV, 2D posicional, handles, volume, loop</td>
+<td>OGG/MP3, emissores 3D, o componente <code>AudioEmitter</code>, pitch por som</td>
+</tr>
+<tr>
+<td>Cenas</td>
+<td><code>caffeine.scene</code> (load, reload, current) e <code>caffeine.session</code> (dados entre cenas), só na aplicação runtime</td>
+<td>carregamento aditivo, transições, o modo play do editor</td>
+</tr>
+<tr>
+<td>Câmara e luzes</td>
+<td>componentes via <code>caffeine.component</code></td>
+<td>helpers: <code>screenToRay</code>, <code>worldToScreen</code>, look-at</td>
+</tr>
+<tr>
+<td>Terreno, água, fluidos</td>
+<td>só componentes</td>
+<td>consultas de altura, <code>water_height</code>, pintura de splat</td>
+</tr>
+<tr>
+<td>Prefabs</td>
+<td>nenhum</td>
+<td>instanciar com overrides</td>
+</tr>
+<tr>
+<td>Assets</td>
+<td>só texto</td>
+<td>carregar texturas, malhas, materiais; hooks de hot reload</td>
+</tr>
+<tr>
+<td>Photon e render features</td>
+<td>forward-render e post-process</td>
+<td>qualidade do Photon, controlos de reflexos e probes</td>
+</tr>
+<tr>
+<td>Corrotinas e temporizadores</td>
+<td>nenhum</td>
+<td><code>after</code>, <code>every</code>, <code>wait</code></td>
+</tr>
+<tr>
+<td>Dados de save, JSON, utilitários de texto</td>
+<td>nenhum</td>
+<td>armazenamento persistente, parsing</td>
+</tr>
+</tbody>
+</table></div>
+<p>Acrescentado até agora: <code>caffeine.entity</code> (nomes, procura), <code>caffeine.hierarchy</code> (pai, filhos, raiz, sem ciclos),
+<code>caffeine.random</code> (determinístico), cada um em Lua e Dryad a partir de uma implementação partilhada.</p>
+<h2 id="4-roadmap">4. Roadmap<a class="anchor" href="#4-roadmap" aria-label="Link to this section">#</a></h2>
+<p>Cada passo chega com testes nas duas linguagens e uma página nesta secção.</p>
+<h3 id="fase-s1-fechar-as-lacunas-de-paridade">Fase S1 — Fechar as lacunas de paridade<a class="anchor" href="#fase-s1-fechar-as-lacunas-de-paridade" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] <code>onDestroy</code>, <code>onCollision(entity, other)</code> e <code>onPostProcess</code> no Dryad; despacho a partir do <code>ScriptSystem</code>.</li>
+<li>[ ] Eventos no Dryad: <code>caffeine_events_emit/on/off</code> sobre o <code>EventBus</code>.</li>
+<li>[ ] <code>caffeine.world.hasComponent</code> do Lua via registo de reflexão (hoje só conhece quatro nomes).</li>
+<li>[x] Procura por nome e hierarquia (<code>caffeine.entity</code>, <code>caffeine.hierarchy</code>); falta <code>findWith(component)</code>.</li>
+<li>[ ] Prefabs: <code>instantiate(prefab, position)</code>, <code>destroyAfter(entity, seconds)</code>.</li>
+</ul>
+<h3 id="fase-s2-estrutura-e-ergonomia">Fase S2 — Estrutura e ergonomia<a class="anchor" href="#fase-s2-estrutura-e-ergonomia" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Objeto de entidade no Lua (<code>local e = caffeine.entity(id)</code>, <code>e:position()</code>, <code>e:get(&quot;Light&quot;)</code>) sobre os
+mesmos natives, mais userdata <code>Vec3</code> e <code>Quat</code> com operadores, em vez de tabelas simples.</li>
+<li>[ ] Temporizadores e corrotinas: <code>caffeine.timer.after/every/cancel</code>, <code>caffeine.wait(seconds)</code> num
+agendador de corrotinas movido pelo <code>ScriptSystem</code>; o equivalente Dryad como natives.</li>
+<li>[x] Overrides por entidade das variáveis expostas (<code>Properties</code>), só Lua; falta o Dryad.</li>
+<li>[ ] Sistema de módulos para o Dryad (<code>import</code>) resolvido a partir da raiz do projeto, como o <code>caffeine.require</code>.</li>
+<li>[ ] Relatório de erros: nome do script, linha e uma entrada na Consola por cada falha, nunca um no-op silencioso.</li>
+</ul>
+<h3 id="fase-s3-superfície-de-gameplay-3d">Fase S3 — Superfície de gameplay 3D<a class="anchor" href="#fase-s3-superfície-de-gameplay-3d" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Física 3D: <code>raycast</code>, <code>overlapSphere</code>, <code>addForce</code>, <code>setVelocity</code>, callbacks de colisão e trigger.</li>
+<li>[ ] Câmara e picking em 3D: <code>screenToRay</code>, <code>worldToScreen</code>, <code>pick3d</code>.</li>
+<li>[ ] Áudio: <code>play</code>, <code>stop</code>, <code>setVolume</code>, fontes 3D.</li>
+<li>[ ] Paridade de animação, navegação e efeitos no Dryad.</li>
+<li>[ ] Controlo de cenas: <code>loadScene</code>, <code>reloadScene</code>, valores persistentes entre cenas.</li>
+</ul>
+<h3 id="fase-s4-ferramentas">Fase S4 — Ferramentas<a class="anchor" href="#fase-s4-ferramentas" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Referência da API gerada a partir de um registo (<code>src/caffeine/script/api/*.json</code>), verificado por um teste;
+faltam o autocompletar no editor e a matriz de paridade gerada.</li>
+<li>[ ] Limites de sandbox: orçamento de instruções por frame, limite de memória, watchdog de scripts presos.</li>
+<li>[ ] Hot reload que mantém o estado do script onde as variáveis expostas o permitem.</li>
+<li>[ ] Depuração: breakpoints e vista de variáveis no editor de scripts (Lua primeiro).</li>
+<li>[ ] Mostrar a árvore de grupos de scripts no painel Assets e no seletor Add Component; filtro por grupo e pesquisa por etiqueta.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/scripting/api-roadmap.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><span></span><a class="pager-next" href="/pt/docs/scripting/runtime-apis/"><span>Seguinte</span><strong>Lua runtime APIs (core)</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-regras-de-desenho">1. Regras de desenho</a></li><li class="l2"><a href="#2-matriz-de-paridade">2. Matriz de paridade</a></li><li class="l2"><a href="#3-adicionado-nesta-passagem">3. Adicionado nesta passagem</a></li><li class="l3"><a href="#natives-do-dryad">Natives do Dryad</a></li><li class="l3"><a href="#lua-math-caffeinemath">Lua math (caffeine.math)</a></li><li class="l2"><a href="#3b-o-componente-script">3b. O componente Script</a></li><li class="l3"><a href="#agrupar-scripts">Agrupar scripts</a></li><li class="l2"><a href="#3c-cobertura-o-que-o-engine-tem-e-os-scripts-não-alcançam">3c. Cobertura: o que o engine tem e os scripts não alcançam</a></li><li class="l2"><a href="#4-roadmap">4. Roadmap</a></li><li class="l3"><a href="#fase-s1-fechar-as-lacunas-de-paridade">Fase S1 — Fechar as lacunas de paridade</a></li><li class="l3"><a href="#fase-s2-estrutura-e-ergonomia">Fase S2 — Estrutura e ergonomia</a></li><li class="l3"><a href="#fase-s3-superfície-de-gameplay-3d">Fase S3 — Superfície de gameplay 3D</a></li><li class="l3"><a href="#fase-s4-ferramentas">Fase S4 — Ferramentas</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

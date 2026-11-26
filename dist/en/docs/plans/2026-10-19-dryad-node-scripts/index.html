@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dryad and node scripts · Caffeine</title>
+<meta name="description" content="Date: 2026-10-19 Namespace: Caffeine::Script Language: Dryad, in the separate source/ repository, file extension .dyd Status: host, 3D entities, hot reload, emitter, Doppio canvas with attach/run, and .dyd round-trip (wh">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Dryad and node scripts · Caffeine">
+<meta property="og:description" content="Date: 2026-10-19 Namespace: Caffeine::Script Language: Dryad, in the separate source/ repository, file extension .dyd Status: host, 3D entities, hot reload, emitter, Doppio canvas with attach/run, and .dyd round-trip (wh">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/plans/2026-10-19-dryad-node-scripts/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/plans/2026-10-19-dryad-node-scripts/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/plans/2026-10-19-dryad-node-scripts/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab active" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/plans/2026-10-19-dryad-node-scripts/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Project"><div class="nav-title">Project</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Releases</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/releases/build-checklist/">✅ Caffeine Engine - Build Checklist</a></li><li><a class="nav-link" href="/en/docs/releases/changelog/">Changelog</a></li><li><a class="nav-link" href="/en/docs/releases/runtime-capabilities-patch-notes/">Runtime capabilities — patch notes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Plans</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/en/docs/plans/2026-10-19-dryad-node-scripts/" aria-current="page">Dryad and node scripts</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/">Caffeine contra o manual da Unity 5.6</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-forward-pbr-post-session/">2026-10-02 — Forward PBR, reflection, post-processing GPU</a></li><li><a class="nav-link" href="/en/docs/plans/2026-10-02-editor-backlog-phase-b/">Backlog Editor — Phase B–D (Oct 2026)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-viewport-rendering-quality-session/">Session 2026-09-22 — Viewport 3D, Visual Quality and Performance</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-phong-gpu-handles-session/">Session 2026-09-22 — Phong GPU, Handles and Shadows</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-22-engine-pillars-roadmap/">🏛️ Engine Pillars — Roadmap of Fundamental Systems</a></li><li><a class="nav-link" href="/en/docs/plans/2026-09-21-rendering-roadmap/">🎨 Rendering Roadmap — High Volume 3D</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-24-doppio-ui-test-framework/">Doppio UI Test Framework Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-object-selection-raycasting/">Object Selection via Raycasting Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-wiring/">MESH &amp; PREFAB ASSET PIPELINE - COMPLETE ANALYSIS &amp; WIRING PLAN</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-mesh-prefab-asset-pipeline/">Mesh &amp; Prefab Asset Pipeline Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-vp-inverse/">Transform Gizmo Raycasting with VP−1 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-gizmo-raycasting-performance/">Gizmo Raycasting Performance &amp; Threshold Tuning (Task 6)</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-23-3d-mesh-enhancements/">3D Mesh Enhancements Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-20-viewport-3d-iso-gizmos-xyz/">Viewport 3D/2D/Iso + Gizmos XYZ Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-play-mode-physics-scripting-tileset/">Play Mode + Physics + Scripting + Tileset Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-18-inspector-v2/">Inspector 2.0 Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-unified-ecosystem-build/">Unified Caffeine Ecosystem Build &amp; caf-pack Implementation</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-scene-viewport-and-entity-types/">Scene Viewport Fix &amp; Entity Type System Expansion</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-implementation/">Caffeine Ecosystem Three-Phase Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-17-ecosystem-three-phase-design/">Caffeine Unified Ecosystem — Three-Phase Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-projectstartup-dialog-plan/">ProjectStartupDialog Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs/">ProjectStartupDialog Tabs Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-project-startup-dialog-tabs-design/">ProjectStartupDialog - Tab-Based Project Management Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-plan/">Material &amp; Shader Editor Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-material-shader-editor-design/">Material &amp; Shader Editor - Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-plan/">E2E Testing Infrastructure Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-e2e-testing-design/">E2E Testing Infrastructure Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-implementation/">BuildSystem Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-buildsystem-design/">BuildSystem Integration Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-plan/">Audio Preview &amp; Spatial Placement Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-16-audio-preview-spatial-design/">Audio Preview &amp; Spatial Placement — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-project-manager-design/">Project Manager — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-hot-reload-design/">Assets Hot-Reload — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-plan/">Asset Pipeline Integration — Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-15-asset-pipeline-design/">Asset Pipeline Integration — Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-implementation/">Transform Gizmos Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-14-transform-gizmos-design/">Transform Gizmos Design</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-plan/">Scripting Module Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-11-scripting-design/">Scripting Module — Design Document</a></li><li><a class="nav-link" href="/en/docs/plans/2026-05-10-camera3d/">Camera 3D Implementation Plan</a></li><li><a class="nav-link" href="/en/docs/plans/2025-05-15-script-editor/">Script Editor Implementation Plan</a></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/">Milestones</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/caffeine-studio-ide/">🛠️ Caffeine Studio IDE — Plano de Desenvolvimento</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/engine-runtime-capabilities-rfc/">Capacidades de runtime (RFC) — lacunas genéricas</a></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M1 scene editor foundation</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.5-asset-browser-v1/">🔧 Asset Browser (v1)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.1-editor-context-undo-redo/">🔧 EditorContext &amp; Undo/Redo</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.2-hierarchy-panel/">🔧 Hierarchy Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.3-inspector-panel/">🔧 Inspector Panel</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.7-save-load-scene/">🔧 Save/Load Scene</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.6-scene-editor-orchestrator/">🔧 Scene Editor Orchestrator</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m1-scene-editor-foundation/1.4-scene-viewport/">🔧 Scene Viewport</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M2 visual editing assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.6-asset-browser-v2/">🔧 Asset Browser (v2)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.3-asset-pipeline-integration/">🔧 Asset Pipeline Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.2-drag-and-drop/">🔧 Drag-and-Drop</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.4-hot-reload-assets/">🔧 Hot-Reload de Assets</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.7-multiple-scene-tabs/">🔧 Multiple Scene Tabs</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.5-project-manager/">🔧 Project Manager</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m2-visual-editing-assets/2.1-transform-gizmos/">🔧 Transform Gizmos</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M3 scripting runtime</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.3-ecs-lua-bindings/">🔧 ECS Lua Bindings</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.6-editor-script-integration/">🔧 Editor Script Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.1-lua-vm/">🔧 Lua VM</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.7-particle-system/">🔧 Particle System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.4-sandboxing/">🔧 Sandboxing</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.2-script-component-system/">🔧 Script Component &amp; System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m3-scripting-runtime/3.5-script-watcher/">🔧 Script Watcher</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><button class="nav-dir-label" type="button">M4 advanced tools polish</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.1-animation-timeline/">🔧 Animation Timeline Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.4-audio-preview-spatial/">🔧 Audio Preview &amp; Spatial Placement</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.5-build-system/">🔧 Build System Integration</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.7-entity-debugger/">🔧 Entity Debugger</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.8-plugin-system/">🔧 Extension &amp; Plugin System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.3-material-shader-editor/">🔧 Material &amp; Shader Editor</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.6-prefab-system/">🔧 Prefab System</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/m4-advanced-tools-polish/4.2-tilemap-editor/">🔧 Tilemap Editor</a></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/milestones/terrain/">Terrain System — Roadmap</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.1-modulos-adicionais/">7.1 — Módulos Adicionais de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.2-combinadores-booleanos/">7.2 — Combinadores Booleanos de Heightmap</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.3-brush-de-geracao/">7.3 — Brush de Geração no Viewport</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.4-undo-de-geracao/">7.4 — Undo de Geração</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.5-gpu-compute/">7.5 — GPU Compute (Noise + Erosão)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.6-import-png/">7.6 — Import PNG (Heightmap Grayscale)</a></li><li><a class="nav-link" href="/en/docs/plans/milestones/terrain/7.7-colisao-fisica/">7.7 — Colisão Física (Heightfield Collider)</a></li></ul></li></ul></li><li class="nav-dir"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plans/archive/">Archive</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-18-status-report/">Caffeine Engine - Current Status &amp; Implementation Roadmap</a></li><li><a class="nav-link" href="/en/docs/plans/archive/2026-05-16-project-startup-dialog-session/">ProjectStartupDialog + File Picker Implementation - Session Summary</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Analysis</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/analysis/EDITOR_STATUS_ANALYSIS/">Doppio Editor — Component Status Analysis</a></li></ul></li><li><a class="nav-link" href="/en/docs/HISTORY/">Development history</a></li><li><a class="nav-link" href="/en/docs/architecture_specs/">🏗️ Architecture Specifications</a></li><li><a class="nav-link" href="/en/docs/AUDIT_REPORT/">Caffeine Engine — Audit Report</a></li><li><a class="nav-link" href="/en/docs/MASTER/">Master index</a></li><li><a class="nav-link" href="/en/docs/books/">Books and PDFs</a></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/project/">Project</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Dryad and node scripts</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--historical">Historical</span>
+  <span>Last updated: <time datetime="2026-11-18">2026-11-18</time></span>
+</div>
+<p><strong>Date:</strong> 2026-10-19<br>
+<strong>Namespace:</strong> <code>Caffeine::Script</code><br>
+<strong>Language:</strong> Dryad, in the separate <code>source/</code> repository, file extension <code>.dyd</code><br>
+<strong>Status:</strong> host, 3D entities, hot reload, emitter, Doppio canvas with attach/run, and <code>.dyd</code> round-trip (when <code>// @node</code> markers are present)</p>
+<p>The node graph is not a second runtime. The game runs Dryad. The canvas only records how that text was built.</p>
+<h2 id="file-contract">File contract<a class="anchor" href="#file-contract" aria-label="Link to this section">#</a></h2>
+<p>In the project scripts folder (the same one the Lua watcher already uses):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>File</th>
+<th>Read by</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nome_script.dyd</code></td>
+<td>Dryad runtime</td>
+<td>The real program. The only thing executed.</td>
+</tr>
+<tr>
+<td><code>nome_script.node.json</code></td>
+<td>Editor only</td>
+<td>Canvas positions, node types, wires, and parameters.</td>
+</tr>
+</tbody>
+</table></div>
+<pre class="mermaid">flowchart LR
+  canvas[Doppio canvas]
+  json[&quot;nome_script.node.json&quot;]
+  dyd[&quot;nome_script.dyd&quot;]
+  host[DryadHost]
+  play[Play mode]
+  canvas --&gt; json
+  canvas --&gt; dyd
+  dyd --&gt; host --&gt; play
+  json -.-&gt; canvas
+</pre>
+<p>The runtime ignores the JSON. If the JSON is missing, the game still runs. If the <code>.dyd</code> is edited by hand, the game uses that text; the canvas may be stale until the graph is rebuilt.</p>
+<p>The emitter must be deterministic: the same graph always produces the same <code>.dyd</code>.</p>
+<h2 id="language-boundary">Language boundary<a class="anchor" href="#language-boundary" aria-label="Link to this section">#</a></h2>
+<p>Dryad stays a general-purpose language. Caffeine, Doppio, ECS, nodes, and <code>.node.json</code> do not enter the language, the standard library, or the syscalls.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Where</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dryad repository (<code>source/</code>)</td>
+<td>Interpreter, <code>run_source</code>, <code>call_global</code>, build fixes. Dryad's own rules: generic intrinsics, stdlib written in Dryad, tests first.</td>
+</tr>
+<tr>
+<td>Caffeine engine</td>
+<td><code>DryadHost</code>, <code>onCreate</code> / <code>onUpdate</code> / <code>onFixedUpdate</code> hooks, <code>caffeine_set_position</code> / <code>caffeine_get_position_*</code>, <code>Caffeine::Script::Nodes::NodeEmitter</code>, extension dispatch, canvas, and JSON.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Current Dryad limits, handled by the emitter rather than host shortcuts:</p>
+<ul>
+<li><code>&amp;&amp;</code> does not short-circuit. The graph emits <code>if</code>.</li>
+<li><code>Promise</code> is synchronous. The game tick does not depend on it.</li>
+<li>Each Dryad worker has its own <code>Interpreter</code>. Gameplay tick stays on one thread.</li>
+</ul>
+<h2 id="what-the-engine-already-does">What the engine already does<a class="anchor" href="#what-the-engine-already-does" aria-label="Link to this section">#</a></h2>
+<p>Lua stays. <code>ScriptComponent.scriptPath</code> picks the runtime by suffix:</p>
+<ul>
+<li><code>.lua</code> → <code>ScriptEngine</code> (sol2)</li>
+<li><code>.dyd</code> → <code>DryadHost</code></li>
+</ul>
+<p>Each <code>.dyd</code> gets its own <code>dryad::Interpreter</code>. The file is read once (<code>run_file</code> → <code>run_source</code>, which keeps the syntax tree). Each frame calls the global function when it exists:</p>
+<div class="code-block" data-lang="dryad"><div class="code-head"><span class="code-lang">dryad</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-dryad"><span class="hljs-keyword">function</span> <span class="hljs-title function_">onUpdate</span>(<span class="hljs-params">entity, dt</span>) {
+  <span class="hljs-title function_">caffeine_set_position</span>(entity, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>);
+}
+</code></pre></div>
+<p><code>onCreate</code> and <code>onFixedUpdate</code> use the same <code>(entity, dt)</code> shape. A missing function is a no-op, matching Lua.</p>
+<p><code>caffeine_set_position</code> and <code>caffeine_translate</code> are host natives registered with <code>define_native</code>. They are not part of Dryad. The interpreter's network access stays off (<code>set_network_allowed(false)</code>).</p>
+<p>3D entities store their transform in <code>ECS::Position3D</code>, not <code>ECS::Transform</code>. The position natives read and write <code>Position3D</code> when present (falling back to <code>Transform</code> for 2D entities), so a graph moves the same component the 3D renderer draws.</p>
+<p><code>DryadHost::setSearchRoot</code> resolves project-relative paths such as <code>scripts/player.dyd</code>. <code>ScriptSystem</code> receives the project root when play starts. <code>reloadIfChanged</code> recompiles the script when its modification time changes and re-runs <code>onCreate</code>, so saving the canvas while playing takes effect immediately.</p>
+<p>Dryad commit <code>1e0eef2</code>:</p>
+<ul>
+<li><code>Interpreter::run_source</code> retains the <code>Program</code> so functions stay valid after load.</li>
+<li><code>Interpreter::call_global</code> invokes a function in the global environment.</li>
+<li>A build without OpenSSL no longer fails on an unused TLS helper.</li>
+</ul>
+<h2 id="phases">Phases<a class="anchor" href="#phases" aria-label="Link to this section">#</a></h2>
+<h3 id="1-minimal-host-done">1. Minimal host — done<a class="anchor" href="#1-minimal-host-done" aria-label="Link to this section">#</a></h3>
+<p><code>src/caffeine/script/DryadHost.hpp</code> loads the <code>.dyd</code> and calls the hooks. <code>ScriptSystem</code> splits <code>.lua</code> from <code>.dyd</code>. Tests: <code>onUpdate</code> writes <code>Transform</code> on 2D entities and <code>Position3D</code> on 3D entities.</p>
+<p>Path resolution and hot reload are done. Still open: input bindings.</p>
+<h3 id="2-emitter-no-ui-done">2. Emitter, no UI — done<a class="anchor" href="#2-emitter-no-ui-done" aria-label="Link to this section">#</a></h3>
+<p><code>src/caffeine/script/nodes/NodeGraph.hpp</code> holds the in-memory graph (<code>nodes</code>, <code>edges</code>, canvas <code>x</code>/<code>y</code>). <code>NodeEmitter::emit</code> returns deterministic <code>.dyd</code> text and <code>.node.json</code>; <code>writeSiblingFiles</code> writes both next to the script path.</p>
+<p>Catalog (pin names in edges use <code>nodeId.pin</code>):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Exec pins</th>
+<th>Data pins</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OnUpdate</code></td>
+<td><code>out</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>SetPosition</code></td>
+<td><code>in</code>, <code>out</code></td>
+<td><code>x</code>, <code>y</code>, <code>z</code> (inline editable, default <code>0</code>)</td>
+</tr>
+<tr>
+<td><code>Translate</code></td>
+<td><code>in</code>, <code>out</code></td>
+<td><code>x</code>, <code>y</code>, <code>z</code> → <code>caffeine_translate</code> (inline editable)</td>
+</tr>
+<tr>
+<td><code>GetPosition</code></td>
+<td>—</td>
+<td><code>x</code>, <code>y</code>, <code>z</code> → <code>caffeine_get_position_*</code></td>
+</tr>
+<tr>
+<td><code>SetScale</code></td>
+<td><code>in</code>, <code>out</code></td>
+<td><code>x</code>, <code>y</code>, <code>z</code> → <code>caffeine_set_scale</code> (inline editable)</td>
+</tr>
+<tr>
+<td><code>GetScale</code></td>
+<td>—</td>
+<td><code>x</code>, <code>y</code>, <code>z</code> → <code>caffeine_get_scale_*</code></td>
+</tr>
+<tr>
+<td><code>Log</code></td>
+<td><code>in</code>, <code>out</code></td>
+<td>message → <code>caffeine_log</code></td>
+</tr>
+<tr>
+<td><code>DeltaTime</code></td>
+<td>—</td>
+<td><code>value</code> → <code>dt</code></td>
+</tr>
+<tr>
+<td><code>Constant</code></td>
+<td>—</td>
+<td><code>value</code> (<code>valueKind</code> <code>number</code> or <code>bool</code> in JSON)</td>
+</tr>
+<tr>
+<td><code>Branch</code></td>
+<td><code>in</code>, <code>then</code>, <code>else</code>, <code>out</code></td>
+<td><code>condition</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Generated <code>.dyd</code> is ordinary Dryad with <code>// @node &lt;id&gt;</code> markers; branches use <code>if</code> / <code>else</code>, never <code>&amp;&amp;</code>. Tests: <code>tests/test_node_emitter.cpp</code> (determinism + <code>DryadHost</code> execution).</p>
+<h3 id="3-doppio-canvas-done">3. Doppio canvas — done<a class="anchor" href="#3-doppio-canvas-done" aria-label="Link to this section">#</a></h3>
+<p><code>DryadNodeScriptPanel</code> (<code>Window → Dryad Node Script</code>, or open a <code>.dyd</code> from the Asset Browser) edits the sibling <code>.node.json</code> in memory and calls <code>NodeEmitter::writeSiblingFiles</code> when links change, nodes move, constants change, or you press <strong>Save</strong>. Play mode still runs only the <code>.dyd</code> via <code>DryadHost</code>.</p>
+<p>The canvas surface itself lives in the reusable <code>caffeine/ui/NodeCanvas</code> component
+(theme, zoom, mini-map, node chrome and drop targets). Other Doppio tools can
+embed the same component without depending on Dryad.</p>
+<p>The panel toolbar has the node catalog and two runtime controls:</p>
+<ul>
+<li><strong>Attach to selected</strong> adds/updates a <code>ScriptComponent</code> with a project-relative <code>.dyd</code> path.</li>
+<li><strong>Run once</strong> calls <code>onCreate</code> and one <code>onUpdate</code> on the selected entity, without starting play mode.</li>
+</ul>
+<p>When the <code>OnUpdate</code> node has no outgoing exec link the panel says so and offers <strong>Add motion example</strong>, which builds <code>OnUpdate → Translate</code> with <code>DeltaTime</code> wired into <code>y</code>. Dragging a <code>.dyd</code> onto an entity in the Hierarchy attaches it and opens the node editor. The Inspector Script field also accepts <code>.dyd</code> drops.</p>
+<h3 id="dryad-nodes-palette">Dryad Nodes palette<a class="anchor" href="#dryad-nodes-palette" aria-label="Link to this section">#</a></h3>
+<p><strong>Dryad Nodes</strong> is a native Doppio panel, docked on the left and open by default.
+It has a search box and a tree grouped by category (<code>Language / Values</code>,
+<code>Language / Flow</code>, <code>Engine / Events</code>, <code>Engine / Transform</code>, <code>Engine / Time</code>,
+<code>Engine / Debug</code>). Drag a node from the palette onto the Dryad canvas; the drop
+is the only interaction between the two panels.</p>
+<p>The palette is generated from <code>NodeCatalog</code>, which is shared with the canvas
+context menu. Adding a new node means adding one catalog entry plus its emitter
+and runtime support.</p>
+<h3 id="canvas-controls">Canvas controls<a class="anchor" href="#canvas-controls" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>+ Add node</strong> or <strong>right-click</strong> opens the same node catalog.</li>
+<li><strong>Wheel</strong> zooms around the graph; <strong>- / % / +</strong> in the toolbar set the zoom and reset it to 100%.</li>
+<li><strong>Delete</strong> (or the <code>Del</code> key) removes the selected nodes and links.</li>
+<li><strong>Home</strong> centers the graph; <strong>Arrange</strong> lays it out in exec-flow order.</li>
+<li><strong>Middle-drag</strong> pans, and the mini-map shows the whole graph.</li>
+<li>Inputs without a wire have inline fields, so a <code>SetPosition</code> needs no Constant nodes.</li>
+<li>Nodes have fixed width and a colour per kind; links are blue for exec and amber for data.</li>
+<li>A <code>.node.json</code> whose emitted script matches the <code>.dyd</code> is trusted on reload, preserving positions, inline values and orphan nodes. A hand-edited <code>.dyd</code> still wins.</li>
+</ul>
+<p>JSON sketch:</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;script&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;nome_script.dyd&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;nodes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;n1&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;OnUpdate&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;x&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;y&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;edges&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;from&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;n1.out&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;to&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;n2.in&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre></div>
+<h3 id="4-round-trip-done">4. Round-trip — done<a class="anchor" href="#4-round-trip-done" aria-label="Link to this section">#</a></h3>
+<p><code>NodeRoundTrip::importFromDyd</code> rebuilds graph topology from emitter-shaped <code>.dyd</code> (markers on <code>OnUpdate</code>, <code>Branch</code>, <code>SetPosition</code>, <code>Translate</code>; data nodes are inferred from expressions, including <code>dt</code>). Opening a script in <code>DryadNodeScriptPanel</code> first checks whether the <code>.node.json</code> emits exactly the current <code>.dyd</code>; if so it uses the JSON graph (positions, inline values and orphan nodes survive). Otherwise the <code>.dyd</code> wins and <code>x</code>/<code>y</code> come from the JSON for matching ids. <strong>Sync from .dyd</strong> always forces a refresh.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th><code>.dyd</code></th>
+<th>Canvas behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Has <code>// @node</code> markers</td>
+<td>Graph rebuilt from script; layout merged from JSON</td>
+</tr>
+<tr>
+<td>No markers</td>
+<td>Valid Dryad; canvas stays on JSON (or default); status bar explains mismatch</td>
+</tr>
+<tr>
+<td>Markers but parse error</td>
+<td>Falls back to JSON; error in status bar</td>
+</tr>
+</tbody>
+</table></div>
+<p>Tests: <code>tests/test_node_emitter.cpp</code> (round-trip reproduces emitted text).</p>
+<h2 id="out-of-scope">Out of scope<a class="anchor" href="#out-of-scope" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Executing the JSON.</li>
+<li>Opaque Dryad, one unreadable line per node.</li>
+<li>Calling Lua from each node.</li>
+<li>Putting Caffeine concepts inside the Dryad repository.</li>
+<li>Using the bytecode VM (<code>VM::execute</code>) yet. The stable path is the <code>Interpreter</code>. The VM waits until the host is measured.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/plans/2026-10-19-dryad-node-scripts.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/releases/runtime-capabilities-patch-notes/"><span>Previous</span><strong>Runtime capabilities — patch notes</strong></a><a class="pager-next" href="/en/docs/plans/2026-10-03-unity-56-manual-gap/"><span>Next</span><strong>Caffeine contra o manual da Unity 5.6</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#file-contract">File contract</a></li><li class="l2"><a href="#language-boundary">Language boundary</a></li><li class="l2"><a href="#what-the-engine-already-does">What the engine already does</a></li><li class="l2"><a href="#phases">Phases</a></li><li class="l3"><a href="#1-minimal-host-done">1. Minimal host — done</a></li><li class="l3"><a href="#2-emitter-no-ui-done">2. Emitter, no UI — done</a></li><li class="l3"><a href="#3-doppio-canvas-done">3. Doppio canvas — done</a></li><li class="l3"><a href="#dryad-nodes-palette">Dryad Nodes palette</a></li><li class="l3"><a href="#canvas-controls">Canvas controls</a></li><li class="l3"><a href="#4-round-trip-done">4. Round-trip — done</a></li><li class="l2"><a href="#out-of-scope">Out of scope</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9",mermaid:"/assets/vendor/mermaid.min.js"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

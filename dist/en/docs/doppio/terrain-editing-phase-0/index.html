@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terrain editing: Phase 0 report · Caffeine</title>
+<meta name="description" content="What the foundation of the terrain editor is, as built: the tile model, the stroke engine, the native .terrain container, regional GI and the brush cursor, with the C ABI that carries them, how each piece is verified, th">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Terrain editing: Phase 0 report · Caffeine">
+<meta property="og:description" content="What the foundation of the terrain editor is, as built: the tile model, the stroke engine, the native .terrain container, regional GI and the brush cursor, with the C ABI that carries them, how each piece is verified, th">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/terrain-editing-phase-0/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/terrain-editing-phase-0/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/terrain-editing-phase-0/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/terrain-editing-phase-0/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link active" href="/en/docs/doppio/terrain-editing-phase-0/" aria-current="page">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Terrain editing: Phase 0 report</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Done</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last updated: <time datetime="2026-11-23">2026-11-23</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/caffeine-website/content/en/docs/doppio/terrain-editing-phase-0.md"><code>terrain-editing-phase-0.md</code></a></span>
+</div>
+<p class="doc-lede">What the foundation of the terrain editor is, as built: the tile model, the stroke engine, the native <code>.terrain</code> container, regional GI and the brush cursor, with the C ABI that carries them, how each piece is verified, the decisions behind it and what is left. The plan itself is in <a href="/en/docs/doppio/terrain-editing-roadmap/"><code>terrain-editing-roadmap.md</code></a>.</p>
+<h2 id="1-what-phase-0-delivered">1. What Phase 0 delivered<a class="anchor" href="#1-what-phase-0-delivered" aria-label="Link to this section">#</a></h2>
+<table>
+  <thead><tr><th>Piece</th><th>Where</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td>Tile model</td><td><code>src/caffeine/terrain/edit/TerrainTiles.*</code></td><td>Tiles of 64 cells that own disjoint vertices; dirty tiles and the changed region; integer-centimetre coordinates; 16-bit centimetre height tiles with an exact float fallback</td></tr>
+    <tr><td>Stroke engine</td><td><code>terrain/edit/TerrainStroke.*</code></td><td>Stamps spaced in metres along a path; five modes; stamp images, falloff curves, rotation, a pressure hook; tile-by-tile undo records</td></tr>
+    <tr><td>Native container</td><td><code>terrain/TerrainContainer.*</code></td><td>A <code>caf</code> asset of type Terrain: a tile directory and one CRC-checked record per tile; partial loading; lossless conversion of a legacy <code>.cterrain</code></td></tr>
+    <tr><td>Converter</td><td><code>caf-pack --convert-terrain</code>, <code>convertLegacyTerrain</code></td><td>Reads a <code>.cterrain</code>, writes the <code>.terrain</code>, reads it back and compares bit for bit before it reports success</td></tr>
+    <tr><td>Cache</td><td><code>terrain/TerrainCache.*</code></td><td><code>commitHeightEdit</code> (local mesh rebuild), per-tile revisions, <code>giTilesFor</code>, <code>dataFileIsLegacy</code>, <code>convertToNative</code>, <code>saveNativeTerrainFile</code></td></tr>
+    <tr><td>Regional GI</td><td><code>render/GpuSceneRenderer.cpp</code></td><td>A terrain is one Photon object per tile with its own revision, so a stroke revoxelises only the tiles it touched</td></tr>
+    <tr><td>C ABI</td><td><code>capi/EngineAPI.*</code></td><td>Versions 25 (strokes), 26 (data format, conversion) and 27 (terrain raycast, brush outline)</td></tr>
+    <tr><td>Editor</td><td><code>doppio/crates/ui</code>, <code>doppio/crates/engine</code></td><td>Rust wrappers; the brush cursor overlay; <em>Scene &gt; Convert terrains to .terrain</em>; the <code>convert_terrains</code> and <code>terrain_brush_cursor</code> agent actions</td></tr>
+  </tbody>
+</table>
+<h2 id="2-the-tile-model">2. The tile model<a class="anchor" href="#2-the-tile-model" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>A terrain of <code>N</code> vertices has <code>ceil((N-1)/64)</code> tiles a side (257 is 4, 4097 is 64). A tile <em>owns</em> its vertices (the last tile of a row also owns the final one), so tiles never overlap; its <em>mesh region</em> is the owned vertices plus one on every side.</li>
+<li>A point is also named in <strong>integer centimetres from the corner</strong> (<code>vertexXCm</code>), the form a stable id is hashed from: resampling the heightmap does not change it, and a kilometre-wide terrain is addressed by tile first and a small offset after.</li>
+<li><code>DirtyTiles</code> keeps the tiles an edit touched and the tight rectangle of vertices that really changed; the mesh and the GI grow that rectangle by one vertex themselves.</li>
+<li><code>quantizeHeights</code> stores a tile as 16-bit offsets of 1 cm from a base (655 m of range); a tile that does not fit keeps its floats.</li>
+</ul>
+<h2 id="3-the-stroke-engine">3. The stroke engine<a class="anchor" href="#3-the-stroke-engine" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>A stroke is a path of points. The brush is laid on it as stamps <strong>spaced a fixed number of metres apart</strong>, never one per frame: the same path gives the same terrain at 2 or 240 samples. Radius, spacing and heights are metres; positions are metres from the terrain's centre.</li>
+<li>Raise, lower and noise change the height by <em>metres per stamp</em>; smooth and flatten move a 0 to 1 share toward the average or the target. Smoothing reads a copy of the region, so the result does not depend on the order of vertices. Noise is deterministic for a seed.</li>
+<li>The first touch of a tile copies its heights; <code>finish</code> returns a <code>StrokeRecord</code> with before and after for the tiles that really changed. Undo and redo are bit-exact, and the record is a few tiles even on an 8 km terrain.</li>
+</ul>
+<h2 id="4-the-native-terrain-container">4. The native .terrain container<a class="anchor" href="#4-the-native-terrain-container" aria-label="Link to this section">#</a></h2>
+<table>
+  <thead><tr><th>Part</th><th>Content</th></tr></thead>
+  <tbody>
+    <tr><td>Header (32 B)</td><td>caf magic <code>0xCAFECAFE</code>, type Terrain, CRC32 of the payload</td></tr>
+    <tr><td>Metadata</td><td><code>TerrainFileMeta</code> (format version 1, resolution, extent in metres, maximum height), the mask directory, and the tile directory (offset, size and CRC32 of every tile)</td></tr>
+    <tr><td>Payload</td><td>One record per tile, rows then columns, each 16-byte aligned: the heights, the splat weights of the splat texels the tile owns, and the same sub-rectangle of every stored mask</td></tr>
+    <tr><td>Footer</td><td>CRC32 of the whole file</td></tr>
+    <tr><td>Lossless rule</td><td>A height tile is 16-bit only when decoding returns every float bit for bit (so NaN, infinities, -0 and relief above 655 m stay as floats); splat weights are bytes only when every weight is exactly byte/255, otherwise four floats; masks are 8 bits already</td></tr>
+    <tr><td>Reader</td><td><code>open</code> reads the header and directories; <code>loadTile</code>, <code>loadTilesInto</code> read only the tiles asked for and check each CRC; <code>verifyWholeFile</code> checks the footer; a failed load leaves the caller's maps untouched</td></tr>
+    <tr><td>Opening old projects</td><td><code>loadTerrainAny</code> detects the format by signature (<code>CTRN</code> is legacy); a legacy terrain opens as it is and is flagged, and <code>nativeTerrainPath</code> gives the <code>.terrain</code> path to offer</td></tr>
+  </tbody>
+</table>
+<h2 id="5-c-abi">5. C ABI<a class="anchor" href="#5-c-abi" aria-label="Link to this section">#</a></h2>
+<table>
+  <thead><tr><th>Version</th><th>Functions</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td>25</td><td><code>caffeine_session_terrain_stroke_begin / _point / _end / _revert / _reapply</code></td><td>A stroke on a terrain entity: points in world space, a local mesh rebuild per point, one collision-mesh refresh per stroke, undo records within a 512 MB budget</td></tr>
+    <tr><td>26</td><td><code>caffeine_session_terrain_data_legacy</code>, <code>caffeine_session_terrain_convert_native</code></td><td>Whether a terrain is still in the old format; save it as <code>.terrain</code>, checked bit for bit, and point the scene at it (the old file stays)</td></tr>
+    <tr><td>27</td><td><code>caffeine_session_terrain_raycast</code>, <code>caffeine_session_terrain_brush_outline</code></td><td>Where a ray meets a terrain, and the ring a brush makes on the relief</td></tr>
+  </tbody>
+</table>
+<h2 id="6-regional-gi">6. Regional GI<a class="anchor" href="#6-regional-gi" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Photon built one object for a terrain, so any edit revoxelised all of it, and a terrain made of chunks (the default) was not voxelised at all because it has no single mesh. A terrain is now cut into tiles; each tile has a coarse mesh and a revision that moves only when an edit touched it.</li>
+<li>The mesh step keeps the whole terrain within 400 000 triangles and cells of at least about a metre (the voxel volume resolves no more). The boxes of neighbouring terrain tiles are merged, because the voxeliser rebuilds a level whole when it gets more than eight boxes; boxes of ordinary objects are not merged, so a scene that changed wholesale still rebuilds whole and the light settles again.</li>
+<li>Not done yet: precompiled GI per region stored in the container. Phase 5.</li>
+</ul>
+<h2 id="7-verification">7. Verification<a class="anchor" href="#7-verification" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>C++: <code>tests/test_terrain_edit.cpp</code> (tiles, strokes, golden fingerprints for the five modes, a per-stamp budget of about 0.03 to 0.05 ms that does not grow with the terrain, GI tiles, opening and converting a legacy terrain), <code>tests/test_terrain_container.cpp</code> (10 cases) and the C ABI cases in <code>tests/test_capi.cpp</code>. The whole suite: 1099 cases.</li>
+<li>Rust: the engine-crate test of a stroke and its undo; <code>photon_gi::a_terrain_stroke_revoxelises_only_the_tiles_it_touched</code> (16 objects, no whole rebuild, at most 8 boxes); <code>terrain_format</code> (an old project is reported, converted and reopened bit for bit); <code>terrain_cursor</code> (the ring follows the mouse and hugs the relief). The whole suite: 590 tests, clippy with and without the <code>agent</code> feature, <code>./scripts/check-rust-ui.sh</code>.</li>
+</ul>
+<h2 id="8-decisions-recorded">8. Decisions recorded<a class="anchor" href="#8-decisions-recorded" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Material layers: up to 64 per palette, 4 blended per texel, resolution per layer, a layered or a simple mode per terrain; only what a camera can see stays loaded.</li>
+<li>Vegetation: procedural and manual are both placement <em>sources</em>, switchable without losing data; the target is 1M instances in real units (per hectare), so GPU culling, LOD and impostors are in Phase 3.</li>
+<li>Real metric units everywhere (cm, m, km); stable ids come from integer-centimetre world coordinates; a legacy terrain converts without losing a bit; the partial update of the physics collider is out of scope; tablet pressure is Phase 5 (the stroke already carries a pressure and the brush a hook).</li>
+</ul>
+<h2 id="9-known-limits-and-what-is-next">9. Known limits and what is next<a class="anchor" href="#9-known-limits-and-what-is-next" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>A conversion is a file-format migration, not an undoable edit; the engine marks the scene changed so that saving keeps it. <code>saveTerrainFile</code> with a <code>.terrain</code> path returns false on purpose (it lacks the extent and height scale); scenes use <code>saveNativeTerrainFile</code>.</li>
+<li>The brush cursor has no button yet: the agent action and the tests turn it on, and the Terrain Editor of Phase 1 will. A stroke point reaches the engine in world space through a float matrix, which will be revisited with camera-relative rendering for terrains far from the origin.</li>
+<li>Vegetation tiles and precompiled GI in the container belong to Phases 3 and 5. Next: Phase 1, the brush library (<code>.brush</code>, about 40 procedural brushes, every mode, protection mask, symmetry) and the Terrain Editor UI.</li>
+</ul>
+<h2 id="10-work-log">10. Work log<a class="anchor" href="#10-work-log" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>2026-11-22</strong>: the plan and its decisions were written (<code>terrain-editing-roadmap.md</code>); the tile model, the stroke engine, C ABI 25 and the Rust wrapper were built. The session <em>Container .terrain and converter</em> built the container and the <code>caf-pack</code> converter in parallel, in files this session did not touch.</li>
+<li><strong>2026-11-23</strong>: the golden and budget tests, regional GI, the legacy-terrain prompt and conversion (C ABI 26) and the brush cursor (C ABI 27) closed the phase. Incidents: a <code>git stash</code> in the website submodule was undone at once without conflicts; <code>/tmp</code> filled up twice and only old test artifacts were removed; merging every dirty Photon box broke the thin-wall GI test, which is why only terrain tiles are merged.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/terrain-editing-phase-0.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/terrain-editing-roadmap/"><span>Previous</span><strong>Terrain editing: brushes, material palette and vegetation</strong></a><a class="pager-next" href="/en/docs/doppio/terrain-generator-guide/"><span>Next</span><strong>Terrain Generator: heightfields built with nodes</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-what-phase-0-delivered">1. What Phase 0 delivered</a></li><li class="l2"><a href="#2-the-tile-model">2. The tile model</a></li><li class="l2"><a href="#3-the-stroke-engine">3. The stroke engine</a></li><li class="l2"><a href="#4-the-native-terrain-container">4. The native .terrain container</a></li><li class="l2"><a href="#5-c-abi">5. C ABI</a></li><li class="l2"><a href="#6-regional-gi">6. Regional GI</a></li><li class="l2"><a href="#7-verification">7. Verification</a></li><li class="l2"><a href="#8-decisions-recorded">8. Decisions recorded</a></li><li class="l2"><a href="#9-known-limits-and-what-is-next">9. Known limits and what is next</a></li><li class="l2"><a href="#10-work-log">10. Work log</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

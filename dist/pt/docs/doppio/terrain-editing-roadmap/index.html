@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edição de terreno: pincéis, paleta de materiais e vegetação · Caffeine</title>
+<meta name="description" content="Um editor de terreno completo, não um pincel que sobe e desce: uma biblioteca de pincéis customizados, uma paleta de materiais para pintar e uma paleta de vegetação (árvores, plantas, pedras, prontas ou receitas .generat">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Edição de terreno: pincéis, paleta de materiais e vegetação · Caffeine">
+<meta property="og:description" content="Um editor de terreno completo, não um pincel que sobe e desce: uma biblioteca de pincéis customizados, uma paleta de materiais para pintar e uma paleta de vegetação (árvores, plantas, pedras, prontas ou receitas .generat">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/doppio/terrain-editing-roadmap/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/doppio/terrain-editing-roadmap/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/terrain-editing-roadmap/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/doppio/terrain-editing-roadmap/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab active" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/doppio/terrain-editing-roadmap/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/doppio/terrain-editing-roadmap/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Painéis do editor</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/editor/test-automation/">Automação de testes do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-editor/">Editor de cena</a></li><li><a class="nav-link" href="/pt/docs/editor/material-editor/">Editor de materiais</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-gallery/">Galeria de UI do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-migration/">Guia de migração de plugins</a></li><li><a class="nav-link" href="/pt/docs/editor/viewport-toolbar/">HUD e controlos do viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/photon/">Photon — GI híbrido nativo por radiance cascades</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-manager/">Plugin Manager (host legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-sdk/">Plugin SDK (C++ legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-reference/">Referência da UI do Doppio</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/workspace-and-theme/">Workspace, tema e componentes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/doppio/">Geradores &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link active" href="/pt/docs/doppio/terrain-editing-roadmap/" aria-current="page">Edição de terreno: pincéis, paleta de materiais e vegetação</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-phase-0/">Edição de terreno: relatório da Fase 0</a></li><li><a class="nav-link" href="/pt/docs/doppio/environment-guide/">Environment: nuvens, névoa, chuva e relâmpagos no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/rust-ui/">Frontend Rust UI (Iced)</a></li><li><a class="nav-link" href="/pt/docs/doppio/gizmos-and-markers/">Gizmos e marcadores de cena</a></li><li><a class="nav-link" href="/pt/docs/doppio/materials-guide/">Materiais no Doppio: biblioteca procedural, profundidade real e bake</a></li><li><a class="nav-link" href="/pt/docs/doppio/graphics-roadmap/">Melhoria gráfica — Roadmap de Micromeshes e Photon</a></li><li><a class="nav-link" href="/pt/docs/doppio/micromeshes/">Micromeshes: clusters, cortes e o draw na GPU</a></li><li><a class="nav-link" href="/pt/docs/doppio/runtime-modifiers/">Modificadores em tempo de execução para materiais gerados</a></li><li><a class="nav-link" href="/pt/docs/doppio/photoreal-world-roadmap/">Mundo procedural fotorrealista — validação e roadmap</a></li><li><a class="nav-link" href="/pt/docs/doppio/nature-generator-guide/">Nature Generator: rochas, árvores e plantas procedurais, construídas com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/photon-guide/">Photon: iluminação global no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/material-pipeline/">Pipeline de materiais, texturas e geradores — backlog</a></li><li><a class="nav-link" href="/pt/docs/doppio/profiler-guide/">Profiler: para onde vai o tempo de um frame</a></li><li><a class="nav-link" href="/pt/docs/doppio/generator-recipes/">Receitas de geradores (generator.*)</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/headless-testing/">Testes de UI headless para o Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/pt/docs/doppio/texture-generator-guide/">Texture Generator: sprites procedurais, VFX e máscaras empacotadas</a></li><li><a class="nav-link" href="/pt/docs/doppio/water-generator-guide/">Water Generator: corpos de água construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/world-composition/">World Composer: construir um mundo prefab a partir de receitas de geradores</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plugins/compatibility/">Compatibilidade de plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/pt/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/pt/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/pt/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/pt/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Edição de terreno: pincéis, paleta de materiais e vegetação</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--plan">Plano</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Última atualização: <time datetime="2026-11-22">2026-11-22</time></span>
+  <span>Fonte: <a href="https://github.com/devscafecommunity/caffeine/blob/main/caffeine-website/content/pt/docs/doppio/terrain-editing-roadmap.md"><code>terrain-editing-roadmap.md</code></a></span>
+</div>
+<p class="doc-lede">Um editor de terreno completo, não um pincel que sobe e desce: uma biblioteca de pincéis customizados, uma paleta de materiais para pintar e uma paleta de vegetação (árvores, plantas, pedras, prontas ou receitas <code>.generator.nature</code>) colocada de forma adaptativa e sem sobreposição, onde a edição de uma espécie chega a todas as instâncias que já estão no mapa.</p>
+<h2 id="1-ponto-de-partida">1. Ponto de partida<a class="anchor" href="#1-ponto-de-partida" aria-label="Link to this section">#</a></h2>
+<p>O que existe e é reaproveitado, e o que falta.</p>
+<table>
+  <thead><tr><th>Peça</th><th>Estado</th></tr></thead>
+  <tbody>
+    <tr><td><code>TerrainSculptor</code></td><td>5 modos (Raise, Lower, Smooth, Flatten, Noise), um pincel redondo; sem C ABI e sem UI interativa</td></tr>
+    <tr><td><code>TerrainSplatPainter</code></td><td>Pinta <strong>4 camadas fixas</strong> (um mapa RGBA): o teto de uma paleta de materiais hoje</td></tr>
+    <tr><td><code>TerrainMasks</code> e <code>BiomeTable</code></td><td>Altura, declive, curvatura e até 16 máscaras guardadas; regras como "pinheiros onde é suave e seco"</td></tr>
+    <tr><td>Scatter (<code>scatterTerrain</code>)</td><td>Determinístico por seed, prioridade e raio de exclusão; cria <strong>uma entidade por instância</strong> (limite 5000) e não se edita depois</td></tr>
+    <tr><td>Receitas (<code>.generator.nature</code>, <code>recipe_ref.rs</code>)</td><td>"Carvalho, variante 17" é o mesmo modelo em qualquer máquina; as variantes assadas ficam em cache por hash de conteúdo</td></tr>
+    <tr><td>Asset manager, instanciamento, collider do terreno</td><td>Referências dentro do projeto; draws instanciados; um collider heightfield reconstruído por inteiro</td></tr>
+    <tr><td><strong>Falta</strong></td><td>Pincéis customizados, muitas camadas, vegetação como dado do terreno (não entidades), editar uma vez e aplicar a todas, undo por tiles, atualizações incrementais, preview do pincel</td></tr>
+  </tbody>
+</table>
+<h2 id="2-decisões">2. Decisões<a class="anchor" href="#2-decisões" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Formato nativo.</strong> Um contêiner <code>.terrain</code> no formato <code>caf</code> guarda o terreno em tiles regionais. O <code>caf-pack</code> descompila o <code>.cterrain</code> legado para ele, sem perdas, e o motor abre projetos antigos convertendo.</li>
+<li><strong>Resolução por camada.</strong> Cada camada da paleta tem a sua resolução, e um terreno pode alternar entre o modo de material em camadas e o simples.</li>
+<li><strong>Residência por câmera.</strong> Só o que uma câmera pode ver fica carregado (tiles, camadas, texturas, instâncias); o resto é descarregado e volta a carregar com orçamentos de RAM e CPU.</li>
+<li><strong>Procedural e manual são ambos fontes.</strong> O editor de terreno e os geradores procedurais são ferramentas de um mesmo framework, e cada fonte de colocação pode ser ligada ou desligada sem perder os seus dados.</li>
+<li><strong>GI regional.</strong> Uma edição invalida só a região que toca, de forma dinâmica ou a partir de dados pré-compilados.</li>
+<li><strong>1M de instâncias</strong> é meta da Fase 3, então culling na GPU, LOD e impostores entram nela. A meta é dita em unidades reais (instâncias por hectare em quilómetros de terreno), não como uma contagem solta.</li>
+<li><strong>Unidades métricas reais em todo o lado:</strong> centímetros, metros e quilómetros. O raio e o espaçamento do pincel são em metros, as alturas guardam-se ao centímetro, as densidades são por metro quadrado ou hectare, e os terrenos chegam a quilómetros.</li>
+<li><strong>Ids estáveis ao reamostrar</strong> são uma migração explícita: os overrides são remapeados.</li>
+<li><strong>Fora de escopo aqui:</strong> a atualização parcial do collider de física. O pipeline de traço emite regiões sujas, então ele pode assinar depois. A pressão de tablet é Fase 5; os parâmetros do pincel já trazem um gancho de pressão (padrão 1).</li>
+</ul>
+<h2 id="3-arquitetura">3. Arquitetura<a class="anchor" href="#3-arquitetura" aria-label="Link to this section">#</a></h2>
+<h3 id="31-núcleo-de-pincéis-c-terrainedit">3.1 Núcleo de pincéis (C++, <code>terrain/edit/</code>)<a class="anchor" href="#31-núcleo-de-pincéis-c-terrainedit" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Stamp:</strong> uma imagem em tons de cinza (64 a 256 px) com raio, rotação, falloff, espaçamento, intensidade e jitter (posição, rotação, tamanho, opacidade).</li>
+<li><strong>Traço:</strong> os stamps são distribuídos ao longo do caminho por espaçamento em metros, nunca por frame, então o resultado não depende do frame rate.</li>
+<li><strong>Biblioteca:</strong> cerca de 40 pincéis procedurais (redondo macio e duro, quadrado, ruídos Perlin, Worley e ridged, rachaduras, estratos, dunas, crateras, terraços, penhascos), imagens em tons de cinza importadas pelo asset manager, ficheiros <code>Nome.brush</code> (JSON: stamp, parâmetros, modo) e presets do usuário.</li>
+<li><strong>Operações:</strong> Raise e Lower, Smooth, Flatten (altura, plano, sob o cursor), Ramp, Terrace, Noise, Pinch e Bulge, Stamp (soma, absoluto, max, min), Clone, Smudge, erosão térmica e hidráulica como pincel.</li>
+<li><strong>Máscara de proteção</strong> (editar só onde declive, altura ou uma máscara permite) e <strong>simetria</strong> (espelho em X e Z, radial).</li>
+<li><strong>Pipeline:</strong> um traço acumula em tiles sujos; cada tile sujo reconstrói só a sua região de malha, recalcula as suas máscaras e avisa o GI e o collider. O <strong>undo</strong> guarda os tiles de antes e depois, um passo por traço.</li>
+</ul>
+<h3 id="32-paleta-de-materiais">3.2 Paleta de materiais<a class="anchor" href="#32-paleta-de-materiais" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Uma paleta tem até <strong>64 camadas</strong>; cada tile lista só as camadas que usa (no máximo 4 misturadas por texel), então só as camadas dos tiles visíveis ficam residentes, o que torna 64 viável. Cada uma referencia um <code>.mat</code> PBR (albedo, normal, ORM, tiling) pelo asset manager. Guardada como asset <code>.terrainpalette</code>.</li>
+<li><strong>Renderização:</strong> um mapa de índices e um de pesos (4 camadas misturadas por texel) sobre texture arrays agrupados por faixa de tamanho; blend por altura, triplanar em declives fortes, anti-tiling, tint e rotação de UV por camada.</li>
+<li><strong>Resolução por camada</strong> de 256 a 4096, comprimida offline (BC7 e BC5) pelo <code>caf-pack</code>. O <strong>modo simples</strong> (uma textura ou cor, ou as 4 camadas legadas) é selecionável por terreno e por nível de qualidade.</li>
+<li><strong>A pintura</strong> usa o núcleo de pincéis nos modos Paint, Erase, Replace, Smooth e Lock; o <strong>auto-layering</strong> preenche por regras de declive, altura e máscaras, na sintaxe da tabela de bioma.</li>
+</ul>
+<h3 id="33-fontes-de-colocação-e-vegetação">3.3 Fontes de colocação e vegetação<a class="anchor" href="#33-fontes-de-colocação-e-vegetação" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Uma <strong>fonte</strong> produz densidade ou instâncias: pintada (manual), procedural (regras e seed), um plano de scatter importado, ou um grafo ou script. As fontes empilham, e cada uma pode ser ligada, desligada ou misturada.</li>
+<li><strong>Ids estáveis:</strong> o id de uma instância é um hash de fonte, célula (ou traço) e índice. Os overrides (movida, removida, escalada) ficam presos a ele e sobrevivem a regerar. Operações: <em>assar procedural em manual</em> e <em>rederivar</em>.</li>
+<li><strong>Sem sobreposição:</strong> uma grade espacial global com footprint por espécie, prioridade e distância mínima entre espécies, aplicada na pintura (rejeita) e num passe de resolução determinístico; respeita também os objetos da cena.</li>
+<li><strong>Espécie</strong> (a entrada da paleta): um prefab, um mesh ou uma receita <code>.generator.nature</code> com N variantes assadas, densidade, raio de exclusão, faixa de escala, regras de declive, altura e máscara, alinhamento à normal, afundamento, tint, prioridade, vento e LOD.</li>
+<li><strong>Ferramentas:</strong> Paint, Erase, Scale, Rotate, Tint, Replace species, Select e Move, Thin out, Reseed.</li>
+</ul>
+<h3 id="34-uma-edição-chega-a-todas-as-instâncias-e-o-terreno-adapta">3.4 Uma edição chega a todas as instâncias, e o terreno adapta<a class="anchor" href="#34-uma-edição-chega-a-todas-as-instâncias-e-o-terreno-adapta" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Uma instância guarda só <code>espécie, variante, seed, escala, yaw, tint</code> e referencia a espécie; nunca copia um mesh.</li>
+<li>Editar uma espécie abre a sua receita no Nature Generator; ao salvar, as variantes são re-assadas (cache por hash de conteúdo) e todas as instâncias atualizam. O mesmo vale para um prefab, mesh ou material alterado. O override por instância fica mínimo, e <em>destacar para entidade</em> é opcional.</li>
+<li><strong>Adaptativo:</strong> curvas sobre máscaras modulam tamanho, cor e variante (úmido é mais verde e maior, declive é menor, altitude escala). Esculpir re-projeta as instâncias; as que ficam inválidas (declive, água, altura) ficam ocultas, e as manuais não são apagadas.</li>
+</ul>
+<h3 id="35-formato-nativo-do-terreno">3.5 Formato nativo do terreno<a class="anchor" href="#35-formato-nativo-do-terreno" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>.terrain</code> (um tipo de asset <code>caf</code>): tiles regionais de alturas (16 ou 32 bit), pesos por camada, máscaras e tiles de vegetação, com versão e CRC por tile; carrega só as regiões pedidas.</li>
+<li>O <code>caf-pack</code> lê um <code>.cterrain</code> (alturas, splat de 4 camadas, máscaras) e escreve o contêiner. Sem perdas verifica-se por uma ida e volta que compara alturas, pesos de 8 bits e máscaras bit a bit. O leitor legado fica só leitura.</li>
+<li><strong>Unidades reais e mundos grandes:</strong> as alturas são de 16 bits quantizadas a 1 cm com um desvio base por tile (655 m de alcance; tiles mais altos usam 32 bit), as posições são locais ao tile com coordenadas inteiras de tile, a renderização é relativa à câmera, e um id estável é um hash de <em>coordenadas do mundo em centímetros inteiros</em>, não de índices de texel, então reamostrar o heightmap não o altera.</li>
+<li>A mesma grade de tiles serve ao undo, à malha, ao GI e à vegetação.</li>
+</ul>
+<h3 id="36-gi-por-região">3.6 GI por região<a class="anchor" href="#36-gi-por-região" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Toda edição emite regiões sujas na grade de tiles, que alimentam o Photon (que já tem cache por vista).</li>
+<li><strong>Dinâmico:</strong> recalcula só a região suja. <strong>Pré-compilado:</strong> guarda a iluminação por região nos tiles do <code>.terrain</code>, marca como desatualizada quando a região é editada e re-assa em segundo plano. O modo é escolhido por região ou terreno.</li>
+</ul>
+<h3 id="37-residência-orçamentos-e-1m-de-instâncias">3.7 Residência, orçamentos e 1M de instâncias<a class="anchor" href="#37-residência-orçamentos-e-1m-de-instâncias" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><strong>Residência por câmera:</strong> tiles, camadas, texturas e buffers de instância ficam residentes só para o que qualquer câmera ativa (viewport do editor, câmera do jogo, preview) pode ver, com histerese. Carregar e descarregar é assíncrono, faz prefetch ao longo do caminho da câmera e tem orçamentos por frame de RAM, CPU e uploads. Segue as opções de otimização que o motor já tem e aparece na aba Performance e no profiler.</li>
+<li><strong>1M de instâncias:</strong> buffers de instância por chunk (cerca de 32 bytes cada, uns 32 MB na GPU), culling em compute (frustum e oclusão), draws indiretos, LOD mais um impostor octaédrico assado por espécie e variante pelo <code>caf-pack</code>, sombras só para LODs próximos, vento no vertex shader.</li>
+<li><strong>Edição:</strong> durante um traço desenha-se um proxy de menor densidade, com um teto de custo por traço que precisa ser medido.</li>
+</ul>
+<h3 id="38-ui-do-editor-doppio">3.8 UI do editor (Doppio)<a class="anchor" href="#38-ui-do-editor-doppio" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Um modo <strong>Terrain Editor</strong> no viewport com as abas Sculpt, Paint, Foliage e Masks.</li>
+<li>Um painel de pincel (grade de pincéis com preview, sliders, curva de falloff, espaçamento, jitter, simetria), painéis de paleta para materiais e espécies (cartões, busca, favoritos) e um decal do pincel projetado no terreno com um HUD de latência.</li>
+<li>Atalhos: <kbd>[</kbd> e <kbd>]</kbd> para o raio, <kbd>Ctrl</kbd> para inverter, <kbd>Shift</kbd> para suavizar.</li>
+<li>Regras do projeto: painéis compõem componentes, cada widget tem um <code>UiId</code> e uma entrada no catálogo, agentes usam ações <code>Message</code> em <code>main/agent.rs</code>, fluxos headless cobrem cada ferramenta.</li>
+</ul>
+<h2 id="4-fases">4. Fases<a class="anchor" href="#4-fases" aria-label="Link to this section">#</a></h2>
+<table>
+  <thead><tr><th>Fase</th><th>Entrega</th><th>Depende de</th><th>Verificação</th></tr></thead>
+  <tbody>
+    <tr><td><strong>0. Base</strong></td><td>ABI de traço, modelo de tiles em unidades reais (cm, m, km), tiles e regiões sujas, rebuild incremental de malha, undo por tiles, decal do pincel, o contêiner <code>.terrain</code> e o conversor do <code>caf-pack</code></td><td>nada</td><td>Teste golden por traço; ida e volta bit a bit de um terreno legado</td></tr>
+    <tr><td><strong>1. Escultura</strong></td><td>Stamp, <code>.brush</code>, cerca de 40 pincéis, todos os modos, máscara de proteção, simetria, UI</td><td>0</td><td>O mesmo traço a 30, 60 e 144 fps; fluxos headless</td></tr>
+    <tr><td><strong>2. Materiais</strong></td><td>Paleta com resolução por camada, modo em camadas ou simples, mapas de índices e pesos, pintura, auto-layering, orçamento de VRAM, residência</td><td>0</td><td>Render de referência; um projeto antigo abre idêntico</td></tr>
+    <tr><td><strong>3. Vegetação</strong></td><td>Fontes de colocação (pintada e procedural, alternáveis), ids estáveis, sem sobreposição, pipeline GPU para 1M com LOD e impostores</td><td>0</td><td>Determinismo por seed; 1M de instâncias dentro do orçamento do frame</td></tr>
+    <tr><td><strong>4. Receitas e adaptação</strong></td><td>Espécie a partir de <code>.generator.nature</code>, edição que propaga, overrides, re-projeção, variação por máscara</td><td>3</td><td>Editar uma receita muda todas as instâncias; esculpir readapta</td></tr>
+    <tr><td><strong>5. Acabamento</strong></td><td>Máscaras pintadas, estradas e rios por spline, GI regional pré-compilado, pincéis em GPU, pressão de tablet, presets compartilháveis, docs</td><td>1 a 4</td><td>Docs EN e PT, capturas headless</td></tr>
+  </tbody>
+</table>
+<p>As Fases 1, 2 e 3 podem andar em paralelo depois da Fase 0, porque tocam arquivos diferentes. O GI regional começa na Fase 0 (regiões sujas) e se completa na Fase 5.</p>
+<p><strong>Estado da Fase 0 (2026-11-22).</strong> Feito: o modelo de tiles em unidades reais (<code>terrain/edit/TerrainTiles</code>: tiles de 64 células que possuem vértices disjuntos, tiles e regiões sujas, coordenadas em centímetros inteiros, tiles de altura de 16 bits em centímetros com um recurso exato); o motor de traço (<code>TerrainStroke</code>: stamps espaçados em metros ao longo do caminho, cinco modos, imagens de stamp, curvas de falloff, rotação, um gancho de pressão, registros de undo tile a tile); a C ABI 25 (<code>caffeine_session_terrain_stroke_*</code>: begin, point, end, revert, reapply, com um rebuild local da malha por ponto do traço e uma atualização da malha de colisão por traço) e o seu wrapper Rust. Verificado por <code>tests/test_terrain_edit.cpp</code>, pelos testes da C ABI e por um teste da crate do motor: o mesmo caminho dá o mesmo terreno a qualquer taxa de amostragem, um undo é exato bit a bit, e um traço num terreno de 8 km toca só alguns tiles. Também feito: o contêiner nativo <code>.terrain</code> (<code>terrain/TerrainContainer</code>, um asset <code>caf</code> do tipo Terrain: um cabeçalho, um diretório de tiles e um registro com CRC por tile com as suas alturas, retângulos de splat e de máscaras; um leitor que carrega só os tiles pedidos) e o conversor legado (<code>caf-pack --convert-terrain</code> e <code>convertLegacyTerrain</code>, relido bit a bit antes de reportar sucesso; o <code>TerrainCache</code> abre os dois formatos). Nada se perde: um tile de altura só é de 16 bits quando decodificar devolve cada bit do float, senão guarda os floats; os pesos de splat só são bytes quando exatos, senão floats. Verificado por <code>tests/test_terrain_container.cpp</code> (ida e volta do legado, carga de um tile, CRC de tile corrompido, tiles largos, 257 e 4097 vértices). Também feito: o editor diz quais terrenos de um projeto ainda são <code>.cterrain</code> e <em>Scene &gt; Convert terrains to .terrain</em> (a ação de agente <code>convert_terrains</code>, C ABI 26) salva-os no formato nativo, verificados bit a bit, mantendo os ficheiros antigos; terrenos novos salvam como <code>.terrain</code>. GI regional: o Photon vê um terreno como um objeto por tile, cada um com a sua revisão, então um traço revoxeliza só os tiles que tocou (a região alterada é um retângulo justo, e o Photon junta as caixas de tiles de terreno vizinhos). O cursor do pincel (C ABI 27, <code>terrain_raycast</code> e <code>terrain_brush_outline</code>, a ação de agente <code>terrain_brush_cursor</code>): o anel que um pincel faz no relevo, desenhado como overlay sob o mouse. Um teste golden fixa um terreno por modo, e um stamp custa cerca de 0,05 ms seja qual for o tamanho do terreno. <strong>A Fase 0 está completa</strong> (relatório completo: <a href="/pt/docs/doppio/terrain-editing-phase-0/"><code>terrain-editing-phase-0.md</code></a>). Os tiles de vegetação no contêiner pertencem à Fase 3; a atualização parcial do collider de física continua fora de escopo.</p>
+<h2 id="5-riscos-e-medições">5. Riscos e medições<a class="anchor" href="#5-riscos-e-medições" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>VRAM e compatibilidade:</strong> limites de texture array em placas mais fracas. As camadas são descarregadas e carregadas pela residência por câmera, com orçamentos de RAM e CPU, e o modo simples é a rede de segurança.</li>
+<li><strong>Precisão em terrenos de quilómetros:</strong> posições locais ao tile e renderização relativa à câmera são necessárias desde a Fase 0; acrescentá-las depois tocaria cada tile e cada instância.</li>
+<li><strong>Ids estáveis ao reamostrar:</strong> os ids vêm de coordenadas do mundo em centímetros inteiros, então reamostrar os mantém; redimensionar a origem do terreno é uma migração explícita que remapeia os overrides.</li>
+<li><strong>1M de instâncias no editor:</strong> pintar em tempo real precisa de um teto de custo por traço. O proxy de baixa densidade é a resposta, mas é preciso medir.</li>
+<li><strong>Migração:</strong> os <code>.cterrain</code> legados têm de continuar a abrir; o conversor e o seu teste bit a bit fazem parte da Fase 0.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/doppio/terrain-editing-roadmap.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/doppio/"><span>Anterior</span><strong>Doppio: os guias do editor</strong></a><a class="pager-next" href="/pt/docs/doppio/terrain-editing-phase-0/"><span>Seguinte</span><strong>Edição de terreno: relatório da Fase 0</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-ponto-de-partida">1. Ponto de partida</a></li><li class="l2"><a href="#2-decisões">2. Decisões</a></li><li class="l2"><a href="#3-arquitetura">3. Arquitetura</a></li><li class="l3"><a href="#31-núcleo-de-pincéis-c-terrainedit">3.1 Núcleo de pincéis (C++, terrain/edit/)</a></li><li class="l3"><a href="#32-paleta-de-materiais">3.2 Paleta de materiais</a></li><li class="l3"><a href="#33-fontes-de-colocação-e-vegetação">3.3 Fontes de colocação e vegetação</a></li><li class="l3"><a href="#34-uma-edição-chega-a-todas-as-instâncias-e-o-terreno-adapta">3.4 Uma edição chega a todas as instâncias, e o terreno adapta</a></li><li class="l3"><a href="#35-formato-nativo-do-terreno">3.5 Formato nativo do terreno</a></li><li class="l3"><a href="#36-gi-por-região">3.6 GI por região</a></li><li class="l3"><a href="#37-residência-orçamentos-e-1m-de-instâncias">3.7 Residência, orçamentos e 1M de instâncias</a></li><li class="l3"><a href="#38-ui-do-editor-doppio">3.8 UI do editor (Doppio)</a></li><li class="l2"><a href="#4-fases">4. Fases</a></li><li class="l2"><a href="#5-riscos-e-medições">5. Riscos e medições</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

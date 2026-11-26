@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>📦 Asset Manager · Caffeine</title>
+<meta name="description" content="A cache de runtime para texturas, áudio, shaders, meshes e prefabs: carregamento .caf zero-copy, jobs assíncronos, handles com refcount, evicção LRU e hot-reload em debug.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="📦 Asset Manager · Caffeine">
+<meta property="og:description" content="A cache de runtime para texturas, áudio, shaders, meshes e prefabs: carregamento .caf zero-copy, jobs assíncronos, handles com refcount, evicção LRU e hot-reload em debug.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/assets/asset-manager/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/assets/asset-manager/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/assets/asset-manager/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/assets/asset-manager/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab active" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/assets/asset-manager/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/assets/asset-manager/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Motor"><div class="nav-title">Motor</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Arquitetura</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/architecture/cafpack/">Cafpack — Camada Unificada de Assets</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Núcleo</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/core/timer/">⏱️ High-Resolution Timer</a></li><li><a class="nav-link" href="/pt/docs/core/game-loop/">🎬 Game Loop</a></li><li><a class="nav-link" href="/pt/docs/core/events/">📢 Event Bus</a></li><li><a class="nav-link" href="/pt/docs/core/types/">Módulo Core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/ecs/">ECS e cenas</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/ecs/scene/">🗺️ Scene Manager</a></li><li><a class="nav-link" href="/pt/docs/ecs/examples/">Caffeine ECS Examples</a></li><li><a class="nav-link" href="/pt/docs/ecs/core/">ECS core</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Matemática</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/math/quaternions/">📐 3D Math Extension</a></li><li><a class="nav-link" href="/pt/docs/math/vectors/">Módulo de Matemática</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Memória</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/memory/memory-model/">🧠 Memory Model — Especificação de Allocators</a></li><li><a class="nav-link" href="/pt/docs/memory/containers/">Módulo de Contentores</a></li><li><a class="nav-link" href="/pt/docs/memory/allocators/">Módulo de Memória</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Física</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/physics/physics-2d/">Physics 2D</a></li><li><a class="nav-link" href="/pt/docs/physics/physics-3d/">Physics 3D (Bullet3)</a></li><li><a class="nav-link" href="/pt/docs/physics/spatial-partitioning/">Spatial Partitioning</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Renderização</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/rendering/camera-2d/">🎥 Camera System</a></li><li><a class="nav-link" href="/pt/docs/rendering/post-processing/">🎨 Post-Processing Stack</a></li><li><a class="nav-link" href="/pt/docs/rendering/batch-renderer/">Batch Renderer</a></li><li><a class="nav-link" href="/pt/docs/rendering/render-snapshot/">caffeine-render-snapshot</a></li><li><a class="nav-link" href="/pt/docs/rendering/camera-3d/">Camera 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/forward-render-features/">Forward render features</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-phong/">Materiais no passe forward 3D</a></li><li><a class="nav-link" href="/pt/docs/rendering/materials-pbr/">Materiais PBR (forward)</a></li><li><a class="nav-link" href="/pt/docs/rendering/mesh-lod/">Mesh LOD</a></li><li><a class="nav-link" href="/pt/docs/rendering/overlay-2d-rhi/">Overlays vectoriais 2D (caminho RHI)</a></li><li><a class="nav-link" href="/pt/docs/rendering/reflections/">Reflexos</a></li><li><a class="nav-link" href="/pt/docs/rendering/rhi/">RHI — Rendering Hardware Interface</a></li><li><a class="nav-link" href="/pt/docs/rendering/shadow-mapping/">Shadow Mapping (GPU)</a></li><li><a class="nav-link" href="/pt/docs/rendering/texture-quality-lod/">Texture Quality LOD — Distance to Viewers</a></li><li><a class="nav-link" href="/pt/docs/rendering/volumetric-lighting/">Volumetric light</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Terreno</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/terrain/procedural-tools-plugin/">🎲 Procedural Tools Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-plugin/">Terrain Generator Plugin</a></li><li><a class="nav-link" href="/pt/docs/terrain/terrain-system/">Terrain System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Áudio</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/audio/audio-system/">🎵 Audio System</a></li><li><a class="nav-link" href="/pt/docs/audio/volumetric-audio/">Áudio volumétrico</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Animação</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/animation/animation-2d/">🎬 Sistema de Animação</a></li><li><a class="nav-link" href="/pt/docs/animation/skeletal-animation/">🦴 Skeletal Animation</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Entrada</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/input/input-system/">⌨️ Input System</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">UI em tempo de execução (ImGui e HUD in-game)</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/runtime-ui/game-ui/">🖼️ UI System</a></li><li><a class="nav-link" href="/pt/docs/runtime-ui/editor-ui/">Host ImGui (runtime e plugins legados)</a></li><li><a class="nav-link" href="/pt/docs/runtime-ui/ui-kit/">UI kit composável</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Depuração</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/debug/debug-tools/">🔍 Debug Tools</a></li><li><a class="nav-link" href="/pt/docs/debug/testing/">Testes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/performance/">Desempenho</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/performance/editor-viewport-performance/">Performance — Editor Viewport &amp; GPU Scene</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Concorrência</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/concurrency/job-system/">🔗 Job System</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Sistema de assets</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/assets/caf-format/">📄 Formato .caf — Caffeine Asset Format</a></li><li><a class="nav-link active" href="/pt/docs/assets/asset-manager/" aria-current="page">📦 Asset Manager</a></li><li><a class="nav-link" href="/pt/docs/assets/mesh-loading/">🗿 Mesh Loading</a></li><li><a class="nav-link" href="/pt/docs/assets/asset-pipeline/">Asset Pipeline</a></li><li><a class="nav-link" href="/pt/docs/assets/vegetation-kit/">Kit de Vegetação</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/engine/">Motor</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">📦 Asset Manager</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span><strong>Namespace:</strong> `Caffeine::Assets`</span>
+  <span><strong>Arquivos:</strong> `src/caffeine/assets/AssetManager.hpp`, `AssetManager.cpp`, `AssetHandle.hpp`, `AssetTypes.hpp`</span>
+  <span>Last verified: <time datetime="2026-11-18">2026-11-18</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/assets/AssetManager.hpp"><code>assets/AssetManager.hpp</code></a></span>
+</div>
+<p class="doc-lede">A cache de runtime para texturas, áudio, shaders, meshes e prefabs:
+carregamento <code>.caf</code> zero-copy, jobs assíncronos, handles com refcount, evicção LRU e
+hot-reload em debug.</p>
+<hr>
+<h2 id="visão-geral">Visão Geral<a class="anchor" href="#visão-geral" aria-label="Link to this section">#</a></h2>
+<p>O Asset Manager carrega, faz cache e fornece assets (texturas, áudio, shaders) de forma transparente ao jogo. Suporta <strong>async loading</strong> via <a href="/pt/docs/concurrency/job-system/">Job System</a> e <strong>hot-reload</strong> em builds debug.</p>
+<p><strong>Filosofia:</strong> O código do jogo pede um asset pelo caminho; o Asset Manager retorna um <code>AssetHandle&lt;T&gt;</code>. O jogo nunca vê raw bytes — só <code>AssetHandle&lt;Texture&gt;</code>.</p>
+<p><strong>Carregamento zero-copy:</strong> Os assets são carregados via <code>BlobLoader</code> que faz uma única <code>fread()</code> para um <code>LinearAllocator</code>. As structs <code>Texture</code>, <code>AudioClip</code> e <code>ShaderBlob</code> são <em>views</em> sobre esse buffer — sem cópia, sem deserialização.</p>
+<hr>
+<h2 id="arquitetura">Arquitetura<a class="anchor" href="#arquitetura" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><code>Game code:</code></li>
+<li><code>auto tex = assets.loadAsync&lt;Texture&gt;(&quot;textures/hero.caf&quot;);</code>
+<ul>
+<li><code>1. acquireOrCreate(&quot;textures/hero.caf&quot;, AssetType::Texture)</code></li>
+<li><code>Já em cache? → retorna ID existente, incrementa cacheHit</code></li>
+<li><code>Novo? → cria AssetEntry, adiciona ao pathIndex</code></li>
+</ul>
+</li>
+<li><code>2. scheduleLoad(id)</code>
+<ul>
+<li><code>status = Loading</code></li>
+<li><code>JobSystem::scheduleData(Background priority)</code>
+<ul>
+<li><code>loadInternal(id):</code></li>
+<li><code>BlobLoader::load(path, allocator)</code></li>
+<li><code>resolveEntry() → Texture/Audio/Shader</code></li>
+<li><code>status = Loaded</code></li>
+</ul>
+</li>
+<li><code>(se jobs == nullptr: loadInternal roda inline)</code></li>
+</ul>
+</li>
+<li><code>3. handle.isReady() → true</code></li>
+<li><code>handle.get()     → ponteiro const T* para o asset resolvido</code></li>
+</ul>
+<hr>
+<h2 id="api-pública">API Pública<a class="anchor" href="#api-pública" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-keyword">namespace</span> Caffeine::Assets {
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// LoadStatus — estado de carregamento de um asset</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">enum class</span> <span class="hljs-title class_">LoadStatus</span> : u8 {
+    Pending,   <span class="hljs-comment">// slot created, load not yet scheduled</span>
+    Loading,
+    Ready,     <span class="hljs-comment">// payload resolved and safe to use</span>
+    Failed,
+    Invalid    <span class="hljs-comment">// slot invalidado (LRU/GC); generation foi incrementada</span>
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// Tipos de asset runtime (zero-copy views)</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Texture</span> {
+    u32       width;
+    u32       height;
+    u32       format;         <span class="hljs-comment">// 0 = RGBA8</span>
+    u32       mipLevels;
+    <span class="hljs-type">const</span> u8* pixels;
+    u64       pixelDataSize;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">AudioClip</span> {
+    u32       sampleRate;
+    u16       channels;
+    u16       bitsPerSample;
+    u32       sampleCount;
+    <span class="hljs-type">const</span> u8* pcmData;
+    u64       pcmDataSize;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">ShaderBlob</span> {
+    u32       stage;          <span class="hljs-comment">// 0=vertex, 1=fragment, 2=compute</span>
+    <span class="hljs-type">const</span> u8* bytecode;
+    u64       bytecodeSize;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Mesh</span> {
+    <span class="hljs-type">const</span> Vertex3D* vertices;
+    u32             vertexCount;
+    <span class="hljs-type">const</span> u32*      indices;
+    u32             indexCount;
+    u64             vertexDataSize;
+    u64             indexDataSize;
+};
+
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">Prefab</span> {
+    <span class="hljs-type">const</span> u8* payloadData;
+    u64       payloadSize;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// CacheStats — snapshot do estado do cache</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-title class_">CacheStats</span> {
+    u64 totalCachedBytes;
+    u64 maxCacheBytes;
+    u32 textureCount;
+    u32 audioCount;
+    u32 pendingJobs;
+    u32 evictedCount;   <span class="hljs-comment">// entradas removidas por LRU desde o boot</span>
+    f32 cacheHitRate;
+};
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// AssetHandle&lt;T&gt; — handle RAII com ref counting + generation counter</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">//  - Copiar um handle incrementa o ref count do asset.</span>
+<span class="hljs-comment">//  - O destructor decrementa o ref count.</span>
+<span class="hljs-comment">//  - collectGarbage() descarrega assets com refCount == 0.</span>
+<span class="hljs-comment">//  - invalidateEntry() (LRU/GC) incrementa generation → handles antigos ficam Invalid.</span>
+<span class="hljs-comment">//  - Hot-reload NÃO incrementa generation — handles activos continuam válidos.</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AssetHandle</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-built_in">AssetHandle</span>();
+    <span class="hljs-built_in">AssetHandle</span>(AssetManager* mgr, u32 id, u16 generation);
+    ~<span class="hljs-built_in">AssetHandle</span>();
+
+    <span class="hljs-built_in">AssetHandle</span>(<span class="hljs-type">const</span> AssetHandle&amp; o);
+    AssetHandle&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> AssetHandle&amp; o);
+
+    <span class="hljs-built_in">AssetHandle</span>(AssetHandle&amp;&amp; o) <span class="hljs-keyword">noexcept</span>;
+    AssetHandle&amp; <span class="hljs-keyword">operator</span>=(AssetHandle&amp;&amp; o) <span class="hljs-keyword">noexcept</span>;
+
+    <span class="hljs-function"><span class="hljs-type">bool</span>     <span class="hljs-title">isValid</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span></span>;   <span class="hljs-comment">// id + generation coincidem com a entrada</span>
+    <span class="hljs-function"><span class="hljs-type">bool</span>     <span class="hljs-title">isReady</span><span class="hljs-params">()</span>  <span class="hljs-type">const</span></span>;   <span class="hljs-comment">// isValid() &amp;&amp; status == Ready</span>
+    <span class="hljs-function"><span class="hljs-type">const</span> T* <span class="hljs-title">get</span><span class="hljs-params">()</span>      <span class="hljs-type">const</span></span>;   <span class="hljs-comment">// nullptr se não estiver pronto ou generation stale</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">bool</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function">u32  <span class="hljs-title">id</span><span class="hljs-params">()</span>         <span class="hljs-type">const</span></span>;
+    <span class="hljs-function">u16  <span class="hljs-title">generation</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>;
+};
+
+<span class="hljs-keyword">using</span> AssetInvalidationCallback = <span class="hljs-built_in">void</span> (*)(<span class="hljs-type">const</span> InvalidatedAsset&amp; info, <span class="hljs-type">void</span>* userData);
+
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-comment">// AssetManager — gerenciador central</span>
+<span class="hljs-comment">// ============================================================================</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">AssetManager</span> {
+<span class="hljs-keyword">public</span>:
+    <span class="hljs-function"><span class="hljs-keyword">explicit</span> <span class="hljs-title">AssetManager</span><span class="hljs-params">(Threading::JobSystem* jobs,
+                          <span class="hljs-type">const</span> <span class="hljs-type">char</span>*           basePath,
+                          u64                   maxCacheMB = <span class="hljs-number">256</span>)</span></span>;
+    ~<span class="hljs-built_in">AssetManager</span>();
+
+    <span class="hljs-comment">// ── Loading ────────────────────────────────────────────────</span>
+    <span class="hljs-comment">// Async: retorna imediatamente, carrega em background</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    AssetHandle&lt;T&gt; <span class="hljs-title">loadAsync</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+
+    <span class="hljs-comment">// Sync: bloqueia até carregado (use somente no init)</span>
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    AssetHandle&lt;T&gt; <span class="hljs-title">loadSync</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+
+    <span class="hljs-comment">// ── Gerenciamento de cache ─────────────────────────────────</span>
+    <span class="hljs-function"><span class="hljs-type">void</span>       <span class="hljs-title">collectGarbage</span><span class="hljs-params">()</span></span>;   <span class="hljs-comment">// descarrega assets sem referências</span>
+    <span class="hljs-function">CacheStats <span class="hljs-title">cacheStats</span><span class="hljs-params">()</span> <span class="hljs-type">const</span></span>; <span class="hljs-comment">// estatísticas do cache</span>
+
+    <span class="hljs-comment">// ── Invalidation callbacks (GPU textures, etc.) ────────────</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">registerInvalidationCallback</span><span class="hljs-params">(AssetInvalidationCallback cb, <span class="hljs-type">void</span>* userData)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unregisterInvalidationCallback</span><span class="hljs-params">(AssetInvalidationCallback cb, <span class="hljs-type">void</span>* userData)</span></span>;
+
+    <span class="hljs-comment">// ── Frame tick ─────────────────────────────────────────────</span>
+    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tick</span><span class="hljs-params">(u64 frameIndex = <span class="hljs-number">0</span>)</span></span>; <span class="hljs-comment">// atualiza frame index + hot-reload + LRU</span>
+
+    <span class="hljs-comment">// Recarrega do disco um asset já carregado, pelo caminho .caf. Devolve o id</span>
+    <span class="hljs-comment">// do asset, ou ~0u se não estiver em cache. Thread-safe.</span>
+    <span class="hljs-function">u32 <span class="hljs-title">reloadAsset</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* path)</span></span>;
+
+<span class="hljs-keyword">private</span>:
+    <span class="hljs-comment">// incRef / decRef / getStatus — usados por AssetHandle</span>
+    <span class="hljs-function"><span class="hljs-type">void</span>       <span class="hljs-title">incRef</span><span class="hljs-params">(u32 id)</span></span>;
+    <span class="hljs-function"><span class="hljs-type">void</span>       <span class="hljs-title">decRef</span><span class="hljs-params">(u32 id)</span></span>;
+    <span class="hljs-function">LoadStatus <span class="hljs-title">getStatus</span><span class="hljs-params">(u32 id)</span> <span class="hljs-type">const</span></span>;
+
+    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;
+    <span class="hljs-type">const</span> T* <span class="hljs-title">getResolved</span><span class="hljs-params">(u32 id)</span> <span class="hljs-type">const</span></span>; <span class="hljs-comment">// retorna Texture/Audio/Shader resolvido</span>
+
+    <span class="hljs-comment">// ... (membros internos)</span>
+};
+
+} <span class="hljs-comment">// namespace Caffeine::Assets</span>
+</code></pre></div>
+<hr>
+<h2 id="estrutura-interna">Estrutura Interna<a class="anchor" href="#estrutura-interna" aria-label="Link to this section">#</a></h2>
+<p>Cada asset carregado é representado por um <code>AssetEntry</code>:</p>
+<ul>
+<li><code>AssetEntry</code>
+<ul>
+<li><code>path              : std::string (caminho completo no disco)</code></li>
+<li><code>cafType           : AssetType</code></li>
+<li><code>status            : std::atomic&lt;LoadStatus&gt;</code></li>
+<li><code>allocator         : unique_ptr&lt;LinearAllocator&gt; (dono do buffer)</code></li>
+<li><code>header            : const CafHeader*</code></li>
+<li><code>metadata          : const void*      (TextureMetadata, AudioMetadata, etc.)</code></li>
+<li><code>payload           : const void*      (pixels brutos, PCM, bytecode)</code></li>
+<li><code>resolved          : ResolvedData { Texture, AudioClip, ShaderBlob, Mesh, Prefab }</code></li>
+<li><code>refCount          : std::atomic&lt;u32&gt;</code></li>
+<li><code>generation        : u16 (incrementada em invalidateEntry, não em hot-reload)</code></li>
+<li><code>sizeBytes         : u64</code></li>
+<li><code>lastAccessFrame   : u64</code></li>
+</ul>
+</li>
+</ul>
+<p>O <code>LinearAllocator</code> aloca um buffer de <code>fileSize + 64</code> bytes. O <code>BlobLoader</code> faz a <code>fread()</code> única e ajusta os ponteiros <code>header</code>, <code>metadata</code> e <code>payload</code> dentro desse buffer. As structs <code>resolved</code> são preenchidas com os valores extraídos do metadata + payload.</p>
+<hr>
+<h2 id="referências-de-projeto">Referências de Projeto<a class="anchor" href="#referências-de-projeto" aria-label="Link to this section">#</a></h2>
+<p>O gestor é também <strong>o único lugar que decide a que se refere um caminho</strong>. Um campo de componente, um campo do Inspector ou um node de gerador nunca guarda um caminho por conta própria: pergunta ao gestor e guarda o que recebe, então o que aponta é um ficheiro <em>dentro do projeto</em> (ou um built-in do motor).</p>
+<ul>
+<li><code>resolveReference(path)</code> entende um caminho relativo ao projeto, à pasta de assets ou aos assets do motor, ou absoluto. <code>Ok</code> só para um ficheiro no projeto ou no motor; <code>Missing</code>, <code>OutsideProject</code> e <code>NotAFile</code> nos outros casos. Um caminho relativo que sobe com <code>..</code> nunca é válido. <code>\\</code>, <code>.</code> e <code>//</code> não importam.</li>
+<li><code>importReference(path)</code> faz o mesmo e copia um ficheiro real de fora para a pasta de assets, na pasta do seu tipo (<code>Textures</code>, <code>Models</code>, <code>Audio</code>, <code>Materials</code>, <code>Scripts</code>; uma pasta existente é reutilizada qualquer que seja a caixa). Um ficheiro que já lá está com o mesmo conteúdo é reutilizado, um diferente com o mesmo nome fica <code>_1</code>, <code>_2</code>…</li>
+<li>O resultado traz <code>projectPath</code> (relativo à raiz do projeto: o que cenas e ficheiros <code>.mat</code> guardam) e <code>assetPath</code> (relativo à pasta de assets quando o ficheiro está nela: o que o seletor lista e os componentes guardam).</li>
+<li>C ABI 24: <code>caffeine_session_asset_reference(session, path, import, out)</code>. O Doppio chama-a para cada campo de asset do Inspector e cada slot de gerador que guarda um asset; ver <a href="/pt/docs/doppio/rust-ui/">Rust UI</a>.</li>
+<li>Os handles seguram uma referência desde que o slot é encontrado, então uma carga que termina antes de o handle do chamador existir nunca é expulsa; um ficheiro é um slot qualquer que seja a grafia; um caminho que sobe da pasta base, ou um ficheiro carregado como outro tipo, dá um handle vazio; threads que carregam o mesmo asset partilham uma carga; os callbacks de invalidação correm fora do lock do gestor.</li>
+</ul>
+<hr>
+<h2 id="hot-reload-rf39">Hot-Reload (RF3.9)<a class="anchor" href="#hot-reload-rf39" aria-label="Link to this section">#</a></h2>
+<p>Em builds <strong>debug</strong> (<code>#ifdef CF_DEBUG</code>):</p>
+<ol>
+<li><code>tick()</code> chama <code>checkHotReload()</code> a cada frame</li>
+<li>Para cada asset carregado, compara <code>last_write_time</code> do arquivo no disco</li>
+<li>Se mudou: <code>clearEntryData()</code> + <code>loadInternal()</code> <strong>sem</strong> incrementar <code>generation</code></li>
+<li><code>AssetHandle&lt;T&gt;::get()</code> continua válido e aponta para o payload recarregado</li>
+</ol>
+<p><strong>Zero overhead em release:</strong> O hot-reload é compilado condicionalmente — não existe em builds de produção.</p>
+<hr>
+<h2 id="lru-eviction-e-invalidação">LRU Eviction e Invalidação<a class="anchor" href="#lru-eviction-e-invalidação" aria-label="Link to this section">#</a></h2>
+<p>Quando <code>totalCachedBytes &gt; maxCacheBytes</code> (após load ou <code>collectGarbage</code>):</p>
+<ol>
+<li><code>evictLruToFitBudget()</code> escolhe entradas com <code>refCount == 0</code> e menor <code>lastAccessFrame</code></li>
+<li><code>invalidateEntry()</code> limpa payload, incrementa <code>generation</code>, notifica callbacks</li>
+<li>Handles antigos passam a <code>LoadStatus::Invalid</code>; <code>get()</code> devolve <code>nullptr</code></li>
+</ol>
+<p><strong>Callbacks:</strong> subsistemas GPU (ex.: <code>TerrainGpuTextureCache</code>) registam <code>registerInvalidationCallback</code> para libertar texturas quando o asset correspondente é evicted.</p>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">onAssetInvalidated</span><span class="hljs-params">(<span class="hljs-type">const</span> InvalidatedAsset&amp; info, <span class="hljs-type">void</span>* userData)</span> </span>{
+    <span class="hljs-keyword">if</span> (info.type == AssetType::Texture) {
+        <span class="hljs-comment">// libertar GPUTexture associada a info.id / info.generation</span>
+    }
+}
+</code></pre></div>
+<hr>
+<h2 id="exemplos-de-uso">Exemplos de Uso<a class="anchor" href="#exemplos-de-uso" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="cpp"><div class="code-head"><span class="code-lang">cpp</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Caffeine.hpp&gt;</span></span>
+
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine;
+<span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> Caffeine::Assets;
+
+<span class="hljs-comment">// ── Init ──────────────────────────────────────────────────────</span>
+<span class="hljs-function">Threading::JobSystem <span class="hljs-title">jobs</span><span class="hljs-params">(<span class="hljs-number">4</span>)</span></span>;
+<span class="hljs-function">AssetManager <span class="hljs-title">assets</span><span class="hljs-params">(&amp;jobs, <span class="hljs-string">&quot;assets/&quot;</span>, <span class="hljs-number">256</span>)</span></span>; <span class="hljs-comment">// max 256 MB cache</span>
+
+<span class="hljs-comment">// ── Async loading (não bloqueia) ──────────────────────────────</span>
+<span class="hljs-keyword">auto</span> heroTex = assets.<span class="hljs-built_in">loadAsync</span>&lt;Texture&gt;(<span class="hljs-string">&quot;textures/hero.caf&quot;</span>);
+<span class="hljs-keyword">auto</span> bgMusic = assets.<span class="hljs-built_in">loadAsync</span>&lt;AudioClip&gt;(<span class="hljs-string">&quot;audio/level1.caf&quot;</span>);
+
+<span class="hljs-comment">// ── Game loop ─────────────────────────────────────────────────</span>
+<span class="hljs-keyword">while</span> (running) {
+    assets.<span class="hljs-built_in">tick</span>(frameCounter);
+
+    <span class="hljs-keyword">if</span> (heroTex.<span class="hljs-built_in">isReady</span>()) {
+        <span class="hljs-type">const</span> Texture* t = heroTex.<span class="hljs-built_in">get</span>();
+        <span class="hljs-comment">// t-&gt;width, t-&gt;height, t-&gt;pixels, t-&gt;pixelDataSize ...</span>
+    }
+
+    <span class="hljs-comment">// ── Coleta lixo a cada 60 frames ──────────────────────────</span>
+    <span class="hljs-keyword">if</span> (frameCounter % <span class="hljs-number">60</span> == <span class="hljs-number">0</span>) {
+        assets.<span class="hljs-built_in">collectGarbage</span>();
+    }
+
+    ++frameCounter;
+}
+
+<span class="hljs-comment">// ── Sync no init (aceitável no boot) ─────────────────────────</span>
+<span class="hljs-keyword">auto</span> uiAtlas = assets.<span class="hljs-built_in">loadSync</span>&lt;Texture&gt;(<span class="hljs-string">&quot;textures/ui.caf&quot;</span>);
+<span class="hljs-type">const</span> Texture* atlas = uiAtlas.<span class="hljs-built_in">get</span>();  <span class="hljs-comment">// pronto imediatamente</span>
+</code></pre></div>
+<hr>
+<h2 id="testes">Testes<a class="anchor" href="#testes" aria-label="Link to this section">#</a></h2>
+<p>21 casos de teste em <code>tests/test_assetmanager.cpp</code> (inclui HotReloader):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Teste</th>
+<th>O que verifica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AssetManager - construction with null JobSystem</code></td>
+<td>Construtor sem jobs não crasha</td>
+</tr>
+<tr>
+<td><code>AssetManager - loadSync Texture</code></td>
+<td>Textura carregada, campos width/height/pixels corretos</td>
+</tr>
+<tr>
+<td><code>AssetManager - loadSync AudioClip</code></td>
+<td>AudioClip carregado, campos sampleRate/channels corretos</td>
+</tr>
+<tr>
+<td><code>AssetManager - loadSync ShaderBlob</code></td>
+<td>ShaderBlob carregado, campos stage/bytecode corretos</td>
+</tr>
+<tr>
+<td><code>AssetManager - second load of same path is cache hit</code></td>
+<td>Cache hit rate &gt; 0 no segundo load</td>
+</tr>
+<tr>
+<td><code>AssetManager - cacheStats counts textures and audio</code></td>
+<td>textureCount/audioCount corretos</td>
+</tr>
+<tr>
+<td><code>AssetManager - collectGarbage unloads unreferenced assets</code></td>
+<td>Asset descarregado após handle sair de escopo</td>
+</tr>
+<tr>
+<td><code>AssetManager - collectGarbage does not unload referenced assets</code></td>
+<td>Asset mantido enquanto handle existe</td>
+</tr>
+<tr>
+<td><code>AssetManager - handle copy increments ref, original still valid</code></td>
+<td>Cópia de handle mantém asset vivo</td>
+</tr>
+<tr>
+<td><code>AssetManager - loadAsync returns handle that becomes ready</code></td>
+<td>Async loading via JobSystem completa</td>
+</tr>
+<tr>
+<td><code>AssetManager - failed load returns handle with Failed status</code></td>
+<td>Path inexistente retorna Failed</td>
+</tr>
+<tr>
+<td><code>AssetManager - stale handle after eviction returns nullptr</code></td>
+<td>Generation stale após LRU</td>
+</tr>
+<tr>
+<td><code>AssetManager - invalidation callback fires on collectGarbage</code></td>
+<td>Callback notificado em invalidação</td>
+</tr>
+<tr>
+<td><code>AssetManager - LRU evicts unreferenced assets when over budget</code></td>
+<td>Eviction por <code>maxCacheBytes</code></td>
+</tr>
+<tr>
+<td><code>AssetManager - reload after eviction works with new generation</code></td>
+<td>Novo load após eviction</td>
+</tr>
+<tr>
+<td><code>AssetManager - tick advances frame index</code></td>
+<td>tick() não crasha</td>
+</tr>
+<tr>
+<td><code>HotReloader - *</code></td>
+<td>Lifecycle e integração com reload</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="dependências">Dependências<a class="anchor" href="#dependências" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dependência</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/pt/docs/concurrency/job-system/"><code>Caffeine::Threading::JobSystem</code></a></td>
+<td>Background jobs para async loading</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/assets/caf-format/"><code>Caffeine::IO::BlobLoader</code></a></td>
+<td>Leitura zero-copy de arquivos .caf</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/assets/caf-format/"><code>Caffeine::IO::CafTypes</code></a></td>
+<td>CafHeader, TextureMetadata, AudioMetadata, ShaderMetadata</td>
+</tr>
+<tr>
+<td><a href="/pt/docs/memory/allocators/"><code>Caffeine::LinearAllocator</code></a></td>
+<td>Alocação linear para o buffer do asset</td>
+</tr>
+<tr>
+<td><code>std::filesystem</code> (CF_DEBUG)</td>
+<td>Verificação de hot-reload via last_write_time</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="decisões-de-design">Decisões de Design<a class="anchor" href="#decisões-de-design" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Decisão</th>
+<th>Justificativa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AssetHandle&lt;T&gt;</code> tipado</td>
+<td>Erro de tipo pego em compile time</td>
+</tr>
+<tr>
+<td><code>loadAsync</code> aceita <code>JobSystem*</code> nullable</td>
+<td>Fallback sync quando não há JobSystem (útil em testes)</td>
+</tr>
+<tr>
+<td>Zero-copy resolved views</td>
+<td>Sem overhead de conversão; structs são preenchidas no load</td>
+</tr>
+<tr>
+<td><code>collectGarbage()</code> explícito</td>
+<td>Evita pausas inesperadas; jogo controla quando descarregar</td>
+</tr>
+<tr>
+<td>Generation counter</td>
+<td>Detecta handles stale após LRU sem dangling pointers</td>
+</tr>
+<tr>
+<td>Hot-reload sem bump de generation</td>
+<td>Handles activos sobrevivem a reload em debug</td>
+</tr>
+<tr>
+<td>LRU por <code>lastAccessFrame</code></td>
+<td>Pressão de memória previsível com <code>maxCacheMB</code></td>
+</tr>
+<tr>
+<td><code>tick()</code> como ponto único</td>
+<td>Unifica frame counter, hot-reload e eviction num só método</td>
+</tr>
+<tr>
+<td>Hot-reload só em CF_DEBUG</td>
+<td>Zero custo em release</td>
+</tr>
+<tr>
+<td><code>std::unordered_map</code> + <code>std::vector</code></td>
+<td>Simplicidade sobre performance de cache; HashMap customizado seria over-engineering nesta fase</td>
+</tr>
+<tr>
+<td><code>std::mutex</code> (não lock-free)</td>
+<td>Contenção baixa; simplicidade de implementação</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="critério-de-aceitação">Critério de Aceitação<a class="anchor" href="#critério-de-aceitação" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[x] <code>loadAsync</code> retorna imediatamente, carrega em background via JobSystem</li>
+<li>[x] <code>loadSync</code> bloqueia até o carregamento completar</li>
+<li>[x] Cache com ref counting: handle copy incrementa, destructor decrementa</li>
+<li>[x] <code>collectGarbage()</code> descarrega assets sem referências</li>
+<li>[x] <code>cacheStats()</code> retorna contagem por tipo, bytes totais, hit rate</li>
+<li>[x] Hot-reload em debug builds via <code>tick()</code> → <code>checkHotReload()</code></li>
+<li>[x] Zero-copy: <code>BlobLoader</code> → <code>LinearAllocator</code> → resolved fields</li>
+<li>[x] Tipos suportados: Texture, AudioClip, ShaderBlob, Mesh, Prefab</li>
+</ul>
+<hr>
+<h2 id="-tópicos-relacionados">🔗 Tópicos Relacionados<a class="anchor" href="#-tópicos-relacionados" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tópico</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="">Assets &amp; Pipeline</a></td>
+<td>Asset Manager como runtime do pipeline</td>
+</tr>
+<tr>
+<td><a href="">Concorrência &amp; Runtime</a></td>
+<td>Async loading via Job System</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="referências">Referências<a class="anchor" href="#referências" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/pt/docs/architecture_specs/"><code>docs/architecture_specs.md</code></a> — §7 Asset Manager</li>
+<li><a href="/pt/docs/assets/caf-format/"><code>assets/caf-format.md</code></a> — Formato binário .caf</li>
+<li><a href="/pt/docs/concurrency/job-system/"><code>concurrency/job-system.md</code></a> — Background jobs para loading</li>
+<li><a href="">Índice de Tópicos Transversais</a></li>
+<li><a href="https://github.com/devscafecommunity/caffeine/issues/26" rel="noopener" class="ext">Issue #26</a> — Asset Manager task</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/assets/asset-manager.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/assets/caf-format/"><span>Anterior</span><strong>📄 Formato .caf — Caffeine Asset Format</strong></a><a class="pager-next" href="/pt/docs/assets/mesh-loading/"><span>Seguinte</span><strong>🗿 Mesh Loading</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#visão-geral">Visão Geral</a></li><li class="l2"><a href="#arquitetura">Arquitetura</a></li><li class="l2"><a href="#api-pública">API Pública</a></li><li class="l2"><a href="#estrutura-interna">Estrutura Interna</a></li><li class="l2"><a href="#referências-de-projeto">Referências de Projeto</a></li><li class="l2"><a href="#hot-reload-rf39">Hot-Reload (RF3.9)</a></li><li class="l2"><a href="#lru-eviction-e-invalidação">LRU Eviction e Invalidação</a></li><li class="l2"><a href="#exemplos-de-uso">Exemplos de Uso</a></li><li class="l2"><a href="#testes">Testes</a></li><li class="l2"><a href="#dependências">Dependências</a></li><li class="l2"><a href="#decisões-de-design">Decisões de Design</a></li><li class="l2"><a href="#critério-de-aceitação">Critério de Aceitação</a></li><li class="l2"><a href="#-tópicos-relacionados">🔗 Tópicos Relacionados</a></li><li class="l2"><a href="#referências">Referências</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>

@@ -123,5 +123,5 @@ undoable with `Ctrl+Z` and `Ctrl+Shift+Z`.
 
 - [Editor UI gallery](../editor/ui-gallery.md) for a visual tour of every pane.
 - [Scene viewport](../editor/scene-viewport.md) for rendering and camera details.
-- [Headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- [Headless testing](../doppio/headless-testing.md)
   to script the same steps without a window.

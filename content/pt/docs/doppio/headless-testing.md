@@ -838,7 +838,7 @@ Recomeça com uma aplicação nova (nova fixture, tamanho de janela e assets).
 
 | Parâmetro | Tipo | Obrigatório | Descrição |
 |---|---|---|---|
-| `fixture` | `string` | não | `empty`, `entities`, `material`, `texture`, `scene3d` (uma cena com motor, com luzes, uma câmara e meshes; precisa de libcaffeine-capi) `nature` (o mesmo, preenchido com rochas, árvores e plantas geradas) `water` (o separador Water Generator em primeiro plano) ou `terrain` (o separador Terrain Generator em primeiro plano). Predefinição `entities`. |
+| `fixture` | `string` | não | `empty`, `entities`, `material`, `texture`, `scene3d` (uma cena com motor, com luzes, uma câmara e meshes; precisa de libcaffeine-capi) `nature` (o mesmo, preenchido com rochas, árvores e plantas geradas) `water` (o separador Water Generator em primeiro plano) `terrain` (o separador Terrain Generator em primeiro plano) `world` (o separador World Composer num projeto temporário: um terreno de colinas, duas receitas de rocha e `World/Valley.generator.world`; precisa de libcaffeine-capi) ou `world_showcase` (o mesmo separador em `World/Highlands.generator.world`: colinas à volta de um vale, um rio, um lago, carvalhos e pinheiros, rochedos, arbustos e erva; Build faz alguns milhares de instâncias, Frame aponta o Viewport para elas). Predefinição `entities`. |
 | `size` | `[w, h]` | não | Tamanho da janela. |
 | `assets` | `[{ name, path, kind, directory? }]` | não | Lista de assets mostrada no painel Assets. |
 | `asset_root` | `string` | não | Pasta onde o assistente de assets escreve; `temp` cria uma pasta temporária. |

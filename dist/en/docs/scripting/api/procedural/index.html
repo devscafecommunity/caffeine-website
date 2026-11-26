@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procedural · Caffeine</title>
+<meta name="description" content="Deterministic noise, chunk streaming and terrain generation helpers for procedural worlds.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Procedural · Caffeine">
+<meta property="og:description" content="Deterministic noise, chunk streaming and terrain generation helpers for procedural worlds.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/scripting/api/procedural/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/scripting/api/procedural/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/scripting/api/procedural/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=c88ed8e9">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab" href="/en/section/editor/">Doppio</a><a class="tab active" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/scripting/api/procedural/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Scripting"><div class="nav-title">Scripting</div><ul class="nav-root"><li class="nav-dir open top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Scripting</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/scripting/runtime-apis/">Lua runtime APIs (core)</a></li><li><a class="nav-link" href="/en/docs/scripting/native-modules/">Runtime native modules</a></li><li><a class="nav-link" href="/en/docs/scripting/scripting/">Scripting</a></li><li><a class="nav-link" href="/en/docs/scripting/api-roadmap/">Scripting API: parity and roadmap</a></li><li class="nav-dir open"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/scripting/api/">API reference</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/scripting/api/animation/">Animation</a></li><li><a class="nav-link" href="/en/docs/scripting/api/assets/">Assets</a></li><li><a class="nav-link" href="/en/docs/scripting/api/audio/">Audio</a></li><li><a class="nav-link" href="/en/docs/scripting/api/component/">Component</a></li><li><a class="nav-link" href="/en/docs/scripting/api/core/">Core</a></li><li><a class="nav-link" href="/en/docs/scripting/api/debug/">Debug</a></li><li><a class="nav-link" href="/en/docs/scripting/api/draw2d/">Draw 2D</a></li><li><a class="nav-link" href="/en/docs/scripting/api/effects/">Effects</a></li><li><a class="nav-link" href="/en/docs/scripting/api/entity/">Entity</a></li><li><a class="nav-link" href="/en/docs/scripting/api/events/">Events</a></li><li><a class="nav-link" href="/en/docs/scripting/api/forwardrender/">Forward render</a></li><li><a class="nav-link" href="/en/docs/scripting/api/gameState/">Game state</a></li><li><a class="nav-link" href="/en/docs/scripting/api/hierarchy/">Hierarchy</a></li><li><a class="nav-link" href="/en/docs/scripting/api/input/">Input</a></li><li><a class="nav-link" href="/en/docs/scripting/api/map/">Map</a></li><li><a class="nav-link" href="/en/docs/scripting/api/math/">Math</a></li><li><a class="nav-link" href="/en/docs/scripting/api/native/">Native modules</a></li><li><a class="nav-link" href="/en/docs/scripting/api/navigation/">Navigation</a></li><li><a class="nav-link" href="/en/docs/scripting/api/particles/">Particles</a></li><li><a class="nav-link" href="/en/docs/scripting/api/physics3d/">Physics 3D</a></li><li><a class="nav-link" href="/en/docs/scripting/api/pick/">Pick</a></li><li><a class="nav-link" href="/en/docs/scripting/api/postprocess/">Post-process</a></li><li><a class="nav-link active" href="/en/docs/scripting/api/procedural/" aria-current="page">Procedural</a></li><li><a class="nav-link" href="/en/docs/scripting/api/random/">Random</a></li><li><a class="nav-link" href="/en/docs/scripting/api/scene/">Scene</a></li><li><a class="nav-link" href="/en/docs/scripting/api/session/">Session</a></li><li><a class="nav-link" href="/en/docs/scripting/api/time/">Time</a></li><li><a class="nav-link" href="/en/docs/scripting/api/ui/">UI</a></li><li><a class="nav-link" href="/en/docs/scripting/api/world/">World</a></li></ul></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/api/">Engine API</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/api/headless-engine-api/">Headless Engine API: build scenes and render images without the editor</a></li><li><a class="nav-link" href="/en/docs/api/scripting-components/">Scripting: generic component access</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/scripting/">Scripting</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Procedural</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">World</span>
+  <span>Last updated: <time datetime="2026-11-19">2026-11-19</time></span>
+  <span>Lua 12 · Dryad 0</span>
+</div>
+<p class="doc-lede">Deterministic noise, chunk streaming and terrain generation helpers for procedural worlds.</p>
+<p><a href="/en/docs/scripting/api/">All namespaces</a></p>
+<p>Namespace: <code>caffeine.procedural</code></p>
+<h2 id="hash">hash<a class="anchor" href="#hash" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.hash</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">hash(x, z, seed, salt) -&gt; number
+</code></pre></div>
+<p>Deterministic hash of a cell, seed and salt.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>x</code></td><td>number</td><td>Integer X.</td></tr>
+<tr><td><code>z</code></td><td>number</td><td>Integer Z.</td></tr>
+<tr><td><code>seed</code></td><td>number</td><td>Seed.</td></tr>
+<tr><td><code>salt</code></td><td>number</td><td>Extra salt.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Hash value (named hash01 in the engine).</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> r = caffeine.procedural.hash(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">42</span>, <span class="hljs-number">0</span>)
+</code></pre></div>
+<h2 id="noise2d">noise2d<a class="anchor" href="#noise2d" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.noise2d</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">noise2d(x, z, seed) -&gt; number
+</code></pre></div>
+<p>2D value noise.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>x</code></td><td>number</td><td>X coordinate.</td></tr>
+<tr><td><code>z</code></td><td>number</td><td>Z coordinate.</td></tr>
+<tr><td><code>seed</code></td><td>number</td><td>Seed.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Noise value.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> n = caffeine.procedural.noise2d(<span class="hljs-number">1.5</span>, <span class="hljs-number">2.5</span>, <span class="hljs-number">42</span>)
+</code></pre></div>
+<h2 id="fbm2d">fbm2d<a class="anchor" href="#fbm2d" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.fbm2d</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">fbm2d(x, z, seed, octaves, lacunarity, persistence) -&gt; number
+</code></pre></div>
+<p>2D fractal Brownian motion noise.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>x</code></td><td>number</td><td>X coordinate.</td></tr>
+<tr><td><code>z</code></td><td>number</td><td>Z coordinate.</td></tr>
+<tr><td><code>seed</code></td><td>number</td><td>Seed.</td></tr>
+<tr><td><code>octaves</code></td><td>number</td><td>Octave count.</td></tr>
+<tr><td><code>lacunarity</code></td><td>number</td><td>Frequency multiplier per octave.</td></tr>
+<tr><td><code>persistence</code></td><td>number</td><td>Amplitude multiplier per octave.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Noise value.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> h = caffeine.procedural.fbm2d(x * <span class="hljs-number">0.02</span>, z * <span class="hljs-number">0.02</span>, <span class="hljs-number">42</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2.0</span>, <span class="hljs-number">0.5</span>)
+</code></pre></div>
+<h2 id="worldtochunk">worldToChunk<a class="anchor" href="#worldtochunk" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.worldToChunk</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">worldToChunk(worldCoord, chunkSize) -&gt; number
+</code></pre></div>
+<p>Converts a world coordinate to a chunk index.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>worldCoord</code></td><td>number</td><td>World coordinate.</td></tr>
+<tr><td><code>chunkSize</code></td><td>number</td><td>Chunk size in world units.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Chunk index.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> cx = caffeine.procedural.worldToChunk(pos.x, <span class="hljs-number">64</span>)
+</code></pre></div>
+<h2 id="findterrain">findTerrain<a class="anchor" href="#findterrain" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.findTerrain</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">findTerrain() -&gt; number
+</code></pre></div>
+<p>Finds the terrain entity.</p>
+<p><strong>Returns:</strong> <code>number</code>. Terrain entity id, or 0 if none.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> t = caffeine.procedural.findTerrain()
+</code></pre></div>
+<h2 id="getfocuschunk">getFocusChunk<a class="anchor" href="#getfocuschunk" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.getFocusChunk</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">getFocusChunk(directorId, chunkSize, focusId) -&gt; table
+</code></pre></div>
+<p>Returns the chunk the focus entity is in.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>directorId</code></td><td>number</td><td>Entity id of the procedural world director.</td></tr>
+<tr><td><code>chunkSize</code></td><td>number</td><td>Chunk size, used if the director has no procedural settings.</td></tr>
+<tr><td><code>focusId</code></td><td>number</td><td>Focus entity id. Optional.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>table</code>. Table with <code>cx</code> and <code>cz</code> (0, 0 if unavailable).</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> c = caffeine.procedural.getFocusChunk(dir, <span class="hljs-number">64</span>, player)
+<span class="hljs-built_in">print</span>(c.cx, c.cz)
+</code></pre></div>
+<h2 id="ischunkloaded">isChunkLoaded<a class="anchor" href="#ischunkloaded" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.isChunkLoaded</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">isChunkLoaded(directorId, cx, cz) -&gt; boolean
+</code></pre></div>
+<p>Checks whether a chunk is loaded for the director.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>directorId</code></td><td>number</td><td>Entity id of the procedural world director.</td></tr>
+<tr><td><code>cx</code></td><td>number</td><td>Chunk X index.</td></tr>
+<tr><td><code>cz</code></td><td>number</td><td>Chunk Z index.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>boolean</code>. true if the chunk is loaded.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-built_in">print</span>(caffeine.procedural.isChunkLoaded(dir, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>))
+</code></pre></div>
+<h2 id="unloadchunk">unloadChunk<a class="anchor" href="#unloadchunk" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.unloadChunk</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">unloadChunk(directorId, cx, cz)
+</code></pre></div>
+<p>Unloads a chunk of the director.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>directorId</code></td><td>number</td><td>Entity id of the procedural world director.</td></tr>
+<tr><td><code>cx</code></td><td>number</td><td>Chunk X index.</td></tr>
+<tr><td><code>cz</code></td><td>number</td><td>Chunk Z index.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.procedural.unloadChunk(dir, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)
+</code></pre></div>
+<h2 id="stream">stream<a class="anchor" href="#stream" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.stream</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">stream(directorId, terrainId, cx, cz, preset)
+</code></pre></div>
+<p>Streams chunks around the given chunk, adding procedural settings to the director if needed.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>directorId</code></td><td>number</td><td>Entity id of the procedural world director.</td></tr>
+<tr><td><code>terrainId</code></td><td>number</td><td>Terrain entity id. Optional.</td></tr>
+<tr><td><code>cx</code></td><td>number</td><td>Chunk X index.</td></tr>
+<tr><td><code>cz</code></td><td>number</td><td>Chunk Z index.</td></tr>
+<tr><td><code>preset</code></td><td>string</td><td>Preset name. Optional.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.procedural.stream(dir, caffeine.procedural.findTerrain(), <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)
+</code></pre></div>
+<h2 id="generateterrainchunk">generateTerrainChunk<a class="anchor" href="#generateterrainchunk" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.generateTerrainChunk</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">generateTerrainChunk(terrainId, cx, cz, seed, preset)
+</code></pre></div>
+<p>Generates one terrain chunk.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>terrainId</code></td><td>number</td><td>Terrain entity id.</td></tr>
+<tr><td><code>cx</code></td><td>number</td><td>Chunk X index.</td></tr>
+<tr><td><code>cz</code></td><td>number</td><td>Chunk Z index.</td></tr>
+<tr><td><code>seed</code></td><td>number</td><td>Seed.</td></tr>
+<tr><td><code>preset</code></td><td>string</td><td>Preset name. Optional.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.procedural.generateTerrainChunk(terrain, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">42</span>)
+</code></pre></div>
+<h2 id="spawncube">spawnCube<a class="anchor" href="#spawncube" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.spawnCube</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">spawnCube(directorId, cx, cz, x, y, z, sx, sy, sz) -&gt; number
+</code></pre></div>
+<p>Spawns a cube entity tagged with the director and chunk.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>directorId</code></td><td>number</td><td>Entity id of the procedural world director.</td></tr>
+<tr><td><code>cx</code></td><td>number</td><td>Chunk X index.</td></tr>
+<tr><td><code>cz</code></td><td>number</td><td>Chunk Z index.</td></tr>
+<tr><td><code>x</code></td><td>number</td><td>World X.</td></tr>
+<tr><td><code>y</code></td><td>number</td><td>World Y.</td></tr>
+<tr><td><code>z</code></td><td>number</td><td>World Z.</td></tr>
+<tr><td><code>sx</code></td><td>number</td><td>Scale X.</td></tr>
+<tr><td><code>sy</code></td><td>number</td><td>Scale Y.</td></tr>
+<tr><td><code>sz</code></td><td>number</td><td>Scale Z.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> <code>number</code>. Id of the new entity, or 0 if no world.</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua"><span class="hljs-keyword">local</span> c = caffeine.procedural.spawnCube(dir, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>)
+</code></pre></div>
+<h2 id="fillterrainnoise">fillTerrainNoise<a class="anchor" href="#fillterrainnoise" aria-label="Link to this section">#</a></h2>
+<p>Lua: <code>caffeine.procedural.fillTerrainNoise</code></p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">fillTerrainNoise(terrainId, seed, amplitude)
+</code></pre></div>
+<p>Fills the terrain heightmap with fractal noise.</p>
+<table>
+<thead><tr><th>Parameters</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>terrainId</code></td><td>number</td><td>Terrain entity id.</td></tr>
+<tr><td><code>seed</code></td><td>number</td><td>Seed.</td></tr>
+<tr><td><code>amplitude</code></td><td>number</td><td>Height multiplier; results are clamped to 0..1.</td></tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong> none</p>
+<p><strong>Example</strong></p>
+<div class="code-block" data-lang="lua"><div class="code-head"><span class="code-lang">lua</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-lua">caffeine.procedural.fillTerrainNoise(terrain, <span class="hljs-number">42</span>, <span class="hljs-number">1.0</span>)
+</code></pre></div>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/scripting/api/procedural.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/scripting/api/postprocess/"><span>Previous</span><strong>Post-process</strong></a><a class="pager-next" href="/en/docs/scripting/api/random/"><span>Next</span><strong>Random</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#hash">hash</a></li><li class="l2"><a href="#noise2d">noise2d</a></li><li class="l2"><a href="#fbm2d">fbm2d</a></li><li class="l2"><a href="#worldtochunk">worldToChunk</a></li><li class="l2"><a href="#findterrain">findTerrain</a></li><li class="l2"><a href="#getfocuschunk">getFocusChunk</a></li><li class="l2"><a href="#ischunkloaded">isChunkLoaded</a></li><li class="l2"><a href="#unloadchunk">unloadChunk</a></li><li class="l2"><a href="#stream">stream</a></li><li class="l2"><a href="#generateterrainchunk">generateTerrainChunk</a></li><li class="l2"><a href="#spawncube">spawnCube</a></li><li class="l2"><a href="#fillterrainnoise">fillTerrainNoise</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=c88ed8e9"};</script>
+<script src="/assets/app.js?v=c88ed8e9" defer></script>
+</body></html>
