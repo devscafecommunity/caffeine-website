@@ -72,7 +72,7 @@ O viewport sobrepõe dois componentes:
   que não têm mesh para selecionar. Os marcadores ficam por baixo do gizmo na ordem
   de hit: handle do gizmo, depois marcador, depois picking da cena.
 
-Veja [Gizmos e marcadores](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/gizmos-and-markers.md)
+Veja [Gizmos e marcadores](../doppio/gizmos-and-markers.md)
 para o modelo completo e capturas.
 
 ## Undo, redo e play mode
@@ -102,5 +102,5 @@ luzes, câmara e meshes para testes visuais.
 
 - [Scene viewport](scene-viewport.md) — render, câmara e readback.
 - [Galeria de UI](ui-gallery.md) — visita visual aos painéis.
-- [Headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- [Headless testing](../doppio/headless-testing.md)
   — automatizar o editor sem janela.

@@ -89,6 +89,6 @@ de captura do gizmo e marcadores.
 ## Páginas relacionadas
 
 - [Toolbar do viewport](viewport-toolbar.md) — toolbar de ícones e projeções.
-- [Gizmos e marcadores](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/gizmos-and-markers.md)
-- [Guia de materiais](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/materials-guide.md)
+- [Gizmos e marcadores](../doppio/gizmos-and-markers.md)
+- [Guia de materiais](../doppio/materials-guide.md)
 - [Performance](../performance/editor-viewport-performance.md)

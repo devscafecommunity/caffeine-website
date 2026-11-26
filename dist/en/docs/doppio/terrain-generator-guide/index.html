@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terrain Generator: heightfields built with nodes · Caffeine</title>
+<meta name="description" content="Build heightfields from a node graph and place them as engine terrain with ground, rock, dirt and mud splat layers.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Terrain Generator: heightfields built with nodes · Caffeine">
+<meta property="og:description" content="Build heightfields from a node graph and place them as engine terrain with ground, rock, dirt and mud splat layers.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/terrain-generator-guide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/terrain-generator-guide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/terrain-generator-guide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/terrain-generator-guide/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link active" href="/en/docs/doppio/terrain-generator-guide/" aria-current="page">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Terrain Generator: heightfields built with nodes</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last updated: <time datetime="2026-11-21">2026-11-21</time></span>
+</div>
+<p class="doc-lede">Build heightfields from a node graph and place them as engine terrain with ground, rock, dirt and mud splat layers.</p>
+<p>The <strong>Terrain</strong> tab (View menu, next to Nature and Water) builds landscapes from a <strong>node graph</strong> and places
+them in the scene as an engine terrain with ground, rock, dirt and mud splat layers. It is the last of the
+generators (material, texture, nature, water, terrain) and borrows its shape from node-based terrain tools:
+a graph of sources, shapers, masks and erosion ending in an Output.</p>
+<p>The <code>reference/nerthus</code> folder (MIT, a Rust terrain generator of ~100k lines and 25 node families) served as
+the map of what a complete tool needs. <strong>Nothing was copied</strong>; the nodes here are our own implementations of
+well-known techniques (gradient noise, ridged multifractals, Voronoi, terracing, thermal and particle-based
+hydraulic erosion), sized to what the engine can use today.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/terrain/ui/terrain-island.png" alt="The Terrain tab with the Volcanic Island graph" loading="lazy">
+  <figcaption>The Terrain tab with the Volcanic Island graph</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/terrain/terrain-presets.png" alt="The six presets, rendered by the tab's software preview" loading="lazy">
+  <figcaption>The six presets, rendered by the tab's software preview</figcaption>
+</figure>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/terrain/terrain-engine-alpine.png" alt="Alpine Range placed in the engine" loading="lazy">
+  <figcaption>Alpine Range placed in the engine</figcaption>
+</figure>
+<h2 id="1-how-a-graph-works">1. How a graph works<a class="anchor" href="#1-how-a-graph-works" aria-label="Link to this section">#</a></h2>
+<p>The graph carries one kind of data, a <strong>field</strong>: a square grid of 0..1 values that is either a height map or a
+mask. Every pattern is defined on the unit square, so the live 129 x 129 preview and the 513 x 513 result
+show the same landscape. Everything is deterministic for the seeds.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Nodes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sources</td>
+<td><strong>Perlin</strong> (fBm), <strong>Ridged</strong> (multifractal crests), <strong>Voronoi</strong> (cells, distance, edges, cracks), <strong>Mountain</strong> (a massif with ridges), <strong>Island</strong> (radial mask with noisy shore), <strong>Gradient</strong>, <strong>Constant</strong></td>
+</tr>
+<tr>
+<td>Modifiers</td>
+<td><strong>Levels</strong>, <strong>Terrace</strong>, <strong>Stratify</strong> (tilted sedimentary layers), <strong>Warp</strong> (domain warp), <strong>Blur</strong>, <strong>Invert</strong></td>
+</tr>
+<tr>
+<td>Derive</td>
+<td><strong>Slope</strong> (steepness mask), <strong>Height Range</strong> (mask of a height band)</td>
+</tr>
+<tr>
+<td>Combine</td>
+<td><strong>Combine</strong> (Add, Subtract, Multiply, Maximum, Minimum, Blend, Screen, Difference, with an optional mask)</td>
+</tr>
+<tr>
+<td>Simulate</td>
+<td><strong>Thermal Erosion</strong> (talus slumping), <strong>Hydraulic Erosion</strong> (droplets carrying sediment; also outputs <strong>Wear</strong> and <strong>Deposit</strong> masks)</td>
+</tr>
+<tr>
+<td>Output</td>
+<td><strong>Output</strong>: size X/Z, max height, resolution (129/257/513), sea level, beach width, rock slope, bare-rock line; optional <strong>Wear</strong> and <strong>Deposit</strong> inputs (from Hydraulic Erosion) become masks</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="2-the-output-node-and-the-splat-layers">2. The Output node and the splat layers<a class="anchor" href="#2-the-output-node-and-the-splat-layers" aria-label="Link to this section">#</a></h2>
+<p>The Output turns the final height into the engine terrain and computes the four <strong>splat layers</strong> from the
+terrain itself:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 ground (grass, moss)</td>
+<td>everywhere that is not rock, beach or underwater</td>
+</tr>
+<tr>
+<td>1 rock</td>
+<td>slopes steeper than <em>Rock above slope</em> (real rise over run from the size and max height) and heights above <em>Bare rock above</em></td>
+</tr>
+<tr>
+<td>2 dirt</td>
+<td>the beach band just above the sea level</td>
+</tr>
+<tr>
+<td>3 mud</td>
+<td>below the sea level</td>
+</tr>
+</tbody>
+</table></div>
+<p>Weights are normalised to sum to one; the engine resamples them to its splat map. The <strong>sea level</strong> is only a
+height used for the layers and the preview: place a <strong>Water</strong> body at that height (the tab reports it in
+metres).</p>
+<h2 id="3-presets">3. Presets<a class="anchor" href="#3-presets" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Presets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gentle</td>
+<td><strong>Rolling Hills</strong></td>
+</tr>
+<tr>
+<td>Mountains</td>
+<td><strong>Alpine Range</strong>, <strong>Highland Lake</strong></td>
+</tr>
+<tr>
+<td>Coast</td>
+<td><strong>Volcanic Island</strong>, <strong>Archipelago</strong></td>
+</tr>
+<tr>
+<td>Arid</td>
+<td><strong>Badlands</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Each is an ordinary graph you can open and edit. Tests check that every preset builds a valid terrain (values in
+range, real relief, splat weights summing to one), that thermal erosion softens the surface while conserving
+material, that hydraulic erosion is deterministic and produces wear and deposit masks, that the same graph at
+two resolutions shows the same landscape, and that seeds change the result.</p>
+<h2 id="4-engine-side-c-abi-v8">4. Engine side (C ABI v8)<a class="anchor" href="#4-engine-side-c-abi-v8" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><code>CaffeineTerrain</code> (POD) with <code>caffeine_session_set_terrain(entity, terrain, heights, splat_rgba)</code>,
+<code>caffeine_session_terrain</code> and <code>caffeine_session_terrain_height</code>. Heights are 0..1 and scaled by the max
+height; the optional splat bytes are resampled to the splat map. The Rust <code>doppio-engine</code> crate wraps them as
+<code>Terrain</code> and <code>Engine::set_terrain/terrain/terrain_height</code>.</li>
+<li>The session now <strong>syncs terrain meshes before rendering</strong> (it did not, so a terrain never drew in the editor)
+and gives the entity the mesh components the renderer looks for.</li>
+<li>The terrain mesh is <strong>centred on its entity</strong>; <code>terrain_height(x, z)</code> measures from the corner, and so do the mask reads.</li>
+<li>Placing is one undo step, selects the entity and reports the sea level; <strong>Export</strong> writes
+<code>Terrain/&lt;name&gt;.generator.terrain</code> (a recipe wrapping the <code>CAFTERRAIN1</code> / <code>TERRAINGRAPH1</code> text) and a <strong>16-bit height map
+PNG</strong> for other tools.</li>
+</ul>
+<h3 id="masks-c-abi-v15">Masks (C ABI v15)<a class="anchor" href="#masks-c-abi-v15" aria-label="Link to this section">#</a></h3>
+<p>Placing a terrain sends the engine more than a height and a splat map: it sends <strong>masks</strong>, named 0..1 fields that scatter, the biome
+table and (later) the shaders read to place things by what the terrain <em>is</em>.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/terrain/terrain-masks.png" alt="The Alpine Range and its seven masks: height, slope, curvature, flow, wetness, wear and deposit" loading="lazy">
+  <figcaption>The Alpine Range placed in the engine and every mask read back through the C ABI at 256 x 256: the three the engine derives from the
+  heightfield, the two the graph derives (drainage lines in <em>flow</em>, the wet valley floors and the sea in <em>wetness</em>) and the two
+  hydraulic erosion left (<em>wear</em> where it cut, <em>deposit</em> where it dropped sediment).</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mask</th>
+<th>Made by</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>height</code></td>
+<td>engine, from the heightfield</td>
+<td>normalised height</td>
+</tr>
+<tr>
+<td><code>slope</code></td>
+<td>engine</td>
+<td>angle from the horizontal, 0 flat .. 1 = 90 degrees</td>
+</tr>
+<tr>
+<td><code>curvature</code></td>
+<td>engine</td>
+<td>0.5 on flat ground, towards 1 in a valley, towards 0 on a ridge (+-0.125 per metre is the full range)</td>
+</tr>
+<tr>
+<td><code>flow</code></td>
+<td>graph (Output node)</td>
+<td>D8 flow accumulation: how much of the terrain drains through a texel, log-scaled</td>
+</tr>
+<tr>
+<td><code>wetness</code></td>
+<td>graph</td>
+<td>steady drainage that is not steep, plus everything at or below the sea level</td>
+</tr>
+<tr>
+<td><code>wear</code>, <code>deposit</code></td>
+<td>graph, <strong>when wired</strong></td>
+<td>what hydraulic erosion took and left; the Output node has two optional inputs for them (the presets with erosion wire them)</td>
+</tr>
+</tbody>
+</table></div>
+<p>The built-ins cost nothing: the engine computes them from the heightfield on demand. The stored ones are 8 bits per texel on the
+heightfield's grid (a mask is a weight, not a height), up to 16 per terrain, <strong>saved with the terrain file</strong> (version 3; a terrain
+without masks is still written as version 2 so older readers open it).</p>
+<ul>
+<li><code>caffeine_session_set_terrain_mask(entity, name, res_x, res_z, bytes)</code> (NULL bytes removes it), <code>terrain_mask_count</code>, <code>terrain_mask_at</code>
+(name, grid, built-in), <code>terrain_mask(entity, name, x, z)</code> for one point and <code>terrain_mask_rect(entity, name, x0, z0, x1, z1, w, h, out)</code> to
+resample a rectangle. Coordinates are metres from the terrain's corner, like <code>terrain_height</code>; outside the terrain reads the nearest edge.</li>
+<li><code>caffeine_session_terrain_normal(entity, x, z)</code>: the unit surface normal.</li>
+<li>The Rust crate wraps them: <code>Engine::set_terrain_mask</code>, <code>remove_terrain_mask</code>, <code>terrain_masks</code>, <code>terrain_mask</code>, <code>terrain_mask_rect</code>,
+<code>terrain_normal</code>.</li>
+</ul>
+<h3 id="the-biome-table">The biome table<a class="anchor" href="#the-biome-table" aria-label="Link to this section">#</a></h3>
+<p><code>terrain/TerrainBiome</code> turns masks into the 0..1 density of each scatter class: a class density is <code>base x</code> a product of terms, each term a
+trapezoid over one mask. It is plain text and plugs straight into the scatter module's density callback:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">class 2 base 0.9            # trees: gentle, dry, above the beach
+  slope     0.00 0.00 0.15 0.35
+  wetness   0.00 0.00 0.30 0.60
+  height    0.22 0.28 1.00 1.00
+class 1 base 1              # rocks: steep ground
+  slope     0.30 0.45 1.00 1.00
+</code></pre></div>
+<p>A class without a rule has density 1; a term that names a mask the terrain does not have gives 0 (nothing is placed rather than
+everywhere) and <code>missingMasks</code> lists those names. Tested end to end: scattered trees never land on steep or wet ground and rocks only on the
+ridge. The editor reads a table through the scatter plan below; a World tab that edits tables visually is phase 6 of the world roadmap.</p>
+<h3 id="scatter-on-a-terrain-c-abi-v16">Scatter on a terrain (C ABI v16)<a class="anchor" href="#scatter-on-a-terrain-c-abi-v16" aria-label="Link to this section">#</a></h3>
+<p><strong>Scene &gt; Scatter on Terrain</strong> (id <code>editor.menu.scene.scatter_terrain</code>), or the <strong>Scatter</strong> button in this tab's toolbar (next to <em>Place in scene</em>; it scatters the selected terrain, else the one you placed last), places a whole plan of vegetation and rocks on the selected terrain in one
+undo step. The plan is a project text file, <code>Scatter/default.scatter</code>, written from a built-in plan the first time; edit it and run the action
+again. A <code>class</code> line says <em>what</em> (shape, size, spacing, scale, tilt, sink, tint, variants, Micromesh), and the lines under it are the biome
+terms that say <em>where</em>, the same trapezoids as above:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">seed 7
+class 1 name boulder primitive sphere color 0.45 0.43 0.40 size 1.6 1.1 1.4 cell 16 radius 2.2 density 0.9 priority 30 scale 0.7 1.6 tilt 0.8 sink 0.3 micromesh on
+  slope 0.30 0.45 1.00 1.00
+class 2 name pine primitive cone color 0.12 0.32 0.15 size 1.8 6 1.8 cell 8 radius 2.4 density 0.85 priority 20 scale 0.8 1.4 tilt 0.1 tint 0.1
+  slope   0.00 0.00 0.15 0.35
+  wetness 0.00 0.00 0.30 0.60
+  height  0.12 0.20 0.70 0.85
+</code></pre></div>
+<p><strong>Edit scatter plan</strong> (toolbar) opens the plan in the script editor. A class can also be a <strong>composite</strong>: indented <code>part mesh &lt;path&gt; [slots a.mat;b.mat] [micromesh on|off] [cutout on|off]</code> lines make every instance an empty entity with one child per part (a generated tree is a solid and a foliage mesh);
+the Nature tab's <em>Add to scatter plan</em> writes them for you.</p>
+<p>A shape is <code>primitive &lt;cube|sphere|cone|cylinder|capsule|pyramid|torus&gt;</code> or <code>mesh &lt;path&gt;</code> (a <code>{v}</code> in the path is the variant number, so a
+<code>.nature</code> rock set scatters as variants); <code>material &lt;path&gt;</code> and <code>color r g b</code> set the look. The plan is validated before anything is placed:
+a bad line or a biome term for a mask the terrain does not have reports an error in the status bar and changes nothing.</p>
+<figure class="doc-figure">
+  <img loading="lazy" src="/en/docs/images/doppio/terrain/scatter-on-terrain.png" alt="The Alpine Range scattered with the default plan: an aerial and a close lit view, and the slope, wetness and height masks with a dot for every instance of the classes that read them">
+  <figcaption>The Alpine Range scattered with the built-in plan (20 000 instances: 2 692 boulders, 651 pines, 16 657 tufts). Top: lit views, pines in
+  the basins. Bottom: where each class landed over the mask it reads: boulders on the steep (bright) slope, tufts off rock, pines only on dry
+  (black) wetness and below the bare summits. Regenerate with <code>scripts/render-scatter-docs.sh</code>.</figcaption>
+</figure>
+<p>What happens underneath:</p>
+<ul>
+<li><code>scatterTerrain</code> (<code>src/caffeine/scatter/TerrainScatter</code>) runs the deterministic scatter core over a region of the terrain with its height,
+normal and the biome density. The result depends only on the seed, the plan and the terrain, not on the chunk size: the two halves of a
+region add up to the whole. It stops at <code>maxInstances</code> and reports the total, so the status line tells you when the plan was cut
+(default 5 000 in the editor; raise it with <code>max_instances</code>).</li>
+<li><code>caffeine_session_scatter_terrain(session, entity, seed, classes, class_count, biome_text, region, out, capacity, out_total)</code> returns each
+instance's world position, <code>up</code> (the terrain normal), Euler rotation in degrees, scale, tint and variant. <code>capacity</code> 0 only counts.
+<code>caffeine_biome_check(text, error, size)</code> validates a table. The Rust crate wraps them as <code>Engine::scatter_terrain</code> and <code>biome_check</code>.</li>
+<li>Doppio creates a holder entity <code>Scatter &lt;plan name&gt;</code> and one child per instance with Mesh Filter, Mesh Renderer (material, tint = class colour
+x instance tint, Micromesh) and the position, rotation and scale from the engine. Same seed and plan, same placement.</li>
+<li>Limits: every instance is an entity, so thousands are slow to edit (the instanced and Micromesh draw paths handle them, per-chunk instance
+buffers are phase 4); the plan is global to the terrain (no painted regions yet); rocks use a single height sample at the instance centre.</li>
+</ul>
+<h2 id="5-limits-and-roadmap">5. Limits and roadmap<a class="anchor" href="#5-limits-and-roadmap" aria-label="Link to this section">#</a></h2>
+<p>This is the first slice of a tool that is far larger elsewhere (the reference has ~25 node families). Honest
+status:</p>
+<ul>
+<li><strong>Node coverage.</strong> 19 nodes against the reference's hundreds. Missing families, roughly in the order they
+matter: <strong>rivers and lakes</strong> (flow routing, carving, water masks), <strong>snow and glaciers</strong>, <strong>sediment and
+scree</strong> simulations, <strong>rock detail</strong> (outcrops, shattered stone, sandstone), <strong>cartography</strong> (contours,
+hillshade), <strong>vegetation and object scattering</strong> from masks, <strong>vector masks</strong> (splines, roads), <strong>file input</strong>
+(import heightmaps and meshes), and a <strong>colorize</strong> stage that paints a colour map from palettes and masks.</li>
+<li><strong>Fidelity.</strong> The erosion is a compact particle model, not a production solver: it carves believable gullies
+and deposits but does not match dedicated tools on large, long-running simulations; it runs on the CPU at up
+to 513 x 513. The engine itself accepts terrains up to 4097 x 4097 and its chunked LOD draws them (a 1025 x 1025 terrain submits about 0.84 M of its 2.1 M triangles in about 410 draws; see the benchmark set in <code>micromeshes.md</code>); what is missing is a generator output above 513 and tiling or streaming of anything larger than one heightfield.</li>
+<li><strong>Splat textures.</strong> The four layers use the terrain component's layer texture paths (defaults point at the
+<code>hdr-assets-texture</code> ground sets). In a project without them the terrain draws dark; choosing the layer
+textures from the tab is next. There is <strong>no snow layer</strong> (the engine has four), so mountains show rock, not
+snow.</li>
+<li><strong>Masks to the engine.</strong> Only the four splat layers reach the engine. Wear, deposit and flow masks stay in the
+graph; exporting masks as images and driving vegetation scatter from them is not done.</li>
+<li><strong>A process-wide cache.</strong> The engine's terrain cache is a singleton keyed by entity id and a session's teardown clears it, so two engine sessions in one process must not build terrains at the same time (the engine tests take a lock for this). A per-session cache is the clean fix.</li>
+<li><strong>One output.</strong> One terrain per graph; no tiling or multi-terrain export, no build/export queue.</li>
+<li><strong>Preview.</strong> The 3D preview is a software render of the splat colours and sea plane with a 1.4x vertical
+exaggeration; the engine's lighting, shadows and textures differ.</li>
+<li><strong>Water.</strong> The sea level is a number, not a water body; the Water tab places the surface separately.</li>
+<li><strong>Tuning.</strong> Preset relief and sea levels were tuned against the software preview and a single engine render;
+expect to adjust them (max height, sea, rock slope) per project.</li>
+</ul>
+<p>World-level plan (masks to the engine, scatter, chunk streaming): see <a href="/en/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>.</p>
+<h2 id="6-agents-and-scripting">6. Agents and scripting<a class="anchor" href="#6-agents-and-scripting" aria-label="Link to this section">#</a></h2>
+<p>The tab is a pane like the others (<code>editor.pane.terrain_generator</code>, <code>terraingen.*</code> ids). Headless: fixture
+<code>terrain</code> (<code>reset</code> takes a <code>preset</code>, e.g. <code>Badlands</code>); no engine is needed for the graph and preview. Placement
+and rendering are covered by engine-backed tests.</p>
+<p>The toolbar buttons are the MCP actions <code>terrain_scatter</code> and <code>terrain_edit_scatter_plan</code> (and the Nature tab's <code>nature_add_to_scatter</code>). Agents place a scatter with the MCP action <code>scatter_on_terrain</code> (<code>plan_text</code> or <code>plan_file</code>, <code>seed</code>, <code>max_instances</code>, <code>terrain_id</code>); it sends the same
+message as the menu, so it is one undo step too. Tests: <code>scatter_on_terrain_places_the_plan_by_the_terrains_masks</code> (engine-backed).</p>
+<h2 id="7-regenerating-the-images">7. Regenerating the images<a class="anchor" href="#7-regenerating-the-images" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/capture-terrain-docs.sh                                              <span class="hljs-comment"># the tab (headless, no engine)</span>
+./scripts/render-terrain-mask-docs.sh                                          <span class="hljs-comment"># the mask sheet (engine renders and reads back every mask)</span>
+DOPPIO_TERRAIN_DUMP=/tmp/terrain cargo <span class="hljs-built_in">test</span> -p doppio-ui --lib terrain_presets_dump   <span class="hljs-comment"># preview of every preset</span>
+DOPPIO_TERRAIN_DUMP=/tmp/terrain cargo <span class="hljs-built_in">test</span> -p doppio-ui --lib placing_a_terrain      <span class="hljs-comment"># engine render of Alpine Range</span>
+</code></pre></div>
+<h2 id="the-layers-are-project-materials">The layers are project materials<a class="anchor" href="#the-layers-are-project-materials" aria-label="Link to this section">#</a></h2>
+<p>The Output node holds four material slots (ground, rock, dirt, mud). Applying a preset, or placing,
+fills empty slots by baking a material-library picture into <code>Terrain/Layers/&lt;layer&gt;.png</code> and writing a
+<code>Terrain/Layers/&lt;layer&gt;.mat</code> whose albedo map is that picture. The slot holds the <code>.mat</code>; placing
+paints the engine's <code>Splat Layer Paths 1..4</code> with each material's albedo map. A slot that already has a
+path, or a file that already exists, is never touched: repaint the PNG, edit the <code>.mat</code>, or pick another
+material from the node's list. A slot holding a plain picture (older graphs) still works.</p>
+<p>Limit: the engine's splat shader blends the four <strong>albedo</strong> pictures only. Normal, roughness and the
+other <code>.mat</code> channels are stored in the file but not used for terrain layers yet; that needs a shader
+change.</p>
+<p>Old <code>.terrain-graph</code> files load as before; their empty slots are filled the next time you apply or place.</p>
+<h2 id="using-it-in-a-world">Using it in a world<a class="anchor" href="#using-it-in-a-world" aria-label="Link to this section">#</a></h2>
+<p>The <a href="/en/docs/doppio/world-composition/">World Composer</a> starts from a terrain recipe: its <code>terrain</code> line names a
+<code>*.generator.terrain</code>, the editor bakes it, and the composition's classes read its masks (<code>slope</code>, <code>height</code>,
+<code>curvature</code>, <code>flow</code>, <code>wetness</code>, ...) with the same biome terms as the table above. The composer adds one mask of its
+own, <code>water_distance</code>, and a river with <code>carve</code> lowers the baked heightfield before any class reads it.</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/terrain-generator-guide.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/terrain-editing-phase-0/"><span>Previous</span><strong>Terrain editing: Phase 0 report</strong></a><a class="pager-next" href="/en/docs/doppio/texture-generator-guide/"><span>Next</span><strong>Texture Generator: procedural sprites, VFX and packed masks</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-how-a-graph-works">1. How a graph works</a></li><li class="l2"><a href="#2-the-output-node-and-the-splat-layers">2. The Output node and the splat layers</a></li><li class="l2"><a href="#3-presets">3. Presets</a></li><li class="l2"><a href="#4-engine-side-c-abi-v8">4. Engine side (C ABI v8)</a></li><li class="l3"><a href="#masks-c-abi-v15">Masks (C ABI v15)</a></li><li class="l3"><a href="#the-biome-table">The biome table</a></li><li class="l3"><a href="#scatter-on-a-terrain-c-abi-v16">Scatter on a terrain (C ABI v16)</a></li><li class="l2"><a href="#5-limits-and-roadmap">5. Limits and roadmap</a></li><li class="l2"><a href="#6-agents-and-scripting">6. Agents and scripting</a></li><li class="l2"><a href="#7-regenerating-the-images">7. Regenerating the images</a></li><li class="l2"><a href="#the-layers-are-project-materials">The layers are project materials</a></li><li class="l2"><a href="#using-it-in-a-world">Using it in a world</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

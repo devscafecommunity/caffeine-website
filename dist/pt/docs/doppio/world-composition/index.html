@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World Composer: construir um mundo prefab a partir de receitas de geradores · Caffeine</title>
+<meta name="description" content="Um ficheiro que diz de que é feito o mundo : um terreno, as árvores, rochas e erva que nele crescem, os rios e lagos que o atravessam e os materiais que o revestem. Escolhe a composição; o sistema constrói o mundo, e cad">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="World Composer: construir um mundo prefab a partir de receitas de geradores · Caffeine">
+<meta property="og:description" content="Um ficheiro que diz de que é feito o mundo : um terreno, as árvores, rochas e erva que nele crescem, os rios e lagos que o atravessam e os materiais que o revestem. Escolhe a composição; o sistema constrói o mundo, e cad">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/pt/docs/doppio/world-composition/">
+<meta property="og:url" content="https://caffeine.devscafe.org/pt/docs/doppio/world-composition/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/world-composition/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/docs/doppio/world-composition/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Saltar para o conteúdo</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/pt/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/pt/section/start/">Primeiros passos</a><a class="tab active" href="/pt/section/editor/">Doppio</a><a class="tab" href="/pt/section/scripting/">Scripting</a><a class="tab" href="/pt/section/engine/">Motor</a><a class="tab" href="/pt/section/ecosystem/">Ecossistema</a><a class="tab" href="/pt/section/project/">Projeto</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Pesquisar na documentação"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Pesquisar…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang" href="/en/docs/doppio/world-composition/" hreflang="en" lang="en" title="English">EN</a><a class="lang active" href="/pt/docs/doppio/world-composition/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Alternar tema"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Painéis do editor</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/editor/test-automation/">Automação de testes do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-editor/">Editor de cena</a></li><li><a class="nav-link" href="/pt/docs/editor/material-editor/">Editor de materiais</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-gallery/">Galeria de UI do editor</a></li><li><a class="nav-link" href="/pt/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-migration/">Guia de migração de plugins</a></li><li><a class="nav-link" href="/pt/docs/editor/viewport-toolbar/">HUD e controlos do viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/photon/">Photon — GI híbrido nativo por radiance cascades</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-manager/">Plugin Manager (host legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/plugin-sdk/">Plugin SDK (C++ legado)</a></li><li><a class="nav-link" href="/pt/docs/editor/ui-reference/">Referência da UI do Doppio</a></li><li><a class="nav-link" href="/pt/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/pt/docs/editor/workspace-and-theme/">Workspace, tema e componentes</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/doppio/">Geradores &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-roadmap/">Edição de terreno: pincéis, paleta de materiais e vegetação</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-editing-phase-0/">Edição de terreno: relatório da Fase 0</a></li><li><a class="nav-link" href="/pt/docs/doppio/environment-guide/">Environment: nuvens, névoa, chuva e relâmpagos no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/rust-ui/">Frontend Rust UI (Iced)</a></li><li><a class="nav-link" href="/pt/docs/doppio/gizmos-and-markers/">Gizmos e marcadores de cena</a></li><li><a class="nav-link" href="/pt/docs/doppio/materials-guide/">Materiais no Doppio: biblioteca procedural, profundidade real e bake</a></li><li><a class="nav-link" href="/pt/docs/doppio/graphics-roadmap/">Melhoria gráfica — Roadmap de Micromeshes e Photon</a></li><li><a class="nav-link" href="/pt/docs/doppio/micromeshes/">Micromeshes: clusters, cortes e o draw na GPU</a></li><li><a class="nav-link" href="/pt/docs/doppio/runtime-modifiers/">Modificadores em tempo de execução para materiais gerados</a></li><li><a class="nav-link" href="/pt/docs/doppio/photoreal-world-roadmap/">Mundo procedural fotorrealista — validação e roadmap</a></li><li><a class="nav-link" href="/pt/docs/doppio/nature-generator-guide/">Nature Generator: rochas, árvores e plantas procedurais, construídas com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/photon-guide/">Photon: iluminação global no Doppio</a></li><li><a class="nav-link" href="/pt/docs/doppio/material-pipeline/">Pipeline de materiais, texturas e geradores — backlog</a></li><li><a class="nav-link" href="/pt/docs/doppio/profiler-guide/">Profiler: para onde vai o tempo de um frame</a></li><li><a class="nav-link" href="/pt/docs/doppio/generator-recipes/">Receitas de geradores (generator.*)</a></li><li><a class="nav-link" href="/pt/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields construídos com nós</a></li><li><a class="nav-link" href="/pt/docs/doppio/headless-testing/">Testes de UI headless para o Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/pt/docs/doppio/texture-generator-guide/">Texture Generator: sprites procedurais, VFX e máscaras empacotadas</a></li><li><a class="nav-link" href="/pt/docs/doppio/water-generator-guide/">Water Generator: corpos de água construídos com nós</a></li><li><a class="nav-link active" href="/pt/docs/doppio/world-composition/" aria-current="page">World Composer: construir um mundo prefab a partir de receitas de geradores</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/pt/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/pt/docs/plugins/compatibility/">Compatibilidade de plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/pt/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/pt/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/pt/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/pt/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/pt/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/pt/docs/">Documentação</a><span aria-hidden="true">/</span><a href="/pt/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">World Composer: construir um mundo prefab a partir de receitas de geradores</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Guia</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Última atualização: <time datetime="2026-11-25">2026-11-25</time></span>
+  <span>Fonte: <a href="https://github.com/devscafecommunity/caffeine/blob/main/content/en/docs/doppio/world-composition.md"><code>world-composition.md</code></a></span>
+</div>
+<p class="doc-lede">Um ficheiro que diz <em>de que é feito o mundo</em>: um terreno, as árvores, rochas e erva
+que nele crescem, os rios e lagos que o atravessam e os materiais que o revestem. Escolhe a composição;
+o sistema constrói o mundo, e cada planta adapta-se ao sítio onde está porque a sua aleatoriedade vem de um
+hash das suas coordenadas. É um <strong>complemento do Terrain Generator</strong>, não um substituto: o terreno
+continua a ser um grafo, a composição decide o que vive nele.</p>
+<blockquote>
+<p><strong>Estado: construído.</strong> A construção no núcleo (<code>src/caffeine/world</code>), a C ABI (v28), o bake <code>.cinst</code> e o seu
+caminho de desenho, a cache de bakes e o separador World no Doppio existem; a secção 8 lista o que está feito e as
+poucas coisas ainda em aberto. Substitui as partes &quot;arquitetura alvo&quot; e &quot;separador World&quot; de
+<a href="/pt/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>, que fica como a validação da ideia e das fases de
+motor e de renderização.</p>
+</blockquote>
+<h2 id="1-a-ideia-numa-imagem">1. A ideia numa imagem<a class="anchor" href="#1-a-ideia-numa-imagem" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">Valley.generator.world                         ← the composition (one file, you edit it)
+  seed 1234, generator_version 2
+  terrain   Terrain/Alpine.generator.terrain   ← height + masks (slope, wetness, flow, ...)
+  water     Water/River.generator.water        ← follows the terrain&#x27;s flow mask
+            Water/Lake.generator.water         ← fills basins under a level
+  classes   (what grows where, in priority order)
+    boulder  Nature/MossRock.generator.nature   where slope &gt; 0.3
+    oak      Nature/OakTree.generator.nature    where gentle, dry, near water
+    grass    Nature/LowerGrass.generator.nature where flat, not rock
+  materials Materials/Moss.generator.material   ground layers, rock moss, ...
+        │
+        ▼  build (deterministic)
+  placement per cell:  sub-seed = hash(world seed, class, cell x, cell z)
+        │                → variant, yaw, scale, tint, lean — all from that one number
+        ▼
+  prefab world: terrain + water + instances, always identical for the same inputs
+</code></pre></div>
+<p>Três propriedades definem-no:</p>
+<ol>
+<li><strong>Composição, não geração.</strong> O utilizador escolhe peças (receitas <code>.generator.*</code>) e regras; nada é aleatório
+a menos que uma seed o diga. Abra o mesmo ficheiro amanhã e obtém o mesmo mundo.</li>
+<li><strong>Tudo num só sítio.</strong> Terreno, natureza, água, materiais e texturas são listados num ficheiro e num
+separador, em vez de cinco ferramentas que colocam cada uma o seu próprio resultado.</li>
+<li><strong>Adapta-se à posição.</strong> Uma árvore não é uma cópia de um modelo largada em (x, z). A sua variante, tamanho,
+inclinação e tonalidade derivam do hash da sua célula <em>e</em> do que o terreno é ali (declive, altura, humidade,
+distância à água). A mesma receita de carvalho tem um aspeto diferente numa crista seca e numa margem húmida.</li>
+</ol>
+<p><strong>Não</strong> é um streamer de mundo aberto (esse é o caminho de runtime do roadmap do mundo). O composer constrói um
+mundo limitado e de autor. Está desenhado para que a mesma função de construção possa mais tarde correr por chunk
+para streaming.</p>
+<h2 id="2-o-que-já-existe">2. O que já existe<a class="anchor" href="#2-o-que-já-existe" aria-label="Link to this section">#</a></h2>
+<p>Verificado contra o <code>main</code> do motor (C ABI versão 27).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Peça</th>
+<th>Onde</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ficheiros de receita, um por gerador</td>
+<td><code>Oak.generator.nature</code>, <code>Lake.generator.water</code>, ... (<code>uikit/recipe.rs</code>, <a href="/pt/docs/doppio/generator-recipes/"><code>generator-recipes.md</code></a>)</td>
+<td>feito; <code>generator_version</code> em todos</td>
+</tr>
+<tr>
+<td>Resolvedor de receitas e variantes</td>
+<td><code>uikit/recipe_ref.rs</code>: <code>nature_variants</code>, <code>bake_nature_variant(recipe, seed, quality, cache)</code></td>
+<td>feito, cache indexada por grafo + versão + seed + qualidade</td>
+</tr>
+<tr>
+<td>Hash inteiro</td>
+<td><code>core/Hash.hpp</code>: SplitMix64 <code>deriveSeed(parent, salt, x, z)</code>, <code>toUnit</code>; gémeo em Rust em <code>recipe_ref.rs</code>; testes golden</td>
+<td>feito</td>
+</tr>
+<tr>
+<td>Máscaras do terreno</td>
+<td>C ABI v15: <code>height</code>, <code>slope</code>, <code>curvature</code> (motor), <code>flow</code>, <code>wetness</code>, <code>wear</code>, <code>deposit</code> (grafo)</td>
+<td>feito</td>
+</tr>
+<tr>
+<td>Tabela de biomas</td>
+<td><code>terrain/TerrainBiome</code>: <code>base x</code> produto de trapézios sobre máscaras, texto simples</td>
+<td>feito</td>
+</tr>
+<tr>
+<td>Núcleo de scatter</td>
+<td><code>src/caffeine/scatter</code>: grelha com jitter, prioridade, raio de exclusão, propriedade de células, resultado independente do chunk</td>
+<td>feito</td>
+</tr>
+<tr>
+<td>Scatter sobre um terreno</td>
+<td>C ABI v16, <code>Scatter/default.scatter</code>, <strong>Scene &gt; Scatter on Terrain</strong>, classes compostas (<code>part mesh ...</code>)</td>
+<td>feito, uma entidade por instância</td>
+</tr>
+<tr>
+<td>Saída da natureza para scatter</td>
+<td>cor por vértice, peso de flutter, slots de material por submalha, tonalidade e intervalo de escala por instância</td>
+<td>feito</td>
+</tr>
+<tr>
+<td>Renderização de muitas instâncias</td>
+<td>LOD por clusters Micromesh para partes opacas, vento, translucidez das folhas</td>
+<td>parcial (sem impostores, sem buffers por chunk)</td>
+</tr>
+<tr>
+<td>Água</td>
+<td>superfície e <code>water_height</code>, ondas de Gerstner na GPU</td>
+<td>feito como colocação separada</td>
+</tr>
+<tr>
+<td>Prefabs</td>
+<td>árvore de entidades <code>.prefab</code> que se lembra da receita de origem (<code>uikit/prefab_file.rs</code>)</td>
+<td>feito</td>
+</tr>
+</tbody>
+</table></div>
+<p>Portanto, o trabalho é a <strong>camada que os liga</strong>, a que o roadmap chamava &quot;a camada do mundo&quot;.</p>
+<h2 id="3-o-ficheiro-de-composição">3. O ficheiro de composição<a class="anchor" href="#3-o-ficheiro-de-composição" aria-label="Link to this section">#</a></h2>
+<p><code>&lt;Name&gt;.generator.world</code>, um novo tipo de receita da mesma família, de modo que um duplo clique reabre o Composer.
+O caf-pack já o ignora como fonte só de editor: <code>Registry::isEditorOnly</code> corresponde a qualquer nome com <code>.generator.</code>.
+O ficheiro é o cabeçalho JSON habitual das receitas; como em todos os geradores, o composer é dono da forma de texto
+do seu <code>graph</code>, e esse texto partilha a gramática do plano <code>.scatter</code> e da tabela de biomas (uma linha <code>key value</code> por
+coisa, termos de bioma indentados sob uma classe). O núcleo analisa-o em
+<a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/world/WorldComposition.hpp" rel="noopener" class="ext"><code>WorldComposition.hpp</code></a>,
+por isso não precisa de biblioteca JSON.</p>
+<div class="code-block" data-lang="json"><div class="code-head"><span class="code-lang">json</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;format&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;caffeine-generator&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;kind&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;world&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Valley&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;product&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;generator_version&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;graph&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;seed 1234\nterrain Terrain/Alpine.generator.terrain size 1024 1024\n...&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre></div>
+<p>O texto de <code>graph</code>, sem escapes:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">seed 1234
+water_distance 64
+terrain Terrain/Alpine.generator.terrain size 1024 1024
+water Water/River.generator.water follow flow min 0.8 carve 1.5
+water Water/Lake.generator.water fill basins level 0.18
+material terrain.layer0 Materials/Moss.generator.material
+class boulder ref Nature/MossRock.generator.nature variants 6 priority 30 cell 16 radius 2.2 density 0.9 scale 0.7 1.6 tilt 0.8 sink 0.3
+  slope 0.30 0.45 1.00 1.00
+class oak ref Nature/OakTree.generator.nature variants 8 priority 20 cell 9 radius 3 density 0.8 scale 0.8 1.4 tilt 0.1 tint 0.1
+  slope   0.00 0.00 0.15 0.35
+  wetness 0.20 0.40 0.80 1.00
+  adapt size wetness
+  adapt lean slope 0.3
+  adapt wetness water_distance
+  adapt param.crown wetness
+override remove oak 12 -4
+override move oak 3 7 120.5 88.25
+override pin boulder 5 5 2
+</code></pre></div>
+<p>Linhas de topo: <code>seed</code>, <code>water_distance &lt;metres&gt;</code> (onde a máscara <code>water_distance</code> chega a 1; 64 por omissão),
+<code>terrain &lt;ref&gt; [size &lt;x&gt; &lt;z&gt;]</code>, <code>water &lt;ref&gt; [follow &lt;mask&gt; min &lt;value&gt;] [carve &lt;metres&gt;] [fill basins level &lt;value&gt;]</code>,
+<code>material &lt;slot&gt; &lt;ref&gt;</code>, <code>class</code> e <code>override</code>.</p>
+<p>Propriedades de classe: <code>ref</code> (obrigatória), <code>variants</code>, <code>priority</code>, <code>cell</code>, <code>radius</code>, <code>density</code>, <code>scale &lt;min&gt; &lt;max&gt;</code>, <code>tilt</code>,
+<code>sink</code>, <code>tint</code> (jitter), <code>base</code> (a densidade base da regra) e <code>unique on|off</code>. As linhas indentadas são um termo de bioma
+<code>&lt;mask&gt; &lt;rise0&gt; &lt;rise1&gt; &lt;fall1&gt; &lt;fall0&gt;</code> ou <code>adapt &lt;target&gt; &lt;source&gt; [amount]</code> (secção 4.2). As referências não podem
+conter espaços.</p>
+<p>Regras do ficheiro:</p>
+<ul>
+<li><strong>As referências são caminhos do projeto para receitas</strong>, nunca para OBJs já baked; o Composer volta a correr as
+receitas, por isso editar uma receita de carvalho muda todos os carvalhos. Uma referência em falta ou do tipo errado é
+um erro na barra de estado e nada é construído (a mesma recusa que os slots de receita já usam).</li>
+<li><strong><code>where</code> é a sintaxe de bioma existente</strong> (trapézios sobre máscaras), por isso a tabela de biomas, o plano <code>.scatter</code>
+e a composição partilham uma gramática. Um ficheiro <code>.scatter</code> passa a ser uma <em>vista</em> da lista <code>classes</code>, não um
+segundo formato.</li>
+<li><strong>Tudo tem uma versão.</strong> <code>generator_version</code> no topo; a construção regista as versões de todas as receitas que usou,
+por isso um mundo antigo mantém o comportamento antigo até ser re-baked de propósito.</li>
+<li><strong><code>overrides</code></strong> é a camada esparsa de edição (secção 7), guardada no ficheiro para que o determinismo sobreviva a
+edições manuais.</li>
+</ul>
+<h2 id="4-adaptação-à-posição">4. Adaptação à posição<a class="anchor" href="#4-adaptação-à-posição" aria-label="Link to this section">#</a></h2>
+<p>Dois mecanismos separados; mantenha-os à parte porque têm custos diferentes.</p>
+<h3 id="41-hash-das-coordenadas-barato-existe">4.1 Hash das coordenadas (barato, existe)<a class="anchor" href="#41-hash-das-coordenadas-barato-existe" aria-label="Link to this section">#</a></h3>
+<p>Para cada classe, a colocação corre numa grelha global com jitter. Para uma célula <code>(cx, cz)</code>:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">cell_seed = deriveSeed(world_seed, class_salt, cx, cz)        // integer, platform independent
+variant   = floor(toUnit(deriveSeed(cell_seed, 1, 0, 0)) * N)
+yaw       = toUnit(deriveSeed(cell_seed, 2, 0, 0)) * 360
+scale     = lerp(min, max, toUnit(deriveSeed(cell_seed, 3, 0, 0)))
+tint      = jitter(toUnit(deriveSeed(cell_seed, 4, 0, 0)))
+</code></pre></div>
+<p>O resultado depende apenas da seed, da composição e do terreno, nunca da ordem de carregamento nem do tamanho do
+chunk, por isso duas metades de uma região somam o todo (já testado no núcleo de scatter). O <code>class_salt</code> deriva do
+<code>id</code> da classe, não da sua posição na lista, por isso reordenar classes não move todas as árvores.</p>
+<h3 id="42-contexto-do-solo-novo">4.2 Contexto do solo (novo)<a class="anchor" href="#42-contexto-do-solo-novo" aria-label="Link to this section">#</a></h3>
+<p>O hash sozinho dá variedade, não adaptação. Depois da camada de edição, a construção amostra o terreno na posição
+final de cada instância e guarda com ela um pequeno <strong>contexto</strong> (<code>InstanceContext</code> em
+<a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/world/WorldBuild.hpp" rel="noopener" class="ext"><code>WorldBuild.hpp</code></a>,
+também na instância da C ABI):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Contexto</th>
+<th>De onde</th>
+<th>Usos possíveis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>slope</code></td>
+<td>máscara incorporada</td>
+<td>inclinação, profundidade do alargamento das raízes, afundamento</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>máscara incorporada</td>
+<td>árvores atrofiadas perto do cume, neve</td>
+</tr>
+<tr>
+<td><code>wetness</code></td>
+<td>máscara guardada (0 quando o terreno não a tem)</td>
+<td>copa maior e mais densa perto da água; tonalidade de musgo</td>
+</tr>
+<tr>
+<td><code>water_distance</code></td>
+<td>camada de água (secção 5)</td>
+<td>juncos só na margem, salgueiros perto dela</td>
+</tr>
+<tr>
+<td><code>neighbours</code></td>
+<td>as instâncias geradas</td>
+<td>aglomeração: outras instâncias a menos de três raios, sobre 6</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>adapt &lt;target&gt; &lt;source&gt; [amount]</code> mapeia uma fonte (qualquer máscara do terreno, incluindo <code>water_distance</code>, ou
+<code>neighbours</code>), <code>v</code> em 0..1, num alvo:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Alvo</th>
+<th>Efeito</th>
+<th>Quantidade por omissão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>size</code></td>
+<td><code>scale *= 1 + amount * (2v - 1)</code></td>
+<td>0.25</td>
+</tr>
+<tr>
+<td><code>lean</code></td>
+<td>inclinação na direção da normal <code>+= amount * v</code></td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><code>tint</code></td>
+<td><code>tint *= 1 - amount * v</code></td>
+<td>0.2</td>
+</tr>
+<tr>
+<td><code>wetness</code>, <code>snow</code></td>
+<td>o modificador de runtime <code>= amount * v</code> (modificadores da CAPI v10)</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>param.&lt;name&gt;</code></td>
+<td>um parâmetro exposto da receita de natureza da classe <code>= amount * v</code>: muda o <strong>bake</strong></td>
+<td>1</td>
+</tr>
+</tbody>
+</table></div>
+<p>Os vizinhos são contados sobre as instâncias geradas, <em>antes</em> da camada de edição, por isso mover ou remover uma
+instância nunca altera outra; a construção lê uma margem de três raios à volta da região, por isso as regiões
+continuam a somar o todo. <code>param.&lt;name&gt;</code> (no máximo quatro por classe) é a v2: o contexto passa a ser uma entrada do
+grafo Nature, de modo que uma árvore cresce para o seu sítio. O grafo tem de expor esse parâmetro (<code>expose</code> no grafo
+de natureza); o motor reporta os valores por instância e o editor faz o bake dos modelos.</p>
+<h3 id="43-pool-versus-bake-único">4.3 Pool versus bake único<a class="anchor" href="#43-pool-versus-bake-único" aria-label="Link to this section">#</a></h3>
+<p>Um bake por árvore seria exato e lento demais. Por isso o Composer mantém um <strong>pool de variantes</strong> por classe (N
+variantes baked, em cache como hoje) e o hash escolhe uma, que depois deforma e tinge. Uma classe com mapeamentos
+<code>param.&lt;name&gt;</code> faz o bake de um modelo por conjunto de valores quantizados e reutiliza-o. Uma classe pode ser marcada
+<code>unique on</code> para objetos de destaque (algumas árvores perto do início do jogador): é baked por instância, com a seed
+da instância. Por omissão usa o pool.</p>
+<h2 id="5-pipeline-de-construção">5. Pipeline de construção<a class="anchor" href="#5-pipeline-de-construção" aria-label="Link to this section">#</a></h2>
+<p>Uma função determinística, <code>World::build(request) -&gt; WorldPart</code>
+(<a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/world/WorldBuild.hpp" rel="noopener" class="ext"><code>WorldBuild.hpp</code></a>), no
+núcleo, para que o Doppio, o runtime e o driver headless corram o mesmo código. A C ABI envolve-a sem sessão
+(<code>caffeine_world_build</code>, v28):</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">1. resolve     every ref -&gt; recipe (kind and version checked); fail with a list, build nothing
+2. terrain     the caller bakes the terrain recipe and passes height + masks (the graph lives in Doppio)
+3. water       rivers follow a mask, carve the bed, lakes fill basins, then the water_distance mask
+4. materials   checked and passed through as bindings
+5. classes     the scatter core, every class at once: priority + exclusion radius decide conflicts,
+                 the biome terms decide density, the class id&#x27;s hash is its salt
+6. overrides   the edit layer (remove, move, pin), then the ground context and the adapt mappings
+7. output      instance lists per class (placement order) + carved terrain + water + material bindings
+</code></pre></div>
+<p>Notas:</p>
+<ul>
+<li><strong>A ordem de prioridade é a regra que impede uma árvore de crescer através de uma rocha</strong>: primeiro rochas, depois
+árvores, depois arbustos, depois erva, cada uma com o seu raio de exclusão. Resolvido na colocação, não na malha.</li>
+<li><strong>Água antes do scatter</strong>, para que <code>water_distance</code> exista
+(<a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/world/WorldWater.hpp" rel="noopener" class="ext"><code>WorldWater.hpp</code></a>).
+Um rio é cada vértice onde a sua máscara <code>follow</code> é pelo menos <code>min</code>; <code>carve &lt;m&gt;</code> baixa esse leito numa cópia do
+heightfield antes de qualquer classe ler uma máscara, por isso as máscaras incorporadas <code>slope</code> e <code>curvature</code> veem as
+novas margens, e a superfície fica a 70% da profundidade. Um lago é cada vértice abaixo tanto da sua altura de
+transbordo (um priority-flood a partir da borda) como de <code>level</code>. <code>water_distance</code> vem de uma transformada chamfer
+3-4 inteira, por isso todas as máquinas obtêm os mesmos bytes. A água é calculada sobre o terreno inteiro, seja qual
+for a região, na CPU: o limite documentado é um heightfield limitado (129 a 513 vértices de lado).</li>
+<li><strong>Região</strong>: a função recebe um retângulo, como <code>scatterTerrain</code>, por isso o streaming futuro é a mesma chamada por chunk.</li>
+<li><strong>A saída são dados, não entidades.</strong> Construções pequenas (até 3000 instâncias) criam uma entidade por instância,
+como o Scatter. As grandes escrevem um bake de instâncias (<code>.cinst</code>) e um ficheiro de modelos e desenham-nos a partir
+de uma entidade com o componente <code>World Instances</code>; o caminho por entidade é o que torna lento editar milhares de
+instâncias.</li>
+</ul>
+<h3 id="para-onde-vai-o-resultado">Para onde vai o resultado<a class="anchor" href="#para-onde-vai-o-resultado" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Saída</th>
+<th>O que é</th>
+<th>Quando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cena viva</td>
+<td>o contentor <code>World &lt;name&gt;</code> no canto do terreno: um filho <code>&lt;name&gt; terrain</code> (o terreno baked e escavado, com as suas máscaras e <code>water_distance</code>), uma entidade de água <code>&lt;name&gt; lake N</code> por lago, e um filho por instância com as suas partes de natureza baked</td>
+<td>edição, mundos pequenos</td>
+</tr>
+<tr>
+<td><code>World/&lt;name&gt;.prefab</code></td>
+<td>a árvore guardada, lembra-se do seu <code>.generator.world</code></td>
+<td>colocar o mesmo mundo noutras cenas</td>
+</tr>
+<tr>
+<td><code>World/&lt;name&gt;.cinst</code> + <code>World/&lt;name&gt;.models</code></td>
+<td>o bake de instâncias (classes, depois instâncias em chunks quadrados de 64 m, a chave de cache e o hash das instâncias) e o ficheiro de modelos; o contentor recebe o componente <code>World Instances</code></td>
+<td>mundos grandes (mais de 3000 instâncias), desenho em runtime</td>
+</tr>
+<tr>
+<td><code>&lt;assets&gt;/.cache/world/</code></td>
+<td>a cache de bakes (<code>&lt;key&gt;.cinst</code>) e os modelos de natureza baked</td>
+<td>todas as construções</td>
+</tr>
+</tbody>
+</table></div>
+<p>Todos vêm do mesmo <code>WorldPart</code>; a receita continua a ser a fonte da verdade. Uma reconstrução substitui o
+<code>World &lt;name&gt;</code> anterior e mantém a sua posição.</p>
+<h3 id="desenhar-um-bake">Desenhar um bake<a class="anchor" href="#desenhar-um-bake" aria-label="Link to this section">#</a></h3>
+<p>O componente <code>World Instances</code> (<code>Bake</code>, <code>Models</code>, <code>Draw distance</code>, <code>Cast shadows</code>;
+<a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/world/WorldInstanceDraw.hpp" rel="noopener" class="ext"><code>WorldInstanceDraw.hpp</code></a>)
+desenha todas as instâncias de um bake a partir de uma entidade. O seu ficheiro de modelos tem uma linha por parte de modelo:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text"># class variant mesh [slots a.mat;b.mat] [cutout on|off]
+0 0 .cache/world/nature/oak_tree_3f2a9c0d11e84b27/oak_tree_trunk.obj
+0 0 .cache/world/nature/oak_tree_3f2a9c0d11e84b27/oak_tree_leaves.obj cutout on
+# a per-instance model (unique or parameter-driven class) wins over the variant line
+1 cell 12 -4 .cache/world/nature/pine_9b07e15c4d2a6f80/pine_trunk.obj
+</code></pre></div>
+<p>O renderer carrega o bake e o ficheiro de modelos uma vez por alteração, salta chunks inteiros fora do frustum ou para
+lá de <code>Draw distance</code>, e transforma cada instância visível em desenhos de malha normais, que o instancing existente
+agrupa em lotes (a tonalidade é quantizada a 1/32 para que as instâncias continuem a partilhar lotes). As partes com
+recorte não projetam sombra. Cada parte cozida indica o seu material em <code>slots</code>: os mesmos assets <code>.mat</code> que o Nature
+Generator escreve ao colocar a árvore (casca, cartões de folhas, superfícies de rocha, o seu próprio material),
+registados ao lado dos OBJ em cache em <code>.materials</code>. Rios e lagos são entidades de água moldadas pela grelha de
+superfície do motor (<code>caffeine_world_water_surface</code> e <code>caffeine_session_set_water_surface</code>); com uma biblioteca sem ela
+um lago é um plano e um rio é só escavado.</p>
+<h2 id="6-o-separador-composer">6. O separador Composer<a class="anchor" href="#6-o-separador-composer" aria-label="Link to this section">#</a></h2>
+<p>Um separador <strong>World</strong> (View &gt; World Composer, ou duplo clique num <code>*.generator.world</code> em Assets) construído só com componentes:</p>
+<ul>
+<li><strong>Library</strong>: as receitas <code>generator.*</code> do projeto por tipo (terrain, nature, water, material, texture). Arraste uma
+para a linha de largar da Composition, ou clique nela, para a adicionar.</li>
+<li><strong>Composition</strong>: a linha do terreno, as linhas de água, as linhas de material e as linhas de classe (ref, variants,
+priority), e por cima delas um <strong>Graph</strong> (<code>world.composition.graph</code>, um <code>node_canvas</code>): os mesmos blocos de
+construção como nodes, cada um ligado a uma saída <code>World</code> — o Terrain alimenta cada node de Water e de Class (o
+solo onde crescem ou escavam), e os nodes de Water, Material e Class alimentam todos o <code>World</code>. É uma vista sobre a
+composição, não uma superfície de edição: clicar num node de classe seleciona-a (o painel Rules abaixo mostra então
+as suas propriedades, tal como clicar na sua linha); arrastar um node só reorganiza o layout, que é estado de UI só
+de sessão, não faz parte da receita gravada. A forma do grafo corresponde sempre ao que foi adicionado — não há
+religação, por isso <code>Connect</code>/<code>Detach</code> no canvas não fazem nada.</li>
+<li><strong>Rules</strong>: as propriedades da classe selecionada, os seus termos <code>where</code> como sliders, os seus mapeamentos <code>adapt</code>,
+<code>unique</code>, a seed com um botão <em>Reseed</em> (uma seed derivada, com undo), e a camada de edição: linhas de pin e de move,
+um retângulo de região com <em>Remove in region</em>, e um <strong>pincel de remoção</strong>. Com o pincel ativo, arrastar com o botão
+esquerdo no Viewport remove as instâncias da última construção sob o anel; o traço é um passo de undo e escreve
+linhas <code>override remove</code>.</li>
+<li><strong>Preview</strong>: uma construção grosseira após cada edição, com debounce, numa thread de trabalho (o bake do terreno e
+a construção no motor, através de um <code>WorldBuilder</code> sem sessão); ganha a última edição e todas as instâncias contam.</li>
+<li><strong>Build</strong>: a construção completa através da cache de bakes; um passo de undo; a linha de estado reporta instâncias
+por classe, o tempo, se a cache respondeu e quantos modelos foram baked. <em>Save as prefab</em> escreve <code>World/&lt;name&gt;.prefab</code>;
+<em>Frame</em> aponta a câmara do Viewport para a última construção.</li>
+</ul>
+<figure>
+  <img src="/pt/docs/images/doppio/world/ui/world-tab.png" alt="O separador World: Library, Composition e Rules ao lado do Viewport" loading="lazy">
+  <figcaption>O separador World com o fixture headless <code>world</code>: duas receitas de rocha sobre um terreno de colinas.</figcaption>
+</figure>
+<figure>
+  <img src="/pt/docs/images/doppio/world/ui/world-built.png" alt="O separador World depois de um build, com a linha de estado a indicar as instâncias por classe e a cache" loading="lazy">
+  <figcaption>Depois de <em>Build</em>: 93 instâncias (63 rock, 30 stone), cache miss, uma entidade por instância.</figcaption>
+</figure>
+<p>Aplicam-se as regras do projeto: cada widget tem um <code>UiId</code> e uma entrada no <code>CATALOG</code>, as edições da composição usam a
+pilha de undo do separador e uma construção é um único <code>App::commit</code> da cena, e cada comando é uma <code>Message</code> e uma ação
+MCP: <code>world_show</code>, <code>world_add</code>, <code>world_add_class</code>, <code>world_set_class</code>, <code>world_set_rule</code>, <code>world_reseed</code>, <code>world_preview</code>,
+<code>world_build</code>, <code>world_remove_in_region</code>, <code>world_brush</code>, <code>world_remove_in_circle</code>, <code>world_undo</code>, <code>world_save</code>,
+<code>world_save_prefab</code>, <code>world_frame</code>, mais a consulta só de leitura <code>world</code>. O fixture headless <code>world_showcase</code> é um
+mundo com ar de mundo (colinas à volta de um vale, um rio, um lago, árvores, rochas, arbustos e erva) para as imagens da
+documentação. O fluxo headless <code>doppio/tests/ui-flows/world-composer.json</code>
+adiciona, arrasta e desfaz uma classe, faz reseed, edita uma regra, ativa o pincel e constrói;
+<code>doppio/crates/ui/src/windows/main/tests.rs</code> cobre mundos grandes, acertos na cache, escavação e lagos, o pincel e o prefab.</p>
+<h2 id="7-edições-determinismo-e-cache">7. Edições, determinismo e cache<a class="anchor" href="#7-edições-determinismo-e-cache" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>Camada de edição.</strong> Esculpir, mover uma árvore e apagar uma rocha são guardados como <code>overrides</code> esparsos indexados
+por <code>(class, cell)</code>: <code>remove</code>, <code>move to</code>, <code>pin variant</code>. Aplicam-se <em>depois</em> da geração, por isso o mundo gerado
+nunca deixa de ser reproduzível. Mover uma árvore não altera nenhuma outra árvore.</li>
+<li><strong>Chave de cache.</strong> A seed, <code>generator_version</code>, o texto da composição, o hash de conteúdo e a versão de cada receita
+usada, o terreno baked (alturas e máscaras guardadas), a região e o orçamento de instâncias. <code>cacheKeyOf(request)</code>
+calcula-a sem construir. <code>WorldCache</code> guarda os bakes em disco como <code>&lt;key&gt;.cinst</code>
+(<a href="https://github.com/devscafecommunity/caffeine/blob/main/src/caffeine/world/WorldInstanceFile.hpp" rel="noopener" class="ext"><code>WorldInstanceFile.hpp</code></a>;
+<code>caffeine_world_build_cached</code> na C ABI). Mudar uma receita, ou esculpir o terreno, invalida apenas o que depende disso.</li>
+<li><strong>Sem vírgula flutuante nas decisões de colocação.</strong> Aceitar/rejeitar e a ordem das células usam inteiros; fixe o
+ruído e as chamadas <code>libm</code> que decidem <em>onde</em>, como o roadmap já exige.</li>
+<li><strong>Testes golden</strong>: <code>tests/test_world.cpp</code> fixa o hash das instâncias de uma composição pequena e os salts das classes
+(cujo gémeo em Rust é <code>recipe_ref::content_hash</code>), verifica que a construção com 1 e 7 threads é idêntica, que as
+metades somam o todo (incluindo água e aglomeração) e que um <code>.cinst</code> é igual byte a byte para a mesma construção.</li>
+</ul>
+<h2 id="8-lacunas-por-ordem-de-construção">8. Lacunas, por ordem de construção<a class="anchor" href="#8-lacunas-por-ordem-de-construção" aria-label="Link to this section">#</a></h2>
+<p>Cada passo é útil sozinho e testável em headless. <code>[x]</code> significa que já é verdade no <code>main</code> do motor.</p>
+<h3 id="c0-fundações">C0 — Fundações<a class="anchor" href="#c0-fundações" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Receitas com <code>generator_version</code>; resolvedor e variantes em cache.</li>
+<li>[x] Hash inteiro, os mesmos números em C++ e em Rust.</li>
+<li>[x] Máscaras, tabela de biomas, núcleo de scatter, ação Scatter on Terrain.</li>
+<li>[x] O caf-pack ignora <code>*.generator.world</code> (<code>Registry::isEditorOnly</code> corresponde a qualquer nome com <code>.generator.</code>).</li>
+<li>[x] Tipo de receita <code>generator.world</code> no Doppio: <code>recipe::Kind::World</code>, tipo de asset, duplo clique abre o separador.</li>
+</ul>
+<h3 id="c1-modelo-de-composição-e-construção-headless-núcleo-sem-ui">C1 — Modelo de composição e construção headless (núcleo, sem UI)<a class="anchor" href="#c1-modelo-de-composição-e-construção-headless-núcleo-sem-ui" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] <code>src/caffeine/world</code>: analisar e validar o texto de <code>graph</code> (<code>WorldComposition</code>); <code>build(request)</code> com o código
+de scatter e de biomas existente; saída <code>WorldPart</code> (instâncias agrupadas por classe, por ordem de colocação).</li>
+<li>[x] Salt de classe a partir do <code>id</code> da classe (<code>classSalt</code>, FNV-1a + SplitMix64, gémeo em Rust <code>recipe_ref::content_hash</code>);
+resolução de refs através de um callback resolvedor com verificação de tipo e versão; lista de erros tudo-ou-nada.</li>
+<li>[x] Camada de edição: <code>override remove|move|pin</code>, indexada por <code>(class, cell)</code>; <code>Scatter::Instance</code> transporta a sua célula.</li>
+<li>[x] C ABI v28: <code>caffeine_world_build</code> e os seus getters, <code>caffeine_world_check</code>, POD, testes em C++ e em Rust.</li>
+<li>[x] Testes (<code>tests/test_world.cpp</code>): as metades somam o todo; reordenar ou adicionar classes não move as
+outras; 7 threads igual a 1; overrides; hash golden das instâncias.</li>
+</ul>
+<h3 id="c2-a-água-como-parte-da-composição">C2 — A água como parte da composição<a class="anchor" href="#c2-a-água-como-parte-da-composição" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Máscara <code>water_distance</code> a partir dos corpos de água; os rios seguem uma máscara, os lagos enchem bacias abaixo de um nível.</li>
+<li>[x] Escavação opcional do leito antes de as máscaras serem lidas (limite documentado: CPU, heightfield limitado).</li>
+<li>[x] Refs de água verificadas e ligadas: os lagos são colocados como entidades de água com o aspeto da sua receita.</li>
+<li>[x] Rios e margens de lagos desenhados como superfícies de água moldadas (com a grelha de superfície do motor).</li>
+</ul>
+<h3 id="c3-contexto-do-solo-e-adaptação">C3 — Contexto do solo e adaptação<a class="anchor" href="#c3-contexto-do-solo-e-adaptação" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Amostragem de contexto (declive, altura, humidade, distância à água, vizinhos) por instância.</li>
+<li>[x] Mapeamentos <code>adapt</code> para escala, inclinação e tonalidade da instância e para os modificadores de runtime de humidade e neve.</li>
+<li>[x] Parâmetros expostos em <code>generator.nature</code> (<code>expose</code>) e <code>adapt param.&lt;name&gt;</code>, para que o contexto conduza o <strong>bake</strong>;
+pool (conjuntos de valores quantizados) versus <code>unique</code> (por instância).</li>
+<li>[ ] Um controlo no Nature Generator para expor um parâmetro (hoje a linha <code>expose</code> é escrita no texto do grafo).</li>
+</ul>
+<h3 id="c4-saída-e-renderização">C4 — Saída e renderização<a class="anchor" href="#c4-saída-e-renderização" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Saída <code>.prefab</code> que mantém a ligação ao seu <code>generator.world</code>.</li>
+<li>[x] Bake de instâncias <code>.cinst</code> e o caminho de desenho <code>World Instances</code> (culling por chunk, instancing existente).</li>
+<li>[x] Cache de bakes persistente, indexada como na secção 7.</li>
+<li>[ ] Impostores, buffers de instâncias na GPU por chunk e LOD de malha para instâncias (fase 4 do roadmap); picking de
+instâncias; o renderer de runtime, o shadow map de CPU e o bake Photon ainda não desenham <code>World Instances</code>.</li>
+<li>[x] Materiais nas partes de natureza cozidas: as entidades recebem-nos como as partes compostas do Scatter, os ficheiros de modelos como <code>slots</code>.</li>
+</ul>
+<h3 id="c5-editor">C5 — Editor<a class="anchor" href="#c5-editor" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Separador World, arrastar da biblioteca, editor de regras, construção de pré-visualização, ação de construção com undo.</li>
+<li>[x] <code>UiId</code>s, ações MCP, fluxo e fixture headless, capturas através do driver headless
+(<code>scripts/capture-world-docs.sh</code>).</li>
+<li>[x] Pintura de overrides: o pincel de remoção no Viewport e o retângulo de região.</li>
+<li>[x] A pré-visualização corre numa thread de trabalho através de <code>WorldBuilder</code> (sem limite de instâncias; resultados obsoletos são descartados).</li>
+</ul>
+<h3 id="c6-documentação">C6 — Documentação<a class="anchor" href="#c6-documentação" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Espelho em português (<code>content/pt/docs/doppio/world-composition.md</code>) e ambas as auditorias.</li>
+<li>[x] Os guias Nature, Terrain e Water apontam para aqui.</li>
+</ul>
+<h2 id="9-riscos-e-questões-em-aberto">9. Riscos e questões em aberto<a class="anchor" href="#9-riscos-e-questões-em-aberto" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risco ou questão</th>
+<th>Plano</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Instâncias por entidade não escalam</td>
+<td><code>.cinst</code> + <code>World Instances</code> (C4); entidades só para construções pequenas</td>
+</tr>
+<tr>
+<td>Adaptar o bake precisa de parâmetros de grafo que o Nature não expõe</td>
+<td><code>expose</code> no grafo de natureza e <code>adapt param.&lt;name&gt;</code> (C3)</td>
+</tr>
+<tr>
+<td>Escavar um rio altera todas as máscaras</td>
+<td>escavar primeiro, depois ler as máscaras; a chave de cache inclui-o</td>
+</tr>
+<tr>
+<td>Reordenar classes ou editar uma receita baralha o mundo</td>
+<td>salt a partir do id da classe; hashes por receita na chave de cache</td>
+</tr>
+<tr>
+<td>Os floats decidem a colocação entre máquinas</td>
+<td>decisões inteiras, testes golden</td>
+</tr>
+<tr>
+<td>A unidade é &quot;um mundo&quot; ou &quot;uma região&quot;?</td>
+<td>a construção recebe uma região, por isso ambas funcionam; um terreno por composição até existir tiling de terreno (a saída do gerador é 129/257/513)</td>
+</tr>
+<tr>
+<td><code>.scatter</code> versus <code>.generator.world</code></td>
+<td>o <code>.scatter</code> continua legível e passa a ser uma vista de <code>classes</code>; sem segundo formato</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="10-relacionado">10. Relacionado<a class="anchor" href="#10-relacionado" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/pt/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>: as fases de motor, renderização, streaming e qualidade sobre as quais isto assenta.</li>
+<li><a href="/pt/docs/doppio/generator-recipes/"><code>generator-recipes.md</code></a>: ficheiros de receita, referências, variantes, o hash.</li>
+<li><a href="/pt/docs/doppio/terrain-generator-guide/"><code>terrain-generator-guide.md</code></a>: máscaras, tabela de biomas, scatter.</li>
+<li><a href="/pt/docs/doppio/nature-generator-guide/"><code>nature-generator-guide.md</code></a>, <a href="/pt/docs/doppio/water-generator-guide/"><code>water-generator-guide.md</code></a>, <a href="/pt/docs/doppio/material-pipeline/"><code>material-pipeline.md</code></a>.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/pt/docs/doppio/world-composition.md" rel="noopener">Editar esta página</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/pt/docs/doppio/water-generator-guide/"><span>Anterior</span><strong>Water Generator: corpos de água construídos com nós</strong></a><a class="pager-next" href="/pt/docs/plugins/"><span>Seguinte</span><strong>Plugins</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="Nesta página"><div class="toc-title">Nesta página</div><ul><li class="l2"><a href="#1-a-ideia-numa-imagem">1. A ideia numa imagem</a></li><li class="l2"><a href="#2-o-que-já-existe">2. O que já existe</a></li><li class="l2"><a href="#3-o-ficheiro-de-composição">3. O ficheiro de composição</a></li><li class="l2"><a href="#4-adaptação-à-posição">4. Adaptação à posição</a></li><li class="l3"><a href="#41-hash-das-coordenadas-barato-existe">4.1 Hash das coordenadas (barato, existe)</a></li><li class="l3"><a href="#42-contexto-do-solo-novo">4.2 Contexto do solo (novo)</a></li><li class="l3"><a href="#43-pool-versus-bake-único">4.3 Pool versus bake único</a></li><li class="l2"><a href="#5-pipeline-de-construção">5. Pipeline de construção</a></li><li class="l3"><a href="#para-onde-vai-o-resultado">Para onde vai o resultado</a></li><li class="l3"><a href="#desenhar-um-bake">Desenhar um bake</a></li><li class="l2"><a href="#6-o-separador-composer">6. O separador Composer</a></li><li class="l2"><a href="#7-edições-determinismo-e-cache">7. Edições, determinismo e cache</a></li><li class="l2"><a href="#8-lacunas-por-ordem-de-construção">8. Lacunas, por ordem de construção</a></li><li class="l3"><a href="#c0-fundações">C0 — Fundações</a></li><li class="l3"><a href="#c1-modelo-de-composição-e-construção-headless-núcleo-sem-ui">C1 — Modelo de composição e construção headless (núcleo, sem UI)</a></li><li class="l3"><a href="#c2-a-água-como-parte-da-composição">C2 — A água como parte da composição</a></li><li class="l3"><a href="#c3-contexto-do-solo-e-adaptação">C3 — Contexto do solo e adaptação</a></li><li class="l3"><a href="#c4-saída-e-renderização">C4 — Saída e renderização</a></li><li class="l3"><a href="#c5-editor">C5 — Editor</a></li><li class="l3"><a href="#c6-documentação">C6 — Documentação</a></li><li class="l2"><a href="#9-riscos-e-questões-em-aberto">9. Riscos e questões em aberto</a></li><li class="l2"><a href="#10-relacionado">10. Relacionado</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Motor Caffeine e Doppio. A documentação faz parte do projeto open source.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Código-fonte</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Pesquisar na documentação">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Pesquisar…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Escreva para pesquisar títulos, secções e texto.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"pt",search:"/pt/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

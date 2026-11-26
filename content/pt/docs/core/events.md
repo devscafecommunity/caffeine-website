@@ -310,7 +310,7 @@ bus.publishDeferred(OnCollision2D{ ... });
   `ScriptEngine` (`src/caffeine/script`) expõe `on`/`emit` para Lua; `UISystem` (`src/caffeine/ui`)
   e `SceneEditor` (`doppio-archived/src/doppio/editor/`) consomem eventos
 - **Docs relacionados:** [Physics 2D](../physics/physics-2d.md), [Audio](../audio/audio-system.md),
-  [Game UI](../ui/game-ui.md), [GameLoop](../core/game-loop.md) (chama `dispatch()`)
+  [Game UI](../runtime-ui/game-ui.md), [GameLoop](../core/game-loop.md) (chama `dispatch()`)
 
 ---
 

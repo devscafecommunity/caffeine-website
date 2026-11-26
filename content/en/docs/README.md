@@ -38,12 +38,12 @@ the editor talks to it through <code>libcaffeine-capi</code>.</p>
     <tr>
       <td><strong>Editor testing</strong></td>
       <td><a href="editor/test-automation.md">Test automation</a></td>
-      <td><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md">Headless driver reference</a>, <a href="editor/ui-reference.md">UI reference</a></td>
+      <td><a href="doppio/headless-testing.md">Headless driver reference</a>, <a href="editor/ui-reference.md">UI reference</a></td>
     </tr>
     <tr>
       <td><strong>Content tools</strong></td>
-      <td><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/material-pipeline.md">Material pipeline</a></td>
-      <td><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/materials-guide.md">Materials guide</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/nature-generator-guide.md">Nature</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/terrain-generator-guide.md">Terrain</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/water-generator-guide.md">Water</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/texture-generator-guide.md">Texture</a></td>
+      <td><a href="doppio/material-pipeline.md">Material pipeline</a></td>
+      <td><a href="doppio/materials-guide.md">Materials guide</a>, <a href="doppio/nature-generator-guide.md">Nature</a>, <a href="doppio/terrain-generator-guide.md">Terrain</a>, <a href="doppio/water-generator-guide.md">Water</a>, <a href="doppio/texture-generator-guide.md">Texture</a></td>
     </tr>
     <tr>
       <td><strong>Engine core</strong></td>

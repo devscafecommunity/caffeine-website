@@ -65,7 +65,7 @@ wizard and the generator graphs.
 
 Each flow starts from a deterministic fixture, acts with `id:`/`text:` targets and
 asserts with `expect`. Screenshots, baselines and GIF/MP4 recording are available for
-visual work. See [Headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+visual work. See [Headless testing](../doppio/headless-testing.md)
 and [Test automation](../editor/test-automation.md).
 
 ## CI
@@ -106,6 +106,6 @@ user-visible editor change adds a flow; an engine behaviour change adds a Catch2
 
 ## Related pages
 
-- [Headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- [Headless testing](../doppio/headless-testing.md)
 - [Test automation](../editor/test-automation.md)
 - [Building](../getting-started/building.md)

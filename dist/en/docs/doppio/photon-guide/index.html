@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photon: global illumination in Doppio · Caffeine</title>
+<meta name="description" content="Indirect light, colour bleeding and sky occlusion without ray-tracing hardware, and the Photon tab that manages it.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Photon: global illumination in Doppio · Caffeine">
+<meta property="og:description" content="Indirect light, colour bleeding and sky occlusion without ray-tracing hardware, and the Photon tab that manages it.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/photon-guide/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/photon-guide/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/photon-guide/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/photon-guide/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link active" href="/en/docs/doppio/photon-guide/" aria-current="page">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Photon: global illumination in Doppio</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last updated: <time datetime="2026-11-21">2026-11-21</time></span>
+</div>
+<p class="doc-lede">Indirect light, colour bleeding and sky occlusion without ray-tracing hardware, and the Photon tab that manages it.</p>
+<p>Photon is the engine's global illumination (GI). Doppio edits it from the <strong>Photon</strong> tab (View menu, next to the
+generators) and from the <code>Photon GI</code> component in the Inspector: both write the same fields, so they never disagree.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/photon/ui/photon-pane.png" alt="The Photon tab with the component added" loading="lazy">
+  <figcaption>The Photon tab: lighting, voxel geometry, debug view and the live voxel statistics</figcaption>
+</figure>
+<h2 id="1-how-photon-works">1. How Photon works<a class="anchor" href="#1-how-photon-works" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Part</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Near field</td>
+<td>Screen-anchored radiance cascades (K to 0) traced against the depth buffer, merged front to back and resolved to SH-L1 probes (<code>photon_cascade.comp</code>, <code>photon_c0.comp</code>)</td>
+</tr>
+<tr>
+<td>Far field</td>
+<td>Four clipmap levels of voxels (cells of 0.25, 0.5, 1 and 2 m, 64 cubed each) with a lattice of probes per level; rays that leave the screen query it</td>
+</tr>
+<tr>
+<td>Material volume</td>
+<td>The albedo and coverage of the scene's surfaces, written by the <strong>triangle voxeliser</strong> (<code>photon_voxelize_tri.comp</code>) and by the screened fill</td>
+</tr>
+<tr>
+<td>Injection</td>
+<td>The sun, point and spot lights, and the sky, are injected into the voxel faces with a shadow marched through the material volume (<code>photon_inject.comp</code>)</td>
+</tr>
+<tr>
+<td>Feedback</td>
+<td>The previous frame's irradiance is fed back with a cap and a reprojected history, which is the multi-bounce</td>
+</tr>
+<tr>
+<td>Temporal average</td>
+<td>Every probe offsets its traced directions by its own fixed amount, so the noise is not coherent; the resolve averages the reprojected irradiance of the previous frame into this one (weight 0.4 while the scene changes, 0.07 when still, quicker for large differences), and the far probes follow the same weight</td>
+</tr>
+</tbody>
+</table></div>
+<p>The screen cascades dominate what the camera sees. The far field is what lights a surface from things the camera does
+not see: the wall behind it, the underside of a ceiling, the sun's bounce through a slit.</p>
+<h2 id="2-the-photon-tab">2. The Photon tab<a class="anchor" href="#2-the-photon-tab" aria-label="Link to this section">#</a></h2>
+<p>The tab edits the first <code>Photon GI</code> component of the scene (the renderer reads the last enabled one, so keep one). <strong>Add Photon GI</strong>
+creates it on a new entity (on, compute path, High quality) when the scene has none. Every edit goes through the engine's component API and records one undo step
+(a slider is one step per field, not per value).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Field</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Enabled</strong></td>
+<td><code>Enabled</code></td>
+<td>Photon on or off</td>
+</tr>
+<tr>
+<td><strong>Path</strong></td>
+<td><code>Path</code></td>
+<td>The screen fallback gather, or the compute cascades with the voxel far field</td>
+</tr>
+<tr>
+<td><strong>Quality</strong></td>
+<td><code>Quality</code></td>
+<td>Off, Low, Balanced, High or Eco: probe spacing and cascade count</td>
+</tr>
+<tr>
+<td><strong>Intensity</strong></td>
+<td><code>Intensity</code></td>
+<td>Multiplier of the indirect light, near field and far field alike</td>
+</tr>
+<tr>
+<td><strong>Bounce gain</strong></td>
+<td><code>Bounce gain</code></td>
+<td>Scales the light the voxels hold (see section 4)</td>
+</tr>
+<tr>
+<td><strong>Sky</strong></td>
+<td><code>Sky intensity</code></td>
+<td>The sky light a ray finds when it leaves the screen and the voxels</td>
+</tr>
+<tr>
+<td><strong>Ambient</strong></td>
+<td><code>Ambient</code></td>
+<td>An extra ambient bounce added to the fallback</td>
+</tr>
+<tr>
+<td><strong>Radius</strong></td>
+<td><code>Radius</code></td>
+<td>Reach of the screen cascades, in world units</td>
+</tr>
+<tr>
+<td><strong>Skinned meshes</strong></td>
+<td><code>Voxel skinned meshes</code></td>
+<td>Skinned meshes in the volume, in their current pose</td>
+</tr>
+<tr>
+<td><strong>Cut-out meshes as solid</strong></td>
+<td><code>Voxel cut-out meshes</code></td>
+<td>Foliage cards count as solid blocks (off by default)</td>
+</tr>
+<tr>
+<td><strong>Terrain</strong></td>
+<td><code>Voxel terrain</code></td>
+<td>Terrain meshes in the volume</td>
+</tr>
+<tr>
+<td><strong>Full rebuilds</strong></td>
+<td><code>Full rebuilds</code></td>
+<td>Diagnostic: rebuild every level on every change</td>
+</tr>
+<tr>
+<td><strong>Rebuild voxels</strong></td>
+<td></td>
+<td>Throw the volume away; the next frame voxelises the scene again</td>
+</tr>
+<tr>
+<td><strong>View</strong></td>
+<td><code>Debug view</code></td>
+<td>Lit scene, GI only, or the sky fallback only</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3-what-is-in-the-voxel-volume">3. What is in the voxel volume<a class="anchor" href="#3-what-is-in-the-voxel-volume" aria-label="Link to this section">#</a></h2>
+<p>The triangle voxeliser writes the scene's geometry into the volume, including what the camera never sees:</p>
+<ul>
+<li><strong>Opaque meshes</strong> always, with the colour of their material times the mean colour of its picture (mid grey when the
+picture cannot be read), per material slot. Blended surfaces are not solid and stay out.</li>
+<li><strong>Terrain</strong> from its mesh, with an earth colour taken from its tint (its splat layers are not one picture).</li>
+<li><strong>Skinned meshes</strong> in the pose of the frame; they are revoxelised where they move.</li>
+<li><strong>Cut-out meshes</strong> only when the switch is on: foliage cards then shade like solid blocks.</li>
+<li>Water and volumetric lights never.</li>
+</ul>
+<h3 id="dirty-regions">Dirty regions<a class="anchor" href="#dirty-regions" aria-label="Link to this section">#</a></h3>
+<p>Each object has a hash of its mesh, transform, pose and colour. A frame where nothing changed costs one hash per object.
+When an object moves, the voxeliser clears and revoxelises only the boxes where it was and where it is, in all four levels
+(each box padded by one cell of the level); at most eight boxes, beyond that the levels rebuild whole. A level also rebuilds
+whole when its clipmap origin moves. The panel shows both counts.</p>
+<h3 id="the-1-million-triangle-cap">The 1 million triangle cap<a class="anchor" href="#the-1-million-triangle-cap" aria-label="Link to this section">#</a></h3>
+<p>Above 1 million triangles the voxeliser does not run and only the screened fill remains (it covers what the camera sees).
+The panel shows <strong>Over 1M triangles: screen fill only</strong> and the engine reports <code>over_budget</code>. Nothing is dropped silently.</p>
+<h3 id="what-it-costs-probes-outside-the-view-and-coarse-levels">What it costs: probes outside the view and coarse levels<a class="anchor" href="#what-it-costs-probes-outside-the-view-and-coarse-levels" aria-label="Link to this section">#</a></h3>
+<p>The far field traces 16,384 probes (4 levels of 16 cubed), about 100 rays each, so it was the biggest cost of Photon (25 ms at 720p on the benchmark
+scene). A surface the camera sees reads the probes within about one spacing of it, so:</p>
+<ul>
+<li>
+<p>A probe more than 1.8 spacings outside the camera's frustum is not traced: its tile is carried over from the previous frame and its SH is left as it was. A probe that was out of view for more
+than 120 frames starts from a fresh trace when it comes back.</p>
+</li>
+<li>
+<p>While the scene is calm (the temporal weight below 0.2) level 1 and level 2 are traced every second frame and level 3 every fourth, with the previous frame's weight raised to the period so they
+converge as fast per second. While anything changes every level follows every frame.</p>
+</li>
+<li>
+<p>The border texels of a probe's tile repeat the nearest of the 8 by 8 interior directions, so they copy what the interior traced instead of tracing 36 more rays.</p>
+</li>
+<li>
+<p>While the camera is still and the scene calm, the screen cascades 2 and up are also traced on alternate frames (they keep their atlas in between); a moving camera rebuilds them every frame.</p>
+</li>
+</ul>
+<p>The probe pass fell from 25 to about 7 ms, the near field from 12.7 to about 7 ms, and the regression scenes of section 8 still pass. The <a href="/en/docs/doppio/profiler-guide/">Profiler</a> lists each pass (<code>Photon::probes</code>, <code>Photon::inject</code>, one scope per
+cascade); with GPU timing on they are real GPU times.</p>
+<h2 id="4-bounce-gain">4. Bounce gain<a class="anchor" href="#4-bounce-gain" aria-label="Link to this section">#</a></h2>
+<p><code>Bounce gain</code> multiplies the light injected into the voxels (the sun, the lights and the sky ambient), so the bounce between
+surfaces grows without touching the direct light. It does not scale the screen cascades, which follow <code>Intensity</code>.
+Measured on the far floor of a closed room with a slit in the ceiling, GI only, out of 255:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Bounce gain</th>
+<th>0</th>
+<th>1</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Far floor</td>
+<td>13</td>
+<td>18</td>
+<td>24</td>
+</tr>
+</tbody>
+</table></div>
+<p>With gain 0 what remains is the screen cascades and the sky fallback; the gain moves the far field's share (the part above the gain-0 level).</p>
+<h3 id="the-weather-and-the-bounce">The weather and the bounce<a class="anchor" href="#the-weather-and-the-bounce" aria-label="Link to this section">#</a></h3>
+<p>The Environment tab's weather reaches Photon through the light it already reads, so nothing is baked:</p>
+<ul>
+<li><strong>Moving cloud shadows.</strong> With the clouds' ground shadows on, the injection pass multiplies the sun by the cloud shadow at each voxel
+(the same function the forward shaders use), so the bounce off the ground follows the cloud's shadow as it drifts. The near field
+reads the forward pass's direct light and follows it already.</li>
+<li><strong>Lightning.</strong> A flash adds a cold directional light for its length, which Photon injects like the sun, and multiplies its sky radiance
+(the sky flashes too), so the bounce flashes with the strike and falls back with it.</li>
+<li><strong>Overcast and fog</strong> grey and tint Photon's sky light (see the <a href="/en/docs/doppio/environment-guide/">Environment guide</a>).</li>
+</ul>
+<p>The drift of the cloud shadows is deliberately not part of the light hash (it would hold the temporal average in its fast mode all the
+time): the resolve follows a large difference between history and present on its own, so a slow drift stays smooth, while a flash adds
+a light, changes the hash and is followed at once.</p>
+<h2 id="5-presets">5. Presets<a class="anchor" href="#5-presets" aria-label="Link to this section">#</a></h2>
+<p>Every preset switches Photon on, on the compute path.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Preset</th>
+<th>Quality</th>
+<th>Radius</th>
+<th>Sky</th>
+<th>Ambient</th>
+<th>Bounce gain</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Balanced</strong></td>
+<td>Balanced</td>
+<td>14</td>
+<td>0.65</td>
+<td>0.2</td>
+<td>1</td>
+<td>The default look</td>
+</tr>
+<tr>
+<td><strong>Interior (strong bounce)</strong></td>
+<td>High</td>
+<td>10</td>
+<td>0.35</td>
+<td>0.1</td>
+<td>2</td>
+<td>Rooms lit through openings</td>
+</tr>
+<tr>
+<td><strong>Outdoor</strong></td>
+<td>High</td>
+<td>40</td>
+<td>0.8</td>
+<td>0.25</td>
+<td>1</td>
+<td>Long reach, strong sky</td>
+</tr>
+<tr>
+<td><strong>Fast (Eco)</strong></td>
+<td>Eco</td>
+<td>14</td>
+<td>0.65</td>
+<td>0.2</td>
+<td>1</td>
+<td>Skinned meshes and terrain left out of the volume</td>
+</tr>
+<tr>
+<td><strong>Diagnostic (GI only)</strong></td>
+<td>High</td>
+<td>14</td>
+<td>0.65</td>
+<td>0.2</td>
+<td>1</td>
+<td>GI only view and full rebuilds</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="6-voxel-statistics">6. Voxel statistics<a class="anchor" href="#6-voxel-statistics" aria-label="Link to this section">#</a></h2>
+<p>The <strong>Voxel volume</strong> card reads the engine's counters every frame (no GPU read-back):</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Line</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Objects, Triangles</td>
+<td>What the volume was built from (triangles are 0 while over budget)</td>
+</tr>
+<tr>
+<td>Levels rebuilt (last)</td>
+<td>One bit per level rebuilt whole in the latest update</td>
+</tr>
+<tr>
+<td>Regions (last / total)</td>
+<td>Boxes revoxelised in the latest update, and since the session began</td>
+</tr>
+<tr>
+<td>Whole levels (total)</td>
+<td>Level rebuilds since the session began</td>
+</tr>
+<tr>
+<td>Update time</td>
+<td>CPU time to encode the latest update</td>
+</tr>
+<tr>
+<td>Far field running</td>
+<td>The far field ran in the latest frame</td>
+</tr>
+</tbody>
+</table></div>
+<p>What it costs, and what it does not: each view that uses Photon (the editor Viewport, the Gameplay tab, the Camera tab) has its <strong>own</strong> instance, because the
+targets are sized to the view and the far field is centred on its camera; one shared instance made two views of different sizes or places rebuild each
+other's targets and voxels every frame. In a still scene with a still camera the far field is left as it is once it has converged (48 frames, with a real
+trace every 240), and while the camera only turns, in a calm scene, it is traced every other frame. The engine counts both (<code>far_skipped</code>, <code>far_half_rate</code>,
+<code>target_rebuilds</code> in the C ABI's Photon stats). On a sun, a camera and a cube at 1158 x 536 the editor frame went from 14.4 ms to 4.1 ms still and to 10.0 ms
+turning, and three views from 43.5 ms to 9.2 ms still; <code>cargo test -p doppio-ui --lib -- --ignored --nocapture frame_budget::</code> prints these with the engine's profiler.</p>
+<h2 id="7-for-agents-and-tests">7. For agents and tests<a class="anchor" href="#7-for-agents-and-tests" aria-label="Link to this section">#</a></h2>
+<p>The same commands are agent actions (<code>--features agent</code>), each returning a <code>Message</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Action or query</th>
+<th>Args</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show_photon</code>, <code>photon_add</code>, <code>photon_rebuild</code></td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>photon_set</code></td>
+<td><code>{ &quot;field&quot;: &quot;Bounce gain&quot;, &quot;value&quot;: 2.5 }</code> (a bool, a number, or an option name or index)</td>
+</tr>
+<tr>
+<td><code>photon_preset</code></td>
+<td><code>{ &quot;name&quot;: &quot;Interior (strong bounce)&quot; }</code></td>
+</tr>
+<tr>
+<td>query <code>photon</code></td>
+<td>The settings and statistics, or <code>{ &quot;present&quot;: false }</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The headless flows are <code>doppio/tests/ui-flows/photon-panel.json</code> and <code>photon-scene.json</code>; the images of this page come
+from <code>caffeine-website/captures/flows/capture-photon-docs.json</code> (<code>./scripts/capture-photon-docs.sh</code>).</p>
+<h3 id="c-abi-v17">C ABI v17<a class="anchor" href="#c-abi-v17" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="c"><div class="code-head"><span class="code-lang">c</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-c">CaffeineResult <span class="hljs-title function_">caffeine_session_photon_stats</span><span class="hljs-params">(<span class="hljs-type">const</span> CaffeineSession*, CaffeinePhotonStats* out)</span>;
+CaffeineResult <span class="hljs-title function_">caffeine_session_photon_rebuild</span><span class="hljs-params">(CaffeineSession*)</span>;
+</code></pre></div>
+<p><code>CaffeinePhotonStats</code> holds <code>objects</code>, <code>triangles</code>, <code>over_budget</code>, <code>far_enabled</code>, <code>full_rebuilds</code>, <code>region_rebuilds</code>,
+<code>last_level_mask</code>, <code>last_regions</code> and <code>last_update_ms</code>. Rust reads it as <code>Engine::photon_stats()</code>.</p>
+<h2 id="8-tests-and-limits">8. Tests and limits<a class="anchor" href="#8-tests-and-limits" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>GPU tests (<code>tests/test_photon_voxelizer.cpp</code>): voxels of a triangle, a wall behind the camera, clipmap moves, the sun's
+injection, probes in front of a red wall, a closed room, the mean colour of a picture, a <strong>moving object revoxelising
+only its box</strong> (identical, voxel for voxel, to a rebuild from scratch) and the <strong>cap</strong>.</li>
+<li>Regression scenes (<code>photon_gi</code> in <code>windows/main/tests.rs</code>): colour bleed, an off-screen sunlit wall, a sealed room, a
+thin wall, the debug views and the bounce gain; and <code>photon_panel</code>: add, edit, undo, rebuild and a moving object.</li>
+<li>Limits: no motion vectors yet (the history reprojects with the previous matrix), the terrain has one colour, a cut-out
+mesh is a solid block, and a change (a light that moved) takes about twenty frames to settle in, because the resolve averages frames.</li>
+</ul>
+<p>See also the <a href="/en/docs/doppio/graphics-roadmap/">graphics roadmap</a> and the <a href="/en/docs/editor/photon/">editor page for Photon</a>.</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/photon-guide.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/nature-generator-guide/"><span>Previous</span><strong>Nature Generator: procedural rocks, trees and plants, built with nodes</strong></a><a class="pager-next" href="/en/docs/doppio/photoreal-world-roadmap/"><span>Next</span><strong>Photoreal procedural world — validation and roadmap</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-how-photon-works">1. How Photon works</a></li><li class="l2"><a href="#2-the-photon-tab">2. The Photon tab</a></li><li class="l2"><a href="#3-what-is-in-the-voxel-volume">3. What is in the voxel volume</a></li><li class="l3"><a href="#dirty-regions">Dirty regions</a></li><li class="l3"><a href="#the-1-million-triangle-cap">The 1 million triangle cap</a></li><li class="l3"><a href="#what-it-costs-probes-outside-the-view-and-coarse-levels">What it costs: probes outside the view and coarse levels</a></li><li class="l2"><a href="#4-bounce-gain">4. Bounce gain</a></li><li class="l3"><a href="#the-weather-and-the-bounce">The weather and the bounce</a></li><li class="l2"><a href="#5-presets">5. Presets</a></li><li class="l2"><a href="#6-voxel-statistics">6. Voxel statistics</a></li><li class="l2"><a href="#7-for-agents-and-tests">7. For agents and tests</a></li><li class="l3"><a href="#c-abi-v17">C ABI v17</a></li><li class="l2"><a href="#8-tests-and-limits">8. Tests and limits</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

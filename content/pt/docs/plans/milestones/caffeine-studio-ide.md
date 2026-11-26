@@ -833,8 +833,8 @@ M4 ─────────────────────────�
 ## Referências
 
 - [`docs/editor/scene-editor.md`](../../editor/scene-editor.md) — Documentação atual do Scene Editor
-- [`docs/ui/editor-ui.md`](../../ui/editor-ui.md) — Embedded UI / ImGuiIntegration
-- [`docs/ui/game-ui.md`](../../ui/game-ui.md) — UI System (game HUD)
+- [`docs/runtime-ui/editor-ui.md`](../../runtime-ui/editor-ui.md) — Embedded UI / ImGuiIntegration
+- [`docs/runtime-ui/game-ui.md`](../../runtime-ui/game-ui.md) — UI System (game HUD)
 - [`docs/scripting/scripting.md`](../../scripting/scripting.md) — Scripting (Lua)
 - [`docs/assets/asset-pipeline.md`](../../assets/asset-pipeline.md) — Asset Pipeline CLI
 - [`docs/ecs/core.md`](../../ecs/core.md) — ECS Core

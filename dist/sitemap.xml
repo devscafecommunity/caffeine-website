@@ -19,6 +19,7 @@
   <url><loc>https://caffeine.devscafe.org/en/docs/assets/mesh-loading/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/assets/vegetation-kit/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/audio/audio-system/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/audio/volumetric-audio/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/concurrency/job-system/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/core/events/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/core/game-loop/</loc></url>
@@ -26,6 +27,27 @@
   <url><loc>https://caffeine.devscafe.org/en/docs/core/types/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/debug/debug-tools/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/debug/testing/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/environment-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/generator-recipes/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/gizmos-and-markers/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/graphics-roadmap/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/headless-testing/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/material-pipeline/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/materials-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/micromeshes/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/nature-generator-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/photon-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/photoreal-world-roadmap/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/profiler-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/runtime-modifiers/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/rust-ui/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/terrain-editing-phase-0/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/terrain-editing-roadmap/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/terrain-generator-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/texture-generator-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/water-generator-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/doppio/world-composition/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/ecs/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/ecs/core/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/ecs/examples/</loc></url>
@@ -171,6 +193,9 @@
   <url><loc>https://caffeine.devscafe.org/en/docs/rendering/shadow-mapping/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/rendering/texture-quality-lod/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/rendering/volumetric-lighting/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/runtime-ui/editor-ui/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/runtime-ui/game-ui/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/docs/runtime-ui/ui-kit/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/scripting/api/animation/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/scripting/api/assets/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/scripting/api/audio/</loc></url>
@@ -208,14 +233,12 @@
   <url><loc>https://caffeine.devscafe.org/en/docs/terrain/procedural-tools-plugin/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/terrain/terrain-plugin/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/terrain/terrain-system/</loc></url>
-  <url><loc>https://caffeine.devscafe.org/en/docs/ui/editor-ui/</loc></url>
-  <url><loc>https://caffeine.devscafe.org/en/docs/ui/game-ui/</loc></url>
-  <url><loc>https://caffeine.devscafe.org/en/docs/ui/ui-kit/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/docs/books/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/section/start/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/section/editor/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/section/scripting/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/section/engine/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/en/section/ecosystem/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/section/project/</loc></url>
   <url><loc>https://caffeine.devscafe.org/en/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/AUDIT_REPORT/</loc></url>
@@ -237,6 +260,7 @@
   <url><loc>https://caffeine.devscafe.org/pt/docs/assets/mesh-loading/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/assets/vegetation-kit/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/audio/audio-system/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/audio/volumetric-audio/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/concurrency/job-system/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/core/events/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/core/game-loop/</loc></url>
@@ -244,6 +268,27 @@
   <url><loc>https://caffeine.devscafe.org/pt/docs/core/types/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/debug/debug-tools/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/debug/testing/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/environment-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/generator-recipes/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/gizmos-and-markers/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/graphics-roadmap/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/headless-testing/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/material-pipeline/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/materials-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/micromeshes/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/nature-generator-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/photon-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/photoreal-world-roadmap/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/profiler-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/runtime-modifiers/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/rust-ui/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/terrain-editing-phase-0/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/terrain-editing-roadmap/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/terrain-generator-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/texture-generator-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/water-generator-guide/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/doppio/world-composition/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/ecs/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/ecs/core/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/ecs/examples/</loc></url>
@@ -389,6 +434,9 @@
   <url><loc>https://caffeine.devscafe.org/pt/docs/rendering/shadow-mapping/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/rendering/texture-quality-lod/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/rendering/volumetric-lighting/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/runtime-ui/editor-ui/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/runtime-ui/game-ui/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/docs/runtime-ui/ui-kit/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/scripting/api/animation/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/scripting/api/assets/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/scripting/api/audio/</loc></url>
@@ -426,14 +474,12 @@
   <url><loc>https://caffeine.devscafe.org/pt/docs/terrain/procedural-tools-plugin/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/terrain/terrain-plugin/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/terrain/terrain-system/</loc></url>
-  <url><loc>https://caffeine.devscafe.org/pt/docs/ui/editor-ui/</loc></url>
-  <url><loc>https://caffeine.devscafe.org/pt/docs/ui/game-ui/</loc></url>
-  <url><loc>https://caffeine.devscafe.org/pt/docs/ui/ui-kit/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/docs/books/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/section/start/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/section/editor/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/section/scripting/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/section/engine/</loc></url>
+  <url><loc>https://caffeine.devscafe.org/pt/section/ecosystem/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/section/project/</loc></url>
   <url><loc>https://caffeine.devscafe.org/pt/</loc></url>
 </urlset>
