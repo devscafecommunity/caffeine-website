@@ -3,7 +3,7 @@
 <div class="doc-meta">
   <span class="doc-badge doc-badge--reference">Guia</span>
   <span class="doc-badge">Doppio</span>
-  <span>Última atualização: <time datetime="2026-11-25">2026-11-25</time></span>
+  <span>Última atualização: <time datetime="2026-11-26">2026-11-26</time></span>
   <span>Fonte: <a href="https://github.com/devscafecommunity/caffeine/blob/main/content/en/docs/doppio/world-composition.md"><code>world-composition.md</code></a></span>
 </div>
 
