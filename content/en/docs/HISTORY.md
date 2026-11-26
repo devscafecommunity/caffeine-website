@@ -52,7 +52,7 @@ describe the plan at the time, not today's implementation.</p>
     <tr>
       <td>Doppio</td>
       <td>From the ImGui C++ editor to the Rust/Iced workspace, the five-pane layout and the C ABI boundary.</td>
-      <td><a href="editor/scene-editor.md">Scene editor</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/rust-ui.md">Rust UI notes</a>, <a href="plans/2026-05-24-doppio-ui-test-framework.md">UI test framework plan</a></td>
+      <td><a href="editor/scene-editor.md">Scene editor</a>, <a href="doppio/rust-ui.md">Rust UI notes</a>, <a href="plans/2026-05-24-doppio-ui-test-framework.md">UI test framework plan</a></td>
     </tr>
     <tr>
       <td>Rendering push</td>
@@ -62,12 +62,12 @@ describe the plan at the time, not today's implementation.</p>
     <tr>
       <td>Content tools</td>
       <td>Material Generator, Texture Generator, Texture Set painter, Nature, Water and Terrain generators.</td>
-      <td><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/material-pipeline.md">Material pipeline</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/texture-generator-guide.md">Texture guide</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/terrain-generator-guide.md">Terrain guide</a></td>
+      <td><a href="doppio/material-pipeline.md">Material pipeline</a>, <a href="doppio/texture-generator-guide.md">Texture guide</a>, <a href="doppio/terrain-generator-guide.md">Terrain guide</a></td>
     </tr>
     <tr>
       <td>Headless testing</td>
       <td>Scripted UI flows, annotated screenshots, baselines and GIF/MP4 recording with no window.</td>
-      <td><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md">Headless driver</a>, <a href="editor/test-automation.md">Test automation</a></td>
+      <td><a href="doppio/headless-testing.md">Headless driver</a>, <a href="editor/test-automation.md">Test automation</a></td>
     </tr>
   </tbody>
 </table>

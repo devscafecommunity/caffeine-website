@@ -101,6 +101,6 @@ erros, a auditoria de acoplamento core/ImGui e a suite de flows headless.
 ## Próximos passos
 
 - Siga o [Quick start](quick-start.md) para criar um projeto e gravar uma cena.
-- Leia [o driver headless](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- Leia [o driver headless](../doppio/headless-testing.md)
   para conduzir o editor sem janela.
 - Abra a [referência de UI](../editor/ui-reference.md) para todos os ids de widgets catalogados.

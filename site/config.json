@@ -17,9 +17,9 @@
     },
     {
       "id": "editor",
-      "title": { "en": "Doppio editor", "pt": "Editor Doppio" },
-      "description": { "en": "Panels, viewport, materials, generators, plugins and headless testing.", "pt": "Painéis, viewport, materiais, geradores, plugins e testes headless." },
-      "items": ["editor", "assets", "plugins"]
+      "title": { "en": "Doppio", "pt": "Doppio" },
+      "description": { "en": "The editor: panels, viewport, materials, every generator (terrain, nature, water, texture), World Composer, plugins and headless testing.", "pt": "O editor: painéis, viewport, materiais, cada gerador (terreno, natureza, água, textura), World Composer, plugins e testes headless." },
+      "items": ["editor", "doppio", "plugins"]
     },
     {
       "id": "scripting",
@@ -30,20 +30,27 @@
     {
       "id": "engine",
       "title": { "en": "Engine", "pt": "Motor" },
-      "description": { "en": "Architecture, ECS, rendering, physics, audio, memory and the rest of the runtime.", "pt": "Arquitetura, ECS, renderização, física, áudio, memória e o resto do runtime." },
-      "items": ["architecture", "core", "ecs", "math", "memory", "physics", "rendering", "terrain", "audio", "animation", "input", "ui", "debug", "performance", "concurrency"]
+      "description": { "en": "Caffeine internals: architecture, ECS, rendering, physics, audio, assets, memory and the rest of the runtime (not the editor).", "pt": "Internos do Caffeine: arquitetura, ECS, renderização, física, áudio, assets, memória e o resto do runtime (não o editor)." },
+      "items": ["architecture", "core", "ecs", "math", "memory", "physics", "rendering", "terrain", "audio", "animation", "input", "runtime-ui", "debug", "performance", "concurrency", "assets"]
+    },
+    {
+      "id": "ecosystem",
+      "title": { "en": "Ecosystem", "pt": "Ecossistema" },
+      "description": { "en": "The other Caffeine repositories: the asset packer, the launcher and the editor plugins submodule.", "pt": "Os outros repositórios do Caffeine: o empacotador de assets, o launcher e o submódulo de plugins do editor." },
+      "items": ["ECOSYSTEM_WORKFLOW.md"]
     },
     {
       "id": "project",
       "title": { "en": "Project", "pt": "Projeto" },
-      "description": { "en": "Releases, roadmaps, history and design plans.", "pt": "Versões, roteiros, história e planos de design." },
-      "items": ["releases", "plans", "analysis", "HISTORY.md", "ECOSYSTEM_WORKFLOW.md", "architecture_specs.md", "AUDIT_REPORT.md", "MASTER.md"]
+      "description": { "en": "Releases, roadmaps, history, design plans and the LaTeX books.", "pt": "Versões, roteiros, história, planos de design e os livros em LaTeX." },
+      "items": ["releases", "plans", "analysis", "HISTORY.md", "architecture_specs.md", "AUDIT_REPORT.md", "MASTER.md"]
     }
   ],
   "titles": {
     "getting-started": { "en": "Getting started", "pt": "Primeiros passos" },
-    "editor": { "en": "Editor", "pt": "Editor" },
-    "assets": { "en": "Assets", "pt": "Assets" },
+    "editor": { "en": "Editor panels", "pt": "Painéis do editor" },
+    "doppio": { "en": "Generators & World Composer", "pt": "Geradores & World Composer" },
+    "assets": { "en": "Asset system", "pt": "Sistema de assets" },
     "plugins": { "en": "Plugins", "pt": "Plugins" },
     "scripting": { "en": "Scripting", "pt": "Scripting" },
     "scripting/api": { "en": "API reference", "pt": "Referência da API" },
@@ -59,7 +66,7 @@
     "audio": { "en": "Audio", "pt": "Áudio" },
     "animation": { "en": "Animation", "pt": "Animação" },
     "input": { "en": "Input", "pt": "Entrada" },
-    "ui": { "en": "UI", "pt": "Interface" },
+    "runtime-ui": { "en": "Runtime UI (ImGui & in-game HUD)", "pt": "UI em tempo de execução (ImGui e HUD in-game)" },
     "debug": { "en": "Debugging", "pt": "Depuração" },
     "performance": { "en": "Performance", "pt": "Desempenho" },
     "concurrency": { "en": "Concurrency", "pt": "Concorrência" },

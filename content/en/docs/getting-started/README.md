@@ -102,6 +102,6 @@ core/ImGui coupling audit and the headless flow suite.
 ## Next steps
 
 - Follow [Quick start](quick-start.md) to create a project and save a scene.
-- Read [the headless driver](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- Read [the headless driver](../doppio/headless-testing.md)
   to drive the editor without a window.
 - Open the [UI reference](../editor/ui-reference.md) for every catalogued widget id.

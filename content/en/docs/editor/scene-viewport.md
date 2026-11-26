@@ -89,6 +89,6 @@ is the fixture used by the gizmo/marker capture flows.
 ## Related pages
 
 - [Viewport toolbar](viewport-toolbar.md) — icon toolbar and projections.
-- [Gizmos and markers](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/gizmos-and-markers.md)
-- [Materials guide](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/materials-guide.md)
+- [Gizmos and markers](../doppio/gizmos-and-markers.md)
+- [Materials guide](../doppio/materials-guide.md)
 - [Performance](../performance/editor-viewport-performance.md)

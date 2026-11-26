@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphics improvement — Micromeshes and Photon roadmap · Caffeine</title>
+<meta name="description" content="How to take the renderer from &quot;good forward PBR with a screen-space GI&quot; to dense, virtualised geometry ( Micromeshes ) and world-space dynamic global illumination ( Photon ), using only what SDL3 GPU can do on Vulkan, D3">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Graphics improvement — Micromeshes and Photon roadmap · Caffeine">
+<meta property="og:description" content="How to take the renderer from &quot;good forward PBR with a screen-space GI&quot; to dense, virtualised geometry ( Micromeshes ) and world-space dynamic global illumination ( Photon ), using only what SDL3 GPU can do on Vulkan, D3">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/graphics-roadmap/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/graphics-roadmap/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/graphics-roadmap/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/graphics-roadmap/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link active" href="/en/docs/doppio/graphics-roadmap/" aria-current="page">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link" href="/en/docs/doppio/rust-ui/">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Graphics improvement — Micromeshes and Photon roadmap</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--reference">Reference</span>
+  <span class="doc-badge">Engine</span>
+  <span>Last updated: <time datetime="2026-11-21">2026-11-21</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/blob/main/graphics-roadmap.md"><code>graphics-roadmap.md</code></a></span>
+</div>
+<p class="doc-lede">How to take the renderer from "good forward PBR with a screen-space GI" to dense,
+virtualised geometry (<strong>Micromeshes</strong>) and world-space dynamic global illumination
+(<strong>Photon</strong>), using only what SDL3 GPU can do on Vulkan, D3D12 and Metal.</p>
+<p>Names: the geometry system is called <strong>Micromeshes</strong> and the GI system <strong>Photon</strong>. Both are our own designs.
+No code, shader text or data layout is taken from other engines; the public literature (cluster hierarchies,
+radiance cascades, voxel clipmaps, visibility buffers) is the only reference. This page is the graphics
+companion of <a href="/en/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>, which feeds it with terrain, nature and
+materials.</p>
+<blockquote>
+<p><strong>Status (2026-11-20):</strong> <strong>Micromeshes M-0, M-1 and M-2 are done</strong> (occlusion is single-phase), tested on the GPU and drawn through the real scene
+renderer (see <a href="/en/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>): RHI indirect draws and storage buffers, render stats and a HUD readout, the offline
+cluster hierarchy with normals, UVs, tangents and vertex colours, the GPU cut with per-instance transforms, the lit G-buffer draw and
+the sun cascades' own coarser cut into a shared index arena, and a single-phase occlusion test against last frame's depth. <strong>Open in
+M-2:</strong> two-phase occlusion and point and spot shadow cuts. <strong>Photon P-A is nearly done</strong> (P-A: the conservative voxeliser first, because the direct-light injection could not be verified
+before it; then motion vectors, then real direct light). Independent GPU work done meanwhile is <strong>not</strong> part of these phases:
+vegetation shading and wind, alpha-tested shadows, run-time material modifiers, GPU-displaced water and the weather (clouds, height fog
+and rain; see the Nature, Water and Environment guides). The deterministic-world foundation shared with the world roadmap (<code>core/Hash.hpp</code>, the scatter core) is done.</p>
+<p><strong>M-0 is complete.</strong> <strong>Next, in order:</strong> P-A, whose first item is the conservative voxeliser. Micromesh's next phases (M-3 streaming, the
+<code>.micromesh</code> section in <code>.caf</code>, a terrain cluster path to beat the benchmark's baseline) follow once the content pipeline needs them.</p>
+</blockquote>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/micromesh/micromesh-cuts.png" alt="One rock drawn at four error budgets, coloured by cluster" loading="lazy">
+  <figcaption>Phase M-1 and M-2 as they run today: one rock, four error budgets, every colour a cluster (details in
+  <a href="/en/docs/doppio/micromeshes/">micromeshes.md</a>).</figcaption>
+</figure>
+<h2 id="1-verdict">1. Verdict<a class="anchor" href="#1-verdict" aria-label="Link to this section">#</a></h2>
+<p><strong>Photon: already under way, finish it.</strong> The engine has a compute radiance-cascade GI with a four-level voxel
+far field and multi-bounce feedback (<code>PhotonCascades.hpp</code>). The proposal to &quot;build a GI&quot; is mostly
+done; the work left is quality, validation and the world-space accuracy items its own header lists.</p>
+<p><strong>Micromeshes: built and drawing in the scene, with one hard limit that shaped it.</strong> The cluster hierarchy, the GPU cut with
+per-instance transforms, the lit G-buffer draw, shadow cascades, occlusion and the benchmark set exist (<code>micromeshes.md</code>). SDL3 GPU
+has indirect draws, storage buffers and compute passes, but <strong>no mesh shaders, no portable 64-bit atomics and no indirect-count draw</strong>,
+so the cut is compacted into one index arena and drawn with one hardware draw per instance (large win, low risk, as planned). A
+compute software rasteriser for sub-pixel triangles stays optional (M-4), using 32-bit atomics.</p>
+<p><strong>Dropped as written:</strong> an SDF-based GI (Photon already uses radiance cascades plus voxels; a second GI
+would double the maintenance), and &quot;trillions of triangles&quot;. The realistic target is <strong>tens of millions of
+source triangles in view with a frame-bound cost</strong>, which is what clusters deliver.</p>
+<h3 id="where-it-stands-2026-11-20">Where it stands (2026-11-20)<a class="anchor" href="#where-it-stands-2026-11-20" aria-label="Link to this section">#</a></h3>
+<p>21 items done, 25 open. <strong>Micromeshes are largely done; Photon P-A is nearly done</strong> (regression scenes, voxeliser with dirty regions, real direct light, bounce gain and the Photon panel done), so the next real
+work on this page is Photon P-A's motion vectors (see section 8 for the order).</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Done</th>
+<th>Open</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-A Photon: make it correct</td>
+<td>4</td>
+<td>1</td>
+<td>nearly done: regression scenes, voxeliser and real direct light done; motion vectors open</td>
+</tr>
+<tr>
+<td>P-B Photon: quality</td>
+<td>0</td>
+<td>5</td>
+<td>not started</td>
+</tr>
+<tr>
+<td>P-C Photon: scale and cost</td>
+<td>0</td>
+<td>4</td>
+<td>not started</td>
+</tr>
+<tr>
+<td>M-0 RHI and tooling</td>
+<td>4</td>
+<td>0</td>
+<td>done: indirect draws, storage buffers, stats, the HUD readout, the benchmark set (Profiler entries still to add)</td>
+</tr>
+<tr>
+<td>M-1 Cluster build</td>
+<td>4</td>
+<td>1</td>
+<td>done; the <code>.micromesh</code> section in <code>.caf</code> and the packer live in a separate repo and are open</td>
+</tr>
+<tr>
+<td>M-2 GPU cull and draw</td>
+<td>8</td>
+<td>3</td>
+<td>done except two-phase occlusion, point/spot shadow cuts and adopting terrain</td>
+</tr>
+<tr>
+<td>M-3 Streaming and memory</td>
+<td>0</td>
+<td>3</td>
+<td>not started</td>
+</tr>
+<tr>
+<td>M-4 Small triangles</td>
+<td>0</td>
+<td>2</td>
+<td>optional, not started</td>
+</tr>
+<tr>
+<td>M-5 Editor integration</td>
+<td>1</td>
+<td>2</td>
+<td>the Inspector toggle is done; stats panel, debug view, generator export, site captures open</td>
+</tr>
+<tr>
+<td>Shared items (section 6)</td>
+<td>0</td>
+<td>4</td>
+<td>none started</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="2-what-exists-verified-in-the-tree">2. What exists (verified in the tree)<a class="anchor" href="#2-what-exists-verified-in-the-tree" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Status</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GI near field</td>
+<td><strong>Done</strong>: world-aligned cascades K-1..0, fused trace+merge, SH-L1 resolve</td>
+<td><code>PhotonCascades.cpp</code>, <code>photon_cascade.comp</code></td>
+</tr>
+<tr>
+<td>GI far field</td>
+<td><strong>Done (fallback fill)</strong>: four clipmap levels 0.25/0.5/1/2 m, probes with SH, Chebyshev queries</td>
+<td><code>PhotonCascades.hpp</code>, <code>PhotonFarField.hpp</code></td>
+</tr>
+<tr>
+<td>Multi-bounce</td>
+<td><strong>Done</strong>: previous irradiance fed back with a cap and reprojected history</td>
+<td>header notes P5</td>
+</tr>
+<tr>
+<td>Baked AO</td>
+<td><strong>Done</strong>: BVH/GPU AO bake</td>
+<td><code>PhotonAOBake.cpp</code>, <code>PhotonGpuBake.cpp</code></td>
+</tr>
+<tr>
+<td>Direct light into GI</td>
+<td><strong>Done</strong>: the sun, point and spot lights injected into the voxels, shadowed by a march through the material volume</td>
+<td><code>photon_inject.comp</code></td>
+</tr>
+<tr>
+<td>Voxelisation</td>
+<td><strong>Done</strong>: conservative triangle voxeliser with dirty-region updates, terrain, skinned and cut-out meshes; 1M-triangle cap; the screened fill stays as the fallback</td>
+<td><code>photon_voxelize_tri.comp</code>, <code>GpuSceneRenderer::updatePhotonGeometry</code></td>
+</tr>
+<tr>
+<td>Motion vectors</td>
+<td><strong>Gap</strong>: history reprojects with the previous matrix only</td>
+<td>header P5</td>
+</tr>
+<tr>
+<td>Geometry LOD</td>
+<td><strong>Done for opaque meshes that opt in</strong> (Micromesh cluster cut); <strong>partial</strong> for the rest: 3 clustered-vertex LODs per mesh, terrain chunk LODs, CPU frustum cull</td>
+<td><code>micromesh/</code>, <code>MicromeshGpu.cpp</code>, <code>MeshLOD.cpp</code>, <code>TerrainLodSystem.cpp</code></td>
+</tr>
+<tr>
+<td>Occlusion</td>
+<td><strong>Partial</strong>: coarse CPU AABB occluders (max 16), Min-Z pyramid for GI, and for Micromesh a single-phase farthest-depth pyramid of last frame's depth</td>
+<td><code>CoarseOcclusion.hpp</code>, <code>MinZPyramid.cpp</code>, <code>MicromeshGpu.cpp</code></td>
+</tr>
+<tr>
+<td>Instancing</td>
+<td><strong>Done, CPU-grouped</strong>: batches of up to 256 by key</td>
+<td><code>InstanceBatch.hpp</code></td>
+</tr>
+<tr>
+<td>Shadows</td>
+<td><strong>Done</strong>: 4 directional cascades at 2048, point and spot maps</td>
+<td><code>GpuDirectionalShadowMap.hpp</code></td>
+</tr>
+<tr>
+<td>Post</td>
+<td><strong>Done</strong>: TAA, ACES, bloom, DOF, SSAO, motion blur, auto exposure</td>
+<td><code>PostProcessStack.cpp</code></td>
+</tr>
+<tr>
+<td>Compute and indirect in the RHI</td>
+<td><strong>Done (M-0)</strong>: indirect draws and dispatch, storage buffers, read-write compute buffers, capabilities, <code>readBuffer</code></td>
+<td><code>rhi/CommandBuffer.hpp</code>, <code>tests/test_rhi_indirect.cpp</code></td>
+</tr>
+<tr>
+<td>Website page for Photon</td>
+<td><strong>Done</strong>: the Photon guide and the editor page</td>
+<td><a href="/en/docs/doppio/photon-guide/"><code>photon-guide.md</code></a></td>
+</tr>
+<tr>
+<td>Sky, clouds, fog, rain and lightning</td>
+<td><strong>Done</strong>: reflected <code>Volumetric Clouds</code> and <code>Weather</code> components, exponential height fog, world-space rain with depth and splashes in the composite pass, wind gusts shared by rain, foliage and clouds, lightning with a bolt, a flash that lights the scene and Photon, and thunder events, moving cloud shadows on the ground and in Photon's bounce, silver lining and sun shafts, scene-wide wetness, sun and Photon sky light that follow the overcast sky, the Environment tab</td>
+<td><code>WeatherSystem.hpp</code>, <code>sky.frag</code>, <code>post_composite.frag</code>, <code>photon_inject.comp</code>, <a href="/en/docs/doppio/environment-guide/"><code>environment-guide.md</code></a></td>
+</tr>
+<tr>
+<td>Profiler and measured performance</td>
+<td><strong>Done</strong>: a scope tree with real GPU time per pass (<code>CF_GPU_SCOPE</code>), the Profiler tab, C ABI v18; first round: texture-cache lookups out of the draw loop (opaque pass 13.5 to 2.3 ms), Photon probes culled to the view and time-sliced (25 to 9 ms), cheaper cloud sun march, material-cache lookups out of the draw loop, shadow casters culled per cascade, charts for frame rate, CPU per core, GPU and memory (C ABI v19)</td>
+<td><code>Profiler.hpp</code>, <code>GpuProfile.hpp</code>, <a href="/en/docs/doppio/profiler-guide/"><code>profiler-guide.md</code></a></td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="3-review-of-the-proposal">3. Review of the proposal<a class="anchor" href="#3-review-of-the-proposal" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><strong>&quot;Cluster in Rust on a background thread.&quot;</strong> Wrong place. Clustering must be an <strong>engine core</strong> module
+(<code>src/caffeine/micromesh</code>) behind the C ABI, because the renderer, the <code>.caf</code> packer and the runtime (no
+Rust) all need it. The Rust editor only triggers a bake and shows stats. Generators produce plain meshes;
+the cluster build is the last step of the asset pipeline and is cached, never run at game time.</li>
+<li><strong>&quot;128-256 triangles per cluster, bounds plus geometric error.&quot;</strong> Correct. Use 128 triangles and at most
+128 vertices per cluster, a bounding sphere, a normal cone for back-face culling and a <strong>simplification
+error</strong> per cluster group, with the parent's error never smaller than its children's (monotonic), so the
+cut through the hierarchy is crack-free and view-independent.</li>
+<li><strong>&quot;Compute shaders choose visible clusters and detail.&quot;</strong> Correct, and it is the core: two-phase GPU
+culling (previous-frame survivors first, then the rest against a fresh Min-Z pyramid) writing an indirect
+argument buffer. We already have the Min-Z pyramid code for GI to reuse.</li>
+<li><strong>&quot;Software rasterisation in compute.&quot;</strong> Only for triangles that cover under about 4 pixels, and only after
+the hardware path works. It needs a visibility buffer with atomic min on a packed value. Without 64-bit
+atomics, pack 24-bit depth plus 8-bit cluster-local id into 32 bits and resolve the rest in a second pass,
+or skip the software path. Treat it as optional.</li>
+<li><strong>&quot;Eliminates LOD pop-in.&quot;</strong> Only with crack-free simplification plus TAA-friendly dithered transitions.
+It does not remove material or shadow cost: shadow cascades must use the same cluster cut (coarser).</li>
+<li><strong>&quot;Trillions of polygons.&quot;</strong> No. Memory (cluster data streaming) and the per-pixel cost bound it. Plan for
+a fixed budget (visible clusters, rasterised pixels) and measure.</li>
+<li><strong>&quot;Foliage and alpha.&quot;</strong> Cluster rendering suits opaque geometry. Alpha-tested leaves and grass stay on
+the instanced path (with impostors) until a cutout-aware cluster path is justified.</li>
+<li><strong>GI &quot;route A, SDF&quot;.</strong> Not adopted: Photon already covers it with probes plus voxels. What the SDF idea
+adds that we lack is <strong>accurate occlusion from off-screen and back-face geometry</strong>, which the conservative
+triangle voxeliser (below) provides inside the existing design.</li>
+<li><strong>GI &quot;route B, POM GI&quot;.</strong> Only as a <strong>micro-contact</strong> term: the height maps already give POM
+self-shadow and a cavity term (<code>material-pipeline.md</code>). Extending that to a small indirect bounce in cavities
+is cheap and local, but it is a detail layer on top of Photon, not a GI.</li>
+<li><strong>&quot;Anisotropic filtering, ACES, sRGB.&quot;</strong> Already in (ACES fitted, sRGB, mip chains). Only the explicit
+anisotropic sampler setting is worth checking.</li>
+</ul>
+<h2 id="4-roadmap-photon-gi">4. Roadmap — Photon (GI)<a class="anchor" href="#4-roadmap-photon-gi" aria-label="Link to this section">#</a></h2>
+<p>Photon first: it is closest to done, benefits every scene now, and Micromeshes will need its voxels.</p>
+<h3 id="phase-p-a-make-it-correct">Phase P-A — Make it correct<a class="anchor" href="#phase-p-a-make-it-correct" aria-label="Link to this section">#</a></h3>
+<blockquote>
+<p><strong>Finding (2026-11-20):</strong> a prototype injected the sun into the far-field radiance (a voxel march toward the light instead of
+shadow maps, in <code>photon_inject.comp</code>) and was <strong>reverted</strong>: in a red-wall-and-floor scene the result was identical with and
+without it, because the screen-space cascades dominate every visible pixel and the far field only fills what leaves the
+screen, where the screen-depth voxel fill has no geometry. The direct light cannot be tested, and so is not worth its cost,
+until the conservative voxeliser (third item) provides geometry the screen does not see. Order accordingly. The Photon GI
+component is now reflected (Inspector, scenes, scripts: <code>Photon GI</code>, with <code>Debug view</code>), which the next attempt needs; note
+that <code>Debug view</code> did not change the image on the <code>ComputeC0</code> path in that test: fixed (2026-11-21), GI only and Fallback only now work there.</p>
+</blockquote>
+<ul>
+<li>[x] Inject <strong>real direct light</strong> (sun, point, spot) into the voxel radiance (<code>photon_inject.comp</code>: <code>directLight</code>, shadowed by a
+march through the material volume, the forward shader's <code>radiance x N.L</code> convention), with the sky ambient scaled by the sky
+visibility of each face. Test: a red, a white and a green wall behind the camera (not on screen) tint the white cube that faces
+them red, neutral and green (about 40 of 255, nothing without the wall). Three bugs found on the way, all in the far field: the
+probes decoded their directions twice (so the far query read other directions than the probes had traced), the cascades did
+the same, and the <strong>material volume was cycled</strong> (discarded) by each compute pass (<code>CommandBuffer::beginComputePass(..., cycle)</code>).
+The last one let the screened fill erase the triangle voxels every frame: a closed room read 90 of 255 of sky light, now about 15 on average (1 to 3 in the quietest frames).</li>
+<li>[ ] <strong>Motion vectors</strong> pass (per object matrices, previous frame), used by Photon history, TAA and motion
+blur. Remove the &quot;no motion vectors&quot; gap; invalidate history on disocclusion by depth/normal test.</li>
+<li>[x] Conservative <strong>triangle voxeliser</strong> (<code>photon_voxelize_tri.comp</code>, <code>PhotonCascades::updateGeometryVoxels</code>): one invocation per
+triangle, separating-axis triangle/box test over the voxels of its box, all four clipmap levels; the scene's opaque triangles are
+gathered with their albedo (<code>GpuSceneRenderer::updatePhotonGeometry</code>, one hash per object every frame, a diff against the last set) and a
+level is cleared and rebuilt when its clipmap origin moves or the geometry changes. <strong>Dirty regions:</strong> a moving
+object clears and revoxelises only the boxes where it was and is (at most 8, else the levels rebuild whole); terrain, skinned meshes (in their pose) and, on request, cut-out meshes are in the volume; past 1 million triangles the voxeliser stops and the screened fill works alone, and the panel says so. A textured
+surface counts with the mean colour of its picture (<code>GpuTextureCache::averageColor</code>). GPU tests: <code>test_photon_voxelizer.cpp</code>.
+The screened fill stays, as the fallback and for the terrain.</li>
+<li>[x] Headless regression scenes: Cornell box, light-through-door, thin wall leak (module <code>photon_gi</code> in <code>windows/main/tests.rs</code>, image
+thresholds on the difference between GI off and on). Measured 2026-11-21: colour bleed passes (a white floor gains about +8 red beside the
+red wall, +6 green beside the green one). A room with no opening leaked: with the camera inside it the interior was lit like the open
+sky (gains of 60 to 90 out of 255, whatever the sky intensity); sealed now (about 15 on average over the frames; single frames swung between 3 and 25 until probes got their own sample offsets, see the temporal average in the Photon guide), with the sun's bounce through a slit at 7 to 16 on
+the far floor against about 170 on the lit patch, and a partition shuts that bounce out of the far side (4.3 -&gt; 1.5). The far field is
+asked from 0.4 m off the surface (the surface's own voxels are up to 0.5 m thick) and from the ray's origin, not its screen-exit point.
+All regular tests.</li>
+<li>[x] <strong>Bounce gain and the Photon panel</strong> (C ABI v17: <code>caffeine_session_photon_stats</code>, <code>caffeine_session_photon_rebuild</code>). <code>Bounce gain</code> scales what the voxels hold: on the far floor of the slit room
+(GI only, of 255) it reads 13 at gain 0, 18 at 1 and 24 at 4; the screen cascades are scaled by <code>Intensity</code>. The <strong>Photon</strong> tab edits the component, the voxel
+geometry switches and presets, with live voxel statistics; see <a href="/en/docs/doppio/photon-guide/"><code>photon-guide.md</code></a>.</li>
+</ul>
+<h3 id="phase-p-b-quality-and-stability">Phase P-B — Quality and stability<a class="anchor" href="#phase-p-b-quality-and-stability" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Normal-aware spatial-temporal denoise of the SH resolve; clamp fireflies; ghosting metrics in tests.</li>
+<li>[ ] Emissive surfaces as lights (materials already have emissive maps).</li>
+<li>[ ] Sky as a proper source: feed the prefiltered environment (split-sum) to Photon far field and to
+specular IBL, one source of truth.</li>
+<li>[ ] Glossy reflections from the probe field when screen-space tracing misses (replaces the per-object
+probe cubemaps as the fallback, so off-screen reflections stay stable).</li>
+<li>[ ] Per-view scratch resources (the header notes one shared scratch instance); needed for editor
+previews and split view.</li>
+</ul>
+<h3 id="phase-p-c-scale-and-cost">Phase P-C — Scale and cost<a class="anchor" href="#phase-p-c-scale-and-cost" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Quality tiers with measured GPU budgets (Eco/Low/Balanced/High) and a frame-time governor.</li>
+<li>[ ] Clipmap far field following the camera with toroidal updates; larger worlds without re-fill spikes.</li>
+<li>[ ] Feed terrain and vegetation chunks (from the world roadmap) into the voxel volume as they stream in.</li>
+<li>[ ] Update the website Photon page to the real state and add the new knobs to the editor UI with <code>UiId</code>s.</li>
+</ul>
+<h2 id="5-roadmap-micromeshes-virtual-geometry">5. Roadmap — Micromeshes (virtual geometry)<a class="anchor" href="#5-roadmap-micromeshes-virtual-geometry" aria-label="Link to this section">#</a></h2>
+<p>Each phase ships alone and keeps the old path as a fallback behind a flag.</p>
+<h3 id="phase-m-0-rhi-and-tooling-prerequisites">Phase M-0 — RHI and tooling prerequisites<a class="anchor" href="#phase-m-0-rhi-and-tooling-prerequisites" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] <code>rhi/CommandBuffer</code> wraps indirect draws (<code>drawIndirect</code>, <code>drawIndexedIndirect</code>, multi-draw count), indirect dispatch,
+graphics <strong>storage buffers</strong> for the vertex and fragment stages and compute passes with read-write storage
+<strong>buffers</strong>; <code>BufferUsage::{Indirect, IndirectWrite, GraphicsStorage, GraphicsStorageWrite}</code>;
+<code>RenderDevice::capabilities()</code> (indirect draw and dispatch, storage, no mesh shaders, no 64-bit atomics) and
+<code>readBuffer</code>. Tested on the GPU in <code>tests/test_rhi_indirect.cpp</code>: indirect arguments decide what is drawn, and a
+compute pass writes the draw arguments (a miniature of GPU culling). The tests skip without a GPU or <code>glslc</code>.</li>
+<li>[x] CPU-side pass timers per stage (gather, shadows, opaque, translucent, total) and counters (meshes, frustum culled,
+draw calls, instanced draw calls, triangles) in <code>GpuSceneRenderer::lastFrameStats()</code>; C ABI <strong>v11</strong>
+<code>caffeine_session_render_stats</code>, the Rust <code>Engine::render_stats()</code> and the agent query <code>render_stats</code>.
+SDL3 GPU has no portable GPU timestamps, so the times are encoding time, not GPU time.</li>
+<li>[x] The viewport HUD shows the last frame's triangles, draws and Micromesh draws (cheap counters, no read-back). Still open: Profiler entries and a panel with the cluster counters.</li>
+<li>[x] <strong>The reproducible benchmark set</strong> (<code>./scripts/benchmark-micromesh.sh</code>): a dense rock field, a forest of 300 dense trees and a terrain at two grid
+sizes, fixed camera paths, content generated in code (no assets, byte-identical every run, tested), every renderer path that applies.
+Triangle and draw counts reproduce exactly; wall time is a whole frame including read-back, encode time the CPU's. Results in
+<a href="/en/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>: Micromesh draws 6.1x (rocks) and 3.3x (forest) fewer triangles and a median frame of 0.56 and
+0.75 of the instanced one, but the forest costs more CPU (one draw per tree); the terrain baseline is 0.2 to 0.8 M triangles in 100 to
+400 draws. The old <code>assets/benchmarks</code> (an unused 43 KB scene) is not part of it.</li>
+</ul>
+<h3 id="phase-m-1-cluster-build-offline-core">Phase M-1 — Cluster build (offline, core)<a class="anchor" href="#phase-m-1-cluster-build-offline-core" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] <code>micromesh</code> module (<code>src/caffeine/micromesh/Micromesh.hpp</code>): clusters of at most 128 triangles and 128 vertices along a Morton
+curve (our own, simpler than a greedy adjacency split), each with a tight bounding sphere, a back-face normal cone and a
+local vertex remap (one byte per index).</li>
+<li>[x] <strong>Hierarchy</strong>: clusters are grouped (4 at a time, widened when a group cannot shrink), each group is merged, simplified by
+<strong>quadric edge collapse with its boundary locked</strong> (and non-manifold edges), and split again, up to one root. A group's
+error is the larger of its collapse error and its children's, plus an epsilon, so it is <strong>strictly</strong> monotonic; its
+sphere contains the children's. A cut is &quot;own error &lt;= threshold &lt; parent error&quot; (optionally divided by the distance to
+the sphere for a projected error).</li>
+<li>[x] Versioned POD bytes: <code>serialize</code> / <code>deserialize</code> (bounds-checked), byte-identical rebuilds. C ABI <strong>v12</strong>
+<code>caffeine_micromesh_build</code> (positions, indices, stats, bytes) and the Rust <code>Engine::micromesh_build</code>, so generators and a
+packer can bake. <strong>Not done:</strong> the <code>.micromesh</code> section inside <code>.caf</code> and a <code>caf-pack</code> CLI (a separate submodule repo).</li>
+<li>[x] Tests (<code>tests/test_micromesh.cpp</code>, 9 cases): limits per cluster, every level coarser, one root on closed meshes, monotonic
+errors and sphere containment, <strong>every cut of a sphere and a torus is closed and manifold (each edge in exactly two
+triangles) at 12 thresholds</strong>, view-dependent cuts are crack-free and coarser far away, an open grid keeps its boundary and
+terminates, back-face cones never hide a facing cluster, degenerate input, byte-identical rebuilds and the ABI.</li>
+<li>[ ] Known limits: groups are neighbours on a Morton curve, not an adjacency graph, so a level removes about half the
+triangles on compact meshes and less on thin or branching ones; open meshes stop where their locked boundary pins
+everything (several roots); a collapse picks the best of the two endpoints and the midpoint (no optimal position);
+measured on meshes up to 82 k triangles (about a second to build 80 000); locked UV seams limit how far a mesh with many islands
+reduces. (Normals, UVs, tangents and vertex colours are carried now.)</li>
+</ul>
+<h3 id="phase-m-2-gpu-culling-and-hardware-draw">Phase M-2 — GPU culling and hardware draw<a class="anchor" href="#phase-m-2-gpu-culling-and-hardware-draw" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Upload to GPU buffers (<code>render/MicromeshGpu</code>): one storage buffer of cluster records (bounds, error spheres, cone, index range),
+one position buffer, one index buffer with every cluster's global indices, and an indirect-argument buffer.</li>
+<li>[x] Per-instance transforms: <code>MicromeshGpu::setInstances</code>, cull index <code>instance * clusterCount + cluster</code>, per-instance cut, frustum
+and cone, one dispatch and one indirect draw for the whole field (196 rocks, 16 M source triangles: 0.15 to 0.5 M drawn per frame, 10x
+fewer than the exact mesh on average). Images and GIF in <a href="/en/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>. Still one hierarchy per object and a uniform scale per instance.</li>
+<li>[x] Compute pass 1 (<code>shaders/micromesh_cull.comp</code>): per cluster, the cut test (own error within the threshold, parent's not,
+optionally projected by distance), frustum test and back-face cone; it writes one indexed-draw argument set per cluster
+with <code>indexCount</code> 0 when culled, so the CPU issues the same <code>drawIndexedIndirect(args, 0, clusterCount)</code> every frame
+with no read-back and no atomics.</li>
+<li>[x] <strong>Occlusion, single-phase</strong>: each frame the previous depth buffer becomes a farthest-depth pyramid (<code>MicromeshHzb</code>, one storage
+buffer) and the camera's compacting cull drops clusters whose sphere is behind it (Mesh Renderer -&gt; Micromesh occlusion, off by
+default). Behind a wall: 1.5x to 2.5x fewer triangles (2.1x mean), picture difference 0.11 / 255 mean; a cluster that becomes
+visible shows one frame late at silhouette edges. Images in <a href="/en/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>.</li>
+<li>[ ] <strong>Two-phase occlusion</strong> (draw last frame's visible clusters, rebuild the pyramid from that depth, test the rest): removes the
+one-frame lag; needs the opaque pass split in two.</li>
+<li>[x] The indirect draw works on the GPU: <code>MicromeshGpu::draw</code> binds the buffers and issues one multi-draw over every cluster.
+<strong>Tested on the GPU</strong> (<code>tests/test_micromesh_gpu.cpp</code>): the cut the compute pass selects <strong>equals the CPU's <code>selectCut</code></strong>
+at 4 distances x 3 thresholds, the cone filter equals <code>isBackFacing</code>, the frustum test equals the same sphere-plane test on
+the CPU, a farther camera picks a coarser cut, and a rendered cut covers the sphere's disc (fine and coarse alike).</li>
+<li>[x] Prerequisite for it: <strong>shading normals</strong> carried through every collapse and drawn with <code>MicromeshGpu::drawLit</code>; a coarse cut shades
+within 1.6 to 10 / 255 of the exact mesh (facets: 2.9 to 13). <strong>UVs</strong> are carried too (seams stay locked): a bump map and a UV
+checker stay within 1.2 to 11.7 / 255 of the exact render across the cuts. Images in <a href="/en/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>. Tangents,
+vertex colours and a second UV set are still missing.</li>
+<li>[x] <strong>Draw the visible clusters into the existing G-buffer targets through the scene pipeline</strong> (Photon, SSAO, TAA and post keep
+working unchanged): Mesh Renderer -&gt; <strong>Micromesh</strong> (+ error in px) draws the mesh as a cut through <code>scene_lit.frag</code>, one indexed
+draw per instance (the cull pass compacts the cut: SDL3 GPU has no indirect-count draw). 81 lit, shadowed rocks: 5.3x to 7.1x
+fewer triangles per frame for the camera, 10.8x from the air, picture difference 1.5 / 255. Details, the benchmark table and the
+limits in <a href="/en/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>. Also fixed on the way: a dense mesh without materials re-read its file on
+every draw of every frame (4 to 8 ms of CPU per draw).</li>
+<li>[x] <strong>Shadow cascades draw their own coarser cut</strong> (same hierarchy, so no cracks): the sun's cascades are cut at four shadow texels by
+<code>shadow_micromesh.vert</code>, into a <strong>shared index arena</strong> that grows by itself (32 MB for 81 rocks instead of one full-size index buffer
+per rock). Point and spot shadows still draw the full mesh. Also: non-uniform scale, one hierarchy per sub-mesh, vertex colours
+carried. The editor viewport renders without shadow maps unless <code>ViewportSettings::shadows</code> is on (C ABI v14).</li>
+<li>[ ] Point and spot shadow maps draw their own coarser cut too (only the sun's cascades do).</li>
+<li>[ ] Terrain tiles and Nature rocks/trunks are first adopters; foliage stays instanced. (Rocks and trunks can opt in through the Mesh
+Renderer, and the Nature generator switches it on for the solid parts it places (3 000 triangles or more); terrain has no cluster path:
+its baseline is in the benchmark set.)</li>
+</ul>
+<h3 id="phase-m-3-streaming-and-memory">Phase M-3 — Streaming and memory<a class="anchor" href="#phase-m-3-streaming-and-memory" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Page cluster data in and out by distance and error with a fixed memory budget and an async
+upload queue; never stall a frame.</li>
+<li>[ ] Geometry compression (quantised positions and octahedral normals) and an LRU of pages.</li>
+<li>[ ] Hook the world chunks: a chunk's baked meshes are clustered when first cached and reused afterwards.</li>
+</ul>
+<h3 id="phase-m-4-small-triangle-path-optional-measure-first">Phase M-4 — Small-triangle path (optional, measure first)<a class="anchor" href="#phase-m-4-small-triangle-path-optional-measure-first" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[ ] Compute rasteriser for clusters whose triangles are under ~4 pixels, writing a visibility buffer
+with 32-bit atomics and a resolve pass that fetches attributes. Gate on a measured win over the
+hardware path on dense rock/bark scenes.</li>
+<li>[ ] Material resolve in screen tiles to avoid one pass per material.</li>
+</ul>
+<h3 id="phase-m-5-editor-integration">Phase M-5 — Editor integration<a class="anchor" href="#phase-m-5-editor-integration" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>[x] Inspector toggle &quot;Micromesh&quot; on a Mesh Renderer (reflection exposes <code>Micromesh</code> and <code>Micromesh error (px)</code>); still open: a stats panel and a debug view (cluster colours,
+error cut, culled clusters), <code>UiId</code> catalogue entries for the toggle and MCP actions.</li>
+<li>[ ] Nature, Terrain and Water generators export through the cluster build. <strong>Nature is done</strong>: its <em>Micromesh</em> option places solid parts of
+3 000 triangles or more with Micromesh on, and <em>Merge parts</em> gives a tree one mesh with a material slot per part. Terrain and Water are open.</li>
+<li>[ ] Docs and headless captures (cluster debug view) in the site.</li>
+</ul>
+<h2 id="6-shared-items">6. Shared items<a class="anchor" href="#6-shared-items" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>[ ] <strong>One visibility source</strong>: the cluster cull and Photon voxelisation read the same instance data.</li>
+<li>[ ] <strong>Frame graph light</strong>: explicit pass list with resource lifetimes so culling, G-buffer, Photon,
+shadows and post are ordered and memory is reused; today the order is hand-written.</li>
+<li>[ ] <strong>Quality governor</strong>: one setting maps to Photon tier, shadow resolution, cluster error threshold,
+and runtime scalers (resolution, TAA upsampling).</li>
+<li>[ ] <strong>Reference scenes</strong> with fixed seeds rendered headless and compared as visual baselines.</li>
+</ul>
+<h2 id="7-risks">7. Risks<a class="anchor" href="#7-risks" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No mesh shaders, no 64-bit atomics in SDL3 GPU</td>
+<td>hardware indirect draws first; software raster optional and 32-bit</td>
+</tr>
+<tr>
+<td>Cracks between LOD groups</td>
+<td>locked group boundaries, monotonic error, tests that cut at random thresholds</td>
+</tr>
+<tr>
+<td>Photon history ghosts with moving objects</td>
+<td>motion vectors, disocclusion tests, regression scenes</td>
+</tr>
+<tr>
+<td>Voxeliser cost on dynamic geometry</td>
+<td>static baked once, dynamic dirty-region updates only</td>
+</tr>
+<tr>
+<td>Two geometry paths drift apart</td>
+<td>flag-gated, same G-buffer output, shared tests</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Photon P-A and Micromeshes M-0/M-1 are independent and can run in parallel</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="8-suggested-order">8. Suggested order<a class="anchor" href="#8-suggested-order" aria-label="Link to this section">#</a></h2>
+<p>Done: <strong>M-0</strong>, <strong>M-1</strong> and <strong>M-2</strong> (Micromeshes, up to single-phase occlusion). From here:</p>
+<ol>
+<li><strong>P-A</strong> (correct Photon): the conservative voxeliser first, then motion vectors, then real direct light and the regression scenes.
+Nothing of Photon is done, and every Micromesh and world item that wants GI waits on it.</li>
+<li><strong>M-5</strong>, the cheap part: the Terrain and Water generators switching Micromesh on (Nature does), stats panel and debug view, <code>UiId</code>s, site
+captures. Also the <code>.micromesh</code> section in <code>.caf</code> (a cache for the first-frame build) and a terrain cluster path to beat the benchmark.</li>
+<li><strong>P-B</strong>, then <strong>M-3</strong> (streaming and compression) tied to the world chunks of the world roadmap.</li>
+<li><strong>P-C</strong>, two-phase occlusion and point/spot shadow cuts, and <strong>M-4</strong> only if profiling asks for it.</li>
+</ol>
+<h2 id="9-related">9. Related<a class="anchor" href="#9-related" aria-label="Link to this section">#</a></h2>
+<ul>
+<li><a href="/en/docs/doppio/micromeshes/"><code>micromeshes.md</code></a>: what is built of Micromeshes, with renders from the GPU path.</li>
+<li><a href="/en/docs/doppio/photoreal-world-roadmap/"><code>photoreal-world-roadmap.md</code></a>: the content generated for this renderer.</li>
+<li><a href="/en/docs/doppio/material-pipeline/"><code>material-pipeline.md</code></a>: POM, displacement and height-derived AO.</li>
+<li><a href="/en/docs/doppio/nature-generator-guide/"><code>nature-generator-guide.md</code></a>: vegetation LOD and instancing gaps.</li>
+<li><a href="/en/docs/doppio/terrain-generator-guide/"><code>terrain-generator-guide.md</code></a>: tiled and large terrains.</li>
+</ul>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/graphics-roadmap.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/gizmos-and-markers/"><span>Previous</span><strong>Gizmos and scene markers</strong></a><a class="pager-next" href="/en/docs/doppio/headless-testing/"><span>Next</span><strong>Headless UI testing for Doppio (doppio-headless)</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#1-verdict">1. Verdict</a></li><li class="l3"><a href="#where-it-stands-2026-11-20">Where it stands (2026-11-20)</a></li><li class="l2"><a href="#2-what-exists-verified-in-the-tree">2. What exists (verified in the tree)</a></li><li class="l2"><a href="#3-review-of-the-proposal">3. Review of the proposal</a></li><li class="l2"><a href="#4-roadmap-photon-gi">4. Roadmap — Photon (GI)</a></li><li class="l3"><a href="#phase-p-a-make-it-correct">Phase P-A — Make it correct</a></li><li class="l3"><a href="#phase-p-b-quality-and-stability">Phase P-B — Quality and stability</a></li><li class="l3"><a href="#phase-p-c-scale-and-cost">Phase P-C — Scale and cost</a></li><li class="l2"><a href="#5-roadmap-micromeshes-virtual-geometry">5. Roadmap — Micromeshes (virtual geometry)</a></li><li class="l3"><a href="#phase-m-0-rhi-and-tooling-prerequisites">Phase M-0 — RHI and tooling prerequisites</a></li><li class="l3"><a href="#phase-m-1-cluster-build-offline-core">Phase M-1 — Cluster build (offline, core)</a></li><li class="l3"><a href="#phase-m-2-gpu-culling-and-hardware-draw">Phase M-2 — GPU culling and hardware draw</a></li><li class="l3"><a href="#phase-m-3-streaming-and-memory">Phase M-3 — Streaming and memory</a></li><li class="l3"><a href="#phase-m-4-small-triangle-path-optional-measure-first">Phase M-4 — Small-triangle path (optional, measure first)</a></li><li class="l3"><a href="#phase-m-5-editor-integration">Phase M-5 — Editor integration</a></li><li class="l2"><a href="#6-shared-items">6. Shared items</a></li><li class="l2"><a href="#7-risks">7. Risks</a></li><li class="l2"><a href="#8-suggested-order">8. Suggested order</a></li><li class="l2"><a href="#9-related">9. Related</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

@@ -4,7 +4,7 @@
   <span class="doc-badge doc-badge--stable">Stable</span>
   <span class="doc-badge">Doppio</span>
   <span>Verificado em: <time datetime="2026-11-18">2026-11-18</time></span>
-  <span>Fonte: <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/flows/capture-editor-docs.json"><code>capture-editor-docs.json</code></a></span>
+  <span>Fonte: <a href="https://github.com/devscafecommunity/caffeine/blob/main/captures/flows/capture-editor-docs.json"><code>capture-editor-docs.json</code></a></span>
 </div>
 
 <p class="doc-lede">Uma visita visual ao workspace Rust do Doppio, capturada fora do
@@ -135,5 +135,5 @@ As imagens vêm de um flow headless comprometido:
 ./scripts/capture-editor-tour.sh   # MP4 + GIF
 ```
 
-Escreve nomes estáveis em `doppio/docs/images/editor/`. Copie os ficheiros para
+Escreve nomes estáveis em `content/en/docs/images/doppio/editor/`. Copie os ficheiros para
 `content/{en,pt}/docs/images/editor/` depois de regenerar. Não edite os PNGs à mão.

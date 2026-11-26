@@ -107,7 +107,7 @@ entrada em `uikit::id::CATALOG` com tipo e descrição. O catálogo alimenta:
 
 - o targeting headless e as capturas anotadas;
 - a [referência de UI](ui-reference.md) gerada;
-- as ações dos agentes e as legendas em `doppio/docs/ui-captions.json`.
+- as ações dos agentes e as legendas em `captures/ui-captions.json`.
 
 Adicione um id e uma entrada no catálogo com cada widget novo.
 

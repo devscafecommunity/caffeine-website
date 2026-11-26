@@ -1,0 +1,1374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rust UI frontend (Iced) · Caffeine</title>
+<meta name="description" content="Architecture of the active Rust/Iced editor: workspace, panels, components, the C ABI boundary and the checks that keep it coherent.">
+<meta name="theme-color" content="#14110f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#fbf8f4" media="(prefers-color-scheme: light)">
+<meta property="og:title" content="Rust UI frontend (Iced) · Caffeine">
+<meta property="og:description" content="Architecture of the active Rust/Iced editor: workspace, panels, components, the C ABI boundary and the checks that keep it coherent.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Caffeine">
+<link rel="canonical" href="https://caffeine.devscafe.org/en/docs/doppio/rust-ui/">
+<meta property="og:url" content="https://caffeine.devscafe.org/en/docs/doppio/rust-ui/">
+<link rel="alternate" hreflang="en" href="https://caffeine.devscafe.org/en/docs/doppio/rust-ui/">
+<link rel="alternate" hreflang="pt" href="https://caffeine.devscafe.org/pt/">
+<link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+<script>try{var t=localStorage.getItem('caffeine-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="/assets/style.css?v=f8cf45ec">
+</head>
+<body data-page="doc">
+<a class="skip" href="#content">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn menu-btn" type="button" aria-label="Menu" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="brand" href="/en/"><svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="url(#cf-grad)"/><defs><linearGradient id="cf-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a65a"/><stop offset="1" stop-color="#c2561e"/></linearGradient></defs><path d="M8.500 14h12v5a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="#fff"/><path d="M20.500 15.500H22a2.500 2.500 0 0 1 0 5h-1.500" fill="none" stroke="#fff" stroke-width="1.800" stroke-linecap="round"/><path d="M12 11c-1-1.500 1-2.500 0-4M16 11c-1-1.500 1-2.500 0-4" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.600" stroke-linecap="round"/></svg><span>Caffeine</span></a>
+    <nav class="tabs" aria-label="Sections"><a class="tab" href="/en/section/start/">Getting started</a><a class="tab active" href="/en/section/editor/">Doppio</a><a class="tab" href="/en/section/scripting/">Scripting</a><a class="tab" href="/en/section/engine/">Engine</a><a class="tab" href="/en/section/ecosystem/">Ecosystem</a><a class="tab" href="/en/section/project/">Project</a></nav>
+    <div class="topbar-actions">
+      <button class="search-btn" type="button" aria-label="Search the docs"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="search-label">Search docs…</span><kbd>Ctrl K</kbd></button>
+      <div class="langs" role="group" aria-label="Language"><a class="lang active" href="/en/docs/doppio/rust-ui/" hreflang="en" lang="en" title="English">EN</a><a class="lang" href="/pt/" hreflang="pt" lang="pt" title="Português">PT</a></div>
+      <button class="icon-btn theme-btn" type="button" aria-label="Toggle theme"><span class="icon-sun"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="icon-moon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span></button>
+      <a class="icon-btn" href="https://github.com/devscafecommunity/caffeine" aria-label="GitHub" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Doppio"><div class="nav-title">Doppio</div><ul class="nav-root"><li class="nav-dir top"><div class="nav-dir-row"><button class="nav-dir-label" type="button">Editor panels</button><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/editor/ui-reference/">Doppio UI reference</a></li><li><a class="nav-link" href="/en/docs/editor/test-automation/">Editor test automation</a></li><li><a class="nav-link" href="/en/docs/editor/ui-gallery/">Editor UI gallery</a></li><li><a class="nav-link" href="/en/docs/editor/git-plugin/">Git Plugin</a></li><li><a class="nav-link" href="/en/docs/editor/material-editor/">Material editor</a></li><li><a class="nav-link" href="/en/docs/editor/photon/">Photon — native hybrid radiance-cascade GI</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-manager/">Plugin Manager (legacy host)</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-migration/">Plugin migration guide</a></li><li><a class="nav-link" href="/en/docs/editor/plugin-sdk/">Plugin SDK (legacy C++)</a></li><li><a class="nav-link" href="/en/docs/editor/scene-editor/">Scene editor</a></li><li><a class="nav-link" href="/en/docs/editor/scene-viewport/">Scene viewport</a></li><li><a class="nav-link" href="/en/docs/editor/viewport-toolbar/">Viewport HUD and controls</a></li><li><a class="nav-link" href="/en/docs/editor/workspace-and-theme/">Workspace, theme and components</a></li></ul></li><li class="nav-dir open top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/doppio/">Generators &amp; World Composer</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/doppio/environment-guide/">Environment: clouds, fog, rain and lightning in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/generator-recipes/">Generator recipes (generator.*)</a></li><li><a class="nav-link" href="/en/docs/doppio/gizmos-and-markers/">Gizmos and scene markers</a></li><li><a class="nav-link" href="/en/docs/doppio/graphics-roadmap/">Graphics improvement — Micromeshes and Photon roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/headless-testing/">Headless UI testing for Doppio (doppio-headless)</a></li><li><a class="nav-link" href="/en/docs/doppio/material-pipeline/">Material, texture and generator pipeline — backlog</a></li><li><a class="nav-link" href="/en/docs/doppio/materials-guide/">Materials in Doppio: procedural library, real depth and baking</a></li><li><a class="nav-link" href="/en/docs/doppio/micromeshes/">Micromeshes: clusters, cuts and the GPU draw</a></li><li><a class="nav-link" href="/en/docs/doppio/nature-generator-guide/">Nature Generator: procedural rocks, trees and plants, built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/photon-guide/">Photon: global illumination in Doppio</a></li><li><a class="nav-link" href="/en/docs/doppio/photoreal-world-roadmap/">Photoreal procedural world — validation and roadmap</a></li><li><a class="nav-link" href="/en/docs/doppio/profiler-guide/">Profiler: where a frame's time goes</a></li><li><a class="nav-link" href="/en/docs/doppio/runtime-modifiers/">Run-time modifiers for generated materials</a></li><li><a class="nav-link active" href="/en/docs/doppio/rust-ui/" aria-current="page">Rust UI frontend (Iced)</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-roadmap/">Terrain editing: brushes, material palette and vegetation</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-editing-phase-0/">Terrain editing: Phase 0 report</a></li><li><a class="nav-link" href="/en/docs/doppio/terrain-generator-guide/">Terrain Generator: heightfields built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/texture-generator-guide/">Texture Generator: procedural sprites, VFX and packed masks</a></li><li><a class="nav-link" href="/en/docs/doppio/water-generator-guide/">Water Generator: water bodies built with nodes</a></li><li><a class="nav-link" href="/en/docs/doppio/world-composition/">World Composer: build a prefab world from generator recipes</a></li></ul></li><li class="nav-dir top"><div class="nav-dir-row"><a class="nav-link nav-dir-link" href="/en/docs/plugins/">Plugins</a><button class="nav-toggle" type="button" aria-label="Toggle" aria-expanded="false"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><ul><li><a class="nav-link" href="/en/docs/plugins/getting-started/">Getting started</a></li><li><a class="nav-link" href="/en/docs/plugins/installing-plugins/">Installing plugins</a></li><li><a class="nav-link" href="/en/docs/plugins/natural-fluids/">Natural Fluids</a></li><li><a class="nav-link" href="/en/docs/plugins/compatibility/">Plugin compatibility</a></li><li><a class="nav-link" href="/en/docs/plugins/service-registry/">Service registry</a></li><li><a class="nav-link" href="/en/docs/plugins/volumetric-clouds/">VC&amp;M — Volumetric Clouds &amp; Mist</a></li><li><a class="nav-link" href="/en/docs/plugins/writing-a-plugin/">Writing a plugin</a></li></ul></li></ul></nav>
+  <main class="main" id="content">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/en/docs/">Documentation</a><span aria-hidden="true">/</span><a href="/en/section/editor/">Doppio</a></nav>
+    <article class="doc">
+      <h1 class="doc-title">Rust UI frontend (Iced)</h1>
+      <div class="doc-meta">
+  <span class="doc-badge doc-badge--stable">Stable</span>
+  <span class="doc-badge">Doppio</span>
+  <span>Last verified: <time datetime="2026-11-21">2026-11-21</time></span>
+  <span>Source: <a href="https://github.com/devscafecommunity/caffeine/tree/main/doppio"><code>doppio/</code></a></span>
+</div>
+<p class="doc-lede">Architecture of the active Rust/Iced editor: workspace, panels,
+components, the C ABI boundary and the checks that keep it coherent.</p>
+<figure class="doc-figure">
+  <img src="/en/docs/images/doppio/editor/workspace-scene.png" alt="Doppio Rust workspace with Hierarchy, Viewport, Inspector and Assets and Console panes" loading="lazy">
+  <figcaption>The live Rust editor. Every pane is an Iced view over <code>App</code> state; engine rendering arrives through <code>libcaffeine-capi</code>.</figcaption>
+</figure>
+<p>Status: <strong>the active editor</strong>. <code>caffeine-core</code> is built without ImGui/ImNodes;
+the ImGui draw-list adapters live in <code>caffeine-editor-support</code>. The Rust
+workspace under <code>doppio/</code> is the live Doppio frontend and talks to the engine
+through <code>libcaffeine-capi</code>. The old C++ editor is frozen in <code>doppio-archived/</code>
+and is no longer part of the CMake build.</p>
+<h2 id="why-iced">Why Iced<a class="anchor" href="#why-iced" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>MIT licensed, suitable for an engine/editor that other people may redistribute.</li>
+<li><code>wgpu</code> renderer, <code>PaneGrid</code> docking, dynamic widget trees in plain Rust.</li>
+<li>Official <code>iced_test</code> headless simulator (<code>click</code>, <code>typewrite</code>, <code>find</code>,
+snapshots) for deterministic CI tests.</li>
+<li><code>iced-mcp</code> (MIT, iced 0.14) exposes the running widget tree to agents over MCP:
+snapshots, clicks, typing, assertions, flows and <code>run-suite</code>.</li>
+</ul>
+<h2 id="workspace">Workspace<a class="anchor" href="#workspace" aria-label="Link to this section">#</a></h2>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">doppio/
+  crates/engine/            libloading bindings to libcaffeine-capi
+  crates/ui/
+    src/windows/            main.rs (app state + PaneGrid), projectloader.rs
+    src/uikit/components/   button, panel, toolbar, status, text_field, field_editor,
+                            tree_view, component_card/picker, viewport_surface,
+                            viewport_shader, rendering_canvas, gizmo, scene_markers,
+                            viewport_math, asset_preview,
+                            breadcrumb, code_editor
+    src/uikit/theme.rs      colours, borders and spacing for the whole workspace
+    src/uikit/panels/       hierarchy, sceneviewport, assetmanager, asset_wizard,
+                            inspector, console, material, material_generator,
+                            texture_generator, texture_set, nature_generator,
+                            water_generator, terrain_generator, project_manager,
+                            script, dryad_nodes
+    src/uikit/project.rs    project.caffeine manifest, recursive scan, recent list
+    src/uikit/script.rs     open script documents, editor buffers and save/revert
+    src/uikit/dryad.rs      Dryad graph, catalog, emitter, .node.json and round-trip
+</code></pre></div>
+<ul>
+<li>App/UI state lives in <code>windows/main.rs</code>; panels and components are
+reusable library modules.</li>
+<li><strong>Panels compose components; they never build interactive widgets inline.</strong>
+Text fields, field editors, component cards/pickers and buttons live in
+<code>uikit/components/</code>; <code>scripts/check-rust-ui.sh</code> rejects raw <code>text_input</code>,
+<code>checkbox</code>, <code>pick_list</code>, <code>slider</code> or <code>button</code> calls in <code>uikit/panels/</code>.</li>
+<li>The UI crates never touch FFI directly: only <code>doppio-engine</code> loads the
+shared library.</li>
+<li>a four-region <code>PaneGrid</code> layout: Hierarchy on the left; Viewport (+ Material,
+Texture and other generators, Texture Set, Script, Dryad Nodes) in the centre;
+Material, Nature, Water and Terrain are editors, so they are tabs of the centre workspace); Inspector
+(+ Profiler, Photon, Environment, Audio) alone on the right, only what stays open while working; and a Project-style
+bottom dock with <strong>Assets</strong> (folder tree + file grid) next to the Console, tall enough to keep the Hierarchy short (a tab strip wider than its pane scrolls sideways and the pane drops its split button, so tabs are never hidden);</li>
+<li><strong>docking</strong>: dragging a tab away from its header shows guides on every pane
+(<code>uikit/components/dock_overlay.rs</code>): the centre adds the tab to that pane's
+group, the edge guides split the pane and dock on that side. Panes also have
+a maximise/restore button; open menus only close on a click outside, Escape
+or choosing an item (hover updates from widgets behind never dismiss them);</li>
+<li>the <strong>Performance</strong> tab (<code>uikit/panels/performance.rs</code>, <code>windows/main/performance.rs</code>, View → Performance): where the render options live.
+The scene's <code>Forward Render Features</code> component (instancing, occlusion culling, reflection probes and screen-space reflections, volumetric
+light, diffuse sky light and their numbers; <strong>Add render features</strong> puts it on a new entity) and the editor viewport's own render scale,
+anti-aliasing, light shadows and ground grid. Scene edits are undo steps; viewport options are the editor's and are not. The editor starts the
+viewport at render scale 1.0 (the engine's own default stays 1.5 for other hosts). Agents use <code>performance</code>, <code>performance_set</code>,
+<code>performance_add</code> and <code>show_performance</code>. Photon keeps its own tab. With Photon off, or its component disabled, no Photon pass runs (a test
+checks the engine's profiler), though a profiler row keeps the totals since the last <strong>Reset</strong>;</li>
+<li><strong>building the editor</strong>: the editor lays out and draws the whole window on every tick, so an unoptimised build costs a full core and leaves
+the GPU waiting (a scene the engine draws in 2 ms ran at 7 fps). The workspace's <code>Cargo.toml</code> therefore builds dependencies at <code>opt-level = 3</code>
+and the editor crates at 1 even in the dev profile, with line-table debug info; the first build takes minutes, later ones are incremental, and
+the whole-window layout dropped from about 20 ms to about 3 ms;</li>
+<li><strong>Play and the scene views</strong>: ▶ / ⏸ and ⏹ sit in the middle of the top bar (<code>uikit/components/transport.rs</code>, <code>windows/main/sceneview.rs</code>).
+Play snapshots the scene and starts the engine's game simulation (C ABI v23, <code>GameSimulation</code>): the systems <code>caffeine-runtime</code> runs
+between frames (animation, effects, fluids, navigation, 2D and 3D physics, Lua and Dryad scripts, procedural worlds, UI) over the editor's
+own world, shown in the <strong>Gameplay</strong> tab through the scene's active camera with the keyboard and pointer reaching the scripts. Pause freezes
+it, Stop ends it and puts the scene back as it was: what the game did, and anything edited meanwhile, is undone, and Play leaves no undo history.
+The <strong>Camera</strong> tab shows the scene through the selected Camera 3D (or the active one) without playing. Both pictures are engine scene views with
+their own render target and draw on demand like the editor viewport. The simulation does not belong to one view: the game ticks
+whichever tab is on screen, and the clock of the picture (clouds, weather, wind, water, sound) steps once per game tick by whichever view
+draws first (the editor Viewport, Gameplay or Camera), so every visible view shows the same moment and none counts it twice; with
+none on screen the physics and scripts go on and only the picture-bound parts wait. The engine's profiler lists the work: <code>Game::tick</code>
+with <code>Game::animation</code>, <code>effects</code>, <code>physics2d</code>, <code>physics3d</code>, <code>scripts</code> and <code>world_and_ui</code>, and <code>SceneView::game</code> / <code>SceneView::camera</code>. Agents use <code>toggle_play</code>, <code>stop_play</code>, <code>game_key</code>, <code>show_gameplay</code>,
+<code>show_camera_preview</code> and the <code>play</code> query;</li>
+<li><strong>detaching</strong>: the ⧉ button in a pane's title bar turns the active tab into a window of its own (the editor
+runs as an <code>iced::daemon</code>; <code>windows/main/detach.rs</code>). A detached tab is the same view over the same engine and
+documents, so nothing is copied: it leaves the dock layout and is drawn in another operating-system window with a
+<strong>Dock back</strong> button. Closing that window docks the tab back, closing the main window quits, a &quot;show this tab&quot;
+command raises the window instead of docking a second copy, and the last tab of the editor cannot leave. Agents use
+<code>detach_tab</code>, <code>attach_tab</code> and the <code>windows</code> query; the single-window agent bridge build refuses to detach;</li>
+<li>the <strong>Assets wizard</strong> (<code>+ New</code> / <code>Import</code> in the Assets toolbar,
+<code>uikit/asset_wizard.rs</code> + <code>uikit/panels/asset_wizard.rs</code>): Create (folder,
+Lua, Dryad script; material and texture set open their editors), Import
+(copies files or folders into the current folder, never overwriting; the queue tags
+every file with its kind and flags the ones that will be skipped; a file dropped on the window outside the
+wizard is imported straight into the folder being browsed) and Pack (<code>caf-pack --input &lt;asset root&gt; --output &lt;project&gt;.cap</code>, found via <code>CAF_PACK</code>, <code>CAFFEINE_ENGINE_ROOT</code>, a sibling
+<code>caf-pack/build/src</code> or <code>PATH</code>);</li>
+<li>the <strong>file browser</strong> (<code>uikit/file_browser.rs</code> + <code>uikit/panels/file_browser.rs</code>, <strong>Browse…</strong> in the Import tab):
+Doppio's own picker for files and folders on this computer, identical on Linux, macOS and Windows and drivable by
+tests and agents because it is plain <code>std::fs</code> (no operating-system dialog). It has places (home, Desktop, Documents,
+Downloads, every drive on Windows, <code>/</code> and the mount points elsewhere), a path trail, a box that takes typed or pasted
+paths (<code>~</code>, relative, quoted, <code>file://</code>), a name filter, hidden-file and importable-types switches and a multi-selection
+that survives walking between folders; a double-clicked file is taken at once and the next Browse opens where the last
+one ended;</li>
+<li><strong>asset kinds, cards and the shared picker</strong>: <code>uikit/asset_kind.rs</code> is the one table of file
+extensions (textures including bmp/psd/pnm, meshes, audio including flac, fonts, prefabs, scenes,
+terrain/water/nature graphs, texture sets and data files such as .json, .csv, .mtl and .bin);
+the Assets grid draws a card per asset with a bar in its kind's colour, a thumbnail or icon well and an
+extension chip. Every asset field composes <code>asset_field</code> (thumbnail, editable path, <strong>…</strong> and <strong>×</strong>)
+and opens the single <code>asset.pick.*</code> overlay: matching assets with kind filters, search, the current value
+first and a <em>None</em> row. Inspector string fields are recognised by name (<code>Mesh Path</code>, <code>Clip Path</code>,
+<code>Script</code>…); the Terrain and Water Generator slots use it too; agents drive it with <code>asset_pick_*</code> and <code>asset_kinds</code>.
+Whatever is typed or picked goes through the engine's asset manager first (<code>windows/main/assetref.rs</code>, C ABI 24): a file
+from outside the project is imported into its folder and the field keeps the project path, a file of the wrong kind is
+refused before anything is copied, and a path still being typed is kept as typed. The Material Generator's Image and
+Normal Map nodes, the Terrain and Water slots, the Nature material and image nodes and the baking of a graph follow the same rule;</li>
+<li>stable widget ids for the toolbar, inspector inputs and entity rows;</li>
+<li>a headless <code>iced_test</code> harness covering editing, panes, console filters,
+hierarchy search, viewport gestures and flight;</li>
+<li>an optional <code>agent</code> feature that routes <code>main</code> through <code>iced_mcp::run</code>.</li>
+</ul>
+<p>The C++ boundary:</p>
+<ul>
+<li><code>caffeine-core</code>: engine only, no ImGui/ImNodes.</li>
+<li><code>caffeine-editor-support</code>: ImGui adapters for engine render helpers.</li>
+<li><code>caffeine-capi</code>: the C ABI used by Rust (and any other external frontend).</li>
+</ul>
+<p>Run it with:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> doppio
+cargo run -p doppio-ui -- ../assets/benchmarks/dense_outdoor.caf
+</code></pre></div>
+<p>Materials, procedural library and real depth: <a href="/en/docs/doppio/materials-guide/"><code>materials-guide.md</code></a>. The current widget catalogue and screenshots are published as the <a href="https://github.com/devscafecommunity/caffeine/blob/main/caffeine-website/content/en/docs/editor/ui-reference.md" rel="noopener" class="ext">UI reference</a>.</p>
+<p>Drive and inspect the UI without a window (any agent, CI or human; plain JSON
+over stdin/stdout, see <a href="/en/docs/doppio/headless-testing/"><code>headless-testing.md</code></a>):</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/doppio-headless.sh widgets                      <span class="hljs-comment"># what is on screen</span>
+./scripts/doppio-headless.sh run doppio/tests/ui-flows --format text
+./scripts/doppio-headless.sh screenshot --annotate --out /tmp/shots
+</code></pre></div>
+<p>Run the checks used by CI/agents:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/check-rust-ui.sh
+<span class="hljs-comment"># cargo fmt --check, cargo test, cargo check --features agent, clippy -D warnings</span>
+<span class="hljs-comment"># plus the caffeine-core ImGui coupling audit</span>
+</code></pre></div>
+<h2 id="migration-status">Migration status<a class="anchor" href="#migration-status" aria-label="Link to this section">#</a></h2>
+<h3 id="engine-imgui-split-done">Engine / ImGui split — done<a class="anchor" href="#engine-imgui-split-done" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>caffeine-core</code> builds without ImGui/ImNodes; <code>nm</code> reports 0 ImGui/ImNodes
+symbols in <code>libcaffeine-core.a</code>.</li>
+<li><code>caffeine-editor-support</code> contains the engine ImGui adapters
+(<code>Overlay2D::draw</code>, <code>SkyboxRenderer</code>).</li>
+<li>18 UI-kit headers and 1 editor-UI header still reference ImGui; that is the
+legacy SDK/editor side, not core.</li>
+<li><code>caffeine-runtime</code> is still an ImGui frontend and needs an RHI render path
+before it can be made UI-free.</li>
+</ul>
+<p>Measure the coupling with:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">python3 scripts/audit_core_ui_coupling.py
+python3 scripts/audit_core_ui_coupling.py --fail-on-leaks
+</code></pre></div>
+<h3 id="c-abi-data-oriented-boundary-first-slice-done">C ABI / data-oriented boundary — first slice done<a class="anchor" href="#c-abi-data-oriented-boundary-first-slice-done" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>header: <code>include/caffeine/capi/EngineAPI.h</code></li>
+<li>implementation: <code>src/caffeine/capi/EngineAPI.cpp</code></li>
+<li>version: <code>CAFFEINE_CAPI_VERSION</code> 2; <code>caffeine_capi_version()</code> is exposed to
+frontends and shown as a status-bar badge.</li>
+<li>test: <code>tests/test_capi.cpp</code> (<code>[capi]</code>, 318 assertions / 13 cases)</li>
+<li>opaque <code>CaffeineSession</code>, <code>CaffeineEntity</code> and versioned <code>CaffeineResult</code>;</li>
+<li>session create/destroy and <code>.caf</code> scene load;</li>
+<li>entity count/list/name, create, destroy, rename and selection;</li>
+<li>position/rotation/scale get/set (setting a transform creates one when the
+entity has none), plus resolved world positions
+(<code>entity_world_position</code>, <code>set_entity_world_position</code>) so groups compose
+position, rotation and scale; the offscreen renderer calls
+<code>Scene::propagateTransforms</code> every frame before drawing;</li>
+<li>dirty state and <code>.caf</code> save; the Rust toolbar has Save + a dirty marker;</li>
+<li>project asset listing (<code>set_asset_root</code>, <code>refresh_assets</code>, <code>asset_at</code>); the
+Rust Asset Manager shows real files and a file count;</li>
+<li>hierarchy links (<code>entity_parent</code>, <code>set_entity_parent</code>) with cycle rejection;
+the Hierarchy <strong>+</strong> opens a create-entity palette with built-in prefabs
+(empty/folder, mesh primitives, lights, camera, physics props, player,
+terrain/water) plus a duplicate-selection recipe. Prefabs are applied through
+the same C ABI components and are undoable;</li>
+<li>the Hierarchy panel composes the reusable <code>tree_view</code> component: compact
+full-width rows, semantic icons, expand/collapse chevrons, hover/selection
+states and per-row context menus. Rows are draggable: dropping one onto
+another reparents it, and dropping it on the scene root unparents it. The
+Assets browser shares the breadcrumb, text field and asset-preview components;</li>
+<li>PBR material assets (<code>.mat</code>): <code>CaffeineMaterial</code> mirrors the engine surface
+(albedo, metallic, roughness, reflectance, emission, transmission, clearcoat,
+sheen, iridescence, reflection and UV tiling/offset), load/save, built-in
+presets, assignment to the selected entity's Mesh Filter and a synchronous
+sphere preview rendered by <code>MaterialPreviewRenderer</code>.
+<code>caffeine_texture_generate_map</code> derives normal, AO, roughness, metallic and
+height maps; <code>caffeine_texture_pack_maps</code> writes ORM, Unity HDRP mask and
+Unity metallic-smoothness packings; <code>caffeine_texture_save_rgba</code> writes
+generator output. <code>asset_path</code>, <code>asset_project_path</code> and
+<code>resolve_path</code> bridge asset-relative, project-relative and absolute paths;</li>
+<li>component schema and values (<code>component_type_*</code>, <code>entity_component_*</code>,
+<code>add/remove_component</code>); the Inspector is generic and edits every registered
+component (Transform, Camera 3D, lights, renderers, physics, colliders,
+scripts) with scalar, vector, bool, string and enum fields;</li>
+<li>Dryad preview (<code>caffeine_session_run_dryad</code>) runs <code>onCreate</code> + one
+<code>onUpdate</code> on an entity without entering play mode; <code>caffeine_dryad_available</code>
+reports whether the interpreter was linked;</li>
+<li>non-blocking render (<code>render_begin</code> / <code>render_poll</code>): submit a download copy
+and poll its fence instead of waiting for the GPU;</li>
+<li>in-memory scene snapshots (<code>snapshot</code> / <code>restore</code>): the whole world serialized
+to bytes, used by the editor undo/redo timeline;</li>
+<li>camera get/set (<code>CaffeineCamera</code>), driven by viewport gestures and WASD;</li>
+<li>viewport settings (<code>set/get_viewport_settings</code>): reference grid, FXAA/TAA and
+internal render scale;</li>
+<li>tick/frame-stat bookkeeping (systems will be wired incrementally);</li>
+<li>no ImGui and no editor headers in the ABI;</li>
+<li><code>libcaffeine-capi.so</code> shared library (CMake target <code>caffeine-capi</code>);</li>
+<li>a <code>libloading</code> Rust bridge in <code>doppio/crates/engine/src/lib.rs</code>, with a
+round-trip integration test that skips when the library is absent;</li>
+<li>the Rust Inspector shows the real C++ position and can nudge it with <code>+X</code>;</li>
+<li>222 Rust tests: 2 engine bridge/snapshot tests, 3 material-preview
+integration tests, 216 UI/widget tests (1 ignored docs generator) and 1 doctest.</li>
+</ul>
+<p>The app loads a real scene through the ABI:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> doppio
+cargo run -p doppio-ui -- ../assets/benchmarks/dense_outdoor.caf
+</code></pre></div>
+<p>The hierarchy then shows the real C++ entities (Rock/Tree/...). Without the
+shared library it falls back to fake data, so UI tests do not depend on CMake.</p>
+<p>Still to add before the Rust UI is fully wired:</p>
+<ul>
+<li>component schemas and field snapshots in POD arrays;</li>
+<li>commands/undo/redo/play-pause and remaining asset operations;</li>
+<li>events (dirty state, selection, logs, asset changes).</li>
+</ul>
+<p>The existing <code>PluginHostApi</code> is a good function-table precedent. The existing
+<code>DOPPIO_TEST_MODE</code> JSON loop (<code>TestRequestHandler</code>) is a good engine-side test
+precedent.</p>
+<h3 id="component-schema-and-generic-inspector">Component schema and generic Inspector<a class="anchor" href="#component-schema-and-generic-inspector" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>The C ABI exposes a component catalog (id, name, fields with kind/limits/
+enum options) plus per-entity instances and field get/set/add/remove.</li>
+<li>The registry covers Transform, Position/Rotation/Scale 3D, Camera 3D,
+Light plus directional/point/spot, Mesh Renderer, Mesh Filter, Rigid Body
+3D/2D, Collider 3D/2D and Script.</li>
+<li>The Inspector is generic but composed as a property editor: an entity header,
+a combined Transform card (position/rotation/scale axes), collapsible
+component cards with icons and compact remove actions, striped property rows,
+right-aligned labels, sliders with values, vector axis groups and a colour
+picker. Each component has a compact remove button and the pane has an Add
+Component picker. Every edit is an undo step.</li>
+<li>The panel itself only composes uikit components (<code>text_field</code>,
+<code>field_editor</code>, <code>component_card</code>, <code>component_picker</code>); it contains no raw
+<code>text_input</code>/<code>checkbox</code>/<code>pick_list</code>. <code>scripts/check-rust-ui.sh</code> enforces it.</li>
+<li>Window chrome is a <strong>menu bar</strong> (<code>Scene</code>, <code>Edit</code>, <code>View</code>) plus <code>status</code> chips;
+every pane body is wrapped by the <code>panel</code> component with a title and muted
+subtitle. Colours and spacing come from <code>uikit/theme.rs</code> (the check rejects
+hardcoded colours outside it).</li>
+<li>Prefer direct manipulation over button rows: hierarchy rows support click,
+double-click (focus) and right-click (context menu: add/focus/delete);
+viewport gestures are drag/pan/wheel/double-click/right-click. Menu entries
+and <code>Ctrl</code> shortcuts cover the rest.</li>
+</ul>
+<h3 id="project-manager-and-assets">Project Manager and Assets<a class="anchor" href="#project-manager-and-assets" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>When no <code>.caf</code> scene is passed on the command line, Doppio opens its own
+<strong>Project Manager</strong> over the workspace (the editor fixtures and screenshot
+runs pass a scene, so they stay deterministic). The Project menu and
+<code>Ctrl+O</code> reopen it at any time.</li>
+<li>The launcher may also pass a project root or <code>project.caffeine</code> as the first
+argument. Doppio opens it directly, sets the engine asset root, loads
+<code>last_scene</code> and shows the active-project chip instead of the startup dialog.</li>
+<li>The manager has <strong>Create New</strong>, <strong>Open Recent</strong> and <strong>Browse Projects</strong> tabs,
+mirroring the archived startup dialog. Create validates the name, creates
+<code>Assets/Raw/{Animations,Audio,Generators,Materials,Models,Prefabs,Sky,TextureSets,Textures}</code>, <code>Assets/Processed</code>, <code>Scripts</code>,
+<code>scenes</code>, <code>materials</code>, <code>texture_sets</code> and <code>build</code>, writes <code>project.caffeine</code>
+and opens the project. Browse recursively scans a folder up to six levels for
+<code>project.caffeine</code>, and Recent reads <code>~/.config/caffeine/recent.txt</code>
+(<code>$CAFFEINE_RECENT_PROJECTS</code> overrides the file for tests and portable runs).
+Rows select on click and open on double-click; the primary action opens the
+selection.</li>
+<li>Opening a project sets the engine asset root from <code>paths.assets_raw</code>, loads
+<code>last_scene</code> when it exists, or clears the world and saves a starter
+<code>scenes/main.caf</code> for a new project. Saving the scene updates <code>last_scene</code> in
+the manifest. The active project is shown as a chip in the title bar.</li>
+<li>The manifest format is the existing <code>project.caffeine</code> JSON shape
+(<code>project_name</code>, <code>engine_version</code>, <code>paths</code>, <code>template_type</code>, <code>last_scene</code>),
+so projects created by the C++ tools and by Doppio are interchangeable.
+<code>uikit::project</code> owns create/load/scan/recent helpers and injects the recent
+file in tests so no real user state is touched.</li>
+<li>The <strong>Sample</strong> template is the fixed project the team benchmarks and tries Doppio in: the standard folders and
+nothing else, named <code>Sample</code> unless a name is typed. Its canonical copy is <code>samples/Sample</code> in the engine repository, and a
+test fails when the template and that copy drift apart (<code>cargo test -p doppio-ui zz_write_sample -- --ignored</code> rewrites it).</li>
+<li>The <strong>Assets</strong> pane is now a real browser: clickable breadcrumbs, Up/Root,
+refresh, folder-first navigation and a Grid/List switch. Folder navigation is
+derived from <code>AssetInfo.relative_path</code>; no new C ABI call is required.
+Search walks the whole asset root (not only the current folder), thumbnails
+and material tints are reused, and the existing internal drag/drop path keeps
+original asset indices so dropping a <code>.mat</code> or image on the Hierarchy or
+Inspector still works.</li>
+</ul>
+<h3 id="script-editor-and-dryad-nodes">Script editor and Dryad nodes<a class="anchor" href="#script-editor-and-dryad-nodes" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>The <strong>Script</strong> pane opens <code>.lua</code> and <code>.dyd</code> files as tabs, with per-file dirty
+tracking, Save/Revert/Close, line numbers, syntax colouring and the shared
+project path. Scripts open from Assets (single-click for <code>.lua</code>; double-click
+for the source of a <code>.dyd</code>), the Scene menu, <code>Ctrl+Shift+E</code>, or the MCP
+<code>open_script</code> action.</li>
+<li>Iced 0.14's stock <code>text_editor</code> paints empty under this workspace's
+renderer, so <code>uikit/components/code_editor.rs</code> wraps the canvas-based
+<code>iced-code-editor</code> widget. The pane still owns the document state, dirty
+checks and disk I/O; the component is the only place that knows the editor
+implementation.</li>
+<li><strong>Attach Selected</strong> writes the script's project-relative path into the
+selected entity's <code>Script</code> component (adding the component when missing);
+<strong>Detach</strong> clears it. Both are undoable scene edits.</li>
+<li>The <strong>Dryad Nodes</strong> pane (<code>Ctrl+Shift+D</code>, Scene menu, or a <code>.dyd</code> asset)
+edits the same <code>.dyd</code> plus its sibling <code>.node.json</code>. The Rust <code>dryad</code>
+module matches the C++ <code>NodeEmitter</code>/<code>NodeGraphIO</code>/<code>NodeRoundTrip</code> formats
+byte-for-byte: deterministic <code>// @node</code> markers, sorted JSON ids/edges and
+<code>%.17g</code> numbers. It supports OnUpdate, Set/Get Position, Set/Get Scale,
+Translate, DeltaTime, Constant, Branch and Log, plus the runtime nodes Key
+Down, Action Down, Input Axis (name in the properties panel), Total Time and
+Destroy Self, with typed exec/data ports, connection validation, inline
+input fallbacks, Add motion and Sync from <code>.dyd</code>. The new nodes exist in the
+Rust catalog only; the C++ <code>NodeCatalog</code> (archived editor) still lists the
+original ten.</li>
+<li><strong>Reference tooltip.</strong> Hovering a name in the Script pane shows its signature
+and description in a floating card. <code>uikit/script_reference.rs</code> holds one
+table per language (Lua <code>caffeine.*</code>, Dryad <code>caffeine_*</code>); a test reads the
+C++ binding sources and fails when a Dryad native is missing from the table.
+<code>.dyd</code> files use the JavaScript grammar for colouring (Dryad is a brace
+language); colouring of the engine API names themselves is not available
+because <code>iced-code-editor</code> does not take a custom grammar.</li>
+<li><strong>Attach</strong> and <strong>Run once</strong> reuse the script component and the C ABI
+<code>caffeine_session_run_dryad</code> preview (onCreate + one onUpdate). Saving the
+graph writes both files; opening a <code>.dyd</code> also stages its source in the
+Script pane for hand editing. Sources without <code>// @node</code> markers stay valid
+Dryad and the graph editor reports the mismatch instead of rewriting them.</li>
+</ul>
+<h3 id="material-studio">Material studio<a class="anchor" href="#material-studio" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>.mat</code> files are first-class assets. Clicking a <code>.mat</code> in Assets opens the
+<strong>Material</strong> pane (a tab beside the Inspector); clicking a texture creates an
+unsaved material whose albedo map points at it. The pane is a reusable
+<code>panels/material</code> composition of <code>material_preview</code>, <code>texture_slot</code>,
+<code>card</code>, <code>slider</code>, <code>color_picker</code>, <code>dropdown</code> and <code>checkbox</code> components.</li>
+<li>The preview is a real engine-rendered sphere
+(<code>caffeine_session_render_material_preview</code>), 256 px, throttled to ~8 Hz and
+only while the pane is visible. Dragging the image orbits it. The preview
+renderer has its own targets, so it never resizes the scene viewport target.</li>
+<li>Surface controls cover the full CAFMAT3 surface: albedo/alpha, metallic,
+roughness, reflectance, emission, alpha mode/cutoff, UV tiling/offset,
+normal/AO strength, transmission/IOR, clearcoat, sheen, iridescence and
+reflection. Presets keep the material name, maps and UV layout. Normal maps
+can be marked DirectX (green down); the renderer flips green before tangent
+space shading.</li>
+<li>Texture slots (albedo, normal, ORM, emission) open a searchable project
+picker with image thumbnails. The Assets pane filters to textures, materials,
+meshes and scenes and has its own search field, so a material or map is a few
+keystrokes away instead of scrolling through source files. Material cards
+fall back to an albedo swatch when a thumbnail cannot be decoded.</li>
+<li>The map baker writes beside the saved <code>.mat</code>: normal from a height/colour
+source (OpenGL or DirectX green), AO from ring-average cavity, roughness
+(inverted albedo luminance) and metallic (bright-surface mask), then packs
+ORM, Unity HDRP mask or Unity metallic-smoothness. Generated normal/ORM maps
+are assigned back to the material; Unity packings are export-only because
+the renderer's ORM slot expects R=AO, G=roughness, B=metallic.</li>
+<li>The Inspector shows a compact Material slot for the selected entity's Mesh
+Filter; clicking it opens the material, <code>×</code> unassigns it (undoable).</li>
+<li>Apply assigns the open material through the C ABI (undo step
+<code>Assign Material</code>). Scene edits never rewrite <code>.mat</code> files, and material
+edits stay unsaved until Save.</li>
+<li>Texture paths are stored project-relative, as existing scene/material files
+do. <code>asset_path</code>, <code>asset_project_path</code> and <code>resolve_path</code> bridge asset
+browser paths, <code>.mat</code> paths and absolute paths; <code>MeshCache</code> also accepts the
+sample materials' repository-relative <code>assets/...</code> prefix.</li>
+<li>The workflow follows the public conventions used by TextureCraft and
+MaterialCraft (PBR channels, texture slots, ORM/Unity packing, live preview)
+but is implemented from Caffeine's own C ABI and renderer; no reference code
+or assets were copied.</li>
+</ul>
+<h3 id="material-generator-node-canvas">Material generator (node canvas)<a class="anchor" href="#material-generator-node-canvas" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>uikit/components/node_canvas.rs</code> is a reusable canvas component: nodes are
+graph-space cards with typed input/output ports, cubic wires, selection,
+node dragging, empty-space panning and wheel zoom. It emits
+<code>Select</code>, <code>MoveNode</code>, <code>Connect</code> and <code>Viewport</code> events; the caller owns the
+graph model. The same component can back other node tools.</li>
+<li><code>uikit/generators.rs</code> is a small clean-room atomic graph: Color, Image,
+Normal Map, Noise (value/Perlin), Voronoi (cells/distance), Checker, Bricks,
+Gradient, Blend (13 modes plus a scalar mask input), Normal Blend (whiteout/
+linear), Levels, Curve, HSL, Threshold, Blur, Sharpen, Emboss, Directional
+Blur, Edge/Cavity/Distance masks, Warp, Value, Luminance, Dot, an Output node
+with Color/Roughness/Metallic/Height/AO inputs and imported <code>Unknown</code>
+placeholders. Ports are typed colour/scalar; scalar inputs read the luminance
+of connected colour maps and fall back to Output constants. Evaluation is
+CPU, tileable at 128–2048 px, cycle-safe and memoized; 2K is the safe max
+until the evaluator gets a tiled/parallel 4K path.</li>
+<li>The <strong>Generator</strong> tab (opened from Material → Generate…, the Scene menu, or
+the MCP action) puts the palette, canvas and selected-node properties side by
+side and maximizes the pane while editing. Image and Normal Map nodes use the
+shared texture picker and support UV/planar/tri-planar/cylindrical/spherical
+projection, tiling, offset, linear/nearest filtering and clamp/repeat
+wrapping. <strong>Bake to Material</strong> runs on a worker thread with progress and
+cancel; image decoding also happens on that worker. The progress bar follows
+the reachable nodes, then reports <code>Packing maps</code>, <code>Baking occlusion</code>,
+<code>Writing maps</code> and <code>Done</code>, so the final AO and map packing no longer look
+stuck at the last node. Occlusion uses a separable box blur (O(pixels)
+instead of O(pixels × radius)), which keeps 2K bakes fast. It writes
+<code>&lt;material&gt;_gen_base_&lt;bits&gt;.png</code>, height/roughness/metallic/packed maps,
+derives a normal map from height and assigns the maps to the open <code>.mat</code>
+before marking it unsaved. A successful bake now saves the <code>.mat</code> and assigns
+it to the selected entity automatically, so the 3D viewport and the
+generator's <strong>3D PREVIEW</strong> (the live material preview sphere) show exactly
+what the graph produced. The generator's <strong>OUTPUT PREVIEW</strong> is a low-resolution
+live bake of the Output node, refreshed after each graph edit with a 160 ms
+debounce; no manual bake is needed to see parameter/brick/mask changes. Direct
+specular is energy-normalised and the height field darkens direct, ambient,
+IBL and reflected light (and point/spot POM shadows), so a face pointing at
+the sun keeps its grooves instead of flattening to a white plastic plate. Every
+node also shows a live 72 px thumbnail of its own evaluated output, computed
+in the same worker pass. The right-hand panel edits the channel-packing
+preset/sources, saves named user presets and chooses 8/16-bit output.</li>
+<li>Saving a material also writes its <code>&lt;name&gt;.mgraph</code> sidecar (versioned text)
+beside the <code>.mat</code>; reopening restores nodes, links, parameters, positions and
+resolution. Graphs are per material, not shared session state.</li>
+<li>Graph edits have their own snapshot timeline (<code>GraphHistory</code>), separate from
+scene undo. Add/delete node, connect, disconnect, move, parameters,
+resolution, copy/paste, image assignment and reroute dots are undoable;
+drags and repeated parameter changes coalesce. <code>Ctrl+Z</code> / <code>Ctrl+Shift+Z</code> /
+<code>Ctrl+Y</code> route to graph history while the Generator pane is active, and the
+header has ↶/↷ buttons.</li>
+<li>Wires are hit-tested as bézier curves. Clicking selects a wire (the
+properties panel offers Delete link); right-click deletes it; dragging a
+connected input detaches its source so it can be dropped on another input.
+Double-clicking a wire inserts a pass-through <strong>Dot</strong> reroute node, with the
+original source and target rewired in one undo step.</li>
+<li>The palette uses the shared <code>tree_view</code> grouped by category (Textures,
+Generators, Filters, Utilities, Output), with collapsible groups and search
+filtering. Nodes snap to a 16-unit grid (toggle), <strong>Fit</strong> frames the whole
+graph, and Copy/Paste duplicates the selected node with a 24-unit offset.</li>
+<li><code>node_canvas</code> ignores mouse presses whose cursor is outside its bounds unless
+a drag is already active, so clicking property sliders never starts an
+empty-canvas pan or clears the selected node.</li>
+<li>The Material panel's <strong>AO from scene</strong> button calls Photon's BVH/GPU AO bake
+for the selected entity and assigns the resulting ORM map to the open
+material (<code>caffeine_session_bake_ao</code>).</li>
+<li><code>uikit/materialcraft.rs</code> reads/writes portable <code>.mcmat</code> archives (ZIP with
+<code>material.json</code>, cooked maps and <code>source.sbs</code>), parses the SBS XML subset and
+exports a minimal SBS source that is re-imported and checked before writing.
+Unknown filters/outputs become <code>Unknown</code> placeholder nodes with warnings.</li>
+<li><code>uikit/materialcraft_io.rs</code> maps imported maps into a <code>.mat</code> (packing separate
+AO/roughness/metallic maps into ORM) and writes <code>.sbs</code>, <code>.mgraph</code> and map
+files. The editor exposes MCP <code>import_materialcraft</code> /
+<code>export_materialcraft</code>; the headless binary is <code>doppio-material</code>.</li>
+<li>The generator follows MaterialCraft's public primitive-editor workflow
+(palette → canvas → properties, typed ports, output node, live baked maps)
+without sharing its code, node definitions or assets.</li>
+<li>The remaining material/texture/generator work is tracked in
+<a href="/en/docs/doppio/material-pipeline/"><code>material-pipeline.md</code></a>: scene/geometry bakes,
+MaterialCraft SBS import and TextureCraft-style texture sets/painting.</li>
+</ul>
+<h3 id="texture-sets-texturecraft-style-foundation">Texture sets (TextureCraft-style foundation)<a class="anchor" href="#texture-sets-texturecraft-style-foundation" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>uikit/texture_set.rs</code> owns UDIM tiles 1001–1010, six default channels
+(baseColor, roughness, metallic, height, AO, curvature), paint/fill layers,
+per-tile layer masks, brush settings, compositing and per-tile undo snapshots.</li>
+<li>The <strong>Texture Set</strong> pane (Material toolbar → Texture Set, or the MCP
+<code>new_texture_set</code> action) stacks tiles/layers on the left, a reusable
+<code>uv_canvas</code> in the centre and channels/brush/export controls on the right.
+The pane maximizes while painting; Material restores the normal layout.</li>
+<li><code>uv_canvas</code> paints RGBA or layer-mask dabs with brush radius, hardness,
+opacity and colour. <strong>3D paint</strong> toggles viewport painting: <code>pick_uv</code> in the
+C ABI ray-picks the selected mesh against the editor camera and returns the
+hit UV; strokes are written to the active tile/layer and the resulting base
+colour is applied to the entity for viewport feedback.</li>
+<li><strong>AO from height</strong> and <strong>Curvature</strong> bake new layers; <strong>AO from scene</strong> calls
+Photon and imports the ORM red channel. <strong>Normal</strong>, <strong>Position</strong> and <strong>ID</strong>
+call <code>caffeine_session_bake_mesh_map</code> and import world-normal,
+world-position or object-ID UV maps into matching channels. All imports keep
+per-tile undo.</li>
+<li>The <code>.texset</code> project is a ZIP with <code>texture-set.json</code>, RGBA PNG tiles and
+grayscale mask PNGs. <code>TileHistory</code> snapshots only the affected tile (cap 64)
+so undo never copies the whole project.</li>
+<li>Export presets: separate PBR maps, glTF ORM and Unity HDRP mask. The
+<code>doppio-material texset-*</code> CLI and MCP <code>export_texture_set</code> use the same code.</li>
+</ul>
+<h3 id="phase-5-polish">Phase 5 polish<a class="anchor" href="#phase-5-polish" aria-label="Link to this section">#</a></h3>
+<ul>
+<li>Material preview: sphere/cube/plane subjects, HDRI path + exposure controls,
+and an asynchronous begin/poll readback (<code>render_material_preview_begin</code> /
+<code>_poll</code>) so orbit drags and edits do not block the UI. It renders at 512 px
+and uses contain-fit with a wider camera so the subject is never cropped.
+The old synchronous entry point remains for tools and tests.</li>
+<li>Thumbnails now decode through the engine (<code>caffeine_texture_load_thumbnail</code>)
+before falling back to Iced's path loader, which fixes PNG/JPG/HDR assets that
+Iced could not decode. The asset grid, material slots and pickers share this
+path; the cache is keyed by resolved path + modification stamp so refreshing
+an asset list only re-decodes thumbnails that changed.</li>
+<li>Inspector <strong>Choose material…</strong> opens the searchable <code>.mat</code> picker. Assets can
+be dragged from the Assets grid onto a Hierarchy entity (material assignment
+or material-from-texture) or onto Material map slots (texture assignment).
+OS file drops still assign <code>.mat</code>/textures and import mesh files.</li>
+<li><code>uikit/mesh_material_import.rs</code> imports OBJ/MTL and <code>.gltf</code>/<code>.glb</code> materials
+(albedo, normal, occlusion, roughness/metallic factors and maps, emission,
+alpha and <code>KHR_texture_transform</code> UV tiling/offset) into <code>.mat</code> assets and
+writes an <code>.mgraph</code> sidecar with an Image node for albedo. MCP
+<code>import_mesh_materials</code> and file drop use the same importer.</li>
+<li>Material badges show map presence with decoded resolution or <strong>missing</strong>,
+plus the normal convention and alpha mode; the status bar shows the C ABI
+version (now <strong>v2</strong>).</li>
+<li><strong>Apply material</strong> saves the open material first, so baked generator maps and
+complex masks reach the <code>.mat</code> file before assignment. Applying to an entity
+without a Mesh Filter now creates a visible cube preview mesh instead of
+failing silently.</li>
+</ul>
+<h3 id="undo-and-redo">Undo and redo<a class="anchor" href="#undo-and-redo" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>doppio/crates/ui/src/history.rs</code> keeps a timeline of editor states: the UI
+entity list, an optional engine snapshot, the dirty flag and the selection.</li>
+<li>States are full scene snapshots rather than per-field commands, so undo also
+covers components the UI does not edit yet.</li>
+<li>Steps are named (<code>Add Entity 3</code>, <code>Rename Boss</code>, <code>Move Rock to x=…</code>), typing in
+one field coalesces into a single step, and a new edit drops the redo branch.</li>
+<li>Cap: 200 steps / ~128 MB; the oldest steps are dropped first.</li>
+<li>Toolbar Undo/Redo, Ctrl+Z, Ctrl+Shift+Z / Ctrl+Y, and MCP <code>undo</code> / <code>redo</code>
+actions. The <code>history</code> query returns the timeline, cursor and can-undo/redo.</li>
+<li>Snapshot restore remaps entity ids, so the UI re-reads the hierarchy; the
+serializer writes and recreates entities in stable id order to preserve it.</li>
+</ul>
+<h3 id="viewport-asynchronous-cpu-readback">Viewport — asynchronous CPU readback<a class="anchor" href="#viewport-asynchronous-cpu-readback" aria-label="Link to this section">#</a></h3>
+<ul>
+<li><code>RenderDevice::initOffscreen()</code> creates a headless SDL_GPU device.</li>
+<li><code>caffeine_session_render()</code> is the blocking path (tools/tests): render with
+<code>GpuSceneRenderer::renderWithCamera</code> into an RGBA8 target and read it back.</li>
+<li><code>caffeine_session_render_begin()</code> renders, starts a texture→transfer-buffer
+download and returns immediately with a fence. <code>RenderDevice::endOffscreen()</code>
+does <strong>not</strong> call <code>SDL_WaitForGPUIdle</code>; the C API keeps one offscreen frame
+in flight and releases upload buffers when its readback fence signals.</li>
+<li><code>caffeine_session_render_poll()</code> returns <code>PENDING</code> until the fence is
+signalled, then maps the transfer buffer and copies the pixels.</li>
+<li>The transfer buffer is reused across frames instead of being allocated and
+destroyed every frame. A 33 ms render interval and a once-per-second HUD
+update keep the UI thread from being flooded.</li>
+<li>Finished frames are drawn by <code>uikit/components/viewport_shader.rs</code>, not by a
+new Iced image handle per frame. The shader owns one persistent wgpu texture
+and writes into it only when the frame id changes, so animated updates no
+longer create/destroy textures or flicker on the compositor.</li>
+<li><code>doppio-engine::Engine::{render, render_begin, render_poll}</code> wrap the ABI.</li>
+<li><code>uikit/components/viewport_surface.rs</code> owns the interactive surface: image or
+empty state, HUD chips (resolution, grid, latency, FPS, camera), mouse
+handling (left drag orbit, right/middle drag pan, wheel zoom, double-click
+focus) and grab/grabbing cursor feedback.</li>
+<li>The scene viewport reports its real pane size through an Iced <code>sensor</code>; the
+app renders at 2x logical pixels (capped at 3 megapixels) so the image stays
+sharp after Iced scales it back down. The C ABI adds 1.5x internal
+supersampling and FXAA (TAA/off are also exposed), and enables the GPU reference grid with adaptive cell
+spacing and coloured X/Z axes. The grid fades out between 1,500 and 5,000
+units of visible range: at extreme zoom its screen-space lines sit almost
+coplanar with distant terrain and alias into dashed confetti. The near plane
+also scales with orbit distance so a 50k far plane does not destroy depth
+precision. The View menu (or <code>G</code> over the viewport) toggles the grid.</li>
+<li><code>WASD</code> flies along the view direction, <code>Q</code>/<code>E</code> move vertically and <code>Shift</code>
+boosts speed. The camera focus is never height-clamped; the orbit pitch only
+stops just short of the pole so <code>lookAt</code> stays stable. That allows reaching
+cloud layers and orbiting beyond the old 5,000-unit zoom limit.</li>
+<li><code>uikit/components/gizmo.rs</code> draws the selected entity's transform gizmo over
+the shader surface using the same orbit camera projection (shared maths in
+<code>components/viewport_math.rs</code>). <code>1</code>/<code>2</code>/<code>3</code> (or View → Move/Rotate/Scale Tool)
+switch modes. Move has shaded 3D arrows and plane handles, Rotate has depth-shaded
+rings with a swept-angle wedge, and Scale follows the object's <strong>local</strong> axes and has a
+centre cube for uniform scale. The handle under the cursor is highlighted. Edits flow
+through the normal commit path and coalesce into one undo step per handle drag. The
+overlay projects the entity's resolved world position, so a child stays attached to a
+moved/rotated/scaled group, and move edits are converted back through the parent
+transform. It projects with the camera snapshot of the frame currently on screen, not
+the UI's newest camera, so an orbiting world and its gizmo stay aligned despite the
+asynchronous readback.</li>
+<li><code>uikit/components/scene_markers.rs</code> draws markers for entities that have no mesh: light
+rays, bulbs and cones, camera frustums, colliders and locators. They sit under the gizmo,
+can be clicked to select their entity and are toggled from the View menu. Details, limits
+and images: <a href="/en/docs/doppio/gizmos-and-markers/"><code>gizmos-and-markers.md</code></a>.</li>
+<li><code>ViewportTick</code> still fires every 16 ms, but the viewport submits at most one
+frame per 33 ms; the HUD shows measured latency and a rolling FPS. The
+persistent shader texture is kept when a frame is unchanged, so dropped
+frames can never show a partial or empty viewport.</li>
+<li>Camera maths (orbit, pan basis, fly movement, zoom, focus selection) lives in
+<code>windows/main.rs</code>; there is no camera button row. Gestures and shortcuts
+(<code>Ctrl+F</code> focus, <code>Ctrl+0</code> reset, <code>Ctrl+R</code> render) drive it.</li>
+</ul>
+<p>The viewport shows the real C++ scene (terrain, rocks, sky) in Iced.</p>
+<h3 id="generators-a-workspace-and-a-notice">Generators: a workspace and a notice<a class="anchor" href="#generators-a-workspace-and-a-notice" aria-label="Link to this section">#</a></h3>
+<p>The Nature, Water, Terrain and Texture tabs (and the Scatter action) share two services (<code>windows/main/workspace.rs</code>):</p>
+<ul>
+<li><strong>A workspace without a project.</strong> Generators write meshes, materials, terrains and plans as project assets. With no project open,
+<code>App::ensure_workspace</code> gives the engine a <strong>scratch project</strong> (<code>$CAFFEINE_SCRATCH</code>, else <code>&lt;data dir&gt;/caffeine/doppio/scratch</code>) the first time an
+action needs files, and says so; the files show in the Assets pane. The top bar shows a <em>No project</em> chip meanwhile. (Before this, <em>Place in scene</em>
+with no project answered with one small line in a side panel, and the Texture tab wrote to a <code>Textures</code> folder relative to the working directory.)
+The engine treats the scratch folder as the project root too (<code>caffeine_session_set_asset_root</code> sets the root when no scene has), because it resolves the
+relative asset paths the generators store against it; without that the placed tree was in the scene but drew nothing.</li>
+<li><strong>The project root is the folder with <code>project.caffeine</code>.</strong> <code>caffeine_session_load_scene</code> walks up from the scene (four levels) to the nearest
+<code>project.caffeine</code>, and only then falls back to the folder above a <code>scenes</code> / <code>Scenes</code> directory (Doppio creates <code>Scenes/</code>; the engine used to know only the
+lowercase name and took <code>Scenes/</code> as the root). Its <code>assets/raw</code> lookup ignores case too (<code>Assets/Raw</code>). Generators store meshes as <strong>project paths</strong>
+(<code>Assets/Raw/Models/Nature/oak_trunk.obj</code>, from <code>asset_project_path</code>), like materials and textures, because the engine resolves a relative path against the
+project root, not the asset root. Every recipe write rescans the assets, so the file shows in the Assets pane at once.</li>
+<li><strong>A notice anyone can see.</strong> Every change of a generator's <code>status</code> line (and of the Scatter action's) becomes a chip in the top bar for 12 seconds and an
+entry in the Console, coloured by how it went (<code>status::tone_for_text</code>: success, warning for &quot;placed with problems&quot;, danger for failures). The
+panels show the same line under their inspector, wrapped and coloured, through <code>status::note</code>.</li>
+</ul>
+<p>Also in the generator tabs: the preset dropdown shows the preset in use (it used to read <em>Choose…</em> even with Oak loaded), graphs that load fit the canvas
+up to 1.4x, node titles and ports are larger and a parameter summary that would overlap a long title is left to the inspector, checkboxes put their label next to the box
+(<code>checkbox::property</code>, and <code>checkbox::inline</code> for toolbars), and the Place/Scatter controls live in the toolbar where a selected node's long parameter list cannot push them
+out of view. Tested by <code>generators_work_without_a_project_and_say_what_happened</code>, <code>status_lines_get_a_tone_from_what_they_say</code> and the flow <code>generators-interconnect.json</code>.</p>
+<h3 id="console">Console<a class="anchor" href="#console" aria-label="Link to this section">#</a></h3>
+<p>Entries are typed as Errors, Log, Actions, Engine or UI and prefixed in the
+list. The filter chips hide/show each category independently; the scrollable
+anchors to the newest entry.</p>
+<h3 id="shortcuts">Shortcuts<a class="anchor" href="#shortcuts" aria-label="Link to this section">#</a></h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Shortcut</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl+Z</code> / <code>Ctrl+Shift+Z</code> / <code>Ctrl+Y</code></td>
+<td>undo / redo</td>
+</tr>
+<tr>
+<td><code>Ctrl+N</code></td>
+<td>add empty entity</td>
+</tr>
+<tr>
+<td><code>Ctrl+Shift+N</code></td>
+<td>open the create-entity palette</td>
+</tr>
+<tr>
+<td><code>Ctrl+Shift+M</code></td>
+<td>new material</td>
+</tr>
+<tr>
+<td><code>Ctrl+S</code></td>
+<td>save scene</td>
+</tr>
+<tr>
+<td><code>Ctrl+Enter</code></td>
+<td>play / pause</td>
+</tr>
+<tr>
+<td><code>Ctrl+F</code></td>
+<td>focus selection</td>
+</tr>
+<tr>
+<td><code>Ctrl+0</code></td>
+<td>reset camera</td>
+</tr>
+<tr>
+<td><code>Ctrl+R</code></td>
+<td>render viewport now</td>
+</tr>
+<tr>
+<td><code>G</code> (over the viewport)</td>
+<td>toggle the reference grid</td>
+</tr>
+<tr>
+<td><code>1</code> / <code>2</code> / <code>3</code> (over the viewport)</td>
+<td>move / rotate / scale gizmo</td>
+</tr>
+<tr>
+<td><code>X</code> (over the viewport)</td>
+<td>gizmo snapping on / off (0.25 m, 15°, 0.1)</td>
+</tr>
+<tr>
+<td><code>W</code> / <code>A</code> / <code>S</code> / <code>D</code></td>
+<td>fly along the view / strafe</td>
+</tr>
+<tr>
+<td><code>Q</code> / <code>E</code></td>
+<td>fly down / up</td>
+</tr>
+<tr>
+<td><code>Shift</code></td>
+<td>boost flight speed</td>
+</tr>
+<tr>
+<td><code>Ctrl+1</code> / <code>Ctrl+2</code></td>
+<td>default / viewport panel layout</td>
+</tr>
+<tr>
+<td>right-click hierarchy row</td>
+<td>add / focus / delete context menu</td>
+</tr>
+<tr>
+<td>double-click hierarchy row or viewport</td>
+<td>focus selection</td>
+</tr>
+<tr>
+<td>left drag / right drag / wheel</td>
+<td>orbit / pan / zoom</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="why-not-a-shared-gpu-texture-yet">Why not a shared GPU texture yet<a class="anchor" href="#why-not-a-shared-gpu-texture-yet" aria-label="Link to this section">#</a></h3>
+<p>SDL_GPU exposes no native resource handles (no <code>VkImage</code>, D3D12 resource or
+shared handle), so Iced/wgpu cannot import the engine's colour target through
+the public API. The async readback above removes the GPU stall; the copy
+remains. Real zero-copy requires one of:</p>
+<ol>
+<li>a wgpu RHI backend for the engine (or rendering the scene in wgpu directly);</li>
+<li>Vulkan external memory via a custom SDL_GPU patch/extension;</li>
+<li>an embedding strategy with a separate SDL3 viewport window.</li>
+</ol>
+<p>Until then, keep the readback path responsive and treat the texture hand-off as
+a renderer-level project, not a UI change.</p>
+<h3 id="plugins">Plugins<a class="anchor" href="#plugins" aria-label="Link to this section">#</a></h3>
+<p>Plugins are C++ and draw ImGui. The Rust UI needs one of:</p>
+<ul>
+<li>a legacy ImGui host window for old plugins; or</li>
+<li>a plugin v2 contract (data/commands, optional process/WASM isolation).</li>
+</ul>
+<p>This is the largest hidden cost and should be designed before removing ImGui
+from the runtime and the legacy SDK.</p>
+<h3 id="tests-and-agents">Tests and agents<a class="anchor" href="#tests-and-agents" aria-label="Link to this section">#</a></h3>
+<p>UI tests are Playwright-style but headless: they drive the real Iced widget
+tree, click by id, type into inputs, apply the resulting messages and assert on
+the next frame. No window, GPU or engine build is required.</p>
+<ul>
+<li><code>crates/ui/src/windows/main/tests.rs</code> has a <code>Harness</code> with <code>click</code>, <code>type_into</code>,
+<code>shows</code>, <code>has</code>, <code>bounds</code>, <code>capture</code> and <code>wait_for</code>, plus focused tests and one
+end-to-end <code>editor_workflow</code> scenario (add → select → rename → move → delete).</li>
+<li>Fixtures (<code>App::empty</code> and two-entity editor) keep tests deterministic.</li>
+</ul>
+<h3 id="ui-ids-bounds-and-visual-captures">UI ids, bounds and visual captures<a class="anchor" href="#ui-ids-bounds-and-visual-captures" aria-label="Link to this section">#</a></h3>
+<p>Iced ids are flat strings, which does not scale to hundreds of widgets. Doppio
+uses a typed taxonomy in <code>uikit::id</code>:</p>
+<div class="code-block" data-lang="text"><div class="code-head"><span class="code-lang">text</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-text">group.subgroup.object        e.g. editor.toolbar.add_entity
+                                  inspector.entity.name
+                                  hierarchy.list.entity_row.3
+                                  assets.grid.asset_card.7
+</code></pre></div>
+<ul>
+<li><code>UiId</code> implements <code>Into&lt;iced::widget::Id&gt;</code>, so components take ids directly.</li>
+<li>Static ids are constants (<code>id::ADD_ENTITY</code>, <code>id::PANE_INSPECTOR</code>, …).</li>
+<li>List rows use <code>id::entity_row(index)</code> / <code>id::asset_card(index)</code>; the group
+and subgroup stay stable while the object carries the index.</li>
+<li><code>id::CATALOG</code> documents every stable widget with a description and kind, and
+<code>id::description(key)</code> resolves dynamic rows too.</li>
+<li>Panes are wrapped in an id'd container, so a screenshot can target
+<code>editor.pane.inspector</code> as naturally as a button.</li>
+</ul>
+<p>The native harness exposes the layout of any id (<code>Harness::bounds</code>) and writes
+annotated PNGs:</p>
+<ul>
+<li><code>Harness::capture(id, path, caption)</code> crops a headless <code>iced_test</code> frame to
+the target, adds a highlight border and a caption rendered with the bundled
+JetBrains Mono (<code>assets/jetbrains-mono/</code>).</li>
+<li><code>Harness::capture_group(&amp;[(id, label)], …)</code> crops the union of several
+widgets, draws numbered colored boxes and a legend — the &quot;annotated panel&quot;
+format.</li>
+</ul>
+<p>The gallery generator walks the catalog, captures every widget that exists in
+the fixture, and writes images, a JSON manifest and English/Portuguese
+Markdown:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/generate-doppio-ui-docs.sh            <span class="hljs-comment"># doppio/target/doppio-ui-docs</span>
+./scripts/generate-doppio-ui-docs.sh --publish  <span class="hljs-comment"># update caffeine-website</span>
+</code></pre></div>
+<p>Descriptions and translations live in <code>caffeine-website/captures/ui-captions.json</code>, so an
+agent can improve the prose without touching Rust. The manifest
+(<code>manifest.json</code>) carries id/group/kind/bounds/image for each entry.</p>
+<p>Agents get the same views through iced-mcp: <code>snapshot</code> returns ids and bounds,
+<code>screenshot</code> accepts a target id plus <code>highlight</code> (or a region) and saves a
+PNG, and <code>ui_catalog</code> lists the documented ids, groups and descriptions.</p>
+<h3 id="agents-mcp">Agents (MCP)<a class="anchor" href="#agents-mcp" aria-label="Link to this section">#</a></h3>
+<p><code>iced-mcp</code> is behind the <code>agent</code> feature and attaches only when <code>ICED_MCP=1</code>:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cargo install iced-mcp-server        <span class="hljs-comment"># once</span>
+<span class="hljs-built_in">cd</span> doppio
+ICED_MCP=1 cargo run -p doppio-ui --features agent
+</code></pre></div>
+<p>The MCP client (Claude Code, Cursor, any MCP client) launches the app, reads
+the widget tree (<code>snapshot</code>), clicks/types by id or text, records flows and
+replays them with <code>iced-mcp run-suite</code>. On top of the widget tools, Doppio
+registers scene-level queries and actions:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Name</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>state</td>
+<td>—</td>
+<td>engine connection, entity/asset counts, selection, play state, dirty flag, camera</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>entities</code></td>
+<td>every entity with id, name, transform and selection</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>selection</code></td>
+<td>the selected entity (local transform and <code>world_position</code>)</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>scene</code></td>
+<td>scene path, dirty flag, counts and the console log</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>assets</code></td>
+<td>project assets with path, kind, size and directory flag</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>project</code></td>
+<td>active project, manager tab, recent/browse results and asset navigation</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>script_editor</code></td>
+<td>open script documents, active tab, paths and dirty state</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>dryad</code></td>
+<td>Dryad script, graph nodes/edges, selection, dirty state and status</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>camera</code></td>
+<td>viewport yaw, pitch, distance and focus</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>viewport</code></td>
+<td>pane/render size, grid, AA, render scale and hover</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>gizmo</code></td>
+<td>active transform tool and selected transform</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>markers</code></td>
+<td>scene markers (id, name, kind, world position) and their visibility</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>toggle_scene_markers</code></td>
+<td>shows or hides the scene markers</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>select_marker</code></td>
+<td><code>{ &quot;id&quot;: entity id }</code>, like clicking the marker icon</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>prefabs</code></td>
+<td>built-in prefab categories and recipes</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>materials</code></td>
+<td>project <code>.mat</code> assets</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>material</code></td>
+<td>open material surface, maps, path and dirty state</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>material_presets</code></td>
+<td>built-in PBR preset names and categories</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>generator</code></td>
+<td>generator graph nodes, typed ports, packing, resolution and bake state</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>texture_set</code></td>
+<td>UDIM tiles, channels, layers, masks, brush and undo state</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>layout</code></td>
+<td>pane list and kinds</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>toggle_grid</code></td>
+<td>shows or hides the reference grid</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>open_project_manager</code></td>
+<td>opens the Project Manager dialog</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>create_project</code></td>
+<td><code>{ &quot;name&quot;, &quot;location&quot;?, &quot;template&quot;?: &quot;Empty&quot;|&quot;2D&quot;|&quot;3D&quot;|&quot;Sample&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>open_project</code></td>
+<td><code>{ &quot;path&quot;: &quot;project root or project.caffeine&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>open_script</code> / <code>open_dryad</code></td>
+<td><code>{ &quot;path&quot;: &quot;script.lua&quot; | &quot;script.dyd&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>dryad_add_node</code> / <code>dryad_connect</code> / <code>dryad_set_number</code> / <code>dryad_set_bool</code> / <code>dryad_set_text</code></td>
+<td>graph editing</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>dryad_save</code> / <code>dryad_sync</code> / <code>dryad_delete</code> / <code>dryad_fit</code> / <code>dryad_add_motion</code></td>
+<td>graph file and layout actions</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>dryad_attach</code> / <code>dryad_run</code></td>
+<td>attach or preview the open Dryad script</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>asset_navigate</code> / <code>asset_up</code> / <code>asset_root</code></td>
+<td>asset-browser folder navigation</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>refresh_assets</code> / <code>set_asset_view</code></td>
+<td>rescan assets / <code>{ &quot;mode&quot;: &quot;grid&quot;|&quot;list&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>create_prefab</code></td>
+<td><code>{ &quot;key&quot;: &quot;cube&quot; | &quot;light&quot; | ... }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>open_material</code></td>
+<td><code>{ &quot;path&quot;: &quot;materials/name.mat&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>import_mesh_materials</code></td>
+<td><code>{ &quot;path&quot;: &quot;model.obj|model.gltf|model.glb&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>new_material</code> / <code>save_material</code> / <code>apply_material</code></td>
+<td>material workflow</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_material_texture</code></td>
+<td><code>{ &quot;slot&quot;: &quot;albedo|normal|orm|emission|source&quot;, &quot;path&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>generate_material_maps</code></td>
+<td><code>{ &quot;operation&quot;: &quot;normal|ao|roughness|metallic|orm|all&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>open_generator</code></td>
+<td>opens the material node canvas</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>add_generator_node</code></td>
+<td><code>{ &quot;kind&quot;: &quot;image|noise|voronoi|checker|bricks|gradient|blend|levels|curve|hsl|threshold|blur|warp|value|luminance|color|dot|output&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>connect_generator</code></td>
+<td><code>{ &quot;from&quot;, &quot;to&quot;, &quot;input&quot;? }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>delete_generator_link</code></td>
+<td><code>{ &quot;to&quot;, &quot;input&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>insert_generator_dot</code></td>
+<td><code>{ &quot;to&quot;, &quot;input&quot;, &quot;x&quot;?, &quot;y&quot;? }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>generator_undo</code> / <code>generator_redo</code></td>
+<td>graph history</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>copy_generator_node</code> / <code>paste_generator_node</code></td>
+<td>node clipboard</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>fit_generator</code> / <code>set_generator_snap</code> / <code>set_generator_search</code></td>
+<td>canvas view options</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_generator_image</code></td>
+<td><code>{ &quot;node&quot;, &quot;path&quot; }</code> image-node texture</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_generator_bits</code></td>
+<td><code>{ &quot;bits&quot;: 8 | 16 }</code> generated map depth</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_generator_packing_preset</code></td>
+<td><code>{ &quot;preset&quot;: &quot;orm|hdrp|metallic_smoothness|custom&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_generator_packing_channel</code></td>
+<td><code>{ &quot;channel&quot;: &quot;r|g|b|a&quot;, &quot;source&quot;: &quot;ao|roughness|metallic|height|smoothness|base_luminance|zero|one&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>bake_scene_ao</code></td>
+<td><code>{ &quot;resolution&quot;?, &quot;rays&quot;?, &quot;max_distance&quot;? }</code> Photon AO for the selected entity</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>new_texture_set</code> / <code>save_texture_set</code> / <code>open_texture_set</code></td>
+<td>texture-set project workflow</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>paint_texture_set</code></td>
+<td><code>{ &quot;tile&quot;?: 1001, &quot;u&quot;: 0..1, &quot;v&quot;: 0..1 }</code> one brush dab</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>texture_set_undo</code> / <code>texture_set_redo</code></td>
+<td>per-tile paint history</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>texture_set_bake_ao</code> / <code>texture_set_bake_curvature</code></td>
+<td>height-derived bakes</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>texture_set_bake_scene_ao</code></td>
+<td>Photon AO into the texture set</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>texture_set_bake_mesh_map</code></td>
+<td><code>{ &quot;kind&quot;: &quot;normal&quot;|&quot;position&quot;|&quot;id&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>export_texture_set</code></td>
+<td><code>{ &quot;path&quot;?: directory }</code> selected export preset</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>import_materialcraft</code></td>
+<td><code>{ &quot;path&quot;: &quot;file.mcmat&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>export_materialcraft</code></td>
+<td><code>{ &quot;path&quot;: &quot;file.mcmat&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>bake_generator</code></td>
+<td>starts the background bake</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>cancel_generator_bake</code></td>
+<td>cancels the running bake</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>open_prefab_palette</code></td>
+<td>opens the create-entity palette</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_gizmo_mode</code></td>
+<td><code>{ &quot;mode&quot;: &quot;move&quot;|&quot;rotate&quot;|&quot;scale&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>toggle_gizmo_snap</code></td>
+<td>turns gizmo snapping on or off; the <code>gizmo</code> query reports <code>snap</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_viewport</code></td>
+<td><code>{ &quot;grid&quot;?, &quot;anti_aliasing&quot;?, &quot;render_scale&quot;? }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_entity_parent</code></td>
+<td><code>{ &quot;entity_id&quot;, &quot;parent_id&quot;?: number | null }</code></td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>ui_catalog</code></td>
+<td>every documented widget id with group, kind and description</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>component_types</code></td>
+<td>component schema: fields, kinds, limits, enum options</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>entity_components</code></td>
+<td>components and values for an entity</td>
+</tr>
+<tr>
+<td>query</td>
+<td><code>history</code></td>
+<td>undo/redo timeline, current cursor, names and size</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>add_component</code> / <code>remove_component</code></td>
+<td>edits the selected entity's components</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_component_field</code></td>
+<td><code>{ &quot;component&quot;, &quot;field&quot;, &quot;kind&quot;, &quot;value&quot; }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>undo</code> / <code>redo</code></td>
+<td>moves through the editor timeline</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>add_entity</code></td>
+<td><code>{ &quot;name&quot;?: string }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>delete_selected</code></td>
+<td>deletes the selected entity</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>select_entity</code></td>
+<td><code>{ &quot;index&quot;?: number, &quot;name&quot;?: string }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>rename_selected</code></td>
+<td><code>{ &quot;name&quot;: string }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>toggle_play</code></td>
+<td>toggles play/pause and ticks the engine</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>save_scene</code></td>
+<td>saves the current <code>.caf</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>set_camera</code></td>
+<td><code>{ &quot;yaw&quot;?: number, &quot;pitch&quot;?: number, &quot;distance&quot;?: number }</code></td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>reset_camera</code></td>
+<td>restores the default camera</td>
+</tr>
+<tr>
+<td>action</td>
+<td><code>close_scene</code></td>
+<td>drops the engine session and clears the editor</td>
+</tr>
+<tr>
+<td>fixture</td>
+<td><code>empty</code>, <code>editor</code></td>
+<td>deterministic starting states for flows</td>
+</tr>
+</tbody>
+</table></div>
+<p>Because every action is an iced <code>Message</code>, agents can only do what the UI can
+do, and the <code>messages</code> tool shows exactly what each call published. Agent edits
+are ordinary undo steps (<code>undo</code> / <code>redo</code>), and the <code>history</code> query exposes the
+timeline.</p>
+<h3 id="visual-regression">Visual regression<a class="anchor" href="#visual-regression" aria-label="Link to this section">#</a></h3>
+<p><code>doppio/.iced-mcp/scripts/visual-regression.luau</code> captures the hierarchy,
+assets, inspector and console panes with <code>screenshot_diff</code> (the GPU viewport is
+excluded on purpose). Baselines are per-machine/GPU and live in
+<code>.iced-mcp/baselines/</code>, which is gitignored:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">./scripts/check-doppio-visual.sh --update-baselines  <span class="hljs-comment"># seed on this machine/image</span>
+./scripts/check-doppio-visual.sh                     <span class="hljs-comment"># CI check</span>
+</code></pre></div>
+<p>The script skips cleanly without <code>iced-mcp</code> or a display. Commit baselines only
+from a controlled CI image if you want cross-machine visual diffs.</p>
+<p>A full scripted session lives in <code>doppio/.iced-mcp/scripts/editor-smoke.luau</code>.
+<code>material-smoke.luau</code> covers opening a <code>.mat</code>, the rendered preview, assigning it
+to an entity, presets and texture slots; <code>material-generator-smoke</code>,
+<code>materialcraft-smoke</code> and <code>texture-set-smoke</code> cover the node canvas, portable
+round-trip and texture-set painting/export; <code>project-smoke</code> covers creating and
+reopening a project plus asset navigation; <code>script-dryad-smoke</code> covers the
+Script Editor, Dryad graph save and the one-frame preview; <code>prefab-smoke</code>,
+<code>hierarchy-smoke</code>, <code>components-smoke</code>, <code>viewport-smoke</code> and <code>tabs-smoke</code> cover
+the rest.
+It loads the <code>editor</code> fixture, renames through the real text input, adds an
+entity, drives the camera and asserts the console:</p>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> doppio
+iced-mcp run-script .iced-mcp/scripts/editor-smoke.luau \
+  --launch <span class="hljs-string">&quot;./target/debug/doppio ../assets/benchmarks/dense_outdoor.caf&quot;</span>
+</code></pre></div>
+<p><code>scripts/doppio-agent.sh</code> builds the C ABI and launches the same app with
+<code>ICED_MCP=1</code> for an interactive agent session.</p>
+<h3 id="materialcraft-headless-bridge">MaterialCraft headless bridge<a class="anchor" href="#materialcraft-headless-bridge" aria-label="Link to this section">#</a></h3>
+<div class="code-block" data-lang="bash"><div class="code-head"><span class="code-lang">bash</span><button class="code-copy" type="button" aria-label="Copy code">Copy</button></div><pre><code class="hljs language-bash">cargo run -p doppio-ui --bin doppio-material -- \
+  inspect ../assets/vegetation-kit/materials/celandine_01.mcmat
+cargo run -p doppio-ui --bin doppio-material -- \
+  import material.mcmat --out imported/
+cargo run -p doppio-ui --bin doppio-material -- \
+  import-sbs material.sbs --out imported/
+cargo run -p doppio-ui --bin doppio-material -- \
+  <span class="hljs-built_in">export</span> materials/paint.mat --out paint.mcmat
+cargo run -p doppio-ui --bin doppio-material -- \
+  bake-graph materials/paint.mgraph --size 2048 --out maps/
+cargo run -p doppio-ui --bin doppio-material -- \
+  texset-info painted.texset
+cargo run -p doppio-ui --bin doppio-material -- \
+  texset-new --out painted.texset --size 1024
+cargo run -p doppio-ui --bin doppio-material -- \
+  texset-export painted.texset --out maps/ --preset <span class="hljs-string">&quot;glTF ORM&quot;</span>
+</code></pre></div>
+<p>The CLI and editor MCP actions share <code>materialcraft_io</code>; the portable export
+validates its own SBS node/link round-trip and reports imported placeholders.</p>
+<p>Session teardown keeps the SDL GPU device for the process lifetime on purpose:
+<code>SDL_DestroyGPUDevice</code> unloads Vulkan entry points that the host's wgpu/Iced
+renderer still holds. Sessions are created rarely, so the editor leaks one
+small device instead of crashing the host.</p>
+<ul>
+<li>Keep/extend the engine JSON protocol for scene/component/viewport assertions.</li>
+<li>Add fixtures for project templates, scenes and component schemas.</li>
+</ul>
+<h2 id="rules">Rules<a class="anchor" href="#rules" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Do not re-add the C++ editor to the live tree; use <code>doppio-archived/</code> as a
+behaviour reference only.</li>
+<li>Add widget ids for anything an agent must find.</li>
+<li>Prefer snapshots/arrays over per-field FFI calls.</li>
+<li>Keep the Rust frontend out of the CMake build; <code>scripts/check-rust-ui.sh</code>
+builds the C ABI first and then the workspace.</li>
+</ul>
+<h2 id="script-reference-card">Script reference card<a class="anchor" href="#script-reference-card" aria-label="Link to this section">#</a></h2>
+<p>The hover card shows module, signature, parameters, return type, an example and related functions.
+<strong>Ctrl+click</strong> on an API name opens its reference page: the <code>caffeine-website</code> checkout when found
+(<code>CAFFEINE_ENGINE_ROOT</code> or a parent of the executable or working directory), otherwise the public URL is logged.
+A test checks that every documented entry has a page in the website tree.</p>
+<h2 id="generator-recipes">Generator recipes<a class="anchor" href="#generator-recipes" aria-label="Link to this section">#</a></h2>
+<p>Generators save <code>generator.*</code> recipe files next to what they bake and reopen them on double-click.
+Other generators reference recipes through <code>uikit/recipe_ref.rs</code> (slots, seeded cached variants, shared SplitMix64
+hashing with the engine's <code>core/Hash.hpp</code>); caf-pack skips recipes as editor-only sources.
+See <a href="/en/docs/doppio/generator-recipes/"><code>generator-recipes.md</code></a>. The generator headers have a <strong>Reseed</strong> button
+(<code>generator.toolbar.reseed</code>, <code>texturegen.toolbar.reseed</code>): new seeds for every seeded node, one undo step.</p>
+<h2 id="script-editor-assistance">Script editor assistance<a class="anchor" href="#script-editor-assistance" aria-label="Link to this section">#</a></h2>
+<p>Hover and Ctrl+click resolve the whole dotted name (<code>caffeine.time.delta</code> from any segment) and also
+cover language words, lifecycle hooks (<code>onUpdate</code>...) and functions or variables declared in the file.
+Ctrl+click on a declared name jumps to its declaration; on an API name it opens the reference.
+Typing offers completions from the API, keywords and the file's own symbols (Up/Down to move, Enter or Tab to accept).
+The editor also has bracket matching and colours, auto-close and auto-indent, indent guides, folding, sticky scroll,
+search/replace (Ctrl+F / Ctrl+H), go to line (Ctrl+G), the command palette, multi-cursor (Alt+click), move and
+duplicate line and comment toggle. All of it is in-process; there is no language server.</p>
+<h2 id="dryad-node-catalog">Dryad node catalog<a class="anchor" href="#dryad-node-catalog" aria-label="Link to this section">#</a></h2>
+<p>58 nodes. Beyond events, transform, time, input and world: Language / Math (Add, Subtract, Multiply, Divide, Negate,
+Min, Max, Abs, Floor, Ceil, Round, Square Root, Power, Sign, Clamp, Clamp 0..1, Lerp, Inverse Lerp, Smoothstep),
+Trigonometry (Sine, Cosine, degrees/radians), Compare (Less, Greater, Equal), Logic (And, Or, Not), Engine / Random
+(Value, Range, Int, Chance), Engine / Input (Mouse X/Y/Delta X/Delta Y, Mouse Button), Engine / Time (Fixed Delta, Frame
+Count) and Engine / World (This Entity, Is Alive, Distance).</p>
+<p>Operators are written fully parenthesised, so the importer reads them back unambiguously. Every native-call node is one
+row of <code>NATIVE_NODES</code> in <code>uikit/dryad.rs</code> (type, labels, native, argument count, bool output); the pins, emitter, importer
+and catalog follow from the row. The engine side is 20 new <code>caffeine_math_*</code> natives (<code>DryadRuntimeBindings.cpp</code>, documented
+in <code>script/api/math.json</code>, tested in <code>tests/test_dryad_host.cpp</code>). Not done: variables and loops (they need exec nodes that
+own a scope, so the emitter and importer must change) and exec nodes for audio, physics and scene natives.</p>
+
+    </article>
+    <div class="doc-foot"><a class="edit-link" href="https://github.com/devscafecommunity/caffeine-website/edit/main/content/en/docs/doppio/rust-ui.md" rel="noopener">Edit this page</a></div>
+    <nav class="pager" aria-label="Pager"><a class="pager-prev" href="/en/docs/doppio/runtime-modifiers/"><span>Previous</span><strong>Run-time modifiers for generated materials</strong></a><a class="pager-next" href="/en/docs/doppio/terrain-editing-roadmap/"><span>Next</span><strong>Terrain editing: brushes, material palette and vegetation</strong></a></nav>
+  </main>
+  <aside class="toc" aria-label="On this page"><div class="toc-title">On this page</div><ul><li class="l2"><a href="#why-iced">Why Iced</a></li><li class="l2"><a href="#workspace">Workspace</a></li><li class="l2"><a href="#migration-status">Migration status</a></li><li class="l3"><a href="#engine-imgui-split-done">Engine / ImGui split — done</a></li><li class="l3"><a href="#c-abi-data-oriented-boundary-first-slice-done">C ABI / data-oriented boundary — first slice done</a></li><li class="l3"><a href="#component-schema-and-generic-inspector">Component schema and generic Inspector</a></li><li class="l3"><a href="#project-manager-and-assets">Project Manager and Assets</a></li><li class="l3"><a href="#script-editor-and-dryad-nodes">Script editor and Dryad nodes</a></li><li class="l3"><a href="#material-studio">Material studio</a></li><li class="l3"><a href="#material-generator-node-canvas">Material generator (node canvas)</a></li><li class="l3"><a href="#texture-sets-texturecraft-style-foundation">Texture sets (TextureCraft-style foundation)</a></li><li class="l3"><a href="#phase-5-polish">Phase 5 polish</a></li><li class="l3"><a href="#undo-and-redo">Undo and redo</a></li><li class="l3"><a href="#viewport-asynchronous-cpu-readback">Viewport — asynchronous CPU readback</a></li><li class="l3"><a href="#generators-a-workspace-and-a-notice">Generators: a workspace and a notice</a></li><li class="l3"><a href="#console">Console</a></li><li class="l3"><a href="#shortcuts">Shortcuts</a></li><li class="l3"><a href="#why-not-a-shared-gpu-texture-yet">Why not a shared GPU texture yet</a></li><li class="l3"><a href="#plugins">Plugins</a></li><li class="l3"><a href="#tests-and-agents">Tests and agents</a></li><li class="l3"><a href="#ui-ids-bounds-and-visual-captures">UI ids, bounds and visual captures</a></li><li class="l3"><a href="#agents-mcp">Agents (MCP)</a></li><li class="l3"><a href="#visual-regression">Visual regression</a></li><li class="l3"><a href="#materialcraft-headless-bridge">MaterialCraft headless bridge</a></li><li class="l2"><a href="#rules">Rules</a></li><li class="l2"><a href="#script-reference-card">Script reference card</a></li><li class="l2"><a href="#generator-recipes">Generator recipes</a></li><li class="l2"><a href="#script-editor-assistance">Script editor assistance</a></li><li class="l2"><a href="#dryad-node-catalog">Dryad node catalog</a></li></ul></aside>
+</div>
+<footer class="site-footer"><div class="site-footer-inner">
+  <span>Caffeine Engine and Doppio. Documentation is part of the open source project.</span>
+  <span class="footer-links"><a href="https://github.com/devscafecommunity/caffeine" rel="noopener">Source code</a><a href="https://github.com/devscafecommunity/caffeine-website" rel="noopener">caffeine-website</a><a href="https://caffeine.devscafe.org">caffeine.devscafe.org</a></span>
+</div></footer>
+<div class="search-modal" hidden>
+  <div class="search-backdrop" data-close></div>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search the docs">
+    <div class="search-input-row"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="search-input" type="search" placeholder="Search docs…" autocomplete="off" spellcheck="false"><kbd>Esc</kbd></div>
+    <ul class="search-results" role="listbox"></ul>
+    <p class="search-tip">Type to search titles, headings and text.</p>
+  </div>
+</div>
+<script>window.CAFFEINE={lang:"en",search:"/en/search.json?v=f8cf45ec"};</script>
+<script src="/assets/app.js?v=f8cf45ec" defer></script>
+</body></html>

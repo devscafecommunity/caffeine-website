@@ -52,7 +52,7 @@
     <tr>
       <td>Doppio</td>
       <td>Do editor C++ em ImGui para o workspace Rust/Iced, o layout de cinco painéis e a fronteira C ABI.</td>
-      <td><a href="editor/scene-editor.md">Editor de cena</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/rust-ui.md">Notas da UI Rust</a>, <a href="plans/2026-05-24-doppio-ui-test-framework.md">Plano do framework de testes</a></td>
+      <td><a href="editor/scene-editor.md">Editor de cena</a>, <a href="doppio/rust-ui.md">Notas da UI Rust</a>, <a href="plans/2026-05-24-doppio-ui-test-framework.md">Plano do framework de testes</a></td>
     </tr>
     <tr>
       <td>Impulso de render</td>
@@ -62,12 +62,12 @@
     <tr>
       <td>Ferramentas de conteúdo</td>
       <td>Material Generator, Texture Generator, pintor Texture Set, Nature, Water e Terrain.</td>
-      <td><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/material-pipeline.md">Material pipeline</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/texture-generator-guide.md">Guia de texturas</a>, <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/terrain-generator-guide.md">Guia de terreno</a></td>
+      <td><a href="doppio/material-pipeline.md">Material pipeline</a>, <a href="doppio/texture-generator-guide.md">Guia de texturas</a>, <a href="doppio/terrain-generator-guide.md">Guia de terreno</a></td>
     </tr>
     <tr>
       <td>Testes headless</td>
       <td>Flows de UI por script, capturas anotadas, baselines e gravação GIF/MP4 sem janela.</td>
-      <td><a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md">Driver headless</a>, <a href="editor/test-automation.md">Automação de testes</a></td>
+      <td><a href="doppio/headless-testing.md">Driver headless</a>, <a href="editor/test-automation.md">Automação de testes</a></td>
     </tr>
   </tbody>
 </table>

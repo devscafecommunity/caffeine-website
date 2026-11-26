@@ -46,7 +46,7 @@ o antigo ponto de entrada “master” e resume a arquitetura atual.</p>
 | ECS e cenas | [ECS core](ecs/core.md), [Scene manager](ecs/scene.md) |
 | Scripting | [Visão geral](scripting/scripting.md) |
 | C ABI e APIs | [Referência da API](api/README.md) |
-| Testes headless | [Referência do driver](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md) |
+| Testes headless | [Referência do driver](doppio/headless-testing.md) |
 | História do projeto | [História](HISTORY.md) |
 
 ## Mapa do repositório

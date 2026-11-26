@@ -66,7 +66,7 @@ filtros da console, asset wizard e os grafos dos geradores.
 
 Cada flow começa numa fixture determinística, age com targets `id:`/`text:` e verifica
 com `expect`. Capturas, baselines e gravação GIF/MP4 estão disponíveis para trabalho
-visual. Veja [Headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+visual. Veja [Headless testing](../doppio/headless-testing.md)
 e [Automação de testes](../editor/test-automation.md).
 
 ## CI
@@ -108,6 +108,6 @@ acrescenta um caso Catch2.
 
 ## Páginas relacionadas
 
-- [Headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- [Headless testing](../doppio/headless-testing.md)
 - [Automação de testes](../editor/test-automation.md)
 - [Compilar](../getting-started/building.md)

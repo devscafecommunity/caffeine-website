@@ -118,7 +118,7 @@ combinada usada em CI é:
 ./scripts/doppio-headless.sh run doppio/tests/ui-flows --format text
 ```
 
-Veja [o guia headless](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+Veja [o guia headless](../doppio/headless-testing.md)
 para a referência de ações, capturas, baselines e gravação GIF/MP4.
 
 ## Helpers de plataforma

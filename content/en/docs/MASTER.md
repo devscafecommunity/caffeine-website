@@ -46,7 +46,7 @@ the old “master” entry point working and gives the current architecture at a
 | ECS and scenes | [ECS core](ecs/core.md), [Scene manager](ecs/scene.md) |
 | Scripting | [Scripting overview](scripting/scripting.md) |
 | C ABI and APIs | [API reference](api/README.md) |
-| Headless testing | [Driver reference](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md) |
+| Headless testing | [Driver reference](doppio/headless-testing.md) |
 | Project history | [History](HISTORY.md) |
 
 ## Repository map

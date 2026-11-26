@@ -87,8 +87,8 @@ vivo, vistas de canal (base, normal, height, roughness, AO, emissive, opacity, m
 channel packing para ORM e layouts Unity. **Bake to Material** escreve os mapas
 selecionados no material aberto.
 
-Veja o [material pipeline](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/material-pipeline.md)
-e o [guia de materiais](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/materials-guide.md).
+Veja o [material pipeline](../doppio/material-pipeline.md)
+e o [guia de materiais](../doppio/materials-guide.md).
 
 ## Formato de ficheiro
 
@@ -103,5 +103,5 @@ e o [guia de materiais](https://github.com/devscafecommunity/caffeine/blob/main/
 
 - [Materiais PBR](../rendering/materials-pbr.md)
 - [Reflexos](../rendering/reflections.md)
-- [Material pipeline](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/material-pipeline.md)
-- [Guia do Texture Generator](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/texture-generator-guide.md)
+- [Material pipeline](../doppio/material-pipeline.md)
+- [Guia do Texture Generator](../doppio/texture-generator-guide.md)

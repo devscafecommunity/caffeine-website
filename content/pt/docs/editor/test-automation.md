@@ -4,7 +4,7 @@
   <span class="doc-badge doc-badge--stable">Stable</span>
   <span class="doc-badge">Doppio</span>
   <span>Verificado em: <time datetime="2026-11-18">2026-11-18</time></span>
-  <span>Fonte: <a href="https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md"><code>headless-testing.md</code></a></span>
+  <span>Fonte: <a href="../doppio/headless-testing.md"><code>headless-testing.md</code></a></span>
 </div>
 
 <p class="doc-lede">O Doppio é testado conduzindo a árvore de widgets real fora do
@@ -82,7 +82,7 @@ catalogados e acrescenta a legenda `n. id — descrição`. O mesmo catálogo al
 
 ## Capturar imagens para documentação
 
-Os flows de captura comprometidos vivem em `doppio/docs/flows/capture-*.json`. Os
+Os flows de captura comprometidos vivem em `captures/flows/capture-*.json`. Os
 wrappers shell removem o prefixo numérico para os nomes das imagens ficarem estáveis:
 
 ```bash
@@ -96,7 +96,7 @@ wrappers shell removem o prefixo numérico para os nomes das imagens ficarem est
 ```
 
 Um flow de captura é um flow normal mais passos `screenshot` com `target`, `padding`
-e `scale`. Veja `doppio/docs/flows/capture-gizmo-docs.json` para o padrão scene3d.
+e `scale`. Veja `captures/flows/capture-gizmo-docs.json` para o padrão scene3d.
 
 ## Gravar GIFs e vídeos
 
@@ -127,7 +127,7 @@ automaticamente.
 
 ## Páginas relacionadas
 
-- [Referência de headless testing](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+- [Referência de headless testing](../doppio/headless-testing.md)
   — todas as ações, formas de target, chaves de estado e opções de captura.
 - [Referência de UI](ui-reference.md) — ids e legendas gerados.
 - [Compilar](../getting-started/building.md) — binários de teste e feature flags.

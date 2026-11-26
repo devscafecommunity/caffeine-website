@@ -274,7 +274,14 @@ Um separador **World** (View > World Composer, ou duplo clique num `*.generator.
 
 - **Library**: as receitas `generator.*` do projeto por tipo (terrain, nature, water, material, texture). Arraste uma
   para a linha de largar da Composition, ou clique nela, para a adicionar.
-- **Composition**: a linha do terreno, as linhas de água, as linhas de material e as linhas de classe (ref, variants, priority).
+- **Composition**: a linha do terreno, as linhas de água, as linhas de material e as linhas de classe (ref, variants,
+  priority), e por cima delas um **Graph** (`world.composition.graph`, um `node_canvas`): os mesmos blocos de
+  construção como nodes, cada um ligado a uma saída `World` — o Terrain alimenta cada node de Water e de Class (o
+  solo onde crescem ou escavam), e os nodes de Water, Material e Class alimentam todos o `World`. É uma vista sobre a
+  composição, não uma superfície de edição: clicar num node de classe seleciona-a (o painel Rules abaixo mostra então
+  as suas propriedades, tal como clicar na sua linha); arrastar um node só reorganiza o layout, que é estado de UI só
+  de sessão, não faz parte da receita gravada. A forma do grafo corresponde sempre ao que foi adicionado — não há
+  religação, por isso `Connect`/`Detach` no canvas não fazem nada.
 - **Rules**: as propriedades da classe selecionada, os seus termos `where` como sliders, os seus mapeamentos `adapt`,
   `unique`, a seed com um botão *Reseed* (uma seed derivada, com undo), e a camada de edição: linhas de pin e de move,
   um retângulo de região com *Remove in region*, e um **pincel de remoção**. Com o pincel ativo, arrastar com o botão

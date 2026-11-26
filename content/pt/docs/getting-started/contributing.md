@@ -66,7 +66,7 @@ referência. Veja [Escrever um plugin](../plugins/writing-a-plugin.md).
   caminhos em `content/pt/docs/`.
 - Cada página começa com título, uma faixa `doc-meta` e um lede curto.
 - As capturas vêm do driver headless, nunca de um screenshot do desktop.
-- Atualize o flow de captura em `doppio/docs/flows/` quando a UI mudar.
+- Atualize o flow de captura em `captures/flows/` quando a UI mudar.
 - Corra as duas auditorias:
 
 ```bash

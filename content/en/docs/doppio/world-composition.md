@@ -268,7 +268,13 @@ A **World** tab (View > World Composer, or double-click a `*.generator.world` in
 
 - **Library**: the project's `generator.*` recipes by kind (terrain, nature, water, material, texture). Drag one onto
   the Composition's drop row, or click it, to add it.
-- **Composition**: the terrain row, water rows, material rows and the class rows (ref, variants, priority).
+- **Composition**: a terrain row, water rows, material rows and the class rows (ref, variants, priority), and above
+  them a **Graph** (`world.composition.graph`, a `node_canvas`): the same building blocks as nodes, each wired into a
+  `World` output — Terrain feeds every Water and Class node (the ground they grow on or carve into), and Water,
+  Material and Class nodes all feed `World`. It is a view over the composition, not an editing surface: clicking a
+  class node selects it (the Rules panel below then shows its properties, same as clicking its row); dragging a node
+  only rearranges the layout, which is session-only UI state, not part of the saved recipe. The graph's shape always
+  matches what was added — there is no rewiring, so `Connect`/`Detach` on the canvas are no-ops.
 - **Rules**: the selected class's properties, its `where` terms as sliders, its `adapt` mappings, `unique`, the seed
   with a *Reseed* button (a derived seed, undoable), and the edit layer: pin and move rows, a region rectangle with
   *Remove in region*, and a **remove brush**. With the brush on, a left drag in the Viewport removes the instances of

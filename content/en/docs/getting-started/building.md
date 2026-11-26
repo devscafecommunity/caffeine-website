@@ -117,7 +117,7 @@ The headless feature runs the committed UI flows in
 ./scripts/doppio-headless.sh run doppio/tests/ui-flows --format text
 ```
 
-See [the headless guide](https://github.com/devscafecommunity/caffeine/blob/main/doppio/docs/headless-testing.md)
+See [the headless guide](../doppio/headless-testing.md)
 for the full action reference, screenshots, baselines and GIF/MP4 recording.
 
 ## Platform helpers

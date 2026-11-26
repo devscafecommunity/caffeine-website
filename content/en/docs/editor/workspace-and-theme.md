@@ -108,7 +108,7 @@ entry in `uikit::id::CATALOG` with kind and description. The catalogue drives:
 
 - headless targeting and annotated screenshots;
 - the generated [UI reference](ui-reference.md);
-- agent actions and the docs captions in `doppio/docs/ui-captions.json`.
+- agent actions and the docs captions in `captures/ui-captions.json`.
 
 Add an id and a catalogue entry with every new widget.
 

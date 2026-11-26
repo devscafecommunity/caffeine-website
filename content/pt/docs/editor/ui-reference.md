@@ -5,7 +5,7 @@
   <span class="doc-badge">Doppio</span>
 </div>
 
-<p class="doc-lede">Gerado por `cargo test -p doppio-ui capture_ui_gallery -- --ignored`. As descrições vivem em `doppio/docs/ui-captions.json`.</p>
+<p class="doc-lede">Gerado por `cargo test -p doppio-ui capture_ui_gallery -- --ignored`. As descrições vivem em `captures/ui-captions.json`.</p>
 
 ## `editor.pane.tab.texture_generator`
 
