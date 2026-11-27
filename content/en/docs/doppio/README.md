@@ -43,6 +43,8 @@ make rocks, trees, water, terrain, textures and materials. The engine repository
 | [`photoreal-world-roadmap.md`](photoreal-world-roadmap.md) | The content plan: terrain, nature, water, scatter and streaming |
 | [`terrain-editing-roadmap.md`](terrain-editing-roadmap.md) | The terrain editing plan: custom brushes, a material palette, adaptive vegetation and the native terrain format |
 | [`terrain-editing-phase-0.md`](terrain-editing-phase-0.md) | The terrain editing foundation as built: tile model, stroke engine, native container, regional GI, brush cursor, C ABI 25 to 27 |
+| [`terrain-editing-phase-5-masks.md`](terrain-editing-phase-5-masks.md) | Painted terrain masks as built: the mask brush, whole-mask edits, undo, vegetation that follows the mask, C ABI 33, the Masks card |
+| [`terrain-editing-phase-5-paths.md`](terrain-editing-phase-5-paths.md) | Roads and rivers by spline as built: the Terrain Path tab, viewport overlay, presets, undo, C ABI 34 |
 | [`terrain-editing-phase-4.md`](terrain-editing-phase-4.md) | Terrain species from recipes as built: baked variants with a material per part, automatic re-bake, adaptation by mask, C ABI 31 |
 | [`terrain-editing-phase-3.md`](terrain-editing-phase-3.md) | Terrain vegetation as built: species, procedural and manual sources, stable ids, brush tools, per-chunk instanced rendering, the Terrain Vegetation tab, C ABI 30 |
 | [`terrain-editing-phase-2.md`](terrain-editing-phase-2.md) | Terrain material painting as built: a palette of up to 64 layers, the layer map, paint strokes, auto-layering, the array-texture renderer, the Terrain Paint tab, C ABI 29 |
